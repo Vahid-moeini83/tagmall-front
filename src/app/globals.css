@@ -1,0 +1,263 @@
+@import "tailwindcss";
+@import "../../public/assets/fonts/style.css";
+
+:root {
+  --primary-color: #3d3183;
+
+  --tint-color-200: #e4ecf5;
+  --tint-color-300: #c9d9eb;
+  --tint-color-400: #aec6e2;
+  --tint-color-500: #93b3d8;
+  --tint-color-600: #79a0ce;
+  --tint-color-700: #5e8dc5;
+
+  --shade-color-100: #3968a0;
+  --shade-color-200: #305785;
+  --shade-color-300: #26456b;
+  --shade-color-400: #1c3450;
+  --shade-color-500: #132235;
+  --shade-color-600: #09111a;
+  --shade-color-700: #070e16;
+
+  --gray-color-100: #f9f9f9;
+  --gray-color-200: #f9f7f7;
+  --gray-color-300: #ededed;
+  --gray-color-400: #cbcbcb;
+  --gray-color-500: #adadad;
+  --gray-color-600: #757575;
+  --gray-color-700: #474747;
+  --gray-color-800: #353535;
+
+  --orange-color-600: #f58220;
+
+  --green-color-600: #06de70;
+
+  /* Error colors */
+  --error-color: #c30000;
+  --error-color-medium: #ed2e2e;
+  --error-color-light: #fff2f2;
+
+  /* Success colors */
+  --success-color: #00966d;
+  --success-color-medium: #00ba88;
+  --success-color-light: #f3fdfa;
+
+  /* Warning colors */
+  --warning-color: #a9791c;
+  --warning-color-medium: #f4b740;
+  --warning-color-light: #fff8e1;
+
+  /* Mobile viewport height (accounts for address bar) */
+  --vh: 1vh;
+}
+
+@theme {
+  --color-primary: var(--primary-color);
+
+  --color-tint-200: var(--tint-color-200);
+  --color-tint-300: var(--tint-color-300);
+  --color-tint-400: var(--tint-color-400);
+  --color-tint-500: var(--tint-color-500);
+  --color-tint-600: var(--tint-color-600);
+  --color-tint-700: var(--tint-color-700);
+
+  --color-shade-100: var(--shade-color-100);
+  --color-shade-200: var(--shade-color-200);
+  --color-shade-300: var(--shade-color-300);
+  --color-shade-400: var(--shade-color-400);
+  --color-shade-500: var(--shade-color-500);
+  --color-shade-600: var(--shade-color-600);
+  --color-shade-700: var(--shade-color-700);
+
+  --color-gray-100: var(--gray-color-100);
+  --color-gray-200: var(--gray-color-200);
+  --color-gray-300: var(--gray-color-300);
+  --color-gray-400: var(--gray-color-400);
+  --color-gray-500: var(--gray-color-500);
+  --color-gray-600: var(--gray-color-600);
+  --color-gray-700: var(--gray-color-700);
+  --color-gray-800: var(--gray-color-800);
+
+  --color-orange-600: var(--orange-color-600);
+
+  --color-green-600: var(--green-color-600);
+
+  --color-error: var(--error-color);
+  --color-error-medium: var(--error-color-medium);
+  --color-error-light: var(--error-color-light);
+
+  --color-success: var(--success-color);
+  --color-success-medium: var(--success-color-medium);
+  --color-success-light: var(--success-color-light);
+
+  --color-warning: var(--warning-color);
+  --color-warning-medium: var(--warning-color-medium);
+  --color-warning-light: var(--warning-color-light);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-3xl: 64px;
+}
+
+@layer base {
+  * {
+    font-family: Dana !important;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    overflow: hidden;
+    font-family: Dana !important;
+  }
+
+  /* مهم: هر المنتی که overflow-y دارد LTR شود */
+  *[style*="overflow"],
+  *[class*="overflow"] {
+    direction: ltr !important;
+  }
+
+  /* محتوا دوباره RTL */
+  *[style*="overflow"] > *,
+  *[class*="overflow"] > * {
+    direction: rtl !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background: #fbfbfb;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 2px;
+    height: 2px;
+    background: #e3e3e3;
+    border-radius: 8px;
+  }
+
+  button {
+    outline: none;
+    border: none;
+  }
+
+  .leaflet-top {
+    display: none !important;
+  }
+
+  .leaflet-left {
+    display: none !important;
+  }
+
+  .leaflet-control-zoom {
+    display: none !important;
+  }
+
+  /* User marker directional shadow (map) */
+  .user-marker-shadow::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(
+      from 270deg,
+      rgba(37, 99, 235, 0.3) 0deg,
+      rgba(37, 99, 235, 0) 60deg,
+      rgba(37, 99, 235, 0) 300deg,
+      rgba(37, 99, 235, 0.3) 360deg
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .full-screen-products-slider::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: auto;
+    height: auto;
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .animate-slide-in-down {
+    animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-up-simple {
+    animation: slideUpSimple 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(0px + 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
+}
+
+@keyframes slideUpSimple {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

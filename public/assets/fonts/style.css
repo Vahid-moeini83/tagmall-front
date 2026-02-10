@@ -1,0 +1,23 @@
+@font-face {
+  font-family: Dana;
+  font-style: normal;
+  font-weight: 200;
+  src: url("/assets/fonts/DanaFaNum-Regular.woff2") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dana;
+  font-style: normal;
+  font-weight: 500;
+  src: url("/assets/fonts/DanaFaNum-Medium.woff2") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Dana;
+  font-style: normal;
+  font-weight: 700;
+  src: url("/assets/fonts/DanaFaNum-DemiBold.woff2") format("truetype");
+  font-display: swap;
+}

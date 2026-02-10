@@ -1,0 +1,18 @@
+{
+  "name": "تگ مال",
+  "short_name": "تگ مال",
+  "description": "پلتفرم خرید حضوری و آنلاین تگ مال",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#707070",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/images/logo/main-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
