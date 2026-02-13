@@ -27,8 +27,15 @@ function SearchBox({ isOpen, onClose }) {
 
       {/* Mobile Full Screen Layout */}
       <div className="fixed inset-x-0 top-0 bottom-[72px] max-h-[calc(100vh-72px)] overflow-hidden z-[60] bg-white flex flex-col lg:hidden">
-        {/* Logo at top */}
-        <div className="flex items-center justify-end p-4">
+        {/* Logo and Close Button at top */}
+        <div className="flex items-center justify-between p-4">
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center text-gray-800 cursor-pointer"
+            aria-label="بستن جستجو"
+          >
+            <CloseSquareIcon size={24} />
+          </button>
           <Image
             src="/assets/images/logo/main-logo.svg"
             width={80}

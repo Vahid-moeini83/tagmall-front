@@ -7,3 +7,5 @@ export {
   PopoverTitle,
   PopoverTrigger,
 } from "./Popover";
+
+export { default as PopoverWithTrigger } from "./PopoverWithTrigger";

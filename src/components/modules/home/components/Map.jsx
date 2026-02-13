@@ -7,6 +7,7 @@ import { sellers } from "@/lib/data";
 import toast from "react-hot-toast";
 import { SellerMarker, UserMarker } from "@/components/ui/markers";
 import { GPSIcon } from "@/icons";
+import usePublicStore from "@/app/store/publicStore";
 
 const MAP_KEY = "web.62daef333a0348299fa1a0eab10b34f2";
 
@@ -32,6 +33,8 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
   const gpsButtonLongPressTimerRef = useRef(null);
   const isLongPressTriggeredRef = useRef(false);
   const isGpsEnabledRef = useRef(false);
+
+  const showSearchResultBox = usePublicStore((s) => s.showSearchResultBox);
 
   useEffect(() => {
     isGpsEnabledRef.current = isGpsEnabled;
@@ -352,51 +355,71 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
 
     // Native touch events for mobile (more reliable)
     const mapContainer = mapContainerRef.current;
+    let longPressTimeout = null;
+    let touchMoved = false;
 
     const handleTouchStart = (e) => {
-      if (e.touches.length !== 1) return; // Only single touch
+      if (e.touches.length !== 1) return;
 
       const touch = e.touches[0];
       touchStartPos = { x: touch.clientX, y: touch.clientY };
+      touchMoved = false;
 
-      longPressTimerRef.current = setTimeout(() => {
-        if (isGpsEnabledRef.current) {
-          toast.error("برای تنظیم موقعیت دستی، ابتدا GPS را خاموش کنید.");
-          handleLongPressEnd();
-          return;
+      // Disable dragging for a while
+      map.dragging.disable();
+
+      longPressTimeout = setTimeout(() => {
+        if (!touchMoved) {
+          if (isGpsEnabledRef.current) {
+            toast.error("برای تنظیم موقعیت دستی، ابتدا GPS را خاموش کنید.");
+            return;
+          }
+
+          const rect = mapContainer.getBoundingClientRect();
+          const containerPoint = L.point(
+            touchStartPos.x - rect.left,
+            touchStartPos.y - rect.top,
+          );
+          const latlng = map.containerPointToLatLng(containerPoint);
+
+          setUserPosition({
+            lat: latlng.lat,
+            lng: latlng.lng,
+            heading: 0,
+          });
+          setIsManualMode(true);
+          toast.success("موقعیت دستی انتخاب شد");
         }
-
-        // Convert touch position to map coordinates
-        const point = map.containerPointToLatLng([
-          touch.clientX,
-          touch.clientY,
-        ]);
-        setUserPosition({
-          lat: point.lat,
-          lng: point.lng,
-          heading: 0,
-        });
-        setIsManualMode(true);
-        toast.success("موقعیت دستی انتخاب شد");
-        handleLongPressEnd();
-      }, 1000);
+      }, 700);
     };
 
     const handleTouchMove = (e) => {
-      if (!touchStartPos || !longPressTimerRef.current) return;
+      if (!touchStartPos) return;
 
       const touch = e.touches[0];
       const deltaX = Math.abs(touch.clientX - touchStartPos.x);
       const deltaY = Math.abs(touch.clientY - touchStartPos.y);
 
-      // Cancel if finger moved more than 10px
-      if (deltaX > 10 || deltaY > 10) {
-        handleLongPressEnd();
+      // Mark as moved if finger moved more than 25px
+      if (deltaX > 25 || deltaY > 25) {
+        touchMoved = true;
+        if (longPressTimeout) {
+          clearTimeout(longPressTimeout);
+          longPressTimeout = null;
+        }
       }
     };
 
     const handleTouchEnd = () => {
-      handleLongPressEnd();
+      if (longPressTimeout) {
+        clearTimeout(longPressTimeout);
+        longPressTimeout = null;
+      }
+      touchStartPos = null;
+      touchMoved = false;
+
+      // Enable dragging again
+      map.dragging.enable();
     };
 
     mapContainer.addEventListener("touchstart", handleTouchStart, {
@@ -407,9 +430,6 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
     });
     mapContainer.addEventListener("touchend", handleTouchEnd);
     mapContainer.addEventListener("touchcancel", handleTouchEnd);
-
-    // Cancel on map move/drag
-    map.on("move", handleLongPressEnd);
 
     addMarkers();
 
@@ -431,15 +451,21 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
       if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current);
       }
-      if (longPressTimerRef.current) {
-        clearTimeout(longPressTimerRef.current);
+      if (longPressTimeout) {
+        clearTimeout(longPressTimeout);
       }
     };
+    // `addMarkers` is defined in-component; we intentionally keep this init effect
+    // stable and run it only when Leaflet is loaded.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLeafletLoaded]);
 
   // Re-add markers when active seller or filter changes
   useEffect(() => {
     addMarkers();
+    // `addMarkers` is defined in-component and intentionally not in deps to avoid
+    // re-binding Leaflet markers too often; dependencies above already trigger reruns.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSellerId, filteredProducts]);
 
   // Long-press on GPS button: pan map to current user position
@@ -466,16 +492,13 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
     <div className="absolute inset-0 z-0 w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full" />
 
-      {/* Top blue shadow */}
-      <div className="block lg:hidden absolute top-0 left-0 right-0 w-full h-16 pointer-events-none z-1000 bg-linear-to-b from-[#231E64] via-[#231E64]/40 to-transparent" />
-
       {/* GPS Button */}
       <div
         onClick={toggleGps}
         onMouseDown={handleGpsButtonMouseDown}
         onMouseUp={handleGpsButtonMouseUp}
         onMouseLeave={handleGpsButtonMouseUp}
-        className="absolute bottom-72 left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
+        className="absolute bottom-[calc(320px+env(safe-area-inset-bottom)+16px)] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
       >
         <div
           className={`bg-gray-200/50 backdrop-blur-sm  border border-white sm:bg-gray-100/70 rounded-lg flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${isGpsEnabled ? "text-primary" : "text-gray-800"}`}

@@ -43,10 +43,10 @@ export default function ProductsList({
                 {specialProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="grid grid-cols-2 border-b border-gray-100 pb-8"
+                    className="grid grid-cols-2 border-b border-gray-100 pb-8 lg:mx-4 xl:mx-8"
                   >
                     <div className="flex justify-center items-center">
-                      <div className="relative w-40 h-40 rounded-lg overflow-hidden">
+                      <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
                         <Image
                           src={
                             product.img || "/assets/images/fallback/phone.png"
@@ -121,10 +121,10 @@ export default function ProductsList({
                 {purchasedProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="grid grid-cols-2 border-b border-gray-100 pb-8"
+                    className="grid grid-cols-2 border-b border-gray-100 pb-8 lg:mx-4 xl:mx-8"
                   >
                     <div className="flex justify-center items-center">
-                      <div className="relative w-40 h-40 rounded-lg overflow-hidden">
+                      <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
                         <Image
                           src={
                             product.img || "/assets/images/fallback/phone.png"

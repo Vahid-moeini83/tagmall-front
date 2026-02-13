@@ -1,11 +1,13 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 import { LocationIcon, MailIcon, SearchIcon, ShoppingBagIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import usePublicStore from "@/app/store/publicStore";
+import { ProfileModal, PartnershipModal } from "@/components/modules/profile";
+import { PopoverWithTrigger } from "@/components/ui/popover";
 
 const navLinks = [
   { id: "location", icon: <LocationIcon color="currentColor" />, href: "#" },
@@ -19,6 +21,8 @@ const LONG_PRESS_MS = 500;
 function MainNavigation() {
   const [leftLinks, rightLinks] = [navLinks.slice(0, 2), navLinks.slice(2, 4)];
   const longPressTimerRef = useRef(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isPartnershipOpen, setIsPartnershipOpen] = useState(false);
 
   const filterPopoverOpen = usePublicStore((s) => s.homeFilterPopoverOpen);
   const setFilterPopoverOpen = usePublicStore(
@@ -57,8 +61,73 @@ function MainNavigation() {
     [setSearchBoxOpen],
   );
 
+  const avatarElement = (
+    <div className="w-12 h-12 relative">
+      <Image
+        src="/assets/images/fallback/avatar.png"
+        fill
+        alt="avatar"
+        className="bg-white rounded-lg"
+      />
+    </div>
+  );
+
+  // Mock products data for partnership
+  const mockProducts = [
+    {
+      id: 1,
+      name: "هدفون بی‌سیم شیائومی",
+      img: "/assets/images/products/headphone.png",
+    },
+    {
+      id: 2,
+      name: "ماوس بی‌سیم لاجیتک",
+      img: "/assets/images/products/mouse.png",
+    },
+    {
+      id: 3,
+      name: "پاوربانک 20000 میلی‌آمپری",
+      img: "/assets/images/products/powerbank.png",
+    },
+    {
+      id: 4,
+      name: "ساعت هوشمند اپل واچ",
+      img: "/assets/images/products/applewatch.png",
+    },
+    {
+      id: 5,
+      name: "هندزفری بلوتوثی سامسونگ",
+      img: "/assets/images/products/airpods.png",
+    },
+    {
+      id: 6,
+      name: "دوربین اکشن گوپرو Hero",
+      img: "/assets/images/products/camera.png",
+    },
+  ];
+
+  const handlePartnershipOpen = () => {
+    setIsPartnershipOpen(true);
+    setIsProfileOpen(false);
+  };
+
   return (
     <>
+      {/* Profile Modal */}
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        triggerElement={avatarElement}
+        onPartnershipOpen={handlePartnershipOpen}
+      />
+
+      {/* Partnership Modal */}
+      <PartnershipModal
+        isOpen={isPartnershipOpen}
+        onClose={() => setIsPartnershipOpen(false)}
+        products={mockProducts}
+      />
+
       {/* Desktop: fixed sidebar on the right */}
       <div className="hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 px-6 xl:pr-10 flex-col justify-end pb-8 bg-gray-200/50 backdrop-blur-sm z-10">
         <div className="flex flex-col items-center gap-6">
@@ -82,34 +151,16 @@ function MainNavigation() {
               </Link>
             ))}
           </div>
-          <div className="w-12 h-12 relative">
-            <Image
-              src="/assets/images/fallback/avatar.png"
-              fill
-              alt="avatar"
-              className="bg-white rounded-lg"
-            />
-          </div>
+          {avatarElement}
         </div>
       </div>
 
-      {/* Mobile: fixed bottom nav bar */}
+      {/* Mobile: Location filter popover */}
       {filterPopoverOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-90 bg-gray-200/50 backdrop-blur-md lg:hidden animate-fade-in"
-            onClick={() => setFilterPopoverOpen(false)}
-          />
-          <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-100 w-[calc(100vw-2rem)] max-w-[608px] bg-white rounded-lg p-2 shadow-lg lg:hidden animate-slide-up-simple">
-            <HomeFilterContent onClose={() => setFilterPopoverOpen(false)} />
-          </div>
-        </>
-      )}
-
-      {/* Location button - always on top when filter is open */}
-      {filterPopoverOpen && (
-        <div className="fixed bottom-0 left-0 right-0 z-100 w-full max-w-[640px] mx-auto lg:hidden pointer-events-none">
-          <div className="flex flex-row items-center justify-around gap-4 py-3 px-4 w-full">
+        <PopoverWithTrigger
+          isOpen={filterPopoverOpen}
+          onClose={() => setFilterPopoverOpen(false)}
+          trigger={
             <Link
               href="#"
               type="button"
@@ -123,16 +174,12 @@ function MainNavigation() {
             >
               <LocationIcon color="currentColor" />
             </Link>
-            {/* Spacer for shop icon */}
-            <div className="w-12 h-12 shrink-0" />
-            {/* Spacer for avatar */}
-            <div className="w-12 h-12 shrink-0" />
-            {/* Spacer for mail icon */}
-            <div className="w-12 h-12 shrink-0" />
-            {/* Spacer for search icon */}
-            <div className="w-12 h-12 shrink-0" />
-          </div>
-        </div>
+          }
+          triggerPosition="bottom-[calc(12px+env(safe-area-inset-bottom))] left-4 lg:hidden"
+          popoverClassName="bottom-20 left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-[608px] bg-white rounded-lg p-2 shadow-lg lg:hidden animate-slide-up-simple"
+        >
+          <HomeFilterContent onClose={() => setFilterPopoverOpen(false)} />
+        </PopoverWithTrigger>
       )}
 
       <div
@@ -165,14 +212,7 @@ function MainNavigation() {
               </Link>
             ),
           )}
-          <div className="w-12 h-12 relative shrink-0">
-            <Image
-              src="/assets/images/fallback/avatar.png"
-              fill
-              alt="avatar"
-              className="bg-white rounded-lg"
-            />
-          </div>
+          <div className="shrink-0">{avatarElement}</div>
           {rightLinks.map((item) => (
             <Link
               key={item.id}

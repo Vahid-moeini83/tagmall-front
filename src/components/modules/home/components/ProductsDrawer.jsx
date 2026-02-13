@@ -24,26 +24,23 @@ const SHOP_IMAGES = [
 ];
 
 // Maximum heights in pixels for snap points
-const MAX_SNAP_HEIGHT_DEFAULT = 236;
-const MAX_SNAP_HEIGHT_WITH_SEARCH = 350;
+const MAX_SNAP_HEIGHT_DEFAULT = 228;
+const MAX_SNAP_HEIGHT_WITH_SEARCH = 280;
 const SNAP_POINT_FULL = 0.9;
 const LONG_PRESS_MS = 500;
 
-// Calculate snap point using actual viewport height
-const calculateSnapPoint = (maxHeight) => {
-  if (typeof window === "undefined") return 0.36;
+// Calculate snap point using a stable viewport height.
+// We intentionally avoid "dynamic" viewport changes (mobile browser bars) to prevent snap jumps.
+const calculateSnapPoint = ({ maxHeight, viewportHeight }) => {
+  if (!viewportHeight) return 0.39;
 
-  // Use visualViewport for accurate mobile viewport (excludes browser UI)
-  const viewportHeight = window.visualViewport
-    ? window.visualViewport.height
-    : window.innerHeight;
+  // Drawer is offset from bottom by 72px (navigation bar).
+  // Keep this consistent with DrawerContent bottom offset.
+  const availableHeight = Math.max(viewportHeight - 72, 1);
 
-  // Subtract navigation bar height (72px)
-  const availableHeight = viewportHeight - 72;
-
-  // Calculate ratio, ensuring it doesn't exceed 50% of available height
+  // Calculate ratio, ensuring it doesn't exceed 39% of available height
   const calculatedRatio = maxHeight / availableHeight;
-  return Math.min(calculatedRatio, 0.5);
+  return Math.min(calculatedRatio, 0.39);
 };
 
 export default function ProductsDrawer({
@@ -61,12 +58,12 @@ export default function ProductsDrawer({
     return "visit";
   });
 
-  const [snapPoints, setSnapPoints] = useState(() => {
-    const firstSnap = showSearchResultBox
-      ? calculateSnapPoint(MAX_SNAP_HEIGHT_WITH_SEARCH)
-      : calculateSnapPoint(MAX_SNAP_HEIGHT_DEFAULT);
-    return [firstSnap, SNAP_POINT_FULL];
-  });
+  // Keep the smallest viewport height observed, to avoid iOS/Chrome bar show/hide
+  // causing snap-point ratios to shift on real devices.
+  const stableViewportHeightRef = useRef(null);
+  const drawerContentRef = useRef(null);
+
+  const [snapPoints, setSnapPoints] = useState(() => [0.3, SNAP_POINT_FULL]);
 
   const [activeSnapPoint, setActiveSnapPoint] = useState(snapPoints[0]);
   const [showSellerDetails, setShowSellerDetails] = useState(false);
@@ -221,9 +218,45 @@ export default function ProductsDrawer({
   // Update snap points when showSearchResultBox changes or viewport resizes
   useEffect(() => {
     const updateSnapPoints = () => {
-      const firstSnap = showSearchResultBox
-        ? calculateSnapPoint(MAX_SNAP_HEIGHT_WITH_SEARCH)
-        : calculateSnapPoint(MAX_SNAP_HEIGHT_DEFAULT);
+      const currentViewportHeight =
+        window.visualViewport?.height || window.innerHeight;
+
+      if (
+        !stableViewportHeightRef.current ||
+        currentViewportHeight < stableViewportHeightRef.current
+      ) {
+        stableViewportHeightRef.current = currentViewportHeight;
+      }
+
+      const viewportHeight = stableViewportHeightRef.current;
+
+      // Measure actual rendered height instead of using hardcoded values
+      let maxHeight = MAX_SNAP_HEIGHT_DEFAULT;
+
+      if (showSearchResultBox && drawerContentRef.current) {
+        // Wait for SearchResultBox to render, then measure
+        requestAnimationFrame(() => {
+          if (drawerContentRef.current) {
+            // Get the actual scrollHeight of the drawer content
+            const actualHeight = drawerContentRef.current.scrollHeight;
+
+            // Use measured height, but cap it at a reasonable maximum
+            maxHeight = Math.min(actualHeight, MAX_SNAP_HEIGHT_WITH_SEARCH);
+
+            const firstSnap = calculateSnapPoint({
+              maxHeight,
+              viewportHeight,
+            });
+            setSnapPoints([firstSnap, SNAP_POINT_FULL]);
+          }
+        });
+        return; // Exit early, will update in requestAnimationFrame
+      }
+
+      const firstSnap = calculateSnapPoint({
+        maxHeight,
+        viewportHeight,
+      });
       setSnapPoints([firstSnap, SNAP_POINT_FULL]);
     };
 
@@ -232,7 +265,6 @@ export default function ProductsDrawer({
     // Listen to visualViewport resize (more accurate for mobile)
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", updateSnapPoints);
-      window.visualViewport.addEventListener("scroll", updateSnapPoints);
     }
 
     // Fallback to window resize
@@ -241,7 +273,6 @@ export default function ProductsDrawer({
     return () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener("resize", updateSnapPoints);
-        window.visualViewport.removeEventListener("scroll", updateSnapPoints);
       }
       window.removeEventListener("resize", updateSnapPoints);
     };
@@ -252,6 +283,31 @@ export default function ProductsDrawer({
     setActiveSnapPoint(snapPoints[0]);
   }, [snapPoints]);
 
+  // Update slider when snap points, search box, or view mode changes
+  useEffect(() => {
+    if (!productsSliderInstance.current) return;
+
+    // Force reflow before update on mobile
+    const forceUpdate = () => {
+      if (productsSliderInstance.current) {
+        // Trigger reflow
+        void productsSliderInstance.current.container.offsetHeight;
+        productsSliderInstance.current.update();
+      }
+    };
+
+    // Wait for drawer animation and layout recalculation
+    const timer = setTimeout(() => {
+      requestAnimationFrame(() => {
+        forceUpdate();
+        // Double update for mobile browsers that need extra time
+        setTimeout(forceUpdate, 50);
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [snapPoints, showSearchResultBox, productsSliderInstance]);
+
   useEffect(() => {
     showSellerDetailsRef.current = showSellerDetails;
   }, [showSellerDetails]);
@@ -259,10 +315,26 @@ export default function ProductsDrawer({
   useEffect(() => {
     if (!productsSliderInstance.current) return;
 
+    // Force reflow before update on mobile
+    const forceUpdate = () => {
+      if (productsSliderInstance.current) {
+        // Trigger reflow
+        void productsSliderInstance.current.container.offsetHeight;
+        productsSliderInstance.current.update();
+      }
+    };
+
     requestAnimationFrame(() => {
-      productsSliderInstance.current?.update();
+      forceUpdate();
+      // Double update for mobile browsers that need extra time
+      setTimeout(forceUpdate, 50);
     });
-  }, [activeSnapPoint, showSellerDetails]);
+  }, [
+    activeSnapPoint,
+    showSellerDetails,
+    showSearchResultBox,
+    productsSliderInstance,
+  ]);
 
   useEffect(() => {
     if (
@@ -289,7 +361,7 @@ export default function ProductsDrawer({
     requestAnimationFrame(() => {
       productsSliderInstance.current.moveToIdx(idx);
     });
-  }, [activeProductId, closedStateProducts]);
+  }, [activeProductId, closedStateProducts, productsSliderInstance]);
 
   if (specialProducts.length === 0 && purchasedProducts.length === 0) {
     return null;
@@ -313,8 +385,8 @@ export default function ProductsDrawer({
         <DrawerContent
           className={cn(
             "rounded-t-xl pt-0 border-0! lg:hidden",
-            "data-[vaul-drawer-direction=bottom]:bottom-[72px]!",
-            "data-[vaul-drawer-direction=bottom]:max-h-[calc(100vh-2rem)]!",
+            "data-[vaul-drawer-direction=bottom]:bottom-[calc(72px+env(safe-area-inset-bottom))]!",
+            "data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-2rem-env(safe-area-inset-bottom))]!",
             "data-[vaul-drawer-direction=bottom]:left-1/2 data-[vaul-drawer-direction=bottom]:right-auto data-[vaul-drawer-direction=bottom]:-translate-x-1/2",
             "data-[vaul-drawer-direction=bottom]:w-full data-[vaul-drawer-direction=bottom]:max-w-[640px]",
           )}
@@ -327,6 +399,7 @@ export default function ProductsDrawer({
             <div className="bg-gray-800 h-1.5 w-24 rounded-full" aria-hidden />
           </div>
           <div
+            ref={drawerContentRef}
             className={cn(
               "rounded-t-xl flex flex-col overflow-hidden px-3 pb-3 pt-2 transition-[background-color,backdrop-filter]",
               homeFilterPopoverOpen
@@ -344,6 +417,7 @@ export default function ProductsDrawer({
               className={cn(
                 "flex-1 min-h-0",
                 isListMode ? "overflow-y-auto" : "overflow-hidden",
+                !isListMode && !showSellerDetails ? "flex" : "",
               )}
             >
               {showSellerDetails && selectedSeller ? (
@@ -491,7 +565,7 @@ export default function ProductsDrawer({
                 <div
                   key={filterMode}
                   ref={productsSliderRef}
-                  className="keen-slider h-full"
+                  className="keen-slider flex-1 min-h-0"
                 >
                   {closedStateProducts.map((product) => (
                     <div key={product.id} className="keen-slider__slide h-full">

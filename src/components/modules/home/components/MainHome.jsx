@@ -7,7 +7,13 @@ import {
   ProductsSlider,
   SellerDetails,
 } from "@/components/modules/home";
-import { ArrowUpDownIcon, StarIcon, VerticalListIcon } from "@/icons";
+import { SellerReviewsModal } from "@/components/modules/seller-reviews";
+import {
+  ArrowUpDownIcon,
+  StarIcon,
+  VerifyIcon,
+  VerticalListIcon,
+} from "@/icons";
 import Image from "next/image";
 import { sellers } from "@/lib/data";
 import { useState, useEffect, useRef } from "react";
@@ -19,6 +25,7 @@ import {
 } from "@/components/ui/popover";
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import { SearchResultBox } from "@/components/ui/search";
+import { mockSellerReviewsData } from "@/lib/mockReviewsData";
 
 // Dynamic import for Map to avoid SSR issues with Leaflet
 const Map = dynamic(() => import("@/components/modules/home/components/Map"), {
@@ -86,6 +93,7 @@ export default function MainHome() {
     workingHours: "",
   });
   const [isProductsListOpen, setIsProductsListOpen] = useState(false);
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const mapActionsRef = useRef(null);
 
   // Get active product from ID
@@ -212,6 +220,11 @@ export default function MainHome() {
           purchasedProducts={filteredPurchasedForList}
         />
       )}
+      <SellerReviewsModal
+        isOpen={isReviewsModalOpen}
+        onClose={() => setIsReviewsModalOpen(false)}
+        sellerData={mockSellerReviewsData}
+      />
       <div className="hidden lg:block">
         <SearchResultBox isMobile={false} />
       </div>
@@ -246,14 +259,17 @@ export default function MainHome() {
                 alt="avatar"
                 className="bg-white rounded-lg"
               />
-              <span
-                className="text-gray-600 cursor-pointer select-none"
-                onMouseDown={handleSellerNameMouseDown}
-                onMouseUp={handleSellerNameMouseUp}
-                onMouseLeave={handleSellerNameMouseLeave}
-              >
-                {activeSellerInfo.name}
-              </span>
+              <div className="flex items-center gap-0.5">
+                <span
+                  className="text-gray-600 cursor-pointer select-none"
+                  onMouseDown={handleSellerNameMouseDown}
+                  onMouseUp={handleSellerNameMouseUp}
+                  onMouseLeave={handleSellerNameMouseLeave}
+                >
+                  {activeSellerInfo.name}
+                </span>
+                <VerifyIcon size={20} />
+              </div>
             </div>
             <div className="flex items-center gap-4 2xl:gap-8">
               <Popover
@@ -284,7 +300,10 @@ export default function MainHome() {
             </div>
           </div>
           <div className="flex items-end justify-between">
-            <div className="flex flex-col gap-1">
+            <div
+              className="flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+              // onClick={() => setIsReviewsModalOpen(true)}
+            >
               <div className="flex items-center gap-1">
                 <StarIcon className="text-yellow-500 w-4 h-4" />
                 <span>

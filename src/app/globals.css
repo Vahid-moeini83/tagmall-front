@@ -32,6 +32,8 @@
 
   --green-color-600: #06de70;
 
+  --yellow-color-600: #ffc107;
+
   /* Error colors */
   --error-color: #c30000;
   --error-color-medium: #ed2e2e;
@@ -82,6 +84,8 @@
 
   --color-green-600: var(--green-color-600);
 
+  --color-yellow-600: var(--yellow-color-600);
+
   --color-error: var(--error-color);
   --color-error-medium: var(--error-color-medium);
   --color-error-light: var(--error-color-light);
@@ -112,26 +116,25 @@
   }
 
   body {
-    overflow: hidden;
     font-family: Dana !important;
   }
 
   /* مهم: هر المنتی که overflow-y دارد LTR شود */
-  *[style*="overflow"],
-  *[class*="overflow"] {
+  *[style*="overflow-y"],
+  *[class*="overflow-y"] {
     direction: ltr !important;
   }
 
   /* محتوا دوباره RTL */
-  *[style*="overflow"] > *,
-  *[class*="overflow"] > * {
+  *[style*="overflow-y"] > *,
+  *[class*="overflow-y"] > * {
     direction: rtl !important;
   }
 
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
-    background: #fbfbfb;
+    background: transparent;
     border-radius: 8px;
   }
 
