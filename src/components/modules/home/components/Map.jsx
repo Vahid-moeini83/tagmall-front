@@ -34,7 +34,7 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
   const isLongPressTriggeredRef = useRef(false);
   const isGpsEnabledRef = useRef(false);
 
-  const showSearchResultBox = usePublicStore((s) => s.showSearchResultBox);
+  const isSearchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
 
   useEffect(() => {
     isGpsEnabledRef.current = isGpsEnabled;
@@ -498,7 +498,7 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
         onMouseDown={handleGpsButtonMouseDown}
         onMouseUp={handleGpsButtonMouseUp}
         onMouseLeave={handleGpsButtonMouseUp}
-        className="absolute bottom-[calc(320px+env(safe-area-inset-bottom)+16px)] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
+        className="absolute bottom-[calc(270px+env(safe-area-inset-bottom)+16px)] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
       >
         <div
           className={`bg-gray-200/50 backdrop-blur-sm  border border-white sm:bg-gray-100/70 rounded-lg flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${isGpsEnabled ? "text-primary" : "text-gray-800"}`}
@@ -508,15 +508,17 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
       </div>
 
       {/* Logo */}
-      <div className="absolute top-4 lg:left-8 lg:right-[unset] right-4 z-1000">
-        <Image
-          src="/assets/images/logo/main-logo.svg"
-          width={110}
-          height={40}
-          alt="main-logo"
-          className="object-contain"
-        />
-      </div>
+      {!isSearchBoxOpen && (
+        <div className="absolute top-6 lg:top-9 right-2.5 lg:left-8 lg:right-[unset] z-1000">
+          <Image
+            src="/assets/images/logo/main-logo.svg"
+            width={110}
+            height={40}
+            alt="main-logo"
+            className="object-contain"
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -26,6 +26,7 @@ import {
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import { SearchResultBox } from "@/components/ui/search";
 import { mockSellerReviewsData } from "@/lib/mockReviewsData";
+import { useSearchParams } from "next/navigation";
 
 // Dynamic import for Map to avoid SSR issues with Leaflet
 const Map = dynamic(() => import("@/components/modules/home/components/Map"), {
@@ -37,6 +38,7 @@ export default function MainHome() {
   const homeFilterSpecial = usePublicStore((s) => s.homeFilterSpecial);
   const homeFilterVisit = usePublicStore((s) => s.homeFilterVisit);
   const scrollContainerRef = useRef(null);
+  const params = useSearchParams();
 
   const filterMode =
     homeFilterSpecial && homeFilterVisit
@@ -148,6 +150,11 @@ export default function MainHome() {
   const handleProductChange = (product) => {
     if (product?.id) {
       setActiveProductId(product.id);
+
+      // Pan map to the product's seller only if shouldPanMap is true
+      if (mapActionsRef.current && product.seller?.id) {
+        mapActionsRef.current.panToSeller(product.seller.id);
+      }
     }
   };
 
@@ -316,7 +323,7 @@ export default function MainHome() {
               </span>
             </div>
             {viewMode === "slider" && (
-              <div className="text-red-600 pl-10">02:19:11</div>
+              <div className="text-error-medium pl-10">02:19:11</div>
             )}
           </div>
         </div>

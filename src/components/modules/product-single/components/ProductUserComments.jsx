@@ -71,7 +71,7 @@ export default function ProductUserComments() {
                       <SupportIcon size={20} color="black" />
                     </div>
                   </div>
-                  <button className="text-shade-100 text-center">
+                  <button className="text-primary text-center">
                     ثبت دیدگاه یا پرسش
                   </button>
                 </div>
@@ -120,7 +120,7 @@ export default function ProductUserComments() {
                             {box.question.date}
                           </p>
                         </div>
-                        <button className="text-xs text-shade-100 text-center">
+                        <button className="text-xs text-primary text-center">
                           پاسخ
                         </button>
                       </div>
@@ -140,7 +140,7 @@ export default function ProductUserComments() {
                             {box.answer.date}
                           </p>
                         </div>
-                        <button className="text-xs text-shade-100 self-end">
+                        <button className="text-xs text-primary self-end">
                           پاسخ
                         </button>
                       </div>

@@ -98,6 +98,10 @@
   --color-warning-medium: var(--warning-color-medium);
   --color-warning-light: var(--warning-color-light);
 
+  /* Font families */
+  --font-dana: Dana;
+  --font-iransans: IranSans;
+
   /* Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -109,14 +113,14 @@
 
 @layer base {
   * {
-    font-family: Dana !important;
+    font-family: Dana;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
 
   body {
-    font-family: Dana !important;
+    font-family: Dana;
   }
 
   /* مهم: هر المنتی که overflow-y دارد LTR شود */
@@ -191,6 +195,14 @@
 }
 
 @layer utilities {
+  .font-iransans {
+    font-family: IranSans !important;
+  }
+
+  .font-dana {
+    font-family: Dana !important;
+  }
+
   .animate-slide-in-down {
     animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }

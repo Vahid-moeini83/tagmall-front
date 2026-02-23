@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MoreCircleIcon, MinusCircleIcon, LocateIcon } from "@/icons";
+import {
+  MoreSquareIcon,
+  LocateIcon,
+  LookingAvatarIcon,
+  StrokeArrowLeftIcon,
+} from "@/icons";
 import usePublicStore from "@/app/store/publicStore";
 import Image from "next/image";
 
@@ -72,50 +77,78 @@ function SearchSuggestions({ searchQuery }) {
 
   return (
     <div className="flex-1 overflow-y-auto lg:p-4">
-      <h3 className="text-tint-700 font-bold mb-4 text-sm lg:text-base">
-        نتایج جستجو
+      <h3 className="text-primary font-bold mb-6 text-sm lg:text-base">
+        پیشنهادات جستجو
       </h3>
 
       <div className="flex flex-col gap-2">
         {filteredSuggestions.map((item) => (
-          <div key={item.id} className="overflow-hidden">
-            <div className="flex items-center justify-between p-3 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out group">
-              <span className="text-gray-600 hover:text-primary flex-1 text-sm lg:text-base">
-                {item.name}
-              </span>
+          <div
+            key={item.id}
+            className={`overflow-hidden transition-all duration-300 ${
+              expandedCategory === item.id
+                ? "bg-gray-200 rounded-lg px-[10px] py-4"
+                : ""
+            }`}
+          >
+            <div className="flex items-center justify-between py-3 pl-2.5 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out group">
+              <div
+                className={`flex-1 transition-all duration-300 ${
+                  expandedCategory === item.id ? "text-center" : ""
+                }`}
+              >
+                <span className="text-gray-600 hover:text-primary text-sm lg:text-base">
+                  {expandedCategory === item.id && item.type === "category" ? (
+                    <>
+                      <span className="font-black">گروه کالایی</span>{" "}
+                      {item.name}
+                    </>
+                  ) : (
+                    item.name
+                  )}
+                </span>
+                <div className="text-xs text-gray-600 mt-1">
+                  <span className="font-bold">محدوده قیمت</span> 20,000 تا
+                  1,200,000 تومان
+                </div>
+              </div>
               <div className="flex items-center gap-2">
-                {item.type === "category" && (
-                  <>
-                    <button
-                      onClick={() => handleLocationClick(item)}
-                      className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
-                    >
-                      <LocateIcon size={20} color="currentColor" />
-                    </button>
-                    <button
-                      onClick={() => toggleCategory(item.id)}
-                      className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
-                    >
-                      {expandedCategory === item.id ? (
-                        <MinusCircleIcon
-                          size={20}
-                          className="transition-all duration-300 ease-in-out"
-                        />
-                      ) : (
-                        <MoreCircleIcon
-                          size={20}
-                          className="transition-all duration-300 ease-in-out"
-                        />
+                {item.type === "category" &&
+                  (expandedCategory === null ||
+                    expandedCategory === item.id) && (
+                    <>
+                      {expandedCategory !== item.id && (
+                        <button
+                          onClick={() => handleLocationClick(item)}
+                          className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
+                        >
+                          <LocateIcon size={20} color="currentColor" />
+                        </button>
                       )}
-                    </button>
-                  </>
-                )}
+                      <button
+                        onClick={() => toggleCategory(item.id)}
+                        className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
+                      >
+                        {expandedCategory === item.id ? (
+                          <StrokeArrowLeftIcon
+                            size={20}
+                            className="transition-all duration-300 ease-in-out"
+                          />
+                        ) : (
+                          <MoreSquareIcon
+                            size={20}
+                            className="transition-all duration-300 ease-in-out"
+                          />
+                        )}
+                      </button>
+                    </>
+                  )}
               </div>
             </div>
 
             {item.type === "category" && (
               <div
-                className={`mr-2 flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
+                className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
                   expandedCategory === item.id
                     ? "max-h-96 opacity-100 mt-1"
                     : "max-h-0 opacity-0"
@@ -124,9 +157,9 @@ function SearchSuggestions({ searchQuery }) {
                 {item.brands.map((brand) => (
                   <div
                     key={brand.id}
-                    className="p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-all duration-200 ease-in-out"
+                    className="py-2  hover:bg-gray-50 rounded-lg cursor-pointer transition-all duration-200 ease-in-out"
                   >
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-4">
                       <div className="relative w-10 h-10">
                         <Image
                           src="/assets/images/fallback/brand.png"
@@ -136,9 +169,15 @@ function SearchSuggestions({ searchQuery }) {
                           quality={100}
                         />
                       </div>
-                      <span className="text-gray-600 hover:text-primary text-sm lg:text-base">
-                        {brand.name}
-                      </span>
+                      <div className="flex-1">
+                        <span className="text-gray-600 hover:text-primary text-sm lg:text-base block">
+                          {brand.name}
+                        </span>
+                        <div className="text-xs text-gray-600 mt-1">
+                          محدوده قیمت <span className="font-bold">20,000</span>{" "}
+                          تا <span className="font-bold">1,200,000</span> تومان
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}

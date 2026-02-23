@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { MoreCircleIcon, MinusCircleIcon, CloseCircleIcon } from "@/icons";
+import { useState, useEffect, useRef } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
+  MoreSquareIcon,
+  CloseSquareIcon,
+  LookingAvatarIcon,
+  UndoIcon,
+  StrokeArrowLeftIcon,
+} from "@/icons";
+import toast from "react-hot-toast";
 
 // Mock data - بعداً از API میاد
 const mockHistory = [
@@ -45,9 +46,9 @@ const mockHistory = [
 function SearchHistory() {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [historyItems, setHistoryItems] = useState(mockHistory);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [pendingDeletes, setPendingDeletes] = useState([]);
+  const countdownTimerRef = useRef(null);
 
   const toggleCategory = (categoryId) => {
     setExpandedCategory((prev) => (prev === categoryId ? null : categoryId));
@@ -66,48 +67,154 @@ function SearchHistory() {
   };
 
   const handleDeleteClick = (target) => {
-    setDeleteTarget(target);
-    setDeleteDialogOpen(true);
-  };
+    let deletedItem;
 
-  const handleConfirmDelete = () => {
-    if (deleteTarget?.type === "all") {
+    if (target.type === "all") {
+      deletedItem = { type: "all", items: [...historyItems] };
       setHistoryItems([]);
-    } else if (deleteTarget?.type === "category") {
-      setHistoryItems((prev) =>
-        prev.filter((item) => item.id !== deleteTarget.id),
-      );
-      if (expandedCategory === deleteTarget.id) {
+    } else if (target.type === "category") {
+      const category = historyItems.find((item) => item.id === target.id);
+      deletedItem = { type: "category", item: category };
+      setHistoryItems((prev) => prev.filter((item) => item.id !== target.id));
+      if (expandedCategory === target.id) {
         setExpandedCategory(null);
       }
-    } else if (deleteTarget?.type === "item") {
-      setHistoryItems((prev) =>
-        prev.filter((item) => item.id !== deleteTarget.id),
+    } else if (target.type === "item") {
+      const item = historyItems.find((i) => i.id === target.id);
+      deletedItem = { type: "item", item: item };
+      setHistoryItems((prev) => prev.filter((item) => item.id !== target.id));
+    } else if (target.type === "subcategory") {
+      const category = historyItems.find(
+        (item) => item.id === target.categoryId,
       );
-    } else if (deleteTarget?.type === "subcategory") {
+      const subcategory = category?.subcategories.find(
+        (sub) => sub.id === target.id,
+      );
+      deletedItem = {
+        type: "subcategory",
+        item: subcategory,
+        categoryId: target.categoryId,
+      };
       setHistoryItems((prev) =>
         prev.map((item) => {
-          if (item.id === deleteTarget.categoryId) {
+          if (item.id === target.categoryId) {
+            const updatedSubcategories = item.subcategories.filter(
+              (sub) => sub.id !== target.id,
+            );
+            // If this was the last subcategory, close the category
+            if (
+              updatedSubcategories.length === 0 &&
+              expandedCategory === target.categoryId
+            ) {
+              setExpandedCategory(null);
+            }
             return {
               ...item,
-              subcategories: item.subcategories.filter(
-                (sub) => sub.id !== deleteTarget.id,
-              ),
+              subcategories: updatedSubcategories,
             };
           }
           return item;
         }),
       );
     }
-    setDeleteDialogOpen(false);
-    setDeleteTarget(null);
-    setDeleteMode(false);
+
+    setPendingDeletes((prev) => [...prev, deletedItem]);
   };
 
-  const handleCancelDelete = () => {
-    setDeleteDialogOpen(false);
-    setDeleteTarget(null);
+  const handleUndo = () => {
+    pendingDeletes.forEach((deletedItem) => {
+      if (deletedItem.type === "all") {
+        setHistoryItems(deletedItem.items);
+      } else if (deletedItem.type === "category") {
+        setHistoryItems((prev) => [...prev, deletedItem.item]);
+      } else if (deletedItem.type === "item") {
+        setHistoryItems((prev) => [...prev, deletedItem.item]);
+      } else if (deletedItem.type === "subcategory") {
+        setHistoryItems((prev) =>
+          prev.map((item) => {
+            if (item.id === deletedItem.categoryId) {
+              return {
+                ...item,
+                subcategories: [...item.subcategories, deletedItem.item],
+              };
+            }
+            return item;
+          }),
+        );
+      }
+    });
+
+    setPendingDeletes([]);
+    toast.dismiss();
+    if (countdownTimerRef.current) {
+      clearInterval(countdownTimerRef.current);
+    }
   };
+
+  const showToastWithCountdown = () => {
+    let countdown = 5;
+    const toastId = toast(
+      () => (
+        <div className="flex items-center justify-between gap-4 w-full">
+          <span className="text-sm">حذف انجام شد ({countdown} ثانیه)</span>
+          <button
+            onClick={handleUndo}
+            className="flex items-center justify-center hover:scale-110 transition-transform"
+          >
+            <UndoIcon />
+          </button>
+        </div>
+      ),
+      {
+        duration: Infinity,
+        position: "bottom-center",
+      },
+    );
+
+    countdownTimerRef.current = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        toast(
+          () => (
+            <div className="flex items-center justify-between gap-4 w-full">
+              <span className="text-sm">حذف انجام شد ({countdown} ثانیه)</span>
+              <button
+                onClick={handleUndo}
+                className="flex items-center justify-center hover:scale-110 transition-transform"
+              >
+                <UndoIcon />
+              </button>
+            </div>
+          ),
+          {
+            id: toastId,
+          },
+        );
+      } else {
+        clearInterval(countdownTimerRef.current);
+        toast.dismiss(toastId);
+      }
+    }, 1000);
+  };
+
+  const handleConfirmDeletes = () => {
+    if (pendingDeletes.length > 0) {
+      showToastWithCountdown();
+    }
+    setPendingDeletes([]);
+    setDeleteMode(false);
+    setExpandedCategory(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (countdownTimerRef.current) {
+        clearInterval(countdownTimerRef.current);
+        countdownTimerRef.current = null;
+      }
+      // Don't dismiss toast on unmount - let it continue
+    };
+  }, []);
 
   const expandedCategoryData = historyItems.find(
     (item) => item.id === expandedCategory,
@@ -126,27 +233,6 @@ function SearchHistory() {
     return "پاک کردن تاریخچه جست و جو و بازدیدهای اخیر";
   };
 
-  const getDialogText = () => {
-    if (deleteTarget?.type === "all") {
-      return "آیا از پاک کردن همه تاریخچه جست و جو و بازدیدهای اخیر اطمینان دارید؟";
-    } else if (deleteTarget?.type === "category") {
-      const category = historyItems.find((item) => item.id === deleteTarget.id);
-      return `آیا از پاک کردن همه بازدیدهای اخیر "${category?.name}" اطمینان دارید؟`;
-    } else if (deleteTarget?.type === "item") {
-      const item = historyItems.find((i) => i.id === deleteTarget.id);
-      return `آیا از پاک کردن "${item?.name}" اطمینان دارید؟`;
-    } else if (deleteTarget?.type === "subcategory") {
-      const category = historyItems.find(
-        (item) => item.id === deleteTarget.categoryId,
-      );
-      const subcategory = category?.subcategories.find(
-        (sub) => sub.id === deleteTarget.id,
-      );
-      return `آیا از پاک کردن "${subcategory?.name}" اطمینان دارید؟`;
-    }
-    return "";
-  };
-
   const showDeleteButtons = deleteMode && !expandedCategory;
   const showSubcategoryDeleteButtons = deleteMode && expandedCategory;
 
@@ -161,16 +247,46 @@ function SearchHistory() {
   return (
     <>
       <div className="flex-1 overflow-y-auto lg:p-4">
-        <h3 className="text-tint-700 font-bold mb-4 text-sm lg:text-base">
-          تاریخچه جست و جو و بازدیدهای اخیر
-        </h3>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-primary font-bold text-sm lg:text-base">
+            تاریخچه جست و جو و بازدیدهای اخیر
+          </h3>
+          {deleteMode && (
+            <button
+              onClick={handleConfirmDeletes}
+              className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+            >
+              تایید
+            </button>
+          )}
+        </div>
 
         <div className="flex flex-col gap-2">
           {historyItems.map((item) => (
-            <div key={item.id} className="overflow-hidden">
-              <div className="flex items-center justify-between p-3 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out group">
-                <span className="text-gray-600 hover:text-primary flex-1 text-sm lg:text-base">
-                  {item.name}
+            <div
+              key={item.id}
+              className={`overflow-hidden transition-all duration-300 ${
+                expandedCategory === item.id
+                  ? "bg-gray-200 rounded-lg px-5 pt-4"
+                  : ""
+              }`}
+            >
+              <div
+                className={`flex items-center justify-between hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out group ${expandedCategory === item.id ? "pb-3" : "py-4 pl-2.5"}`}
+              >
+                <span
+                  className={`text-gray-600 hover:text-primary flex-1 text-sm lg:text-base transition-all duration-300 ${
+                    expandedCategory === item.id ? "text-center" : ""
+                  }`}
+                >
+                  {expandedCategory === item.id && item.type === "category" ? (
+                    <>
+                      <span className="font-black">بازدیدهای اخیر</span>{" "}
+                      {item.name}
+                    </>
+                  ) : (
+                    item.name
+                  )}
                 </span>
                 <div className="flex items-center gap-2">
                   {showDeleteButtons ? (
@@ -180,21 +296,24 @@ function SearchHistory() {
                       }
                       className="transition-all duration-300 ease-in-out hover:scale-110"
                     >
-                      <CloseCircleIcon size={18} />
+                      <CloseSquareIcon size={18} />
                     </button>
                   ) : (
-                    item.type === "category" && (
+                    item.type === "category" &&
+                    item.subcategories.length > 0 &&
+                    (expandedCategory === null ||
+                      expandedCategory === item.id) && (
                       <button
                         onClick={() => toggleCategory(item.id)}
                         className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
                       >
                         {expandedCategory === item.id ? (
-                          <MinusCircleIcon
+                          <StrokeArrowLeftIcon
                             size={20}
                             className="transition-all duration-300 ease-in-out"
                           />
                         ) : (
-                          <MoreCircleIcon
+                          <MoreSquareIcon
                             size={20}
                             className="transition-all duration-300 ease-in-out"
                           />
@@ -207,7 +326,7 @@ function SearchHistory() {
 
               {item.type === "category" && (
                 <div
-                  className={`mr-6 flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
+                  className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
                     expandedCategory === item.id
                       ? "max-h-96 opacity-100 mt-1"
                       : "max-h-0 opacity-0"
@@ -216,11 +335,15 @@ function SearchHistory() {
                   {item.subcategories.map((sub) => (
                     <div
                       key={sub.id}
-                      className="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg cursor-pointer transition-all duration-200 ease-in-out text-gray-600 hover:text-primary group"
+                      className="flex items-center justify-between py-4 hover:bg-gray-50 rounded-lg cursor-pointer transition-all duration-200 ease-in-out text-gray-600 hover:text-primary group"
                     >
-                      <span className="flex-1 text-sm lg:text-base">
-                        {sub.name}
-                      </span>
+                      <div className="flex items-center gap-4 flex-1">
+                        <LookingAvatarIcon
+                          color="var(--color-gray-400)"
+                          size={20}
+                        />
+                        <span className="text-sm lg:text-base">{sub.name}</span>
+                      </div>
                       {showSubcategoryDeleteButtons && (
                         <button
                           onClick={() =>
@@ -232,7 +355,7 @@ function SearchHistory() {
                           }
                           className="transition-all duration-300 ease-in-out hover:scale-110"
                         >
-                          <CloseCircleIcon color="black" />
+                          <CloseSquareIcon size={20} color="black" />
                         </button>
                       )}
                     </div>
@@ -247,35 +370,11 @@ function SearchHistory() {
       <div className="p-4">
         <button
           onClick={handleDeleteModeToggle}
-          className="w-full py-2 text-tint-600 hover:text-tint-700 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 text-sm"
+          className="w-full py-2 text-primary hover:text-primary/80 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 text-sm"
         >
           {getDeleteButtonText()}
         </button>
       </div>
-
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent showCloseButton={false} className="z-1000">
-          <div className="py-4 text-center text-gray-700 text-sm lg:text-base">
-            {getDialogText()}
-          </div>
-          <DialogFooter className="flex flex-row gap-2 mt-4">
-            <DialogClose asChild>
-              <button
-                onClick={handleCancelDelete}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm lg:text-base"
-              >
-                انصراف
-              </button>
-            </DialogClose>
-            <button
-              onClick={handleConfirmDelete}
-              className="flex-1 px-4 py-2 bg-error-medium text-white rounded-lg hover:bg-error transition-colors text-sm lg:text-base"
-            >
-              حذف
-            </button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

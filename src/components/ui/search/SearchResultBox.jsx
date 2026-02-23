@@ -3,12 +3,28 @@
 import { CloseSquareIcon } from "@/icons";
 import usePublicStore from "@/app/store/publicStore";
 
-function SearchResultBox({ isMobile = false }) {
+function SearchResultBox({
+  isMobile = false,
+  searchTerm = null,
+  standalone = false,
+}) {
   const showSearchResultBox = usePublicStore((s) => s.showSearchResultBox);
   const searchResultData = usePublicStore((s) => s.searchResultData);
   const setShowSearchResultBox = usePublicStore(
     (s) => s.setShowSearchResultBox,
   );
+
+  // Standalone mode for search results page
+  if (standalone) {
+    return (
+      <div className="flex-1 max-w-[495px] bg-white h-[50px] flex items-center justify-center rounded-lg shadow-md">
+        <div className="text-gray-600 text-center font-semibold">
+          گروه کالایی{" "}
+          <span className="font-extralight">{searchTerm || "گوشی موبایل"}</span>
+        </div>
+      </div>
+    );
+  }
 
   if (!showSearchResultBox || !searchResultData) return null;
 
@@ -32,7 +48,7 @@ function SearchResultBox({ isMobile = false }) {
   }
 
   return (
-    <div className="absolute top-4 left-30 xl:left-32 w-96 xl:w-120 z-50 bg-white grid grid-cols-[2.7fr_0.3fr] py-3 px-2 rounded-lg shadow-md animate-slide-in-down">
+    <div className="absolute top-7 left-30 xl:left-48 h-[50px] items-center w-96 xl:w-120 z-50 bg-white grid grid-cols-[2.8fr_0.2fr] px-2 rounded-lg shadow-md animate-slide-in-down">
       <div className="text-gray-600 text-center font-semibold">
         گروه کالایی{" "}
         <span className="font-extralight">

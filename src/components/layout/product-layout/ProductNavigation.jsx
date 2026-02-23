@@ -19,7 +19,7 @@ export default function ProductNavigation() {
           onClick={() => setActiveSection("details")}
           className={`p-[15px] rounded-lg transition-colors ${
             activeSection === "details"
-              ? "bg-gray-200 text-shade-100"
+              ? "bg-gray-200 text-primary"
               : "bg-white text-black"
           }`}
         >
@@ -29,7 +29,7 @@ export default function ProductNavigation() {
           onClick={() => setActiveSection("comments")}
           className={`p-[15px] rounded-lg transition-colors ${
             activeSection === "comments"
-              ? "bg-gray-200 text-shade-100"
+              ? "bg-gray-200 text-primary"
               : "bg-white text-black"
           }`}
         >
@@ -39,7 +39,7 @@ export default function ProductNavigation() {
           onClick={() => setActiveSection("external")}
           className={`p-[15px] rounded-lg transition-colors ${
             activeSection === "external"
-              ? "bg-gray-200 text-shade-100"
+              ? "bg-gray-200 text-primary"
               : "bg-white text-black"
           }`}
         >
@@ -49,7 +49,7 @@ export default function ProductNavigation() {
           onClick={() => setActiveSection("back")}
           className={`p-[15px] rounded-lg transition-colors ${
             activeSection === "back"
-              ? "bg-gray-200 text-shade-100"
+              ? "bg-gray-200 text-primary"
               : "bg-white text-black"
           }`}
         >

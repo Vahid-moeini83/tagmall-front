@@ -1,3 +1,4 @@
+/* Dana fonts */
 @font-face {
   font-family: Dana;
   font-style: normal;
@@ -9,7 +10,7 @@
 @font-face {
   font-family: Dana;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   src: url("/assets/fonts/DanaFaNum-Medium.woff2") format("truetype");
   font-display: swap;
 }
@@ -17,7 +18,24 @@
 @font-face {
   font-family: Dana;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   src: url("/assets/fonts/DanaFaNum-DemiBold.woff2") format("truetype");
+  font-display: swap;
+}
+
+/* IranSans fonts */
+@font-face {
+  font-family: IranSans;
+  font-style: normal;
+  font-weight: 200;
+  src: url("/assets/fonts/iransansdnlight.woff2") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: IranSans;
+  font-style: normal;
+  font-weight: 600;
+  src: url("/assets/fonts/iransansdnbold.woff2") format("truetype");
   font-display: swap;
 }

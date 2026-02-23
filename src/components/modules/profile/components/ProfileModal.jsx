@@ -67,16 +67,18 @@ export default function ProfileModal({
 
           {/* Seller panel section */}
           <div className="border-t-2 border-gray-200 py-3">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-4">
                 <PanelIcon size={24} className="text-gray-800" />
-                <span className="text-gray-600">پنل فروشندگان</span>
+                <span className="text-gray-600 font-[600] cursor-pointer">
+                  پنل فروشندگان
+                </span>
               </div>
               <button className="hover:opacity-80 transition-opacity">
                 <ArrowRightIcon size={20} className="-rotate-45" />
               </button>
             </div>
-            <p className="text-xs lg:text-sm text-gray-600 leading-[24px]">
+            <p className="font-iransans text-xs lg:text-base text-gray-600 lg:pr-6 leading-[48px]">
               با ثبت محصولات و بهره مند از خدمات ما ، بازدید و فروش بیش تر و
               تجربه بی نظیری برای مشتریان خود فراهم کنید .
             </p>
@@ -84,11 +86,11 @@ export default function ProfileModal({
 
           {/* Partnership section */}
           <div className="border-t-2 border-gray-200 py-3">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-4">
                 <ExternalLinkIcon size={24} className="text-gray-800" />
                 <span
-                  className="text-gray-600 cursor-pointer"
+                  className="text-gray-600 font-[600] cursor-pointer"
                   onClick={onPartnershipOpen}
                 >
                   مشارکت در فروش
@@ -101,7 +103,7 @@ export default function ProfileModal({
                 <ChevronLeftIcon size={20} />
               </button>
             </div>
-            <p className="text-xs lg:text-sm text-gray-600 leading-[24px]">
+            <p className="font-iransans text-xs lg:text-base text-gray-600 lg:pr-6 leading-[48px]">
               با به اشتراک گذاری لینک فروش محصولات ، به ازای فروش هر کالا از
               مزایای فروش کالا بهره مند شوید .
             </p>

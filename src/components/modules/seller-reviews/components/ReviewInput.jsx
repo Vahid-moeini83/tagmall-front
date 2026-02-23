@@ -79,7 +79,7 @@ export default function ReviewInput({ userAvatar, onSubmit }) {
           <button
             onClick={handleSubmit}
             disabled={rating === 0 || !comment.trim()}
-            className="text-shade-400 text-xs lg:text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-primary text-xs lg:text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ارسال
           </button>

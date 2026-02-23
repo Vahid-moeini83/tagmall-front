@@ -277,9 +277,7 @@ export default function ProductsSlider({
                   ? `سفارشات از ${activeSellerInfo.name}`
                   : `سفارشی از ${activeSellerInfo.name} ندارید`}
               </span>
-              <span className="text-gray-600/70 text-xs">
-                (بروزرسانی 1 دقیقه پیش)
-              </span>
+              <span className="text-gray-400">(بروزرسانی 1 دقیقه پیش)</span>
             </div>
             {hasPurchasedProducts ? (
               isPurchasedSectionOpen ? (

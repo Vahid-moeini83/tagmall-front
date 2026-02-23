@@ -11,4 +11,5 @@ export {
   DialogClose,
 } from "./Dialog";
 
+export { default as DialogWrapper } from "./DialogWrapper";
 export { default } from "./DialogWrapper";

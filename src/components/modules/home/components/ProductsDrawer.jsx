@@ -6,6 +6,7 @@ import {
   ClockIcon,
   ImageIcon,
   LocationIcon,
+  StrokeArrowLeftIcon,
   VerifyIcon,
 } from "@/icons";
 import { useKeenSlider } from "keen-slider/react";
@@ -97,6 +98,13 @@ export default function ProductsDrawer({
     const rest = specialProducts.filter((p) => p.seller.id !== activeSellerId);
     return [...active, ...rest];
   }, [specialProducts, activeSellerId]);
+
+  // محصولات خرید حضوری فقط از فروشنده فعال
+  const activeSellerPurchasedProducts = useMemo(() => {
+    if (!activeSellerId) return [];
+    return purchasedProducts.filter((p) => p.seller.id === activeSellerId);
+  }, [purchasedProducts, activeSellerId]);
+
   const closedStateVariant = specialProducts.length > 0 ? "product" : "order";
 
   const isListMode = activeSnapPoint === snapPoints[1] && !showSellerDetails;
@@ -175,14 +183,29 @@ export default function ProductsDrawer({
         isLongPressTriggeredRef.current = false;
         return;
       }
+
+      // در حالت list mode، فقط محصول رو تغییر بده و به اسلایدر برو (بدون تغییر نقشه)
+      if (isListMode) {
+        // پیدا کردن اولین محصول این فروشنده در closedStateProducts
+        const firstProductOfSeller = closedStateProducts.find(
+          (p) => p.seller.id === product.seller.id,
+        );
+
+        if (firstProductOfSeller) {
+          onProductChange?.(firstProductOfSeller, false);
+        }
+        setActiveSnapPoint(snapPoints[0]); // بستن drawer و برگشت به حالت اسلایدر
+        return;
+      }
+
+      // در حالت عادی (drawer بسته)، جزئیات فروشنده رو نشون بده
       if (product?.seller) {
-        onProductChange?.(product);
         setSelectedSeller(product.seller);
         setShowSellerDetails(true);
         setActiveSnapPoint(snapPoints[1]); // keep drawer open when showing details
       }
     },
-    [onProductChange, snapPoints],
+    [isListMode, onProductChange, snapPoints, closedStateProducts],
   );
 
   const handleBackToProducts = useCallback(() => {
@@ -339,14 +362,14 @@ export default function ProductsDrawer({
   useEffect(() => {
     if (
       isListMode &&
-      purchasedProducts.length > 0 &&
+      activeSellerPurchasedProducts.length > 0 &&
       ordersSliderInstance.current
     ) {
       requestAnimationFrame(() => {
         ordersSliderInstance.current?.update();
       });
     }
-  }, [isListMode, purchasedProducts.length, ordersSliderInstance]);
+  }, [isListMode, activeSellerPurchasedProducts.length, ordersSliderInstance]);
 
   useEffect(() => {
     if (!productsSliderInstance.current || !activeProductId) return;
@@ -361,7 +384,12 @@ export default function ProductsDrawer({
     requestAnimationFrame(() => {
       productsSliderInstance.current.moveToIdx(idx);
     });
-  }, [activeProductId, closedStateProducts, productsSliderInstance]);
+  }, [
+    activeProductId,
+    closedStateProducts,
+    productsSliderInstance,
+    isListMode,
+  ]);
 
   if (specialProducts.length === 0 && purchasedProducts.length === 0) {
     return null;
@@ -392,12 +420,6 @@ export default function ProductsDrawer({
           )}
           overlayClassName="lg:hidden"
         >
-          <div
-            className="w-fit shrink-0 mx-auto pt-2 pb-1"
-            data-vaul-drag-handle
-          >
-            <div className="bg-gray-800 h-1.5 w-24 rounded-full" aria-hidden />
-          </div>
           <div
             ref={drawerContentRef}
             className={cn(
@@ -464,10 +486,7 @@ export default function ProductsDrawer({
                       className="shrink-0 p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-700"
                       aria-label="برگشت به لیست محصولات"
                     >
-                      <ArrowRightIcon
-                        className="w-5 h-5"
-                        color="currentColor"
-                      />
+                      <StrokeArrowLeftIcon size={20} color="currentColor" />
                     </button>
                   </div>
                   <div className="rounded-lg bg-white p-3 flex flex-col gap-3 mt-2 shrink-0 shadow-sm">
@@ -511,14 +530,20 @@ export default function ProductsDrawer({
                 </div>
               ) : isListMode && filterMode === "all" ? (
                 <div className="flex-1 min-h-0 overflow-y-auto pb-24 flex flex-col gap-3">
-                  {purchasedProducts.length > 0 && (
+                  {activeSellerPurchasedProducts.length > 0 && (
                     <div className="shrink-0 w-full flex flex-col gap-2">
+                      <span className="text-center pt-1 text-gray-600">
+                        فروش ویژه و سفارشات آماده تحویل
+                      </span>
                       <div
                         ref={ordersSliderRef}
                         className="keen-slider min-h-0"
                       >
-                        {purchasedProducts.map((product) => (
-                          <div key={product.id} className="keen-slider__slide">
+                        {activeSellerPurchasedProducts.map((product) => (
+                          <div
+                            key={product.id}
+                            className="keen-slider__slide relative flex flex-col gap-2"
+                          >
                             <ProductCardMobile
                               product={product}
                               variant="order"
@@ -526,26 +551,27 @@ export default function ProductsDrawer({
                               onSellerMouseDown={handleSellerMouseDown}
                               onSellerMouseUp={handleSellerMouseUp}
                               onSellerMouseLeave={handleSellerMouseLeave}
+                              isListMode={isListMode}
                             />
+                            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex justify-center gap-2">
+                              {activeSellerPurchasedProducts.map((_, idx) => (
+                                <button
+                                  key={idx}
+                                  type="button"
+                                  onClick={() =>
+                                    ordersSliderInstance.current?.moveToIdx(idx)
+                                  }
+                                  className={cn(
+                                    "w-2 h-2 rounded-full transition-all cursor-pointer",
+                                    ordersCurrentSlide === idx
+                                      ? "bg-primary w-6"
+                                      : "bg-gray-400 hover:bg-gray-400",
+                                  )}
+                                  aria-label={`اسلاید ${idx + 1}`}
+                                />
+                              ))}
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                      <div className="flex justify-center gap-2 pb-1">
-                        {purchasedProducts.map((_, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() =>
-                              ordersSliderInstance.current?.moveToIdx(idx)
-                            }
-                            className={cn(
-                              "w-2 h-2 rounded-full transition-all cursor-pointer",
-                              ordersCurrentSlide === idx
-                                ? "bg-primary w-6"
-                                : "bg-gray-400 hover:bg-gray-400",
-                            )}
-                            aria-label={`اسلاید ${idx + 1}`}
-                          />
                         ))}
                       </div>
                     </div>
@@ -558,6 +584,7 @@ export default function ProductsDrawer({
                       onSellerMouseDown={handleSellerMouseDown}
                       onSellerMouseUp={handleSellerMouseUp}
                       onSellerMouseLeave={handleSellerMouseLeave}
+                      isListMode={isListMode}
                     />
                   ))}
                 </div>
@@ -576,6 +603,7 @@ export default function ProductsDrawer({
                         onSellerMouseDown={handleSellerMouseDown}
                         onSellerMouseUp={handleSellerMouseUp}
                         onSellerMouseLeave={handleSellerMouseLeave}
+                        isListMode={isListMode}
                       />
                     </div>
                   ))}
@@ -588,6 +616,13 @@ export default function ProductsDrawer({
 
       {showShopImagesGallery && (
         <div className="fixed inset-0 z-1000 flex flex-col bg-gray-200/50 backdrop-blur-sm">
+          <Image
+            src="/assets/images/logo/main-logo.svg"
+            width={110}
+            height={40}
+            alt="Logo"
+            className="absolute right-4 top-4"
+          />
           <div className="flex-1 flex flex-col justify-center min-h-0 overflow-hidden px-3 py-4">
             <div
               ref={gallerySliderRef}
@@ -622,15 +657,15 @@ export default function ProductsDrawer({
               ))}
             </div>
           </div>
-          <div className="flex items-center justify-between px-4 py-4 pb-8">
-            <ArrowRightIcon
+          <div className="relative flex items-center justify-center px-4 py-4 pb-8">
+            <StrokeArrowLeftIcon
               onClick={() => setShowShopImagesGallery(false)}
-              className="w-6 h-6"
+              size={20}
+              className="absolute right-6"
             />
             <span className="text-primary font-semibold text-sm hover:opacity-90 cursor-pointer transition-opacity">
               ارتباط با واحد پشتیبانی
             </span>
-            <div className="w-10 shrink-0" aria-hidden />
           </div>
         </div>
       )}

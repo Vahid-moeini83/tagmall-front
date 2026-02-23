@@ -286,7 +286,7 @@ export default function ProductMain() {
 
           {/* Order button */}
           <div className="text-center">
-            <button className="text-shade-100 text-[20px] cursor-pointer hover:text-primary transition-colors">
+            <button className="text-primary text-[20px] cursor-pointer hover:text-primary transition-colors">
               ثبت سفارش
             </button>
           </div>

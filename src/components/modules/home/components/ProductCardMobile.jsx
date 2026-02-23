@@ -11,6 +11,7 @@ function ProductCardMobile({
   onSellerMouseDown,
   onSellerMouseUp,
   onSellerMouseLeave,
+  isListMode = false,
 }) {
   const isOrder = variant === "order";
   const statusLabel = isOrder
@@ -20,7 +21,10 @@ function ProductCardMobile({
   return (
     <div className="rounded-lg shrink-0">
       <div className="w-full text-start flex items-center justify-between gap-2 py-1.5 px-1 rounded-lg hover:opacity-80 focus:outline-none">
-        <div className="flex items-center gap-2 min-w-0">
+        <div
+          onClick={() => !isListMode && onSellerClick?.(product)}
+          className={`flex items-center gap-2 min-w-0 ${isListMode ? "cursor-pointer" : ""}`}
+        >
           <div className="w-9 h-9 relative shrink-0 rounded-lg overflow-hidden bg-white">
             <Image
               src={
@@ -36,7 +40,6 @@ function ProductCardMobile({
             role="button"
             tabIndex={0}
             className="font-medium text-gray-700 truncate text-sm cursor-pointer select-none"
-            onClick={() => onSellerClick?.(product)}
             onMouseDown={() => onSellerMouseDown?.(product)}
             onMouseUp={onSellerMouseUp}
             onMouseLeave={onSellerMouseLeave}

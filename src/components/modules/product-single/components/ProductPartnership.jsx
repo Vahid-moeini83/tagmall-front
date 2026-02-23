@@ -58,7 +58,7 @@ export default function ProductPartnership() {
                 {!showLink ? (
                   <button
                     onClick={() => setShowLink(true)}
-                    className="text-shade-100 text-lg"
+                    className="text-primary text-lg"
                   >
                     دریافت لینک مشارکت در فروش
                   </button>
@@ -80,7 +80,7 @@ export default function ProductPartnership() {
 
                     {/* Share Button */}
                     <div className="text-center">
-                      <button className="text-shade-100 text-lg cursor-pointer">
+                      <button className="text-primary text-lg cursor-pointer">
                         اشتراک گذاری
                       </button>
                     </div>

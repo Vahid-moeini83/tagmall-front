@@ -45,7 +45,7 @@ export default function PartnershipModal({ isOpen, onClose, products }) {
               پر فروش ترین
             </button>
           </div>
-          <span className="text-shade-100">کالای خاصی در نظر دارید؟</span>
+          <span className="text-primary">کالای خاصی در نظر دارید؟</span>
         </div>
 
         {/* Products list */}
