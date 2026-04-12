@@ -104,7 +104,7 @@
 
   /* Radius */
   --radius-sm: 4px;
-  --radius-md: 8px;
+  --radius-md: 10px;
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-2xl: 32px;
@@ -135,6 +135,18 @@
     direction: rtl !important;
   }
 
+  /* برای مرورگرهای کروم، سافاری، اج و فایرفاکس */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* برای مرورگر فایرفاکس */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
@@ -149,9 +161,17 @@
     border-radius: 8px;
   }
 
+  a {
+    text-decoration: none !important;
+  }
+
   button {
     outline: none;
     border: none;
+  }
+
+  .scroll-hidden::-webkit-scrollbar {
+    display: none !important;
   }
 
   .leaflet-top {
@@ -191,6 +211,41 @@
     width: auto;
     height: auto;
     background: transparent;
+  }
+
+  /* Date picker styles */
+  .rmdp-wrapper .rmdp-wrapper .rmdp-day.rmdp-selected,
+  .rmdp-wrapper .rmdp-day.rmdp-selected span {
+    background-color: var(--color-primary) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 2px var(--color-primary) !important;
+  }
+
+  .rmdp-wrapper .rmdp-day.today {
+    border: 1px solid var(--color-primary) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .rmdp-header-values {
+    color: var(--color-primary) !important;
+    font-weight: bold;
+  }
+
+  .rmdp-input-icon {
+    stroke: var(--color-primary) !important;
+  }
+
+  .rmdp-week .rmdp-week-day {
+    color: var(--color-primary) !important;
+  }
+
+  .rmdp-arrow-container {
+    color: white !important;
+    background-color: white !important;
+  }
+
+  .rmdp-arrow-container .rmdp-arrow {
+    border-color: var(--color-primary) !important;
   }
 }
 

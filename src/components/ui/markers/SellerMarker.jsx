@@ -21,7 +21,7 @@ function SellerMarker({ seller, isActive }) {
           style={{ marginTop: "-4px", zIndex: 0 }}
         />
         <div
-          className={`relative w-12 h-12 rounded-lg border-[3.5px] p-[3px] shadow-md overflow-hidden bg-white z-10 ${borderColor}`}
+          className={`relative w-12 h-12 rounded-[14px] border-[3.5px] p-[3px] shadow-md overflow-hidden bg-white z-10 ${borderColor}`}
         >
           <Image
             src={seller.profileImage}

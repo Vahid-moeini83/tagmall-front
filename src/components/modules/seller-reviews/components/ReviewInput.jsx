@@ -19,17 +19,6 @@ export default function ReviewInput({ userAvatar, onSubmit }) {
 
   return (
     <div className="flex items-end gap-2 max-w-[500px] mx-auto w-full">
-      {/* User profile picture */}
-      <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-gray-400 overflow-hidden shrink-0">
-        <Image
-          src={userAvatar || "/assets/images/fallback/avatar.png"}
-          width={40}
-          height={40}
-          alt="user avatar"
-          className="object-cover"
-        />
-      </div>
-
       {/* Review input box */}
       <div className="flex-1 bg-gray-200 rounded-t-lg rounded-bl-lg px-2 lg:px-[10px] pt-2 lg:pt-[15px] pb-2 lg:pb-[12px] flex flex-col gap-5 lg:gap-[26px]">
         {/* Stars */}
@@ -74,12 +63,12 @@ export default function ReviewInput({ userAvatar, onSubmit }) {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="نظر خود را به اشتراک بگذارید..."
-            className="flex-1 bg-transparent border-none outline-none text-xs lg:text-sm text-gray-800 placeholder:text-gray-500"
+            className="font-iransans flex-1 bg-transparent border-none outline-none text-xs lg:text-sm text-gray-800 placeholder:text-gray-500"
           />
           <button
             onClick={handleSubmit}
             disabled={rating === 0 || !comment.trim()}
-            className="text-primary text-xs lg:text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="font-iransans text-primary text-xs lg:text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ارسال
           </button>

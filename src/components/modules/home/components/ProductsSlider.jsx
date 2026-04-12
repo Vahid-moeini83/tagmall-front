@@ -1,178 +1,89 @@
 "use client";
+
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronDownIcon, ChevronUpIcon, NoteIcon } from "@/icons";
-import Dialog from "@/components/ui/dialog";
+import { DialogWrapper } from "@/components/ui/dialog";
+import { cn } from "@/lib/client/utils";
 
-export default function ProductsSlider({
+// ─── کارت محصولات هر فروشنده ─────────────────────────────────────────────────
+const SellerProductsCard = ({
   products,
-  onProductChange,
-  activeProductId,
-  purchasedProducts,
-  activeSellerInfo,
   filterMode,
-  scrollContainerRef,
-}) {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentPurchasedSlide, setCurrentPurchasedSlide] = useState(0);
-  const [isNoteOpen, setIsNoteOpen] = useState(false);
-  const [isPurchasedSectionOpen, setIsPurchasedSectionOpen] = useState(false);
-  const containerRef = useRef(null);
-  const purchasedSectionRef = useRef(null);
+  isSpecialSale,
+  onNoteOpen,
+  isActive,
+  sliderHeight,
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const dragStartY = useRef(null);
+  const dragStartX = useRef(null);
 
-  const isProgrammaticRef = useRef(false);
-  const targetIndexRef = useRef(null);
-
-  const activeProduct = activeProductId
-    ? products.find((p) => p.id === activeProductId)
-    : null;
-  const activeSellerId = activeProduct?.seller?.id || null;
-
-  const activeSellerPurchasedProducts = purchasedProducts.filter(
-    (p) => p.seller.id === activeSellerId,
+  const goTo = useCallback(
+    (idx) => {
+      const clamped = Math.max(0, Math.min(idx, products.length - 1));
+      setCurrentIndex(clamped);
+    },
+    [products.length],
   );
-  const hasPurchasedProducts = activeSellerPurchasedProducts.length > 0;
-  const isSpecialSale = products.length > 0 ? products[0].isSpecialSale : true;
 
-  const [sliderRef, slider] = useKeenSlider({
-    rtl: true,
-    loop: true,
-    breakpoints: {
-      "(min-width: 1024px)": {
-        slides: { perView: 1.1, spacing: 10, origin: "center" },
-      },
-      "(min-width: 1280px)": {
-        slides: { perView: 1.4, spacing: 5, origin: "center" },
-      },
-    },
-    created(s) {
-      setCurrentSlide(s.track.details.rel);
-    },
-    slideChanged(s) {
-      const idx = s.track.details.rel;
-
-      // ⛔ وسط راه فروشنده رو عوض نکن
-      if (isProgrammaticRef.current) return;
-
-      setCurrentSlide(idx);
-      onProductChange(products[idx]);
-    },
-
-    animationEnded() {
-      if (!isProgrammaticRef.current) return;
-
-      // ✅ sync فقط در مقصد
-      const idx = targetIndexRef.current;
-      if (products[idx]) {
-        onProductChange(products[idx]);
-      }
-
-      isProgrammaticRef.current = false;
-      targetIndexRef.current = null;
-    },
-  });
-
-  const [purchasedSliderRef] = useKeenSlider({
-    rtl: true,
-    loop: true,
-    slides: {
-      perView: activeSellerPurchasedProducts.length > 1 ? 1.2 : 1,
-      origin: "center",
-    },
-    slideChanged(s) {
-      const newIndex = s.track.details.rel;
-      setCurrentPurchasedSlide(newIndex);
-    },
-  });
-
-  const handleOpenPurchasedSlider = () => {
-    if (!hasPurchasedProducts) return;
-    setIsPurchasedSectionOpen((prev) => !prev);
+  const handleDragStart = (clientY, clientX) => {
+    dragStartY.current = clientY;
+    dragStartX.current = clientX;
   };
 
-  const handleClickBulletPoints = (index) => {
-    setCurrentSlide(index);
-
-    if (products[index]) {
-      onProductChange(products[index]);
-    }
-
-    isProgrammaticRef.current = true;
-    targetIndexRef.current = index;
-
-    slider.current?.moveToIdx(index, true);
+  const handleDragEnd = (clientY, clientX) => {
+    if (dragStartY.current === null) return;
+    const deltaY = dragStartY.current - clientY;
+    const deltaX = Math.abs(dragStartX.current - clientX);
+    dragStartY.current = null;
+    dragStartX.current = null;
+    if (Math.abs(deltaY) < 30 || deltaX > Math.abs(deltaY)) return;
+    if (deltaY > 0) goTo(currentIndex + 1);
+    else goTo(currentIndex - 1);
   };
 
-  useEffect(() => {
-    if (
-      isPurchasedSectionOpen &&
-      purchasedSectionRef.current &&
-      scrollContainerRef?.current
-    ) {
-      const container = scrollContainerRef.current;
-      const target = purchasedSectionRef.current;
-
-      const top =
-        target.getBoundingClientRect().top -
-        container.getBoundingClientRect().top +
-        container.scrollTop;
-
-      requestAnimationFrame(() => {
-        container.scrollTo({
-          top,
-          behavior: "smooth",
-        });
-      });
-    }
-  }, [isPurchasedSectionOpen]);
-
-  // Update slider when products list changes (e.g. filter change)
-  useEffect(() => {
-    if (slider.current && products.length > 0) {
-      slider.current.update();
-    }
-  }, [products]);
-
-  // Sync slider to show active product when activeProductId or products change
-  useEffect(() => {
-    if (!slider.current || !products.length || !activeProductId) return;
-
-    const targetIndex = products.findIndex((p) => p.id === activeProductId);
-    if (targetIndex === -1) return;
-
-    const s = slider.current;
-    const currentIndex = s.track.details.rel;
-    if (currentIndex === targetIndex) return;
-
-    isProgrammaticRef.current = true;
-    targetIndexRef.current = targetIndex;
-
-    // 🔥 اکتیو ظاهری فوری
-    setCurrentSlide(targetIndex);
-
-    // 🎞️ انیمیشن حفظ می‌شه
-    s.moveToIdx(targetIndex, true);
-  }, [activeProductId, products]);
+  const cardHeight = isActive ? sliderHeight : Math.round(sliderHeight * 0.8);
 
   return (
-    <div ref={containerRef} className="flex flex-col overflow-y-auto">
-      <div className="relative">
+    <div
+      className="relative w-full transition-all duration-300 flex items-center justify-center"
+      style={{ height: cardHeight }}
+    >
+      <div
+        className="relative w-full overflow-hidden select-none"
+        style={{ height: cardHeight }}
+        onMouseDown={(e) => handleDragStart(e.clientY, e.clientX)}
+        onMouseUp={(e) => handleDragEnd(e.clientY, e.clientX)}
+        onTouchStart={(e) =>
+          handleDragStart(e.touches[0].clientY, e.touches[0].clientX)
+        }
+        onTouchEnd={(e) =>
+          handleDragEnd(
+            e.changedTouches[0].clientY,
+            e.changedTouches[0].clientX,
+          )
+        }
+      >
         <div
-          className={`keen-slider ${filterMode === "visit" ? "h-[460px] xl:h-[480px]" : "h-[440px] xl:h-[460px]"}`}
-          ref={sliderRef}
+          className="transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateY(-${currentIndex * cardHeight}px)`,
+            height: `${products.length * cardHeight}px`,
+          }}
         >
-          {products.map((product, index) => (
+          {products.map((product) => (
             <div
               key={product.id}
-              className="keen-slider__slide flex items-center justify-center"
+              className="flex items-center justify-center"
+              style={{ height: cardHeight }}
             >
               <div
-                className={`bg-white flex flex-col gap-3 items-center transition-all justify-center rounded-lg py-2 px-3 w-full ${
-                  currentSlide === index ? "h-full max-w-[360px]" : "h-[80%]"
-                }`}
+                className="bg-white flex flex-col gap-3 items-center justify-center rounded-md py-2 px-3 w-full max-w-[360px]"
+                style={{ height: cardHeight }}
               >
                 <div className="relative rounded-md overflow-hidden">
                   <Image
@@ -202,16 +113,16 @@ export default function ProductsSlider({
                   ) : (
                     <div className="w-full bg-gray-50 rounded-lg text-sm py-2 px-4 text-gray-600 mt-2 cursor-pointer">
                       <div className="flex flex-col gap-2">
-                        <div className="flex items-center justify-center gap-4 font-bold ">
+                        <div className="flex items-center justify-center gap-4 font-bold">
                           وضعیت: {product.orderHistory?.statusLabel}
                         </div>
-                        <div className="flex items-center justify-center gap-4 font-bold ">
+                        <div className="flex items-center justify-center gap-4 font-bold">
                           تعداد: 1 عدد
                         </div>
                       </div>
                       {product.orderHistory?.userNote && (
                         <div
-                          onClick={() => setIsNoteOpen(true)}
+                          onClick={() => onNoteOpen?.()}
                           className="flex items-center justify-center gap-2 mt-2 pt-2 border-t border-gray-400"
                         >
                           <NoteIcon size={20} />
@@ -224,14 +135,14 @@ export default function ProductsSlider({
                 {isSpecialSale ? (
                   <Link
                     href="#"
-                    className="w-full py-2 text-primary font-bold rounded-lg hover:bg-blue-100 transition text-center text-sm"
+                    className="w-full py-2 text-primary font-bold rounded-md hover:bg-primary/5 transition text-center text-sm"
                   >
                     ثبت سفارش
                   </Link>
                 ) : (
                   <Link
                     href="#"
-                    className="w-full py-2 text-green-700 font-bold rounded-lg hover:bg-green-100 transition text-center text-sm flex items-center justify-center gap-1"
+                    className="w-full py-2 text-success-medium font-bold rounded-md hover:bg-success-light transition text-center text-sm flex items-center justify-center gap-1"
                   >
                     رسید تحویل سفارش
                   </Link>
@@ -240,38 +151,255 @@ export default function ProductsSlider({
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Bullet points - fixed position, appears on active card */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex justify-center gap-2 z-10 pointer-events-none">
+      {isActive && products.length > 1 && (
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
           {products.map((_, idx) => (
             <button
               key={idx}
               type="button"
-              onClick={() => handleClickBulletPoints(idx)}
-              className={`h-3 rounded-full transition-all cursor-pointer pointer-events-auto ${
-                currentSlide === idx
-                  ? "bg-primary w-6"
-                  : "bg-gray-300 w-3 hover:bg-gray-400"
-              }`}
-              aria-label={`اسلاید ${idx + 1}`}
+              onClick={() => goTo(idx)}
+              className={cn(
+                "w-2.5 rounded-full transition-all cursor-pointer",
+                currentIndex === idx
+                  ? "bg-primary h-6"
+                  : "bg-gray-300 h-2.5 hover:bg-gray-400",
+              )}
+              aria-label={`محصول ${idx + 1}`}
             />
           ))}
         </div>
+      )}
+    </div>
+  );
+};
+
+// ─── کامپوننت اصلی ────────────────────────────────────────────────────────────
+export default function ProductsSlider({
+  products,
+  onProductChange,
+  activeSellerId,
+  purchasedProducts,
+  activeSellerInfo,
+  filterMode,
+  scrollContainerRef,
+}) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentPurchasedSlide, setCurrentPurchasedSlide] = useState(0);
+  const [isNoteOpen, setIsNoteOpen] = useState(false);
+  const [isPurchasedSectionOpen, setIsPurchasedSectionOpen] = useState(false);
+  const purchasedSectionRef = useRef(null);
+
+  const isProgrammaticRef = useRef(false);
+  const targetIndexRef = useRef(null);
+
+  const isSpecialSale = products.length > 0 ? products[0].isSpecialSale : true;
+  const sliderHeight = filterMode !== "all" ? 460 : 440;
+
+  const productsBySeller = products.reduce((acc, product) => {
+    const sellerId = product.seller?.id;
+    if (!sellerId) return acc;
+    if (!acc[sellerId]) acc[sellerId] = [];
+    acc[sellerId].push(product);
+    return acc;
+  }, {});
+
+  const sellerIds = Object.keys(productsBySeller);
+  const sellerCount = sellerIds.length;
+
+  const activeSellerPurchasedProducts = purchasedProducts.filter(
+    (p) => p.seller?.id === activeSellerId,
+  );
+  const hasPurchasedProducts = activeSellerPurchasedProducts.length > 0;
+
+  // ── ref برای دسترسی به آخرین نسخه sellerIds و productsBySeller در callbacks ──
+  const sellerIdsRef = useRef(sellerIds);
+  const productsBySellerRef = useRef(productsBySeller);
+  useEffect(() => {
+    sellerIdsRef.current = sellerIds;
+    productsBySellerRef.current = productsBySeller;
+  });
+
+  const [sliderRef, sliderInstance] = useKeenSlider({
+    rtl: true,
+    drag: true,
+    // loop: true,
+    mode: "snap",
+    slides: {
+      perView: 1.4,
+      origin: "center",
+    },
+    slideChanged(s) {
+      // ── drag توسط کاربر: programmatic نیست ──
+      if (isProgrammaticRef.current) return;
+
+      const idx = s.track.details.rel;
+      setCurrentSlide(idx);
+      const sellerId = sellerIdsRef.current[idx];
+      const sellerProducts = productsBySellerRef.current[sellerId];
+      if (sellerProducts?.length > 0) {
+        onProductChange?.(sellerProducts[0]);
+      }
+    },
+    animationEnded() {
+      // ✅ دقیقاً مثل کد نمونه: sync در مقصد
+      if (!isProgrammaticRef.current) return;
+
+      const idx = targetIndexRef.current;
+      const sellerId = sellerIdsRef.current[idx];
+      const sellerProducts = productsBySellerRef.current[sellerId];
+      if (sellerProducts?.length > 0) {
+        onProductChange?.(sellerProducts[0]);
+      }
+
+      isProgrammaticRef.current = false;
+      targetIndexRef.current = null;
+    },
+  });
+
+  const [purchasedSliderRef] = useKeenSlider({
+    rtl: true,
+    loop: true,
+    slides: {
+      perView: activeSellerPurchasedProducts.length > 1 ? 1.2 : 1,
+      origin: "center",
+      spacing: 10,
+    },
+    slideChanged(s) {
+      setCurrentPurchasedSlide(s.track.details.rel);
+    },
+  });
+
+  // ✅ دقیقاً مثل کد نمونه: moveToIdx با true
+  const handleClickBulletPoints = useCallback(
+    (index) => {
+      if (!sliderInstance.current) return;
+
+      setCurrentSlide(index);
+      const sellerId = sellerIdsRef.current[index];
+      const sellerProducts = productsBySellerRef.current[sellerId];
+      if (sellerProducts?.length > 0) {
+        onProductChange?.(sellerProducts[0]);
+      }
+
+      isProgrammaticRef.current = true;
+      targetIndexRef.current = index;
+
+      // ✅ دقیقاً مثل کد نمونه
+      sliderInstance.current.moveToIdx(index, true);
+    },
+    [sliderInstance, onProductChange],
+  );
+
+  // ── sync از خارج (activeSellerId تغییر کرد) ──────────────────────────────
+  useEffect(() => {
+    if (!sliderInstance.current || !activeSellerId) return;
+    const idx = sellerIds.findIndex((id) => id === String(activeSellerId));
+    if (idx < 0) return;
+    const currentIdx = sliderInstance.current.track.details?.rel;
+    if (currentIdx === idx) return;
+
+    // ✅ فوری: state آپدیت میشه
+    setCurrentSlide(idx);
+
+    isProgrammaticRef.current = true;
+    targetIndexRef.current = idx;
+
+    // ✅ دقیقاً مثل کد نمونه: moveToIdx با true
+    sliderInstance.current.moveToIdx(idx, true);
+  }, [activeSellerId]);
+
+  useEffect(() => {
+    if (sliderInstance.current && products.length > 0) {
+      sliderInstance.current.update();
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (
+      isPurchasedSectionOpen &&
+      purchasedSectionRef.current &&
+      scrollContainerRef?.current
+    ) {
+      const container = scrollContainerRef.current;
+      const target = purchasedSectionRef.current;
+      const top =
+        target.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop;
+      requestAnimationFrame(() => {
+        container.scrollTo({ top, behavior: "smooth" });
+      });
+    }
+  }, [isPurchasedSectionOpen]);
+
+  if (sellerCount === 0) return null;
+
+  return (
+    <div className="flex flex-col overflow-y-auto">
+      <div className="relative">
+        <div
+          ref={sliderRef}
+          className="keen-slider items-center"
+          style={{ height: sliderHeight }}
+        >
+          {sellerIds.map((sellerId, index) => (
+            <div
+              key={sellerId}
+              className="keen-slider__slide flex items-center justify-center"
+              style={{ height: sliderHeight }}
+            >
+              <SellerProductsCard
+                products={productsBySeller[sellerId]}
+                filterMode={filterMode}
+                isSpecialSale={isSpecialSale}
+                onNoteOpen={() => setIsNoteOpen(true)}
+                isActive={currentSlide === index}
+                sliderHeight={sliderHeight}
+              />
+            </div>
+          ))}
+        </div>
+
+        {sellerCount > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex justify-center gap-2 z-10 pointer-events-none">
+            {sellerIds.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleClickBulletPoints(idx)}
+                className={cn(
+                  "h-3 rounded-full transition-all cursor-pointer pointer-events-auto",
+                  currentSlide === idx
+                    ? "bg-primary w-6"
+                    : "bg-gray-300 w-3 hover:bg-gray-400",
+                )}
+                aria-label={`فروشنده ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
-      {filterMode !== "visit" && (
+      {filterMode === "all" && (
         <div className="mt-4 shrink-0">
           <div
-            className={`flex items-center justify-between border-t-3 border-white pt-4 shrink-0 hover:bg-white/10 transition-colors rounded-b-md px-2 ${
-              hasPurchasedProducts ? "cursor-pointer" : ""
-            }`}
-            onClick={handleOpenPurchasedSlider}
+            className={cn(
+              "flex items-center justify-between border-t-3 border-white pt-4 shrink-0 hover:bg-white/10 transition-colors rounded-b-md px-2",
+              hasPurchasedProducts ? "cursor-pointer" : "",
+            )}
+            onClick={() => {
+              if (!hasPurchasedProducts) return;
+              setIsPurchasedSectionOpen((prev) => !prev);
+            }}
           >
             <div className="flex items-center gap-1">
               <span
-                className={`font-bold text-sm xl:text-base ${
-                  hasPurchasedProducts ? "text-primary" : "text-gray-600"
-                }`}
+                className={cn(
+                  "font-bold text-sm xl:text-base",
+                  hasPurchasedProducts ? "text-primary" : "text-gray-600",
+                )}
               >
                 {hasPurchasedProducts
                   ? `سفارشات از ${activeSellerInfo.name}`
@@ -279,13 +407,12 @@ export default function ProductsSlider({
               </span>
               <span className="text-gray-400">(بروزرسانی 1 دقیقه پیش)</span>
             </div>
-            {hasPurchasedProducts ? (
-              isPurchasedSectionOpen ? (
+            {hasPurchasedProducts &&
+              (isPurchasedSectionOpen ? (
                 <ChevronUpIcon className="text-primary" />
               ) : (
                 <ChevronDownIcon className="text-primary" />
-              )
-            ) : null}
+              ))}
           </div>
         </div>
       )}
@@ -293,21 +420,23 @@ export default function ProductsSlider({
       {isPurchasedSectionOpen && (
         <div ref={purchasedSectionRef} className="shrink-0 mt-6">
           <div
-            className="keen-slider h-[440px] xl:h-[460px]"
             ref={purchasedSliderRef}
+            className="keen-slider"
+            style={{ height: 440 }}
           >
             {activeSellerPurchasedProducts.map((product, index) => (
               <div
                 key={product.id}
                 className="keen-slider__slide flex items-center justify-center"
-                isolation="isolate"
+                style={{ height: 440 }}
               >
                 <div
-                  className={`bg-white flex flex-col gap-3 items-center justify-center rounded-xl py-2 px-3 w-full transition-all ${
+                  className={cn(
+                    "bg-white flex flex-col gap-3 items-center justify-center rounded-xl py-2 px-3 w-full transition-all",
                     currentPurchasedSlide === index
                       ? "h-full mx-6 max-w-[396px]"
-                      : "h-[80%]"
-                  }`}
+                      : "h-[80%]",
+                  )}
                 >
                   <div className="relative rounded-lg overflow-hidden">
                     <Image
@@ -324,10 +453,10 @@ export default function ProductsSlider({
                     </p>
                     <div className="w-full bg-gray-50 rounded-lg text-sm py-2 px-4 text-gray-600 mt-2">
                       <div className="flex flex-col gap-2">
-                        <div className="flex items-center justify-center gap-4 font-bold ">
+                        <div className="flex items-center justify-center gap-4 font-bold">
                           وضعیت: {product.orderHistory?.statusLabel}
                         </div>
-                        <div className="flex items-center justify-center gap-4 font-bold ">
+                        <div className="flex items-center justify-center gap-4 font-bold">
                           تعداد: 1 عدد
                         </div>
                       </div>
@@ -344,7 +473,7 @@ export default function ProductsSlider({
                   </div>
                   <Link
                     href="#"
-                    className="w-full py-2 text-green-700 font-bold rounded-lg hover:bg-green-100 transition text-center text-sm flex items-center justify-center gap-1"
+                    className="w-full py-2 text-success-medium font-bold rounded-md hover:bg-success-light transition text-center text-sm flex items-center justify-center gap-1"
                   >
                     رسید تحویل سفارش
                   </Link>
@@ -355,13 +484,13 @@ export default function ProductsSlider({
         </div>
       )}
 
-      <Dialog
+      <DialogWrapper
         title={"اسم محصول"}
         isOpen={isNoteOpen}
         onClose={() => setIsNoteOpen(false)}
       >
         یادداشت کاربر: لطفا محصول را در بسته بندی تیره قرار دهید. ممنون!
-      </Dialog>
+      </DialogWrapper>
     </div>
   );
 }

@@ -43,7 +43,7 @@ function SellerDetails({ activeSellerInfo, viewMode, onBackToSlider }) {
     <div className="flex flex-col gap-4 h-full animate-in fade-in zoom-in duration-300">
       <button
         onClick={onBackToSlider}
-        className="flex items-center gap-2 text-blue-600 font-bold hover:bg-blue-50 p-2 rounded-lg self-start transition-colors"
+        className="flex items-center gap-2 text-primary font-bold self-start"
       >
         <ArrowRightIcon className="w-5 h-5" />
         <span>بازگشت به لیست محصولات</span>
@@ -100,9 +100,9 @@ function SellerDetails({ activeSellerInfo, viewMode, onBackToSlider }) {
               onClick={() => {
                 instanceRef.current?.moveToIdx(idx);
               }}
-              className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+              className={`w-3 h-3 rounded-full transition-all cursor-pointer ${
                 currentSlide === idx
-                  ? "bg-blue-600 w-6"
+                  ? "bg-primary w-6"
                   : "bg-gray-300 hover:bg-gray-400"
               }`}
               aria-label={`Go to slide ${idx + 1}`}

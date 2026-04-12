@@ -28,7 +28,7 @@ export default function ProductImageSlider() {
       <div ref={sliderRef} className="keen-slider">
         {images.map((image, index) => (
           <div key={index} className="keen-slider__slide">
-            <div className="relative w-full h-[480px]">
+            <div className="relative w-full h-[320px] lg:h-[480px]">
               <Image
                 src={image}
                 fill
@@ -41,18 +41,23 @@ export default function ProductImageSlider() {
       </div>
 
       {/* Bullet Points */}
-      <div className="flex items-center justify-center gap-2 mt-4">
+      <div className="flex items-center justify-center gap-2 lg:gap-2 lg:mt-4">
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => instanceRef.current?.moveToIdx(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              currentSlide === index ? "bg-primary w-6" : "bg-gray-400"
+            className={`w-3 h-3 rounded-full transition-all ${
+              currentSlide === index
+                ? "bg-primary w-6"
+                : "bg-white lg:bg-gray-400"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
+      <button className="block lg:hidden text-primary w-full text-center mt-4">
+        تصاویر ارسال شده توسط کاربران
+      </button>
     </div>
   );
 }

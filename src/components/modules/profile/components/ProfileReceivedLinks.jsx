@@ -1,0 +1,225 @@
+"use client";
+import Image from "next/image";
+import {
+  ArrowRightIcon,
+  StrokeArrowLeftIcon,
+  AvailableProductsIcon,
+  ArrowUpDownIcon,
+} from "@/icons";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import DialogWrapper, { PartnershipHintDialog } from "@/components/ui/dialog";
+import Link from "next/link";
+import FilterReceivedLinksDrawer from "./FilterReceivedLinksDrawer";
+import { DateRangeFilterContent } from "..";
+
+// Mock products data for received links
+const mockProducts = [
+  {
+    id: 1,
+    name: "هدفون بی‌سیم شیائومی مدل 11 pro",
+    img: "/assets/images/products/headphone.png",
+  },
+  {
+    id: 2,
+    name: "ماوس بی‌سیم لاجیتک",
+    img: "/assets/images/products/mouse.png",
+  },
+  {
+    id: 3,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+];
+
+const sortOptions = [
+  { id: "newest", label: "جدیدترین" },
+  { id: "most-viewed", label: "پربازدیدترین" },
+  { id: "best-selling", label: "پر فروش ترین" },
+];
+
+export default function ProfileReceivedLinks({ setActiveSection }) {
+  const router = useRouter();
+  const [selectedFilter, setSelectedFilter] = useState("newest");
+  const [showAvailable, setShowAvailable] = useState(true);
+  const [dateRangeDialogOpen, setDateRangeDialogOpen] = useState(false);
+
+  // Mobile Drawer States
+  const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
+  const [expandedFilter, setExpandedFilter] = useState([]);
+
+  const handleGoBack = () => {
+    router.back();
+  };
+
+  // Mobile Filter Handlers
+  const handleFilterToggle = (filterId) => {
+    setExpandedFilter((prev) =>
+      prev.includes(filterId)
+        ? prev.filter((id) => id !== filterId)
+        : [...prev, filterId],
+    );
+  };
+
+  const hasFiltersChanged = () => {
+    // فعلا فقط چک میکنیم که فیلتر ترتیب نمایش تغییر کرده باشد
+    return selectedFilter !== "newest";
+  };
+
+  const handleResetFilters = () => {
+    setSelectedFilter("newest");
+    setExpandedFilter([]);
+  };
+
+  const getFilterLabel = () => {
+    const option = sortOptions.find((o) => o.id === selectedFilter);
+    return option ? option.label : "پیشنهادات";
+  };
+
+  return (
+    <div className="flex flex-col justify-between h-full pt-6 pb-20 lg:pt-12 lg:pb-24 px-[10px] lg:px-[140px]">
+      {/* Header section */}
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="font-bold text-primary text-base lg:text-xl">
+          لینک های دریافت شده
+        </h3>
+        <AvailableProductsIcon
+          onClick={() => setShowAvailable(!showAvailable)}
+          active={showAvailable}
+          size={20}
+          className="cursor-pointer ml-[6px] lg:ml-0"
+        />
+      </div>
+
+      {/* Filter section (Desktop) */}
+      <div className="hidden lg:flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-5">
+          <span className="font-semibold text-gray-600">پیشنهادات:</span>
+          <div className="flex items-center gap-4 border-l-2 border-gray-300 pl-[10px]">
+            {sortOptions.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => setSelectedFilter(option.id)}
+                className={`transition-colors ${
+                  selectedFilter === option.id
+                    ? "text-primary"
+                    : "text-gray-600"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <button
+          onClick={() => setDateRangeDialogOpen(true)}
+          className="text-gray-600 border-l-2 border-gray-300 pl-4 cursor-pointer"
+        >
+          بازه زمانی
+        </button>
+        <span className="text-primary cursor-pointer">
+          کالای خاصی در نظر دارید؟
+        </span>
+      </div>
+
+      {/* Filter button in mobile */}
+      <div
+        className="lg:hidden text-xs flex items-center gap-2 mb-8 pr-4 cursor-pointer"
+        onClick={() => setIsFiltersDrawerOpen(true)}
+      >
+        <ArrowUpDownIcon />
+        پیشنهادات: {getFilterLabel()}
+      </div>
+
+      {/* Products list */}
+      <div className="space-y-4 lg:space-y-8 overflow-y-auto flex-1">
+        {mockProducts.map((product) => (
+          <div
+            key={product.id}
+            className="flex items-start lg:items-center gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 lg:pb-8"
+          >
+            {/* Product image */}
+            <div className="flex justify-center items-center">
+              <div className="relative w-20 h-20 lg:w-50 lg:h-50 rounded-lg overflow-hidden">
+                <Image
+                  src={product.img || "/assets/images/fallback/no-photo.jpg"}
+                  fill
+                  alt={product.name}
+                  className="object-contain"
+                />
+              </div>
+            </div>
+            {/* Product Info */}
+            <div className="w-full space-y-4 lg:space-y-6">
+              <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
+                {product.name}
+              </p>
+              <div className="text-gray-600 text-xs lg:text-base">
+                <span className="font-bold">سود مشارکت در فروش</span> 1 درصد به
+                ازای فروش هر کالا
+              </div>
+              <div className="text-gray-600 text-xs lg:text-base">
+                <span className="font-bold">وضعیت</span> موجود
+              </div>
+              <div className="hidden lg:block text-gray-400 text-xs lg:text-base">
+                بازدید 1000، خرید موفق 10 بار
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer section */}
+      <div className="fixed right-0 left-0 bottom-0 flex items-center gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] py-8 lg:pb-12 bg-white">
+        <StrokeArrowLeftIcon
+          size={20}
+          className="hidden lg:block absolute bottom-16 right-16 cursor-pointer rotate-180"
+          onClick={handleGoBack}
+        />
+        <div className="w-full flex flex-col lg:items-center gap-4">
+          <span className="hidden lg:block font-semibold text-gray-600 text-center">
+            کاربر محترم سود مشارکت در فروش پس از{" "}
+            <span className="text-primary">بازه زمانی مرجوع شدن سفارش</span> به
+            کیف پول اعتباری شما واریز می‌شود
+          </span>
+          <button className="text-primary text-center hover:opacity-80 transition-opacity">
+            سود مشارکت در فروش
+          </button>
+          <button
+            onClick={() => setActiveSection("partnership")}
+            className="w-full max-w-[480px] flex items-center lg:justify-center bg-gray-200 rounded-lg gap-2 text-xs px-4 py-4"
+          >
+            <StrokeArrowLeftIcon size={16} className="rotate-180" />
+            پیشنهادات مشارکت در فروش
+          </button>
+        </div>
+      </div>
+
+      {/* Date range desktop dialog */}
+      {dateRangeDialogOpen && (
+        <DialogWrapper
+          title={"بازه زمانی"}
+          isOpen={dateRangeDialogOpen}
+          onClose={() => setDateRangeDialogOpen(false)}
+        >
+          <DateRangeFilterContent />
+        </DialogWrapper>
+      )}
+
+      {/* Mobile Filters Drawer */}
+      <FilterReceivedLinksDrawer
+        isOpen={isFiltersDrawerOpen}
+        onClose={() => setIsFiltersDrawerOpen(false)}
+        expandedFilter={expandedFilter}
+        onFilterToggle={handleFilterToggle}
+        selectedFilter={selectedFilter}
+        onFilterChange={setSelectedFilter}
+        hasFiltersChanged={hasFiltersChanged}
+        onResetFilters={handleResetFilters}
+        options={sortOptions}
+        showAvailable={showAvailable}
+        setShowAvailable={setShowAvailable}
+      />
+    </div>
+  );
+}

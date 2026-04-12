@@ -13,16 +13,18 @@ function SortFilterContent({ sortBy, onSortChange }) {
   return (
     <div className="flex flex-col">
       {sortOptions.map((option, index) => (
-        <div
-          key={option.id}
-          className={`py-3 ${index < sortOptions.length - 1 ? "border-b-2 border-gray-200" : ""}`}
-        >
-          <Radio
-            checked={sortBy === option.id}
-            onChange={() => onSortChange(option.id)}
-            label={option.label}
-          />
-        </div>
+        <>
+          <div key={option.id} className="py-3">
+            <Radio
+              checked={sortBy === option.id}
+              onChange={() => onSortChange(option.id)}
+              label={option.label}
+            />
+          </div>
+          {sortOptions.length - 1 > index && (
+            <div className="w-full h-[2px] mr-8 bg-gray-200" />
+          )}
+        </>
       ))}
     </div>
   );

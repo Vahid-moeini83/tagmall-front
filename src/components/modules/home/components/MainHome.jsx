@@ -15,7 +15,7 @@ import {
   VerticalListIcon,
 } from "@/icons";
 import Image from "next/image";
-import { sellers } from "@/lib/data";
+import { sellers } from "@/lib/client/data";
 import { useState, useEffect, useRef } from "react";
 import usePublicStore from "@/app/store/publicStore";
 import {
@@ -25,10 +25,8 @@ import {
 } from "@/components/ui/popover";
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import { SearchResultBox } from "@/components/ui/search";
-import { mockSellerReviewsData } from "@/lib/mockReviewsData";
-import { useSearchParams } from "next/navigation";
+import { mockSellerReviewsData } from "@/lib/client/mockReviewsData";
 
-// Dynamic import for Map to avoid SSR issues with Leaflet
 const Map = dynamic(() => import("@/components/modules/home/components/Map"), {
   ssr: false,
   loading: () => <div className="w-full h-full bg-gray-100" />,
@@ -38,7 +36,6 @@ export default function MainHome() {
   const homeFilterSpecial = usePublicStore((s) => s.homeFilterSpecial);
   const homeFilterVisit = usePublicStore((s) => s.homeFilterVisit);
   const scrollContainerRef = useRef(null);
-  const params = useSearchParams();
 
   const filterMode =
     homeFilterSpecial && homeFilterVisit
@@ -81,11 +78,10 @@ export default function MainHome() {
   const filteredPurchasedForList =
     filterMode === "special" ? [] : purchasedProducts;
 
-  // Initialize with first product ID
-  const initialProductId =
-    sliderProducts.length > 0 ? sliderProducts[0].id : null;
+  const initialSellerId =
+    sliderProducts.length > 0 ? sliderProducts[0].seller.id : null;
 
-  const [activeProductId, setActiveProductId] = useState(initialProductId);
+  const [activeSellerId, setActiveSellerId] = useState(initialSellerId);
   const [viewMode, setViewMode] = useState("slider");
   const [activeSellerInfo, setActiveSellerInfo] = useState({
     name: "سیتی تل",
@@ -96,18 +92,42 @@ export default function MainHome() {
   });
   const [isProductsListOpen, setIsProductsListOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  const [desktopFilterOpen, setDesktopFilterOpen] = useState(false);
   const mapActionsRef = useRef(null);
 
-  // Get active product from ID
-  const activeProduct = activeProductId
-    ? [...specialProducts, ...purchasedProducts].find(
-        (p) => p.id === activeProductId,
-      )
-    : null;
+  const handleSellerSelect = (sellerId) => {
+    setActiveSellerId(sellerId);
+  };
 
-  const activeSellerId = activeProduct?.seller?.id || null;
+  const handleProductChange = (product) => {
+    if (product?.seller?.id) {
+      setActiveSellerId(product.seller.id);
 
-  // Keep activeSellerInfo in sync with activeSellerId
+      if (mapActionsRef.current) {
+        mapActionsRef.current.panToSeller(product.seller.id);
+      }
+    }
+  };
+
+  const handleSellerGoToMap = (sellerId) => {
+    if (mapActionsRef.current) {
+      mapActionsRef.current.panToSeller(sellerId);
+    }
+  };
+
+  const toggleProductsList = () => {
+    setIsProductsListOpen(!isProductsListOpen);
+  };
+
+  const handleSellerNameClick = (sellerId) => {
+    setViewMode("seller-details");
+    handleSellerGoToMap(sellerId);
+  };
+
+  const handleBackToSlider = () => {
+    setViewMode("slider");
+  };
+
   useEffect(() => {
     if (activeSellerId) {
       const seller = sellers.find((s) => s.id === activeSellerId);
@@ -131,91 +151,6 @@ export default function MainHome() {
       });
     }
   }, [activeSellerId]);
-
-  // When user clicks on map marker
-  const handleSellerSelect = (sellerId) => {
-    const products =
-      filterMode === "visit"
-        ? purchasedProducts
-        : [...specialProducts, ...purchasedProducts];
-
-    const firstProduct = products.find((p) => p.seller.id === sellerId);
-
-    if (firstProduct) {
-      setActiveProductId(firstProduct.id);
-    }
-  };
-
-  // When user changes product (e.g. from slider/drawer)
-  const handleProductChange = (product) => {
-    if (product?.id) {
-      setActiveProductId(product.id);
-
-      // Pan map to the product's seller only if shouldPanMap is true
-      if (mapActionsRef.current && product.seller?.id) {
-        mapActionsRef.current.panToSeller(product.seller.id);
-      }
-    }
-  };
-
-  // When user long-presses seller name in drawer, pan map to that seller
-  const handleSellerGoToMap = (sellerId) => {
-    if (mapActionsRef.current) {
-      mapActionsRef.current.panToSeller(sellerId);
-    }
-  };
-
-  const toggleProductsList = () => {
-    setIsProductsListOpen(!isProductsListOpen);
-  };
-
-  const handleSellerNameClick = () => {
-    setViewMode("seller-details");
-  };
-
-  const handleSellerNameLongPress = () => {
-    if (mapActionsRef.current && activeSellerId) {
-      mapActionsRef.current.panToSeller(activeSellerId);
-    }
-  };
-
-  const longPressTimerRef = useRef(null);
-  const isLongPressTriggeredRef = useRef(false);
-
-  const handleSellerNameMouseDown = () => {
-    isLongPressTriggeredRef.current = false;
-    longPressTimerRef.current = setTimeout(() => {
-      isLongPressTriggeredRef.current = true;
-      handleSellerNameLongPress();
-    }, 500);
-  };
-
-  const handleSellerNameMouseUp = () => {
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-    if (!isLongPressTriggeredRef.current) {
-      handleSellerNameClick();
-    }
-  };
-
-  const handleSellerNameMouseLeave = () => {
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-  };
-
-  const handleBackToSlider = () => {
-    setViewMode("slider");
-
-    if (mapActionsRef.current) {
-      mapActionsRef.current.resetMapView();
-    }
-  };
-
-  const [desktopFilterOpen, setDesktopFilterOpen] = useState(false);
 
   return (
     <div className="h-screen flex flex-row-reverse relative">
@@ -249,29 +184,27 @@ export default function MainHome() {
         <ProductsDrawer
           specialProducts={filteredSpecialForList}
           purchasedProducts={filteredPurchasedForList}
-          activeProductId={activeProductId}
+          activeSellerId={activeSellerId}
           onProductChange={handleProductChange}
           onSellerGoToMap={handleSellerGoToMap}
+          setIsReviewsModalOpen={setIsReviewsModalOpen}
         />
       </div>
       <div className="hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-[40%] xl:w-[44%] max-w-200 lg:px-4 lg:mr-24 xl:px-8 2xl:px-16 py-8 bg-gray-200/50 backdrop-blur-sm rounded-l-lg flex-col z-10">
-        {/* Right side header: Desktop */}
         <div className="flex flex-col gap-2 shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <Image
                 src="/assets/images/fallback/avatar.png"
                 width={48}
                 height={48}
                 alt="avatar"
-                className="bg-white rounded-lg"
+                className="bg-white rounded-md"
               />
               <div className="flex items-center gap-0.5">
                 <span
                   className="text-gray-600 cursor-pointer select-none"
-                  onMouseDown={handleSellerNameMouseDown}
-                  onMouseUp={handleSellerNameMouseUp}
-                  onMouseLeave={handleSellerNameMouseLeave}
+                  onClick={() => handleSellerNameClick(activeSellerId)}
                 >
                   {activeSellerInfo.name}
                 </span>
@@ -293,7 +226,7 @@ export default function MainHome() {
                   align="end"
                   side="bottom"
                   sideOffset={6}
-                  className="min-w-44 rounded-lg p-2 z-50 bg-white"
+                  className="min-w-44 rounded-md p-2 z-50 bg-white"
                 >
                   <HomeFilterContent
                     onClose={() => setDesktopFilterOpen(false)}
@@ -308,8 +241,8 @@ export default function MainHome() {
           </div>
           <div className="flex items-end justify-between">
             <div
+              onClick={() => setIsReviewsModalOpen(true)}
               className="flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
-              // onClick={() => setIsReviewsModalOpen(true)}
             >
               <div className="flex items-center gap-1">
                 <StarIcon className="text-yellow-500 w-4 h-4" />
@@ -337,7 +270,7 @@ export default function MainHome() {
               key={filterMode}
               products={sliderProducts}
               onProductChange={handleProductChange}
-              activeProductId={activeProductId}
+              activeSellerId={activeSellerId}
               purchasedProducts={filteredPurchasedForList}
               activeSellerInfo={activeSellerInfo}
               filterMode={filterMode}

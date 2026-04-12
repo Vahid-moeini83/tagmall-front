@@ -5,8 +5,8 @@ export const ArrowUpDownIcon = ({
   ...props
 }) => (
   <svg
-    width="20"
-    height="20"
+    width={size}
+    height={size}
     viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -851,18 +851,19 @@ export const PlusIcon = ({
     <svg
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}
     >
-      <path
-        d="M18 12.75H6C5.59 12.75 5.25 12.41 5.25 12C5.25 11.59 5.59 11.25 6 11.25H18C18.41 11.25 18.75 11.59 18.75 12C18.75 12.41 18.41 12.75 18 12.75Z"
-        fill={color}
-      />
-      <path
-        d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V6C11.25 5.59 11.59 5.25 12 5.25C12.41 5.25 12.75 5.59 12.75 6V18C12.75 18.41 12.41 18.75 12 18.75Z"
+      <rect x="9" width="2" height="20" rx="1" fill={color} />
+      <rect
+        y="11"
+        width="2"
+        height="20"
+        rx="1"
+        transform="rotate(-90 0 11)"
         fill={color}
       />
     </svg>
@@ -1331,6 +1332,78 @@ export const AvailableProductsIcon = ({
       <path
         d="M17.6002 4.8284C17.6646 4.8284 17.7326 4.82462 17.797 4.81705C18.4325 4.75652 18.981 4.39337 19.2988 3.87133C19.4841 3.57249 19.59 3.2169 19.59 2.83861C19.59 1.7378 18.6973 0.845043 17.6002 0.845043C17.309 0.845043 17.0366 0.905569 16.7907 1.01527C16.2384 1.26494 15.8147 1.75293 15.671 2.35441C15.6256 2.5095 15.6067 2.67217 15.6067 2.83861C15.6067 3.93943 16.4994 4.8284 17.6002 4.8284Z"
         fill={active ? "#009444" : "#231F20"}
+      />
+    </svg>
+  );
+};
+
+export const SquarePlusIcon = ({
+  className,
+  size = 24,
+  color = "currentColor",
+  ...props
+}) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <rect
+        x="1"
+        y="1"
+        width="18"
+        height="18"
+        rx="4"
+        fill="white"
+        stroke={color}
+        strokeWidth="2"
+      />
+      <line
+        x1="5"
+        y1="4.37103e-08"
+        x2="5"
+        y2="20"
+        stroke="white"
+        strokeWidth="2"
+      />
+      <line
+        x1="15"
+        y1="4.37103e-08"
+        x2="15"
+        y2="20"
+        stroke="white"
+        strokeWidth="2"
+      />
+      <line
+        x1="20"
+        y1="5"
+        x2="-8.74228e-08"
+        y2="5"
+        stroke="white"
+        strokeWidth="2"
+      />
+      <line
+        x1="20"
+        y1="15"
+        x2="-8.74228e-08"
+        y2="15"
+        stroke="white"
+        strokeWidth="2"
+      />
+      <rect x="9" y="5" width="2" height="10" rx="1" fill={color} />
+      <rect
+        x="15"
+        y="9"
+        width="2"
+        height="10"
+        rx="1"
+        transform="rotate(90 15 9)"
+        fill={color}
       />
     </svg>
   );

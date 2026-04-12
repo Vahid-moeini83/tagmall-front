@@ -1,57 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-  MoreSquareIcon,
-  LocateIcon,
-  LookingAvatarIcon,
-  StrokeArrowLeftIcon,
-} from "@/icons";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { MoreSquareIcon, LocateIcon, StrokeArrowLeftIcon } from "@/icons";
 import usePublicStore from "@/app/store/publicStore";
 import Image from "next/image";
+import { addToSearchHistory } from "@/lib/server/actions/search";
+import { getToken } from "@/lib/server/cookies";
+import { v4 as uuidv4 } from "uuid";
+import SearchSkeleton from "../loading/search/SearchSkeleton";
 
-// Mock data - بعداً از API میاد
-const mockSearchSuggestions = [
-  {
-    id: 1,
-    type: "category",
-    name: "گوشی موبایل",
-    brands: [
-      { id: 11, name: "سامسونگ" },
-      { id: 12, name: "اپل" },
-      { id: 13, name: "شیائومی" },
-      { id: 14, name: "هوآوی" },
-    ],
-  },
-  {
-    id: 2,
-    type: "product",
-    name: "گوشی سامسونگ گلکسی S24",
-  },
-  {
-    id: 3,
-    type: "category",
-    name: "گوشواره",
-    brands: [
-      { id: 31, name: "طلای مهر" },
-      { id: 32, name: "گالری زرین" },
-    ],
-  },
-  {
-    id: 4,
-    type: "product",
-    name: "گوشی اپل آیفون 15 پرو",
-  },
-];
+// Get or create persistent user search ID
+const getUserSearchId = () => {
+  if (typeof window === "undefined") return null;
 
-function SearchSuggestions({ searchQuery }) {
+  let userSearchId = localStorage.getItem("userSearchId");
+  if (!userSearchId) {
+    userSearchId = uuidv4();
+    localStorage.setItem("userSearchId", userSearchId);
+  }
+  return userSearchId;
+};
+
+function SearchSuggestions({
+  searchQuery,
+  suggestions = [],
+  isLoading = false,
+}) {
   const [expandedCategory, setExpandedCategory] = useState(null);
-  const router = useRouter();
+  const [searchIdentifier, setSearchIdentifier] = useState(null);
   const setShowSearchResultBox = usePublicStore(
     (s) => s.setShowSearchResultBox,
   );
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+
+  // Generate search identifier on mount
+  useEffect(() => {
+    setSearchIdentifier(uuidv4());
+  }, []);
 
   const toggleCategory = (categoryId) => {
     setExpandedCategory((prev) => (prev === categoryId ? null : categoryId));
@@ -60,132 +46,212 @@ function SearchSuggestions({ searchQuery }) {
   const handleLocationClick = (item) => {
     setShowSearchResultBox(true, item);
     setSearchBoxOpen(false);
-    router.push("/");
   };
 
-  const filteredSuggestions = mockSearchSuggestions.filter((item) =>
+  const handleItemClick = async (item) => {
+    // Get token and userSearchId
+    const token = await getToken();
+    const userSearchId = getUserSearchId();
+
+    // Prepare data for API
+    const historyData = {
+      keyword: searchQuery,
+      search_identifier: searchIdentifier,
+      category_ids: item.type === "category" ? { [item.id]: [] } : {},
+      product_ids: item.type === "product" ? [item.id] : [],
+    };
+
+    // Add item to history API
+    const { addToSearchHistoryRes, addToSearchHistoryErr } =
+      await addToSearchHistory(historyData, token, userSearchId);
+
+    if (addToSearchHistoryRes) {
+      console.log("Add to history res: ", addToSearchHistoryRes);
+    } else if (addToSearchHistoryErr) {
+      console.log("Add to history err: ", addToSearchHistoryErr);
+    }
+
+    setSearchBoxOpen(false);
+  };
+
+  const handleBrandClick = async (brand, categoryId) => {
+    // Get token and userSearchId
+    const token = await getToken();
+    const userSearchId = getUserSearchId();
+
+    // Prepare data for API
+    const historyData = {
+      keyword: searchQuery,
+      search_identifier: searchIdentifier,
+      category_ids: { [categoryId]: [] },
+      product_ids: [],
+    };
+
+    // Call API
+    await addToSearchHistory(historyData, token, userSearchId);
+
+    // Close search box
+    setSearchBoxOpen(false);
+  };
+
+  const filteredSuggestions = suggestions.filter((item) =>
     item.name.includes(searchQuery),
   );
 
-  if (filteredSuggestions.length === 0) {
-    return (
-      <div className="p-4 text-center text-gray-500 text-sm lg:text-base">
-        نتیجه‌ای برای &quot;{searchQuery}&quot; یافت نشد
-      </div>
-    );
-  }
-
   return (
-    <div className="flex-1 overflow-y-auto lg:p-4">
-      <h3 className="text-primary font-bold mb-6 text-sm lg:text-base">
+    <div className="flex-1 overflow-y-auto lg:py-4">
+      <h3 className="text-primary font-bold mb-5 text-sm lg:text-base lg:px-4">
         پیشنهادات جستجو
       </h3>
 
-      <div className="flex flex-col gap-2">
-        {filteredSuggestions.map((item) => (
-          <div
-            key={item.id}
-            className={`overflow-hidden transition-all duration-300 ${
-              expandedCategory === item.id
-                ? "bg-gray-200 rounded-lg px-[10px] py-4"
-                : ""
-            }`}
-          >
-            <div className="flex items-center justify-between py-3 pl-2.5 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ease-in-out group">
+      {isLoading ? (
+        <SearchSkeleton />
+      ) : filteredSuggestions.length === 0 ? (
+        <div className="p-4 text-center text-gray-500 text-sm lg:text-base">
+          نتیجه‌ای برای &quot;{searchQuery}&quot; یافت نشد
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2 lg:px-[6px]">
+          {filteredSuggestions.map((item) => (
+            <>
               <div
-                className={`flex-1 transition-all duration-300 ${
-                  expandedCategory === item.id ? "text-center" : ""
+                key={item.id}
+                className={`overflow-hidden transition-all duration-300 ${
+                  expandedCategory === item.id
+                    ? "bg-gray-200 rounded-lg px-[10px] lg:pr-[10px] lg:pl-[6px] py-4"
+                    : ""
                 }`}
               >
-                <span className="text-gray-600 hover:text-primary text-sm lg:text-base">
-                  {expandedCategory === item.id && item.type === "category" ? (
-                    <>
-                      <span className="font-black">گروه کالایی</span>{" "}
+                <div
+                  className={`flex items-center justify-between py-3 ${expandedCategory === item.id ? "" : "pl-[10px] lg:pr-[10px] lg:pl-[6px]"} transition-all duration-300 ease-in-out group`}
+                >
+                  <Link
+                    href={item.type === "category" ? `/search/${item.id}` : "#"}
+                    onClick={() => handleItemClick(item)}
+                    className={`flex-1 transition-all duration-300 ${
+                      expandedCategory === item.id ? "text-center" : ""
+                    }`}
+                  >
+                    <div className="text-gray-600 hover:text-primary text-sm lg:text-base">
+                      <span className="font-black text-gray-700">
+                        گروه کالایی
+                      </span>{" "}
                       {item.name}
-                    </>
-                  ) : (
-                    item.name
-                  )}
-                </span>
-                <div className="text-xs text-gray-600 mt-1">
-                  <span className="font-bold">محدوده قیمت</span> 20,000 تا
-                  1,200,000 تومان
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                {item.type === "category" &&
-                  (expandedCategory === null ||
-                    expandedCategory === item.id) && (
-                    <>
-                      {expandedCategory !== item.id && (
+                    </div>
+                    {item.price_range && (
+                      <div className="text-xs text-gray-600 mt-1">
+                        <span className="font-bold">محدوده قیمت</span>{" "}
+                        {item.price_range.from?.toLocaleString() || "0"} تا{" "}
+                        {item.price_range.to?.toLocaleString() || "0"} تومان
+                      </div>
+                    )}
+                  </Link>
+                  <div className="flex items-center gap-2">
+                    {item.type === "category" &&
+                      (expandedCategory === null ||
+                        expandedCategory === item.id) && (
                         <button
-                          onClick={() => handleLocationClick(item)}
-                          className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
+                          onClick={() => toggleCategory(item.id)}
+                          className="flex items-center justify-center cursor-pointer"
                         >
-                          <LocateIcon size={20} color="currentColor" />
+                          {expandedCategory === item.id ? (
+                            <StrokeArrowLeftIcon
+                              size={20}
+                              className="transition-all duration-300 ease-in-out"
+                            />
+                          ) : (
+                            <MoreSquareIcon
+                              size={20}
+                              className="transition-all duration-300 ease-in-out"
+                            />
+                          )}
                         </button>
                       )}
-                      <button
-                        onClick={() => toggleCategory(item.id)}
-                        className="flex items-center justify-center transition-transform duration-300 ease-in-out hover:scale-110"
-                      >
-                        {expandedCategory === item.id ? (
-                          <StrokeArrowLeftIcon
-                            size={20}
-                            className="transition-all duration-300 ease-in-out"
-                          />
-                        ) : (
-                          <MoreSquareIcon
-                            size={20}
-                            className="transition-all duration-300 ease-in-out"
-                          />
-                        )}
-                      </button>
-                    </>
-                  )}
-              </div>
-            </div>
-
-            {item.type === "category" && (
-              <div
-                className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
-                  expandedCategory === item.id
-                    ? "max-h-96 opacity-100 mt-1"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                {item.brands.map((brand) => (
-                  <div
-                    key={brand.id}
-                    className="py-2  hover:bg-gray-50 rounded-lg cursor-pointer transition-all duration-200 ease-in-out"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="relative w-10 h-10">
-                        <Image
-                          src="/assets/images/fallback/brand.png"
-                          fill
-                          alt="brand"
-                          className="object-cover"
-                          quality={100}
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <span className="text-gray-600 hover:text-primary text-sm lg:text-base block">
-                          {brand.name}
-                        </span>
-                        <div className="text-xs text-gray-600 mt-1">
-                          محدوده قیمت <span className="font-bold">20,000</span>{" "}
-                          تا <span className="font-bold">1,200,000</span> تومان
-                        </div>
-                      </div>
-                    </div>
                   </div>
-                ))}
+                </div>
+
+                {item.type === "category" && item.brands && (
+                  <div
+                    className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
+                      expandedCategory === item.id
+                        ? "max-h-96 opacity-100 mt-1"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    {item.brands.map((brand) => (
+                      <Link
+                        key={brand.id}
+                        href={`/search/${brand.id}`}
+                        onClick={() => handleBrandClick(brand, item.id)}
+                        className="py-2 rounded-lg cursor-pointer transition-all duration-200 ease-in-out block"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-10 h-10">
+                            <Image
+                              src={
+                                brand.image?.file_path ||
+                                "/assets/images/fallback/no-photo.jpg"
+                              }
+                              fill
+                              alt="brand"
+                              className="object-cover rounded-md"
+                              quality={100}
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <span className="text-gray-600 hover:text-primary text-sm lg:text-base block">
+                              {brand.name}
+                            </span>
+                            {brand.price_range && (
+                              <div className="text-xs text-gray-600 mt-1">
+                                محدوده قیمت{" "}
+                                <span className="font-bold">
+                                  {brand.price_range.from?.toLocaleString() ||
+                                    "0"}
+                                </span>{" "}
+                                تا{" "}
+                                <span className="font-bold">
+                                  {brand.price_range.to?.toLocaleString() ||
+                                    "0"}
+                                </span>{" "}
+                                تومان
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+              {item.type === "category" && (
+                <Link
+                  key={`${item.id}-location`}
+                  href="/"
+                  onClick={() => handleLocationClick(item?.name)}
+                  className="overflow-hidden transition-all duration-300"
+                >
+                  <div className="py-3 pl-4 lg:px-[10px] transition-all duration-300 ease-in-out group">
+                    <div className="text-gray-600 text-sm lg:text-base">
+                      <span className="font-black text-gray-700">
+                        موقعیت یابی گروه کالایی
+                      </span>{" "}
+                      {item.name}
+                    </div>
+                    {item.price_range && (
+                      <div className="text-xs text-gray-600 mt-1">
+                        <span className="font-bold">محدوده قیمت</span>{" "}
+                        {item.price_range.from?.toLocaleString() || "0"} تا{" "}
+                        {item.price_range.to?.toLocaleString() || "0"} تومان
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              )}
+            </>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

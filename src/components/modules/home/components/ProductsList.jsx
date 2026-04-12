@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { NoteIcon, StrokeArrowLeftIcon } from "@/icons";
 import { useKeenSlider } from "keen-slider/react";
-import Dialog from "@/components/ui/dialog";
+import Dialog, { DialogWrapper } from "@/components/ui/dialog";
 import { useState } from "react";
 
 export default function ProductsList({
@@ -45,7 +45,7 @@ export default function ProductsList({
                 {specialProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="grid grid-cols-2 border-b border-gray-100 pb-8 lg:mx-4 xl:mx-8"
+                    className="grid grid-cols-2 border-b border-gray-100 pb-8"
                   >
                     <div className="flex justify-center items-center">
                       <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
@@ -107,7 +107,7 @@ export default function ProductsList({
                   onClick={onClose}
                   size={20}
                 />
-                <span className="text-blue-600 text-center">
+                <span className="text-primary text-center">
                   کالای خاصی در نظر دارید؟
                 </span>
               </div>
@@ -116,7 +116,7 @@ export default function ProductsList({
 
           <div className="keen-slider__slide overflow-y-auto bg-white rounded-2xl shadow-2xl">
             <div className="flex flex-col justify-between h-full py-12 px-16">
-              <h3 className="font-bold text-blue-600 text-xl mb-8">
+              <h3 className="font-bold text-primary text-xl mb-8">
                 خرید حضوری
               </h3>
 
@@ -138,7 +138,7 @@ export default function ProductsList({
                         />
                       </div>
                     </div>
-                    <div className="flex flex-col items-start justify-start gap-8 pl-8">
+                    <div className="flex flex-col items-start justify-start gap-8">
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-2.5">
                           <div className="relative w-8 h-8 rounded-lg overflow-hidden">
@@ -186,7 +186,7 @@ export default function ProductsList({
                 />
                 <span className="text-gray-600 text-center">
                   کاربر محترم در صورتی که امکان مراجعه به فروشگاه را ندارید، با{" "}
-                  <span className="text-blue-600 cursor-pointer">
+                  <span className="-600 cursor-pointer">
                     درخواست تغییر در شیوه ارسال
                   </span>{" "}
                   سفارش را دریافت کنید.
@@ -196,7 +196,7 @@ export default function ProductsList({
           </div>
         </div>
       </div>
-      <Dialog
+      <DialogWrapper
         title={selectedProduct?.name || "اسم محصول"}
         isOpen={isNoteOpen}
         onClose={() => {
@@ -206,7 +206,7 @@ export default function ProductsList({
       >
         {selectedProduct?.orderHistory?.userNote ||
           "یادداشت کاربر: لطفا محصول را در بسته بندی تیره قرار دهید. این یادداشت جهت تست قرار گرفته است!"}
-      </Dialog>
+      </DialogWrapper>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { flushSync } from "react-dom";
 import Image from "next/image";
-import { sellers } from "@/lib/data";
+import { sellers } from "@/lib/client/data";
 import toast from "react-hot-toast";
 import { SellerMarker, UserMarker } from "@/components/ui/markers";
 import { GPSIcon } from "@/icons";
@@ -321,115 +321,59 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
     });
     mapRef.current = map;
 
-    let touchStartPos = null;
+    let longPressTimeout = null;
 
-    const handleLongPressStart = (e) => {
-      longPressTimerRef.current = setTimeout(() => {
+    // Desktop: mousedown with 700ms timer
+    const handleMouseDown = (e) => {
+      // Only left click
+      if (e.originalEvent.button !== 0) return;
+
+      longPressTimeout = setTimeout(() => {
         if (isGpsEnabledRef.current) {
           toast.error("برای تنظیم موقعیت دستی، ابتدا GPS را خاموش کنید.");
           return;
         }
-        const { lat, lng } = e.latlng;
+
         setUserPosition({
-          lat: lat,
-          lng: lng,
+          lat: e.latlng.lat,
+          lng: e.latlng.lng,
           heading: 0,
         });
         setIsManualMode(true);
         toast.success("موقعیت دستی انتخاب شد");
-      }, 1000);
-    };
-
-    const handleLongPressEnd = () => {
-      if (longPressTimerRef.current) {
-        clearTimeout(longPressTimerRef.current);
-        longPressTimerRef.current = null;
-      }
-      touchStartPos = null;
-    };
-
-    // Mouse events for desktop
-    map.on("mousedown", handleLongPressStart);
-    map.on("mouseup", handleLongPressEnd);
-    map.on("mousemove", handleLongPressEnd);
-
-    // Native touch events for mobile (more reliable)
-    const mapContainer = mapContainerRef.current;
-    let longPressTimeout = null;
-    let touchMoved = false;
-
-    const handleTouchStart = (e) => {
-      if (e.touches.length !== 1) return;
-
-      const touch = e.touches[0];
-      touchStartPos = { x: touch.clientX, y: touch.clientY };
-      touchMoved = false;
-
-      // Disable dragging for a while
-      map.dragging.disable();
-
-      longPressTimeout = setTimeout(() => {
-        if (!touchMoved) {
-          if (isGpsEnabledRef.current) {
-            toast.error("برای تنظیم موقعیت دستی، ابتدا GPS را خاموش کنید.");
-            return;
-          }
-
-          const rect = mapContainer.getBoundingClientRect();
-          const containerPoint = L.point(
-            touchStartPos.x - rect.left,
-            touchStartPos.y - rect.top,
-          );
-          const latlng = map.containerPointToLatLng(containerPoint);
-
-          setUserPosition({
-            lat: latlng.lat,
-            lng: latlng.lng,
-            heading: 0,
-          });
-          setIsManualMode(true);
-          toast.success("موقعیت دستی انتخاب شد");
-        }
       }, 700);
     };
 
-    const handleTouchMove = (e) => {
-      if (!touchStartPos) return;
-
-      const touch = e.touches[0];
-      const deltaX = Math.abs(touch.clientX - touchStartPos.x);
-      const deltaY = Math.abs(touch.clientY - touchStartPos.y);
-
-      // Mark as moved if finger moved more than 25px
-      if (deltaX > 25 || deltaY > 25) {
-        touchMoved = true;
-        if (longPressTimeout) {
-          clearTimeout(longPressTimeout);
-          longPressTimeout = null;
-        }
-      }
-    };
-
-    const handleTouchEnd = () => {
+    const handleMouseUpOrMove = () => {
       if (longPressTimeout) {
         clearTimeout(longPressTimeout);
         longPressTimeout = null;
       }
-      touchStartPos = null;
-      touchMoved = false;
-
-      // Enable dragging again
-      map.dragging.enable();
     };
 
-    mapContainer.addEventListener("touchstart", handleTouchStart, {
-      passive: true,
-    });
-    mapContainer.addEventListener("touchmove", handleTouchMove, {
-      passive: true,
-    });
-    mapContainer.addEventListener("touchend", handleTouchEnd);
-    mapContainer.addEventListener("touchcancel", handleTouchEnd);
+    // Mobile: contextmenu (long press)
+    const handleContextMenu = (e) => {
+      if (isGpsEnabledRef.current) {
+        toast.error("برای تنظیم موقعیت دستی، ابتدا GPS را خاموش کنید.");
+        return;
+      }
+
+      setUserPosition({
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
+        heading: 0,
+      });
+      setIsManualMode(true);
+      toast.success("موقعیت دستی انتخاب شد");
+    };
+
+    // Desktop events
+    map.on("mousedown", handleMouseDown);
+    map.on("mouseup", handleMouseUpOrMove);
+    map.on("mousemove", handleMouseUpOrMove);
+
+    // Mobile event
+    map.on("contextmenu", handleContextMenu);
 
     addMarkers();
 
@@ -441,18 +385,13 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
         userMarkerRootRef.current = null;
       }
 
-      // Remove touch event listeners
-      mapContainer.removeEventListener("touchstart", handleTouchStart);
-      mapContainer.removeEventListener("touchmove", handleTouchMove);
-      mapContainer.removeEventListener("touchend", handleTouchEnd);
-      mapContainer.removeEventListener("touchcancel", handleTouchEnd);
+      if (longPressTimeout) {
+        clearTimeout(longPressTimeout);
+      }
 
       map.remove();
       if (watchIdRef.current !== null) {
         navigator.geolocation.clearWatch(watchIdRef.current);
-      }
-      if (longPressTimeout) {
-        clearTimeout(longPressTimeout);
       }
     };
     // `addMarkers` is defined in-component; we intentionally keep this init effect
@@ -498,10 +437,10 @@ function Map({ activeSellerId, onSellerSelect, onMapReady, filteredProducts }) {
         onMouseDown={handleGpsButtonMouseDown}
         onMouseUp={handleGpsButtonMouseUp}
         onMouseLeave={handleGpsButtonMouseUp}
-        className="absolute bottom-[calc(270px+env(safe-area-inset-bottom)+16px)] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
+        className="absolute bottom-[calc(360px+env(safe-area-inset-bottom))] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
       >
         <div
-          className={`bg-gray-200/50 backdrop-blur-sm  border border-white sm:bg-gray-100/70 rounded-lg flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${isGpsEnabled ? "text-primary" : "text-gray-800"}`}
+          className={`bg-gray-200/40 backdrop-blur-sm  border border-white sm:bg-gray-100/70 rounded-md flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${isGpsEnabled ? "text-primary" : "text-gray-800"}`}
         >
           <GPSIcon size={20} />
         </div>

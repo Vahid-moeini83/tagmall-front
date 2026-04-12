@@ -27,26 +27,36 @@ export default function ProductSpecifications() {
   ];
 
   return (
-    <div className="bg-white rounded-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]">
+    <div className="lg:bg-white lg:rounded-lg py-[10px] pb-20 lg:py-[50px] lg:px-[100px]">
       <Accordion type="single" collapsible defaultValue="specifications">
         <AccordionItem value="specifications">
-          <AccordionTrigger className="text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline justify-between">
+          <AccordionTrigger className="hidden lg:flex text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline justify-between">
             مشخصات
           </AccordionTrigger>
-          <AccordionContent className="mt-4">
-            <div className="space-y-4">
+          <AccordionContent className="lg:mt-4">
+            <div className="space-y-2 lg:space-y-4">
               {specifications.map((spec, index) => (
                 <div key={index}>
-                  <div className="flex flex-col gap-4">
-                    <h3 className="text-gray-600 font-bold">{spec.title}</h3>
-                    <p className="text-gray-600">{spec.description}</p>
+                  <div className="flex flex-col gap-2 lg:gap-5">
+                    <h3 className="text-gray-600 text-xs lg:text-base font-bold">
+                      {spec.title}:
+                    </h3>
+                    <p className="text-gray-600 text-xs/8 lg:text-base/12">
+                      {spec.description}
+                    </p>
                   </div>
                   {index < specifications.length - 1 && (
-                    <div className="border-t border-gray-200 mt-4" />
+                    <div className="border-t-2 border-white lg:border-gray-200 lg:mt-1" />
                   )}
                 </div>
               ))}
             </div>
+            <button
+              onClick={() => setShowComments(true)}
+              className="font-iransans lg:hidden fixed bottom-21 py-4 right-[10px] left-[10px] rounded-lg bg-white text-primary"
+            >
+              پرسش و پاسخ و نظرات کاربران
+            </button>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

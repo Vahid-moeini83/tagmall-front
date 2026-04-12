@@ -8,13 +8,17 @@ import {
   MailIcon,
   SearchIcon,
   ShoppingBagIcon,
+  UserIcon,
 } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import usePublicStore from "@/app/store/publicStore";
-import { ProfileModal, PartnershipModal } from "@/components/modules/profile";
+import { ProfileModal } from "@/components/modules/profile";
 import { PopoverWithTrigger } from "@/components/ui/popover";
+import { getToken, getUser } from "@/lib/server/cookies";
+import { getUserProfile } from "@/lib/server/actions/profile";
+import toast from "react-hot-toast";
 
 const navLinks = [
   { id: "location", icon: <LocationIcon size={20} />, href: "/" },
@@ -27,12 +31,15 @@ const LONG_PRESS_MS = 500;
 
 function MainNavigation({ isHomePage = false }) {
   const pathname = usePathname();
+  const globalUser = usePublicStore((state) => state.user);
+
+  const [user, setUser] = useState(globalUser ?? {});
   const [leftLinks, rightLinks] = [navLinks.slice(0, 2), navLinks.slice(2, 4)];
-  const longPressTimerRef = useRef(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isPartnershipOpen, setIsPartnershipOpen] = useState(false);
-  const buttonRefs = useRef({});
   const [mobileIndicatorStyle, setMobileIndicatorStyle] = useState({});
+
+  const longPressTimerRef = useRef(null);
+  const buttonRefs = useRef({});
   const navContainerRef = useRef(null);
 
   const filterPopoverOpen = usePublicStore((s) => s.homeFilterPopoverOpen);
@@ -41,6 +48,17 @@ function MainNavigation({ isHomePage = false }) {
   );
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+
+  const getUserData = async () => {
+    const token = await getToken();
+
+    const { userProfileRes, userProfileErr } = await getUserProfile(token);
+    if (userProfileRes) {
+      setUser(userProfileRes?.data?.user);
+    } else if (userProfileErr) {
+      toast.error("خطا در دریافت اطلاعات کاربر");
+    }
+  };
 
   // Get active button ID
   function getActiveButtonId() {
@@ -62,24 +80,6 @@ function MainNavigation({ isHomePage = false }) {
       transform: `translateY(${buttonIndex * -56}px)`,
     };
   }, [activeButtonId]);
-
-  // Update indicator position for mobile
-  useEffect(() => {
-    const activeButton = buttonRefs.current[activeButtonId];
-    const container = navContainerRef.current;
-
-    if (activeButton && container) {
-      const buttonRect = activeButton.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      const left = buttonRect.left - containerRect.left;
-      const top = buttonRect.top - containerRect.top;
-
-      setMobileIndicatorStyle({
-        left: `${left}px`,
-        top: `${top}px`,
-      });
-    }
-  }, [activeButtonId, searchBoxOpen]);
 
   // Function to check if button is active
   function isButtonActive(item) {
@@ -132,71 +132,53 @@ function MainNavigation({ isHomePage = false }) {
     }
   }
 
+  // Update indicator position for mobile
+  useEffect(() => {
+    const activeButton = buttonRefs.current[activeButtonId];
+    const container = navContainerRef.current;
+
+    if (activeButton && container) {
+      const buttonRect = activeButton.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const left = buttonRect.left - containerRect.left;
+      const top = buttonRect.top - containerRect.top;
+
+      setMobileIndicatorStyle({
+        left: `${left}px`,
+        top: `${top}px`,
+      });
+    }
+  }, [activeButtonId, searchBoxOpen]);
+
+  useEffect(() => {
+    getUserData();
+  }, [user]);
+
   const avatarElement = (
-    <div className="w-12 h-12 relative">
-      <Image
-        src="/assets/images/fallback/avatar.png"
-        fill
-        alt="avatar"
-        className="bg-white rounded-lg"
-      />
+    <div className="w-12 h-12 relative flex items-center justify-center">
+      {/* user && user?.avatar */}
+      {true ? (
+        <Image
+          src={user?.avatar}
+          fill
+          alt="avatar"
+          onClick={() => setIsProfileOpen(true)}
+          className="bg-white rounded-lg object-cover"
+        />
+      ) : (
+        <UserIcon />
+      )}
     </div>
   );
-
-  // Mock products data for partnership
-  const mockProducts = [
-    {
-      id: 1,
-      name: "هدفون بی‌سیم شیائومی",
-      img: "/assets/images/products/headphone.png",
-    },
-    {
-      id: 2,
-      name: "ماوس بی‌سیم لاجیتک",
-      img: "/assets/images/products/mouse.png",
-    },
-    {
-      id: 3,
-      name: "پاوربانک 20000 میلی‌آمپری",
-      img: "/assets/images/products/powerbank.png",
-    },
-    {
-      id: 4,
-      name: "ساعت هوشمند اپل واچ",
-      img: "/assets/images/products/applewatch.png",
-    },
-    {
-      id: 5,
-      name: "هندزفری بلوتوثی سامسونگ",
-      img: "/assets/images/products/airpods.png",
-    },
-    {
-      id: 6,
-      name: "دوربین اکشن گوپرو Hero",
-      img: "/assets/images/products/camera.png",
-    },
-  ];
-
-  const handlePartnershipOpen = () => {
-    setIsPartnershipOpen(true);
-    setIsProfileOpen(false);
-  };
 
   return (
     <>
       {/* Profile Modal */}
       <ProfileModal
         isOpen={isProfileOpen}
+        setIsProfileOpen={setIsProfileOpen}
         onClose={() => setIsProfileOpen(false)}
         triggerElement={avatarElement}
-        onPartnershipOpen={handlePartnershipOpen}
-      />
-
-      {/* Partnership Modal */}
-      <PartnershipModal
-        isOpen={isPartnershipOpen}
-        onClose={() => setIsPartnershipOpen(false)}
-        products={mockProducts}
       />
 
       {/* Inline variant - simplified buttons without background indicator (Desktop only) */}
@@ -325,9 +307,7 @@ function MainNavigation({ isHomePage = false }) {
 
       {/* Mobile Navigation - Horizontal Layout */}
       <div
-        className={`flex lg:hidden fixed left-0 right-0 w-full ${
-          isHomePage ? "bottom-0 " : "bottom-[10px]"
-        } max-w-[640px] mx-auto ${
+        className={`flex lg:hidden fixed bottom-0 left-0 right-0 w-full max-w-[640px] mx-auto ${
           isHomePage
             ? searchBoxOpen
               ? "bg-white border-t border-gray-200"

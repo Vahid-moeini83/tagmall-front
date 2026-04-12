@@ -20,8 +20,8 @@ export default function ReviewCard({ review, isUserReview, onDelete }) {
                 </span>
               </div>
 
-              <p className="text-gray-600 text-xs lg:text-sm leading-relaxed">
-                <span className="font-semibold text-gray-800">
+              <p className="text-gray-600 font-iransans text-xs lg:text-sm leading-relaxed">
+                <span className="font-iransans font-semibold text-gray-800">
                   {review.userName} :
                 </span>{" "}
                 {review.comment}
@@ -29,7 +29,7 @@ export default function ReviewCard({ review, isUserReview, onDelete }) {
 
               <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-600">
                 <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
-                <span>{review.productName}</span>
+                <span className="font-iransans">{review.productName}</span>
               </div>
 
               <div className="text-center text-gray-400 text-xs mt-2">
@@ -52,8 +52,8 @@ export default function ReviewCard({ review, isUserReview, onDelete }) {
         {review.sellerReply && (
           <div className="w-full flex justify-end">
             <div className="max-w-[380px] lg:max-w-[440px] border-2 border-gray-200 rounded-t-lg rounded-br-lg p-4 flex flex-col gap-3">
-              <p className="text-gray-600 text-xs lg:text-sm leading-relaxed">
-                <span className="font-semibold text-gray-800">
+              <p className="text-gray-600 font-iransans text-xs lg:text-sm leading-relaxed">
+                <span className="font-semibold font-iransans text-gray-800">
                   پاسخ فروشنده:
                 </span>{" "}
                 {review.sellerReply.comment}

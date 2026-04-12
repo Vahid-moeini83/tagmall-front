@@ -38,7 +38,7 @@ export default function ProductUserComments() {
 
   return (
     <div
-      className={`bg-white rounded-lg py-[10px] px-[10px] lg:px-[100px] ${
+      className={`lg:bg-white lg:rounded-lg py-[10px] lg:px-[100px] ${
         isOpen ? "lg:pt-[50px]" : "lg:py-[50px]"
       }`}
     >
@@ -49,17 +49,17 @@ export default function ProductUserComments() {
         onValueChange={(value) => setIsOpen(value === "comments")}
       >
         <AccordionItem value="comments">
-          <AccordionTrigger className="justify-between text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline">
+          <AccordionTrigger className="hidden lg:flex justify-between text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline font-iransans">
             پرسش و پاسخ و دیدگاه کاربران
           </AccordionTrigger>
           <AccordionContent className="mt-4">
-            <div className="flex items-center gap-[6px] overflow-x-auto">
+            <div className="flex flex-col lg:flex-row items-center gap-[6px] lg:overflow-x-auto pb-26 lg:pb-0">
               {/* Guide Box */}
               <div className="flex gap-[6px] shrink-0 mb-12">
                 <div className="flex flex-col justify-between h-auto">
                   <div className="flex items-end gap-2">
-                    <div className="border-2 border-gray-200 rounded-t-lg rounded-br-lg px-2 py-[2px] max-w-[175px]">
-                      <p className="text-xs">
+                    <div className="border-2 border-white lg:border-primary/20 rounded-t-lg rounded-br-lg px-2 py-[2px] max-w-[175px]">
+                      <p className="text-xs font-iransans">
                         <span className="font-bold">راهنما:</span> سوالات خود را
                         در مورد محصول بپرسید
                       </p>
@@ -67,26 +67,26 @@ export default function ProductUserComments() {
                         1 مهر 1404
                       </p>
                     </div>
-                    <div className="border-2 border-gray-200 rounded-lg p-[10px]">
-                      <SupportIcon size={20} color="black" />
+                    <div className="border-2 border-white lg:border-gray-200 rounded-lg p-[10px]">
+                      <SupportIcon size={20} className="text-primary" />
                     </div>
                   </div>
-                  <button className="text-primary text-center">
+                  <button className="font-iransans fixed lg:static bottom-21 right-[10px] left-[10px] rounded-lg py-4 bg-white text-primary text-center">
                     ثبت دیدگاه یا پرسش
                   </button>
                 </div>
-                <div className="w-[2px] h-[200px] bg-gray-200" />
+                <div className="hidden lg:block w-[2px] h-[200px] bg-gray-200" />
               </div>
 
               {/* Q&A Boxes */}
               {qaBoxes.map((box, index) => (
                 <div
                   key={box.id}
-                  className="flex items-center gap-[6px] shrink-0 mb-12"
+                  className="flex items-center gap-[6px] shrink-0 mb-4 lg:mb-12 w-full lg:w-auto border-b-2 border-white pb-4 lg:pb-0 lg:border-0"
                 >
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 w-full lg:w-auto">
                     {/* Question Section (message box on left, heart on right) */}
-                    <div className="flex items-start gap-[50px]">
+                    <div className="flex items-center justify-end lg:justify-normal gap-3 lg:gap-[50px]">
                       <div className="flex flex-col items-center gap-1">
                         <button onClick={() => toggleLike(`q-${box.id}`)}>
                           <HeartIcon
@@ -109,8 +109,8 @@ export default function ProductUserComments() {
                         </span>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <div className="border-2 border-gray-200 rounded-b-lg rounded-tr-lg px-2 py-[2px] max-w-[175px]">
-                          <p className="text-xs">
+                        <div className="border-2 border-gray-400 lg:border-gray-200 rounded-t-lg rounded-br-lg px-2 py-[2px] max-w-[175px]">
+                          <p className="text-xs font-iransans">
                             <span className="font-bold">
                               {box.question.user}:
                             </span>{" "}
@@ -120,17 +120,17 @@ export default function ProductUserComments() {
                             {box.question.date}
                           </p>
                         </div>
-                        <button className="text-xs text-primary text-center">
+                        <button className="font-iransans text-xs text-primary text-center">
                           پاسخ
                         </button>
                       </div>
                     </div>
 
                     {/* Answer Section (heart on left, message box on right) */}
-                    <div className="flex items-start gap-[50px]">
-                      <div className="flex flex-col gap-2 items-end">
-                        <div className="border-2 border-gray-300 rounded-b-lg rounded-tl-lg px-2 py-[2px] max-w-[175px]">
-                          <p className="text-xs">
+                    <div className="flex items-center justify-start lg:justify-normal gap-3 lg:gap-[50px]">
+                      <div className="flex flex-col gap-2 items-center">
+                        <div className="border-2 border-gray-300 rounded-t-lg rounded-bl-lg px-2 py-[2px] max-w-[175px]">
+                          <p className="text-xs font-iransans">
                             <span className="font-bold">
                               {box.answer.user}:
                             </span>{" "}
@@ -140,7 +140,7 @@ export default function ProductUserComments() {
                             {box.answer.date}
                           </p>
                         </div>
-                        <button className="text-xs text-primary self-end">
+                        <button className="text-xs text-primary font-iransans">
                           پاسخ
                         </button>
                       </div>

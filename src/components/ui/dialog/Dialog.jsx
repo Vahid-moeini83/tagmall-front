@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/client/utils";
 import { CloseCircleIcon } from "@/icons";
 
 function Dialog(props) {
@@ -26,7 +26,7 @@ function DialogOverlay({ className, ...props }) {
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-gray-200/50 backdrop-blur-sm fixed inset-0 z-100",
+        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-gray-200/40 backdrop-blur-sm fixed inset-0 z-100",
         className,
       )}
       {...props}
@@ -46,7 +46,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-white border border-gray-600 rounded-xl shadow-xl px-6 py-4 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-200 fixed top-1/2 left-1/2 z-200 w-full max-w-[340px] sm:max-w-[480px] -translate-x-1/2 -translate-y-1/2",
+          "bg-white border border-gray-200 rounded-lg shadow-xl p-4 lg:p-6 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-200 fixed top-1/2 left-1/2 z-200 w-full max-w-[340px] sm:max-w-[480px] -translate-x-1/2 -translate-y-1/2",
           className,
         )}
         {...props}
@@ -73,7 +73,7 @@ function DialogHeader({ className, ...props }) {
     <div
       data-slot="dialog-header"
       className={cn(
-        "flex flex-col space-y-1.5 text-center sm:text-left border-b border-gray-100 pb-1",
+        "flex flex-col space-y-1.5 text-center sm:text-left pb-4",
         className,
       )}
       {...props}
@@ -113,7 +113,7 @@ function DialogTitle({ className, ...props }) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "text-xl font-semibold leading-none tracking-tight text-center",
+        "text-lg font-bold leading-none tracking-tight text-center",
         className,
       )}
       {...props}

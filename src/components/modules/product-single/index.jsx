@@ -1,1 +1,9 @@
-export { default } from "./components/ProductDetail";
+export { default as ProductSingle } from "./components/ProductSingle";
+export { default as ProductMain } from "./components/ProductMain";
+export { default as ProductRelatedAccessories } from "./components/ProductRelatedAccessories";
+export { default as ProductSpecifications } from "./components/ProductSpecifications";
+export { default as ProductReviews } from "./components/ProductReviews";
+export { default as ProductUserComments } from "./components/ProductUserComments";
+export { default as ProductPartnership } from "./components/ProductPartnership";
+export { default as ProductImageSlider } from "./components/ProductImageSlider";
+export { default as ProductNavigation } from "./components/ProductNavigation";

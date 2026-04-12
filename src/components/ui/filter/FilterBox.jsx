@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/client/utils";
 
 const FilterBox = ({ icon, options, value, onChange }) => {
   const selectedOption = options.find((opt) => opt.value === value);
@@ -27,7 +27,7 @@ const FilterBox = ({ icon, options, value, onChange }) => {
             className={cn(
               "text-right px-4 py-3 text-sm font-medium transition-colors duration-150 flex items-center justify-between group",
               value === option.value
-                ? "bg-blue-50 text-blue-700"
+                ? "bg-blue-50 text-primary"
                 : "text-gray-700 hover:bg-gray-50",
             )}
           >

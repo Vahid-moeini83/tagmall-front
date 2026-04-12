@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronDownIcon, ChevronUpIcon } from "@/icons";
+import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from "@/icons";
 
 const mockSpecs = [
   {
@@ -36,6 +36,7 @@ const mockSpecs = [
 
 function SpecsFilterContent({ selectedSpecs, onSpecToggle }) {
   const [expandedSpecs, setExpandedSpecs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleSpec = (specId) => {
     setExpandedSpecs((prev) =>
@@ -45,9 +46,30 @@ function SpecsFilterContent({ selectedSpecs, onSpecToggle }) {
     );
   };
 
+  const filteredSpecs = mockSpecs.filter((spec) =>
+    spec.name.includes(searchQuery),
+  );
+
   return (
-    <div className="bg-gray-200 rounded-lg">
-      {mockSpecs.map((spec) => {
+    <div className="bg-gray-200 rounded-lg overflow-hidden">
+      {/* Search Input */}
+      <div className="relative px-2.5 py-3 border-b-2 border-white overflow-hidden">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="ویژگی خاصی در نظر دارید؟"
+          className="w-full text-gray-600 text-center placeholder:text-gray-400 placeholder:font-iransans focus:outline-none"
+        />
+        <SearchIcon
+          size={20}
+          color="var(--color-gray-400)"
+          className="absolute left-2.5 top-1/2 -translate-y-1/2"
+        />
+      </div>
+
+      {/* Specs List */}
+      {filteredSpecs.map((spec) => {
         const selectedCount = spec.options.filter((option) =>
           selectedSpecs.includes(option.id),
         ).length;

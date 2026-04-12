@@ -11,6 +11,7 @@
   "dependencies": {
     "@neshan-maps-platform/leaflet": "^1.0.8",
     "@neshan-maps-platform/mapbox-gl": "^1.1.5",
+    "axios": "^1.13.5",
     "clsx": "^2.1.1",
     "keen-slider": "^6.8.6",
     "leaflet": "^1.9.4",
@@ -21,7 +22,9 @@
     "react-dom": "19.2.3",
     "react-hot-toast": "^2.6.0",
     "react-leaflet": "^5.0.0",
+    "react-multi-date-picker": "^4.5.2",
     "tailwind-merge": "^3.4.0",
+    "uuid": "^13.0.0",
     "vaul": "^1.1.2",
     "zustand": "^5.0.10"
   },

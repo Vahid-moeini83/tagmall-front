@@ -8,9 +8,11 @@ import { SearchInput, SearchBox } from "@/components/ui/search";
 import MainNavigation from "@/components/layout/navigation-menu/MainNavigation";
 import BrandFilterDialog from "./BrandFilterDialog";
 import PriceRangeDialog from "./PriceRangeDialog";
+import SellerTypeDialog from "./SellerTypeDialog";
+import SpecsFilterDialog from "./SpecsFilterDialog";
 import FiltersDrawer from "./FiltersDrawer";
 import usePublicStore from "@/app/store/publicStore";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/client/utils";
 
 const mockProducts = [
   {
@@ -53,12 +55,15 @@ function SearchResults() {
   const [showAvailable, setShowAvailable] = useState(true);
   const [isBrandDialogOpen, setIsBrandDialogOpen] = useState(false);
   const [isPriceDialogOpen, setIsPriceDialogOpen] = useState(false);
+  const [isSpecsDialogOpen, setIsSpecsDialogOpen] = useState(false);
+  const [isSellerTypeDialogOpen, setIsSellerTypeDialogOpen] = useState(false);
 
   // Mobile filter states
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
-  const [expandedFilter, setExpandedFilter] = useState(null);
+  const [expandedFilter, setExpandedFilter] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedSpecs, setSelectedSpecs] = useState([]);
+  const [sellerType, setSellerType] = useState("all");
   const [searchValue, setSearchValue] = useState("گوشی موبایل");
   const minPrice = 500;
   const maxPrice = 100000000;
@@ -69,20 +74,24 @@ function SearchResults() {
   );
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+  const setDefaultSearchValue = usePublicStore((s) => s.setSearchValue);
 
   const handleLocateClick = () => {
     setSearchBoxOpen(false);
     setShowSearchResultBox(true, { name: "گوشی موبایل" });
   };
 
-  const handleLocationTextClick = () => {
-    setSearchBoxOpen(false);
-    setShowSearchResultBox(true, { name: "گروه کالایی" });
-  };
-
   const handleSearchInputClick = () => {
+    setDefaultSearchValue(searchValue);
     setSearchBoxOpen(true);
   };
+
+  const sellerTypeOptions = [
+    { id: "all", label: "همه فروشندگان" },
+    { id: "special", label: "فروشندگان ویژه" },
+    { id: "official", label: "فروشندگان رسمی" },
+    { id: "local", label: "فروشندگان بومی" },
+  ];
 
   const sortOptions = [
     { id: "newest", label: "جدیدترین" },
@@ -108,7 +117,12 @@ function SearchResults() {
   };
 
   const handleFilterToggle = (filterId) => {
-    setExpandedFilter(expandedFilter === filterId ? null : filterId);
+    setExpandedFilter(
+      (prev) =>
+        prev.includes(filterId)
+          ? prev.filter((id) => id !== filterId) // حذف از لیست
+          : [...prev, filterId], // افزودن به لیست
+    );
   };
 
   const hasFiltersChanged = () => {
@@ -116,6 +130,7 @@ function SearchResults() {
       sortBy !== "newest" ||
       selectedBrands.length > 0 ||
       selectedSpecs.length > 0 ||
+      sellerType !== "all" ||
       priceRange[0] !== minPrice ||
       priceRange[1] !== maxPrice
     );
@@ -125,8 +140,9 @@ function SearchResults() {
     setSortBy("newest");
     setSelectedBrands([]);
     setSelectedSpecs([]);
+    setSellerType("all");
     setPriceRange([minPrice, maxPrice]);
-    setExpandedFilter(null);
+    setExpandedFilter([]);
   };
 
   const getFilterValue = (filterId) => {
@@ -139,6 +155,8 @@ function SearchResults() {
         return selectedBrands.length > 0 ? `${selectedBrands.length} برند` : "";
       case "specs":
         return selectedSpecs.length > 0 ? `${selectedSpecs.length} مورد` : "";
+      case "seller":
+        return sellerTypeOptions.find((o) => o.id === sellerType)?.label || "";
       default:
         return "";
     }
@@ -149,6 +167,7 @@ function SearchResults() {
     { id: "price", label: "محدوده قیمت" },
     { id: "brand", label: "برند" },
     { id: "specs", label: "مشخصات" },
+    { id: "seller", label: "نوع فروشنده" },
   ];
 
   return (
@@ -162,6 +181,16 @@ function SearchResults() {
         <PriceRangeDialog
           isOpen={isPriceDialogOpen}
           onClose={() => setIsPriceDialogOpen(false)}
+        />
+        <SellerTypeDialog
+          isOpen={isSellerTypeDialogOpen}
+          onClose={() => setIsSellerTypeDialogOpen(false)}
+        />
+        <SpecsFilterDialog
+          isOpen={isSpecsDialogOpen}
+          onClose={() => setIsSpecsDialogOpen(false)}
+          selectedSpecs={selectedSpecs}
+          onSpecToggle={handleSpecToggle}
         />
 
         <div className="flex flex-col gap-[25px] flex-1 min-h-0">
@@ -237,7 +266,10 @@ function SearchResults() {
 
                 {/* Specifications Filter */}
                 <div className="px-4 border-l-2 border-gray-200">
-                  <button className="text-primary shrink-0">
+                  <button
+                    onClick={() => setIsSpecsDialogOpen(true)}
+                    className="text-primary shrink-0"
+                  >
                     مشخصات خاصی در نظر دارید ؟
                   </button>
                 </div>
@@ -253,12 +285,22 @@ function SearchResults() {
                 </div>
 
                 {/* Price Range Filter */}
-                <div className="pr-4">
+                <div className="px-4 border-l-2 border-gray-200">
                   <button
                     onClick={() => setIsPriceDialogOpen(true)}
                     className="text-primary shrink-0"
                   >
                     بازه قیمتی
+                  </button>
+                </div>
+
+                {/* Seller Type Filter */}
+                <div className="pr-4">
+                  <button
+                    onClick={() => setIsSellerTypeDialogOpen(true)}
+                    className="text-primary shrink-0"
+                  >
+                    نوع فروشنده
                   </button>
                 </div>
               </div>
@@ -269,7 +311,7 @@ function SearchResults() {
               {mockProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="grid grid-cols-2 border-b-2 border-gray-100 pb-8 lg:mx-4 xl:mx-8"
+                  className="grid grid-cols-2 border-b-2 border-gray-100 pb-8"
                 >
                   <div className="flex justify-center items-center">
                     <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
@@ -281,7 +323,7 @@ function SearchResults() {
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col items-start justify-start gap-8 pl-8">
+                  <div className="flex flex-col items-start justify-start gap-8">
                     <div className="flex items-center justify-between w-full">
                       <span className="text-error-medium text-xl">
                         فروش ویژه
@@ -335,7 +377,7 @@ function SearchResults() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col overflow-y-auto pt-[80px] pb-[90px]">
+        <div className="flex-1 flex flex-col overflow-y-auto py-[80px]">
           {/* Products List */}
           <div className="flex-1 py-3 px-[10px]">
             {mockProducts.map((product) => (
@@ -380,8 +422,8 @@ function SearchResults() {
           </div>
 
           {/* Location Text */}
-          <div className="px-[10px] mt-auto pb-4">
-            <Link href="/" onClick={handleLocationTextClick}>
+          <div className="bg-white px-[10px] mt-auto py-3">
+            <Link href="/" onClick={handleLocateClick}>
               <p className="text-primary text-center cursor-pointer">
                 موقعیت یابی گروه کالایی &quot; گوشی موبایل &quot;
               </p>
@@ -407,6 +449,8 @@ function SearchResults() {
           onBrandToggle={handleBrandToggle}
           selectedSpecs={selectedSpecs}
           onSpecToggle={handleSpecToggle}
+          sellerType={sellerType}
+          onSellerTypeChange={setSellerType}
           hasFiltersChanged={hasFiltersChanged}
           onResetFilters={handleResetFilters}
           availableProductsIconActive={showAvailable}
@@ -421,7 +465,6 @@ function SearchResults() {
       <SearchBox
         isOpen={searchBoxOpen}
         onClose={() => setSearchBoxOpen(false)}
-        initialValue={searchValue}
       />
     </>
   );

@@ -1,6 +1,20 @@
 import { create } from "zustand";
 
 const usePublicStore = create((set, get) => ({
+  // User
+  userInfo: {},
+  setUserInfo: (newUserInfo) =>
+    set((state) => {
+      return { ...state, userInfo: newUserInfo };
+    }),
+
+  // Token
+  token: "",
+  setAccessToken: (token) =>
+    set((state) => {
+      return { ...state, accessToken: token };
+    }),
+
   // Home filter: at least one of special/visit must be true (responsive + desktop)
   homeFilterSpecial: true,
   homeFilterVisit: true,
@@ -31,6 +45,11 @@ const usePublicStore = create((set, get) => ({
   },
 
   // Search box state
+  searchValue: "",
+  setSearchValue(value) {
+    set({ searchValue: value });
+  },
+
   searchBoxOpen: false,
   setSearchBoxOpen(open) {
     set({ searchBoxOpen: open });

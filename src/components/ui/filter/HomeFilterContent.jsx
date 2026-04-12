@@ -1,34 +1,54 @@
 "use client";
 
+import { useState } from "react";
 import usePublicStore from "@/app/store/publicStore";
 import { SupportIcon } from "@/icons";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/client/utils";
 
 const FILTER_OPTIONS = [
   { id: "special", label: "فروش ویژه" },
   { id: "visit", label: "سفارشات آماده تحویل" },
 ];
 
-export default function HomeFilterContent({ onClose }) {
+export default function HomeFilterContent() {
   const homeFilterSpecial = usePublicStore((s) => s.homeFilterSpecial);
   const homeFilterVisit = usePublicStore((s) => s.homeFilterVisit);
   const setHomeFilterSpecial = usePublicStore((s) => s.setHomeFilterSpecial);
   const setHomeFilterVisit = usePublicStore((s) => s.setHomeFilterVisit);
+  const showSearchResultBox = usePublicStore((s) => s.showSearchResultBox);
+  const searchResultData = usePublicStore((s) => s.searchResultData);
+
+  const [locationFilterEnabled, setLocationFilterEnabled] = useState(true);
 
   const handleChange = (id, checked) => {
     if (id === "special") setHomeFilterSpecial(checked);
     else if (id === "visit") setHomeFilterVisit(checked);
-    onClose?.();
+    else if (id === "location") setLocationFilterEnabled(checked);
   };
 
+  const filterOptions =
+    showSearchResultBox && searchResultData
+      ? [
+          {
+            id: "location",
+            label: `موقعیت یابی گروه کالایی ${searchResultData}`,
+          },
+          ...FILTER_OPTIONS,
+        ]
+      : FILTER_OPTIONS;
+
   return (
-    <>
-      <p className="font-iransans text-gray-700 text-xs text-center pt-4 pb-2 px-[20px]">
+    <div className="overflow-hidden">
+      <p className="font-iransans text-gray-700 text-xs text-center pt-4 pb-2 px-3">
         کاربر محترم لطفا وضعیت موقعیت یابی و نمایش کالا ها را مشخص کنید.
       </p>
-      {FILTER_OPTIONS.map((opt, index) => {
+      {filterOptions.map((opt, index) => {
         const checked =
-          opt.id === "special" ? homeFilterSpecial : homeFilterVisit;
+          opt.id === "special"
+            ? homeFilterSpecial
+            : opt.id === "visit"
+              ? homeFilterVisit
+              : locationFilterEnabled;
         return (
           <div key={opt.id}>
             <button
@@ -66,12 +86,12 @@ export default function HomeFilterContent({ onClose }) {
                 <SupportIcon color="var(--color-primary)" size={20} />
               )}
             </button>
-            {index !== FILTER_OPTIONS.length - 1 && (
-              <div className="w-full h-[3px] bg-gray-200 mr-10" />
+            {index !== filterOptions.length - 1 && (
+              <div className="w-full h-[2px] bg-gray-200 mr-10" />
             )}
           </div>
         );
       })}
-    </>
+    </div>
   );
 }

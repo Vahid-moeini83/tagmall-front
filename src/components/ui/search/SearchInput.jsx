@@ -27,14 +27,14 @@ function SearchInput({
 
   return (
     <div
-      className={`max-w-[495px] relative flex items-center ${bgColor} rounded-lg ${className}`}
+      className={`max-w-[540px] relative flex items-center ${bgColor} rounded-lg ${className}`}
     >
       <Image
         src="/assets/images/logo/small-logo.svg"
         width={30}
         height={30}
         alt="logo"
-        className="absolute right-4"
+        className="absolute right-2.5"
       />
       <input
         type="text"
@@ -48,13 +48,13 @@ function SearchInput({
       {searchValue && !readOnly ? (
         <button
           onClick={handleClearSearch}
-          className="absolute left-4 w-5 h-5 cursor-pointer"
+          className="absolute left-2.5 w-5 h-5 cursor-pointer"
         >
           <CloseSquareIcon size={20} />
         </button>
       ) : (
         showSearchIcon && (
-          <SearchIcon className="absolute left-4 w-5 h-5 pointer-events-none" />
+          <SearchIcon className="absolute left-2.5 w-5 h-5 pointer-events-none" />
         )
       )}
     </div>

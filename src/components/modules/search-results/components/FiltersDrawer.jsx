@@ -6,6 +6,7 @@ import SortFilterContent from "./SortFilterContent";
 import PriceRangeFilterContent from "./PriceRangeFilterContent";
 import BrandFilterContent from "./BrandFilterContent";
 import SpecsFilterContent from "./SpecsFilterContent";
+import SellerTypeFilterContent from "./SellerTypeFilterContent";
 
 function FiltersDrawer({
   isOpen,
@@ -24,6 +25,8 @@ function FiltersDrawer({
   onBrandToggle,
   selectedSpecs,
   onSpecToggle,
+  sellerType,
+  onSellerTypeChange,
   hasFiltersChanged,
   onResetFilters,
   availableProductsIconActive,
@@ -36,7 +39,7 @@ function FiltersDrawer({
         className="data-[vaul-drawer-direction=bottom]:h-full!"
       >
         {/* Content */}
-        <div className="relative bg-white rounded-t-2xl px-[10px] pt-6 pb-2">
+        <div className="relative bg-white rounded-t-2xl px-[10px]">
           <p className="font-iransans text-center text-sm text-gray-600">
             انتخاب آسان تر براساس اولویت شما
           </p>
@@ -44,15 +47,18 @@ function FiltersDrawer({
             onClick={onAvailableProductsToggle}
             active={availableProductsIconActive}
             size={20}
-            className="absolute top-[25px] left-5 "
+            className="absolute top-0 left-5 "
           />
         </div>
         <div className="flex-1 overflow-y-auto bg-white px-[10px] py-4">
-          {mobileFilters.map((filter) => (
-            <div key={filter.id} className="mb-2">
+          {mobileFilters.map((filter, index) => (
+            <div
+              key={filter.id}
+              className={`${mobileFilters.length - 1 === index ? "" : "border-b-2 border-gray-200"}`}
+            >
               <button
                 onClick={() => onFilterToggle(filter.id)}
-                className="relative flex items-center justify-between w-full py-3"
+                className={`relative flex items-center justify-between w-full py-4`}
               >
                 <div className="flex items-center gap-2">
                   {filter.customLabel ? (
@@ -70,7 +76,7 @@ function FiltersDrawer({
                     </>
                   )}
                 </div>
-                {expandedFilter === filter.id ? (
+                {expandedFilter.includes(filter.id) ? (
                   <ChevronUpIcon
                     size={20}
                     color="var(--color-gray-800)"
@@ -88,12 +94,12 @@ function FiltersDrawer({
               {/* Filter Content */}
               <div
                 className={`overflow-hidden transition-all duration-300 ${
-                  expandedFilter === filter.id
+                  expandedFilter.includes(filter.id)
                     ? "max-h-[1000px] opacity-100"
                     : "max-h-0 opacity-0"
                 }`}
               >
-                {expandedFilter === filter.id && (
+                {expandedFilter.includes(filter.id) && (
                   <div className="pb-3">
                     {filter.id === "sort" && (
                       <SortFilterContent
@@ -121,6 +127,12 @@ function FiltersDrawer({
                         onSpecToggle={onSpecToggle}
                       />
                     )}
+                    {filter.id === "seller" && (
+                      <SellerTypeFilterContent
+                        sellerType={sellerType}
+                        onSellerTypeChange={onSellerTypeChange}
+                      />
+                    )}
                   </div>
                 )}
               </div>
@@ -129,7 +141,7 @@ function FiltersDrawer({
         </div>
 
         {/* Reset Button */}
-        <DrawerFooter className="bg-white pt-4 pb-24">
+        <DrawerFooter className="bg-white pt-4 pb-18">
           <button
             onClick={onResetFilters}
             disabled={!hasFiltersChanged()}

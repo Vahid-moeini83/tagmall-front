@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/client/utils";
 import { toast } from "react-hot-toast";
 
 function PriceRangeFilterContent({

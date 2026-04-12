@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRightIcon, StarIcon, VerifyIcon } from "@/icons";
+import {
+  ArrowRightIcon,
+  StarIcon,
+  StrokeArrowLeftIcon,
+  VerifyIcon,
+} from "@/icons";
 import Image from "next/image";
 import RatingOverview from "./RatingOverview";
 import ReviewCard from "./ReviewCard";
 import ReviewInput from "./ReviewInput";
-import Dialog from "@/components/ui/dialog";
+import Dialog, { DialogWrapper } from "@/components/ui/dialog";
 
 export default function SellerReviewsModal({ isOpen, onClose, sellerData }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -59,17 +64,17 @@ export default function SellerReviewsModal({ isOpen, onClose, sellerData }) {
                 </div>
               </div>
               {/* Overall rating section */}
-              <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <span className="text-xs lg:text-sm text-gray-600/70">
+                  (آرا {sellerData.totalReviews})
+                </span>
                 <div className="flex items-center gap-1">
-                  <StarIcon className="text-yellow-600" />
+                  <StarIcon size={20} className="text-yellow-600 mb-1" />
                   <span className="text-sm lg:text-base">
                     {sellerData.rating}
                     <span className="text-xs text-gray-600/70">/5</span>
                   </span>
                 </div>
-                <span className="text-xs lg:text-sm text-gray-600/70">
-                  آرا {sellerData.totalReviews}
-                </span>
               </div>
             </div>
 
@@ -95,15 +100,18 @@ export default function SellerReviewsModal({ isOpen, onClose, sellerData }) {
         </div>
 
         {/* Fixed bottom section */}
-        <div className="fixed left-0 right-0 bg-white border-t border-gray-200 py-2 px-4 lg:px-[80px] bottom-0">
+        <div className="fixed left-0 right-0 bg-white  py-2 px-4 lg:px-[80px] bottom-0">
           <div className="flex items-center gap-4">
             {/* Back button */}
             <button
               onClick={onClose}
-              className="shrink-0 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="hidden lg:inline shrink-0"
               aria-label="بازگشت"
             >
-              <ArrowRightIcon className="w-6 h-6 text-gray-700" />
+              <StrokeArrowLeftIcon
+                size={24}
+                className="text-gray-700 rotate-180"
+              />
             </button>
 
             {/* Review input field */}
@@ -118,7 +126,7 @@ export default function SellerReviewsModal({ isOpen, onClose, sellerData }) {
       </div>
 
       {/* Delete confirmation dialog */}
-      <Dialog
+      <DialogWrapper
         title="حذف نظر"
         isOpen={showDeleteDialog}
         onClose={() => setShowDeleteDialog(false)}
@@ -140,7 +148,7 @@ export default function SellerReviewsModal({ isOpen, onClose, sellerData }) {
             </button>
           </div>
         </div>
-      </Dialog>
+      </DialogWrapper>
     </>
   );
 }

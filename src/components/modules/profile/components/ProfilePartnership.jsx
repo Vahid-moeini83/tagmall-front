@@ -1,0 +1,196 @@
+"use client";
+import Image from "next/image";
+import {
+  ArrowRightIcon,
+  ArrowUpDownIcon,
+  HintIcon,
+  StrokeArrowLeftIcon,
+} from "@/icons";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { PartnershipHintDialog } from "@/components/ui/dialog";
+import Link from "next/link";
+import FilterPartnershipDrawer from "./FilterPartnershipDrawer";
+
+// Mock products data for partnership
+const mockProducts = [
+  {
+    id: 1,
+    name: "هدفون بی‌سیم شیائومی مدل 11 pro",
+    img: "/assets/images/products/headphone.png",
+  },
+  {
+    id: 2,
+    name: "ماوس بی‌سیم لاجیتک",
+    img: "/assets/images/products/mouse.png",
+  },
+  {
+    id: 3,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+];
+
+const partnershipOptions = [
+  { id: "most-viewed", label: "پربازدیدترین" },
+  { id: "best-selling", label: "پرفروش ترین" },
+];
+
+export default function ProfilePartnership({ setActiveSection }) {
+  const router = useRouter();
+  const [selectedFilter, setSelectedFilter] = useState("most-viewed");
+  const [isHintBoxOpen, setIsHintBoxOpen] = useState(false);
+
+  // Mobile Drawer States
+  const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
+  const [expandedFilter, setExpandedFilter] = useState([]);
+
+  const handleGoBack = () => {
+    router.back();
+  };
+
+  // Mobile Filter Handlers
+  const handleFilterToggle = (filterId) => {
+    setExpandedFilter((prev) =>
+      prev.includes(filterId)
+        ? prev.filter((id) => id !== filterId)
+        : [...prev, filterId],
+    );
+  };
+
+  const hasFiltersChanged = () => {
+    return selectedFilter !== "most-viewed";
+  };
+
+  const handleResetFilters = () => {
+    setSelectedFilter("most-viewed");
+    setExpandedFilter([]);
+  };
+
+  const getFilterLabel = () => {
+    const option = partnershipOptions.find((o) => o.id === selectedFilter);
+    return option ? option.label : "پیشنهادات";
+  };
+
+  return (
+    <div className="flex flex-col justify-between h-full pt-6 pb-20 lg:pt-12 lg:pb-24 px-[10px] lg:px-[140px]">
+      {/* Header section */}
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="font-bold text-primary text-base lg:text-xl">
+          مشارکت در فروش
+        </h3>
+        <HintIcon
+          onClick={() => setIsHintBoxOpen(true)}
+          size={20}
+          className="cursor-pointer ml-[6px] lg:ml-0"
+        />
+      </div>
+
+      {/* Slogan */}
+      <p className="lg:hidden font-iransans font-bold text-gray-600 text-center mb-8 lg:mb-6">
+        با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
+      </p>
+
+      {/* Filter section (Desktop) */}
+      <div className="hidden lg:flex items-center gap-5 mb-8">
+        <span className="font-semibold text-gray-600">پیشنهادات:</span>
+        <div className="flex items-center gap-4 border-l border-gray-300 pl-[10px]">
+          {partnershipOptions?.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => setSelectedFilter(option.id)}
+              className={`transition-colors ${
+                selectedFilter === option.id ? "text-primary" : "text-gray-600"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <button className="text-primary cursor-pointer">
+          کالای خاصی در نظر دارید؟
+        </button>
+      </div>
+
+      {/* Filter button in mobile */}
+      <div
+        className="lg:hidden text-xs flex items-center gap-2 mb-8 pr-4 cursor-pointer"
+        onClick={() => setIsFiltersDrawerOpen(true)}
+      >
+        <ArrowUpDownIcon size={24} />
+        پیشنهادات: {getFilterLabel()}
+      </div>
+
+      {/* Products list */}
+      <div className="space-y-4 lg:space-y-8 overflow-y-auto flex-1">
+        {mockProducts.map((product) => (
+          <div
+            key={product.id}
+            className="flex items-start gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 pb-0 lg:pb-8"
+          >
+            {/* Product image */}
+            <div className="flex justify-center items-center">
+              <div className="relative w-20 h-20 lg:w-50 lg:h-50 rounded-lg overflow-hidden">
+                <Image
+                  src={product.img || "/assets/images/fallback/no-photo.jpg"}
+                  fill
+                  alt={product.name}
+                  className="object-contain"
+                />
+              </div>
+            </div>
+            {/* Product Info */}
+            <div className="w-full space-y-2 lg:space-y-4">
+              <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
+                {product.name}
+              </p>
+              <div className="flex items-center gap-1 text-gray-600 text-xs lg:text-base">
+                <span className="font-bold">سود مشارکت در فروش</span> 1 درصد به
+                ازای فروش هر کالا
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer section */}
+      <div className="fixed right-0 left-0 bottom-0 flex items-center justify-center gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] py-8 lg:pb-12 bg-white">
+        <StrokeArrowLeftIcon
+          size={20}
+          className="hidden lg:block absolute bottom-16 right-16 cursor-pointer rotate-180"
+          onClick={handleGoBack}
+        />
+        <div className="flex flex-col items-center gap-4">
+          <span className="hidden lg:block font-iransans font-semibold text-gray-600 text-center">
+            با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
+          </span>
+          <button
+            onClick={() => setActiveSection("links")}
+            className="text-primary hover:opacity-80 transition-opacity"
+          >
+            لینک های دریافت شده
+          </button>
+        </div>
+      </div>
+
+      {/* Hint box */}
+      <PartnershipHintDialog
+        open={isHintBoxOpen}
+        setIsHintBoxOpen={setIsHintBoxOpen}
+      />
+
+      {/* Mobile Filters Drawer */}
+      <FilterPartnershipDrawer
+        isOpen={isFiltersDrawerOpen}
+        onClose={() => setIsFiltersDrawerOpen(false)}
+        expandedFilter={expandedFilter}
+        onFilterToggle={handleFilterToggle}
+        selectedFilter={selectedFilter}
+        onFilterChange={setSelectedFilter}
+        hasFiltersChanged={hasFiltersChanged}
+        onResetFilters={handleResetFilters}
+        options={partnershipOptions}
+      />
+    </div>
+  );
+}

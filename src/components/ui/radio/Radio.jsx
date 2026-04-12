@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/client/utils";
 
 function Radio({ checked = false, onChange, label, className, ...props }) {
   return (

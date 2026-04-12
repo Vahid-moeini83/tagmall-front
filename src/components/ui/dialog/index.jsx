@@ -12,4 +12,5 @@ export {
 } from "./Dialog";
 
 export { default as DialogWrapper } from "./DialogWrapper";
+export { default as PartnershipHintDialog } from "./PartnershipHintDialog";
 export { default } from "./DialogWrapper";
