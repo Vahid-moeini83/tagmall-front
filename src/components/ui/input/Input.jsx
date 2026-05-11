@@ -10,6 +10,7 @@ function Input({
   disabled,
   className,
   error,
+  errorClassName,
   maxLength,
   minLength,
   numeric,
@@ -44,7 +45,7 @@ function Input({
         <label
           htmlFor={id}
           className={cn(
-            "text-lg text-gray-800",
+            "text-lg text-gray-800 font-bold",
             error && "text-error-medium!",
             labelClassName,
           )}
@@ -68,7 +69,11 @@ function Input({
         )}
       />
 
-      {error && <p className="text-xs text-error-medium mt-1">{error}</p>}
+      {error && (
+        <p className={`text-xs text-error-medium mt-1 ${errorClassName}`}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

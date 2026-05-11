@@ -39,34 +39,5 @@ export const mockSellerReviewsData = {
       isUserReview: true,
       sellerReply: null,
     },
-    {
-      id: 3,
-      userName: "رضا کریمی",
-      rating: 5,
-      comment:
-        "عالی بود! سرعت ارسال فوق‌العاده و کیفیت محصول دقیقاً مطابق توضیحات. ممنون از فروشنده",
-      productName: "ساعت هوشمند اپل واچ سری 9",
-      timeAgo: "1 روز پیش",
-      isUserReview: false,
-      sellerReply: {
-        comment: "متشکریم از نظر لطف شما. موفق و سلامت باشید.",
-        timeAgo: "20 ساعت پیش",
-      },
-    },
-    {
-      id: 4,
-      userName: "فاطمه نوری",
-      rating: 3,
-      comment:
-        "محصول خوب بود ولی زمان ارسال کمی طولانی شد. امیدوارم در خریدهای بعدی سریع‌تر باشد.",
-      productName: "تبلت سامسونگ Galaxy Tab S9",
-      timeAgo: "2 روز پیش",
-      isUserReview: false,
-      sellerReply: {
-        comment:
-          "پوزش بابت تاخیر. مشکل از شرکت پست بود. سعی می‌کنیم در آینده سریع‌تر ارسال کنیم.",
-        timeAgo: "1 روز پیش",
-      },
-    },
   ],
 };

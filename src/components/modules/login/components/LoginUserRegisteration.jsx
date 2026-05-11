@@ -1,21 +1,22 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { isValidIranianNationalCode } from "@/lib/client/validations";
-import { checkAuthValidation, registerUser } from "@/lib/server/actions/auth";
+import { registerUser } from "@/lib/server/actions/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-import http from "@/app/api/axiosInstance";
-import { saveTokenUser } from "@/lib/server/cookies";
+import { saveToken, saveUser } from "@/lib/server/cookies";
 import usePublicStore from "@/app/store/publicStore";
+import Image from "next/image";
 
-function LoginUserRegisteration({ phoneNumber, enteredOtp }) {
+function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
   const router = useRouter();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [nationalCode, setNationalCode] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [errors, setErrors] = useState({
     firstName: "",
@@ -26,6 +27,12 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp }) {
   });
   const setUserInfo = usePublicStore((state) => state.setUserInfo);
   const setAccessToken = usePublicStore((state) => state.setAccessToken);
+
+  const isFormValid =
+    firstName.trim() &&
+    lastName.trim() &&
+    isValidIranianNationalCode(nationalCode) &&
+    acceptedTerms;
 
   const handleConfirm = async () => {
     const newErrors = {
@@ -73,13 +80,12 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp }) {
     if (registerRes) {
       console.log(registerRes);
       toast.success("ورود با موفقیت انجام شد");
-      router.push("/");
       setAccessToken(registerRes?.data?.token);
       setUserInfo(registerRes?.data?.user);
-      await saveTokenUser(
-        registerRes?.data?.token,
-        JSON.stringify(registerRes?.data?.user),
-      );
+      await saveToken(registerRes?.data?.token);
+      await saveUser(JSON.stringify(registerRes?.data?.user));
+      if (onSuccess) onSuccess();
+      router.push("/");
     } else if (registerErr) {
       const apiErrors = registerErr?.response?.data?.errors;
 
@@ -118,67 +124,100 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp }) {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between overflow-y-auto scroll-hidden">
+    <div className="h-full flex flex-col justify-between overflow-y-auto scroll-hidden mt-6 lg:mt-0">
       <div>
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold">تکمیل ثبت‌نام</h1>
-          <span className="text-gray-600 text-base">
-            لطفا اطلاعات زیر را وارد نمایید.
-          </span>
+        {/* Slogan logo */}
+        <div className="flex items-center justify-center">
+          <Image
+            src="/assets/images/logo/slogan-logo.svg"
+            width={160}
+            height={50}
+            alt="لوگوی شعار"
+          />
         </div>
-        <div className="mt-10 space-y-8">
-          <Input
-            label={"نام"}
-            type="text"
-            id="firstname"
-            value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value);
-              if (errors.firstName) setErrors({ ...errors, firstName: "" });
-            }}
-            disabled={isConfirming}
-            error={errors.firstName}
-          />
-          <Input
-            label={"نام خانوادگی"}
-            type="text"
-            id="lastname"
-            value={lastName}
-            onChange={(e) => {
-              setLastName(e.target.value);
-              if (errors.lastName) setErrors({ ...errors, lastName: "" });
-            }}
-            disabled={isConfirming}
-            error={errors.lastName}
-          />
-          <Input
-            label={"کد ملی"}
-            id="nationalCode"
-            numeric
-            maxLength={10}
-            value={nationalCode}
-            onChange={(e) => setNationalCode(e.target.value)}
-            disabled={isConfirming}
-            error={errors.nationalCode}
+        {/* Title */}
+        <h1 className="font-iransans font-bold text-primary text-lg mt-9">
+          با ما همراه باشید :)
+        </h1>
+        {/* Main content */}
+        <div className="bg-gray-200 rounded-lg overflow-hidden mt-4">
+          <div>
+            <Input
+              type="text"
+              id="firstname"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              disabled={isConfirming}
+              placeholder="نام"
+              className={`text-center border-0! h-[50px] ${errors.firstName ? "" : "border-b-2!"} border-white rounded-none placeholder:text-gray-400`}
+            />
+            {errors.firstName && (
+              <div className="px-4 py-2 border-b-2 border-white">
+                <p className="text-xs text-center text-error-medium">
+                  {errors.firstName}
+                </p>
+              </div>
+            )}
+          </div>
+          <div>
+            <Input
+              type="text"
+              id="lastname"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              disabled={isConfirming}
+              placeholder="نام خانوادگی"
+              className={`text-center border-0! h-[50px] ${errors.lastName ? "" : "border-b-2!"} border-white rounded-none placeholder:text-gray-400`}
+            />
+            {errors.lastName && (
+              <div className="px-4 py-2 border-b-2 border-white">
+                <p className="text-xs text-center text-error-medium">
+                  {errors.lastName}
+                </p>
+              </div>
+            )}
+          </div>
+          <div>
+            <Input
+              id="nationalCode"
+              numeric
+              maxLength={10}
+              value={nationalCode}
+              onChange={(e) => setNationalCode(e.target.value)}
+              disabled={isConfirming}
+              placeholder="کد ملی"
+              className="text-center border-0! h-[50px] placeholder:text-gray-400"
+            />
+            {errors.nationalCode && (
+              <div className="px-4 py-2">
+                <p className="text-xs text-center text-error-medium">
+                  {errors.nationalCode}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* Checkbox */}
+        <div className="mt-4 mr-4">
+          <Checkbox
+            checked={acceptedTerms}
+            onChange={setAcceptedTerms}
+            className="bg-gray-200! border-0!"
+            label="شرایط بهره مندی از خدمات تگ مال را می پذیرم"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-4 mt-10">
-        <span className="text-sm text-gray-600">
-          ثبت نام به منزله پذیرش{" "}
-          <span className="text-primary underline underline-offset-4 cursor-pointer">
-            قوانین و مقررات Tagmall
-          </span>{" "}
-          است.
-        </span>
-        <button
-          disabled={isConfirming}
-          onClick={handleConfirm}
-          className="bg-primary text-white rounded-md w-full h-12 flex items-center justify-center gap-2 transition-all hover:bg-primary/90 hover:gap-3 cursor-pointer"
-        >
-          تکمیل ثبت‌نام
-        </button>
-      </div>
+      <button
+        disabled={isConfirming || !isFormValid}
+        onClick={handleConfirm}
+        className={`w-full mt-6 mb-4 font-bold ${
+          isConfirming || !isFormValid
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-primary cursor-pointer"
+        }`}
+      >
+        ایجاد حساب کاربری
+      </button>
     </div>
   );
 }

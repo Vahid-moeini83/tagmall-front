@@ -10,9 +10,12 @@ function SearchInput({
   onChange: controlledOnChange,
   autoFocus = false,
   showSearchIcon = true,
+  hasLogo = false,
   readOnly = false,
   bgColor = "bg-gray-200",
   className = "",
+  onClick,
+  maxWidth = "max-w-[540px]",
 }) {
   const [internalValue, setInternalValue] = useState("");
 
@@ -27,23 +30,27 @@ function SearchInput({
 
   return (
     <div
-      className={`max-w-[540px] relative flex items-center ${bgColor} rounded-lg ${className}`}
+      className={`${maxWidth} relative flex items-center ${bgColor} rounded-lg ${className} ${readOnly && onClick ? "cursor-pointer" : ""}`}
+      onClick={readOnly && onClick ? onClick : undefined}
     >
-      <Image
-        src="/assets/images/logo/small-logo.svg"
-        width={30}
-        height={30}
-        alt="logo"
-        className="absolute right-2.5"
-      />
+      {hasLogo && (
+        <Image
+          src="/assets/images/logo/small-logo.svg"
+          width={30}
+          height={30}
+          alt="logo"
+          className="absolute right-2.5 pointer-events-none"
+        />
+      )}
       <input
         type="text"
         placeholder={placeholder}
         value={searchValue}
         onChange={(e) => handleChange(e.target.value)}
         readOnly={readOnly}
-        className="w-full py-3 px-4 text-center text-sm lg:text-base text-gray-600 placeholder:text-gray-400 bg-transparent focus:outline-none"
+        className={`w-full py-3 px-4 text-center text-sm lg:text-base text-gray-600 placeholder:text-gray-400 bg-transparent focus:outline-none ${readOnly && onClick ? "cursor-pointer" : ""}`}
         autoFocus={autoFocus}
+        onClick={readOnly && onClick ? onClick : undefined}
       />
       {searchValue && !readOnly ? (
         <button

@@ -186,6 +186,24 @@
     display: none !important;
   }
 
+  /* Fix drawer position when keyboard opens on mobile */
+  [data-vaul-drawer] {
+    touch-action: none;
+    transform: translate3d(0, 0, 0);
+  }
+
+  [data-vaul-drawer][data-vaul-drawer-direction="bottom"] {
+    bottom: 0 !important;
+  }
+
+  /* Prevent drawer from moving when keyboard opens */
+  @supports (-webkit-touch-callout: none) {
+    [data-vaul-drawer-direction="bottom"] {
+      position: fixed !important;
+      bottom: 0 !important;
+    }
+  }
+
   /* User marker directional shadow (map) */
   .user-marker-shadow::after {
     content: "";
@@ -213,7 +231,6 @@
     background: transparent;
   }
 
-  /* Date picker styles */
   .rmdp-wrapper .rmdp-wrapper .rmdp-day.rmdp-selected,
   .rmdp-wrapper .rmdp-day.rmdp-selected span {
     background-color: var(--color-primary) !important;
@@ -242,10 +259,67 @@
   .rmdp-arrow-container {
     color: white !important;
     background-color: white !important;
+    align-items: center !important;
   }
 
   .rmdp-arrow-container .rmdp-arrow {
     border-color: var(--color-primary) !important;
+  }
+
+  /* Increase DatePicker calendar size */
+  .rmdp-wrapper {
+    font-size: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .rmdp-calendar {
+    padding: 10px !important;
+    border-radius: 16px !important;
+  }
+
+  .rmdp-day {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 6px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 14px !important;
+    border-radius: 6px !important;
+  }
+
+  .rmdp-day span:hover {
+    color: #353535 !important;
+    background-color: var(--gray-color-200) !important;
+  }
+
+  .rmdp-week-day {
+    width: 38px !important;
+    height: 30px !important;
+    font-size: 13px !important;
+  }
+
+  .rmdp-header {
+    padding: 10px 0 !important;
+  }
+
+  .rmdp-header-values {
+    font-size: 15px !important;
+    border-radius: 6px !important;
+  }
+
+  .rmdp-header-values:hover {
+    background-color: var(--gray-color-200) !important;
+  }
+
+  .rmdp-arrow-container {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 6px !important;
+  }
+
+  .rmdp-arrow-container:hover {
+    background-color: var(--gray-color-200) !important;
   }
 }
 
@@ -256,6 +330,39 @@
 
   .font-dana {
     font-family: Dana !important;
+  }
+
+  /* Z-index utilities for nested modals */
+  .z-100 {
+    z-index: 100;
+  }
+
+  .z-100\! {
+    z-index: 100 !important;
+  }
+
+  .z-200 {
+    z-index: 200;
+  }
+
+  .z-200\! {
+    z-index: 200 !important;
+  }
+
+  .z-250 {
+    z-index: 250;
+  }
+
+  .z-250\! {
+    z-index: 250 !important;
+  }
+
+  .z-300 {
+    z-index: 300;
+  }
+
+  .z-300\! {
+    z-index: 300 !important;
   }
 
   .animate-slide-in-down {

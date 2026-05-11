@@ -2,7 +2,14 @@
 
 import { cn } from "@/lib/client/utils";
 
-function Radio({ checked = false, onChange, label, className, ...props }) {
+function Radio({
+  checked = false,
+  onChange,
+  label,
+  hasBorder = true,
+  className,
+  ...props
+}) {
   return (
     <label
       className={cn(
@@ -19,7 +26,8 @@ function Radio({ checked = false, onChange, label, className, ...props }) {
       />
       <span
         className={cn(
-          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full border-2 transition-colors",
+          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full transition-colors",
+          hasBorder ? "border-2" : "border-0",
           checked ? "border-primary bg-white" : "border-gray-400 bg-white",
         )}
         aria-hidden

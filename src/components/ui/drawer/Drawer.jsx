@@ -49,6 +49,8 @@ function DrawerContent({
   className,
   overlayClassName,
   dragHandleClassName,
+  dragHandleLineClassName,
+  isHintBox = false,
   children,
   ...props
 }) {
@@ -58,22 +60,37 @@ function DrawerContent({
       <DrawerPrimitive.Content
         data-slot="drawer-content"
         className={cn(
-          "bg-white flex h-auto flex-col text-sm pb-4 data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[98vh] data-[vaul-drawer-direction=bottom]:rounded-t-2xl data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:rounded-r-xl data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:rounded-l-xl data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[90vh] data-[vaul-drawer-direction=top]:rounded-b-xl data-[vaul-drawer-direction=top]:border-b data-[vaul-drawer-direction=left]:sm:max-w-sm data-[vaul-drawer-direction=right]:sm:max-w-sm group/drawer-content fixed z-50",
+          "bg-white flex h-auto flex-col text-sm pb-4 data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[98vh] data-[vaul-drawer-direction=bottom]:rounded-t-2xl data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:rounded-r-xl data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:rounded-l-xl data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[90vh] data-[vaul-drawer-direction=top]:rounded-b-xl data-[vaul-drawer-direction=top]:border-b data-[vaul-drawer-direction=left]:sm:max-w-sm data-[vaul-drawer-direction=right]:sm:max-w-sm group/drawer-content fixed z-50 touch-none",
           className,
         )}
+        style={{
+          position: "fixed",
+          bottom: 0,
+        }}
         {...props}
       >
         {/* Auto-include handle for bottom drawers */}
         <div
           className={cn(
-            "w-fit shrink-0 mx-auto pt-1 pb-4",
+            "w-fit shrink-0 mx-auto pt-2 pb-0",
             dragHandleClassName,
           )}
           data-vaul-drag-handle
         >
-          <div className="bg-gray-300 h-1 w-30 rounded-full" aria-hidden />
+          <div
+            className={`bg-gray-300 h-1 w-30 rounded-full ${dragHandleLineClassName}`}
+            aria-hidden
+          />
         </div>
-        {children}
+        {isHintBox ? (
+          <div
+            className={`${isHintBox ? "h-full flex flex-col justify-between" : ""}`}
+          >
+            {children}
+          </div>
+        ) : (
+          children
+        )}
       </DrawerPrimitive.Content>
     </DrawerPortal>
   );

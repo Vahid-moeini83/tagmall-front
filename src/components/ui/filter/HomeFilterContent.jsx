@@ -39,7 +39,7 @@ export default function HomeFilterContent() {
 
   return (
     <div className="overflow-hidden">
-      <p className="font-iransans text-gray-700 text-xs text-center pt-4 pb-2 px-3">
+      <p className="font-iransans text-gray-700 text-xs text-center pt-6 pb-2 px-3">
         کاربر محترم لطفا وضعیت موقعیت یابی و نمایش کالا ها را مشخص کنید.
       </p>
       {filterOptions.map((opt, index) => {
@@ -54,7 +54,7 @@ export default function HomeFilterContent() {
             <button
               type="button"
               onClick={() => handleChange(opt.id, !checked)}
-              className="w-full flex items-center justify-between gap-3 py-4 px-3 text-right text-xs text-gray-600 hover:bg-gray-50/80 transition-colors"
+              className="w-full flex items-center justify-between gap-3 py-4 px-3 text-right text-xs text-gray-600"
             >
               <div className="flex items-center gap-2.5">
                 <span
@@ -78,13 +78,11 @@ export default function HomeFilterContent() {
                 <span className="flex-1 text-right">
                   {opt.label}{" "}
                   {opt.id === "visit" && (
-                    <span className="font-bold text-gray-700">(1 کالا)</span>
+                    <span className="font-bold text-gray-600">(1 کالا)</span>
                   )}
                 </span>
               </div>
-              {opt.id === "visit" && (
-                <SupportIcon color="var(--color-primary)" size={20} />
-              )}
+              {opt.id === "visit" && <SupportIcon size={20} />}
             </button>
             {index !== filterOptions.length - 1 && (
               <div className="w-full h-[2px] bg-gray-200 mr-10" />

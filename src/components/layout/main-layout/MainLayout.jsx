@@ -18,6 +18,7 @@ function MainLayout({ children }) {
       <SearchBox
         isOpen={searchBoxOpen}
         onClose={() => setSearchBoxOpen(false)}
+        isHomePage={true}
       />
     </div>
   );

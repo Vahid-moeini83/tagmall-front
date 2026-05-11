@@ -49,7 +49,8 @@ const SellerProductsCard = ({
   const cardHeight = isActive ? sliderHeight : Math.round(sliderHeight * 0.8);
 
   return (
-    <div
+    <Link
+      href="/products/2"
       className="relative w-full transition-all duration-300 flex items-center justify-center"
       style={{ height: cardHeight }}
     >
@@ -171,7 +172,7 @@ const SellerProductsCard = ({
           ))}
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 

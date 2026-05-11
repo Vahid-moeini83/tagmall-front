@@ -187,7 +187,7 @@ function SupportChatContent() {
             </div>
             <div className="flex items-center justify-center gap-4 lg:gap-1">
               <StrokeArrowLeftIcon
-                size={24}
+                size={20}
                 onClick={handleGoBack}
                 className="lg:absolute lg:bottom-16 lg:right-16 rotate-180 cursor-pointer"
               />

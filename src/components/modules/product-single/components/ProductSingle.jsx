@@ -1,7 +1,6 @@
 "use client";
 
 import { SearchInput, SearchBox } from "@/components/ui/search";
-import MainNavigation from "@/components/layout/navigation-menu/MainNavigation";
 import usePublicStore from "@/app/store/publicStore";
 import ProductMain from "./ProductMain";
 import ProductRelatedAccessories from "./ProductRelatedAccessories";
@@ -10,25 +9,150 @@ import ProductReviews from "./ProductReviews";
 import ProductUserComments from "./ProductUserComments";
 import ProductPartnership from "./ProductPartnership";
 import ProductNavigation from "./ProductNavigation";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { ShoppingBagIcon } from "@/icons";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
-function ProductSingle() {
+function ProductSingle({ product, productError, comments, commentsError }) {
+  const router = useRouter();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+  const selectedProductAttributes = usePublicStore(
+    (s) => s.selectedProductAttributes,
+  );
+  const clearProductAttributes = usePublicStore(
+    (s) => s.clearProductAttributes,
+  );
   const [activeSection, setActiveSection] = useState("details");
-  const [previousSection, setPreviousSection] = useState(null);
   const [showComments, setShowComments] = useState(false);
 
-  const handleSearchInputClick = () => {
-    setSearchBoxOpen(true);
+  // Product base info
+  const productBaseInfo = {
+    category: "گوشی موبایل",
+    name: product?.name,
   };
 
-  const handleGoBack = () => {
-    if (showComments) {
-      setShowComments(false);
+  // Build dynamic title
+  const getProductTitle = () => {
+    const { category, name } = productBaseInfo;
+    const attributes = selectedProductAttributes;
+
+    // Build attributes string
+    const attributesList = Object.values(attributes).filter(Boolean);
+
+    if (attributesList.length === 0) {
+      return (
+        <>
+          <span className="font-bold">{category}</span> {name}
+        </>
+      );
     }
+
+    return name;
   };
+
+  // Clear attributes on unmount
+  useEffect(() => {
+    return () => {
+      clearProductAttributes();
+    };
+  }, [clearProductAttributes]);
+
+  // Refs for desktop sections
+  const sectionRefs = useRef({
+    details: null,
+    specsAndComments: null,
+    partnership: null,
+  });
+  const scrollContainerRef = useRef(null);
+  const isScrollingProgrammatically = useRef(false);
+
+  const handleGoBack = () => {
+    router.back();
+  };
+
+  // Scroll to section when clicking navigation (Desktop)
+  const handleSectionClick = (sectionId) => {
+    if (isDesktop && sectionRefs.current[sectionId]) {
+      isScrollingProgrammatically.current = true;
+      const element = sectionRefs.current[sectionId];
+      const container = scrollContainerRef.current;
+
+      if (container && element) {
+        const elementTop = element.offsetTop;
+        const offset = elementTop - 20; // 20px offset from top
+
+        container.scrollTo({
+          top: offset,
+          behavior: "smooth",
+        });
+
+        // Reset flag after scroll animation completes
+        setTimeout(() => {
+          isScrollingProgrammatically.current = false;
+        }, 1000);
+      }
+    }
+    setActiveSection(sectionId);
+  };
+
+  // Detect active section on scroll (Desktop)
+  useEffect(() => {
+    if (!isDesktop) return;
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      // Don't update active section during programmatic scroll
+      if (isScrollingProgrammatically.current) return;
+
+      const scrollPosition = container.scrollTop;
+
+      // Check which section is in view
+      const sections = [
+        { id: "details", ref: sectionRefs.current.details },
+        { id: "specsAndComments", ref: sectionRefs.current.specsAndComments },
+        { id: "partnership", ref: sectionRefs.current.partnership },
+      ];
+
+      // Find the section that is most visible in the viewport
+      let activeId = "details";
+
+      for (const section of sections) {
+        if (section.ref) {
+          const sectionTop = section.ref.offsetTop;
+
+          // Check if section is in viewport (with some threshold)
+          // A section is considered active if its top is within the upper half of viewport
+          if (scrollPosition >= sectionTop - 150) {
+            activeId = section.id;
+          }
+        }
+      }
+
+      setActiveSection(activeId);
+    };
+
+    // Initial check
+    handleScroll();
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [isDesktop]);
+
+  // Check if there is no error
+  if (productError) {
+    toast.error("خطا در دریافت اطلاعات محصول");
+    return;
+  }
 
   return (
     <>
@@ -36,106 +160,172 @@ function ProductSingle() {
       <div className="hidden lg:flex h-screen bg-gray-200 px-10 pt-[25px] pb-[5px] flex-col">
         <div className="flex flex-col gap-[25px] flex-1 min-h-0">
           {/* Top Section - Search Input */}
-          <div className="flex items-center gap-[25px] pr-5">
-            <div className="w-[50px] h-[50px] bg-gray-400 rounded-lg shrink-0" />
-            <div
-              onClick={handleSearchInputClick}
-              className="flex-1 cursor-pointer"
-            >
-              <SearchInput
-                value=""
-                onChange={() => {}}
-                placeholder="برند، کالا، لوازم جانبی، قطعات"
-                showSearchIcon={false}
-                readOnly
-                bgColor="bg-white"
-              />
+          <div className="flex items-center justify-between">
+            <div className="flex flex-1 items-center gap-[25px] pr-6">
+              <Link href={"/"}>
+                <Image
+                  src="/assets/images/logo/small-logo.svg"
+                  width={40}
+                  height={40}
+                  alt="لوگو"
+                  className="z-70"
+                />
+              </Link>
+              <div className="flex-1">
+                <SearchInput
+                  value=""
+                  onChange={() => {}}
+                  placeholder="برند، کالا، لوازم جانبی، قطعات"
+                  readOnly
+                  hasLogo={!isDesktop}
+                  bgColor="bg-white"
+                  className="max-w-[642px]"
+                />
+              </div>
             </div>
+            <Link
+              href={"/cart"}
+              className="w-[100px] h-[50px] bg-white rounded-lg flex items-center justify-center gap-[10px]"
+            >
+              <ShoppingBagIcon size={20} />
+              <span className="text-gray-600">5 کالا</span>
+            </Link>
           </div>
 
           {/* Main Content */}
-          <div className="relative rounded-lg overflow-y-auto flex-1 min-h-0">
+          <div
+            ref={scrollContainerRef}
+            className="relative rounded-lg overflow-y-auto flex-1 min-h-0 scroll-smooth"
+          >
             {/* Main Navigation */}
             <div className="fixed right-[65px] bottom-[55px]">
-              <ProductNavigation />
+              <ProductNavigation
+                activeSection={activeSection}
+                setActiveSection={handleSectionClick}
+              />
             </div>
 
             {/* Content */}
             <div className="space-y-1.5 bg-gray-200">
-              <ProductMain />
-              <ProductRelatedAccessories />
-              <ProductSpecifications />
-              <ProductReviews />
-              <ProductUserComments />
-              <ProductPartnership />
+              {/* Section 1: Details (ProductMain + ProductRelatedAccessories) */}
+              <div
+                className="space-y-1.5"
+                ref={(el) => (sectionRefs.current.details = el)}
+              >
+                <ProductMain product={product} />
+                <ProductRelatedAccessories accessories={product?.accessories} />
+              </div>
+
+              {/* Section 2: Specs and Comments (ProductSpecifications + ProductReviews + ProductUserComments) */}
+              <div
+                className="space-y-1.5"
+                ref={(el) => (sectionRefs.current.specsAndComments = el)}
+              >
+                <ProductSpecifications specs={product?.specs} />
+                <ProductReviews review={product?.product_review} />
+                <ProductUserComments
+                  productId={product?.id}
+                  initialComments={comments}
+                  commentsError={commentsError}
+                />
+              </div>
+
+              {/* Section 3: Partnership */}
+              <div
+                className="space-y-1.5"
+                ref={(el) => (sectionRefs.current.partnership = el)}
+              >
+                <ProductPartnership
+                  cooperation={product?.cooperation_in_sale}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Mobile Layout */}
-      <div className="lg:hidden flex flex-col h-screen bg-white">
-        {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-[20px] pb-4">
-          <div onClick={handleSearchInputClick} className="cursor-pointer">
-            <SearchInput
-              value=""
-              onChange={() => {}}
-              placeholder="برند، کالا، لوازم جانبی، قطعات"
-              showSearchIcon={false}
-              readOnly
+      {!isDesktop && (
+        <Drawer open={true} onOpenChange={() => router.back()}>
+          <DrawerContent className="z-100! h-[96%]!" overlayClassName="z-100">
+            <h2 className="font-extralight text-center text-gray-600 text-base lg:text-lg mt-4 mb-4 px-[10px]">
+              {product?.name}
+            </h2>
+            <div className="flex flex-col h-full">
+              {/* Content Area */}
+              <div className="flex-1 overflow-y-auto scroll-hidden">
+                <div className="space-y-1">
+                  {activeSection === "details" && (
+                    <ProductMain product={product} />
+                  )}
+                  {activeSection === "specsAndComments" && (
+                    <Tabs defaultValue="specs" className="px-[10px]">
+                      <TabsList
+                        dir="rtl"
+                        className="w-full bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mt-2"
+                      >
+                        <TabsTrigger
+                          value="specs"
+                          className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                        >
+                          مشخصات
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="reviews"
+                          className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                        >
+                          نقد و بررسی
+                        </TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="specs" dir="rtl">
+                        <ProductSpecifications
+                          setShowComments={setShowComments}
+                          specs={product?.specs}
+                        />
+                      </TabsContent>
+                      <TabsContent value="reviews" dir="rtl">
+                        <ProductReviews
+                          setShowComments={setShowComments}
+                          review={product?.product_review}
+                        />
+                      </TabsContent>
+                    </Tabs>
+                  )}
+                  {activeSection === "partnership" && (
+                    <ProductPartnership
+                      cooperation={product?.cooperation_in_sale}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Fixed Bottom Navigation */}
+              <div className="bg-white -mx-[10px] px-[10px]">
+                <ProductNavigation
+                  activeSection={activeSection}
+                  setActiveSection={setActiveSection}
+                  onGoBack={handleGoBack}
+                />
+              </div>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      )}
+
+      {!isDesktop && (
+        <Drawer open={showComments} onOpenChange={() => setShowComments(false)}>
+          <DrawerContent
+            className="z-100! h-[96%]! overflow-hidden"
+            overlayClassName="z-100 lg:hidden"
+          >
+            <ProductUserComments
+              productId={product?.id}
+              initialComments={comments}
+              commentsError={commentsError}
             />
-          </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="flex-1 pt-[80px] bg-gray-200">
-          <div className="px-[10px] space-y-1">
-            {activeSection === "details" && <ProductMain />}
-            {activeSection === "specsAndComments" && (
-              <>
-                {!showComments ? (
-                  <Tabs defaultValue="specs">
-                    <TabsList
-                      dir="rtl"
-                      className="w-full max-w-[540px] flex items-center gap-1 px-0! mt-2"
-                    >
-                      <TabsTrigger
-                        value="specs"
-                        className="bg-white rounded-md! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
-                      >
-                        مشخصات
-                      </TabsTrigger>
-                      <TabsTrigger
-                        value="reviews"
-                        className="bg-white rounded-md! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
-                      >
-                        نقد و بررسی
-                      </TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="specs" dir="rtl">
-                      <ProductSpecifications />
-                    </TabsContent>
-                    <TabsContent value="reviews" dir="rtl">
-                      <ProductReviews setShowComments={setShowComments} />
-                    </TabsContent>
-                  </Tabs>
-                ) : (
-                  <ProductUserComments />
-                )}
-              </>
-            )}
-            {activeSection === "partnership" && <ProductPartnership />}
-          </div>
-        </div>
-
-        {/* Fixed Bottom Navigation */}
-        <ProductNavigation
-          activeSection={activeSection}
-          setActiveSection={setActiveSection}
-          onGoBack={handleGoBack}
-        />
-      </div>
+          </DrawerContent>
+        </Drawer>
+      )}
 
       {/* Search Box */}
       <SearchBox

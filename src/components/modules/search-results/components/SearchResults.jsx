@@ -11,8 +11,19 @@ import PriceRangeDialog from "./PriceRangeDialog";
 import SellerTypeDialog from "./SellerTypeDialog";
 import SpecsFilterDialog from "./SpecsFilterDialog";
 import FiltersDrawer from "./FiltersDrawer";
+import FiltersSection from "./FiltersSection";
+import ProductsList from "./ProductsList";
 import usePublicStore from "@/app/store/publicStore";
 import { formatPrice } from "@/lib/client/utils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSearchParams } from "next/navigation";
 
 const mockProducts = [
   {
@@ -51,6 +62,10 @@ const mockProducts = [
 ];
 
 function SearchResults() {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const searchParams = useSearchParams();
+  const viewType = searchParams.get("view"); // "accessories" or null for normal
+
   const [sortBy, setSortBy] = useState("newest");
   const [showAvailable, setShowAvailable] = useState(true);
   const [isBrandDialogOpen, setIsBrandDialogOpen] = useState(false);
@@ -194,127 +209,259 @@ function SearchResults() {
         />
 
         <div className="flex flex-col gap-[25px] flex-1 min-h-0">
-          {/* Top Section */}
-          <div className="flex items-center gap-[25px] pr-5">
-            <div className="w-[50px] h-[50px] bg-gray-400 rounded-lg shrink-0" />
-            <div
-              onClick={handleSearchInputClick}
-              className="flex-1 cursor-pointer"
-            >
+          {/* Top Section - Search Input */}
+          <div className="flex items-center gap-[25px] pr-6">
+            <Image
+              src="/assets/images/logo/small-logo.svg"
+              width={40}
+              height={40}
+              alt="لوگو"
+              className="z-70"
+            />
+            <div className="flex-1">
               <SearchInput
-                value="گوشی موبایل"
+                value=""
                 onChange={() => {}}
                 placeholder="برند، کالا، لوازم جانبی، قطعات"
-                showSearchIcon={false}
                 readOnly
+                hasLogo={!isDesktop}
                 bgColor="bg-white"
+                className="max-w-[642px]"
               />
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="relative bg-white rounded-lg px-[100px] pt-[54px] pb-8 overflow-y-auto flex-1 min-h-0">
+          <div className="relative rounded-lg overflow-y-auto flex-1 min-h-0">
             {/* Main Navigation */}
             <div className="fixed right-[65px] bottom-[55px]">
-              <MainNavigation isHomePage={false} />
+              <MainNavigation isHomePage={false} hasSearchBox />
             </div>
 
-            {/* Header */}
-            <div className="flex items-center justify-between pr-[10px]">
-              <h1 className="text-[20px] text-primary">
-                <span className="font-black">دسته بندی</span> گوشی موبایل
-              </h1>
-              <div className="flex items-center gap-[30px]">
-                <AvailableProductsIcon
-                  onClick={() => setShowAvailable(!showAvailable)}
-                  active={showAvailable}
-                  size={20}
-                />
-                <Link
-                  href="/"
-                  onClick={handleLocateClick}
-                  className="transition-colors"
-                  aria-label="بازگشت به صفحه اصلی"
-                >
-                  <LocateIcon size={20} className="text-black" />
-                </Link>
+            {viewType === "accessories" ? (
+              /* Accessories View with Two Separate Boxes */
+              <div className="space-y-1.5 bg-gray-200">
+                {/* Second White Box - Accessories */}
+                <div className="bg-white rounded-t-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]">
+                  <Accordion
+                    type="single"
+                    collapsible
+                    defaultValue="accessories"
+                  >
+                    <AccordionItem value="accessories">
+                      <AccordionTrigger className="hidden lg:flex font-bold! text-base lg:text-xl text-primary justify-between hover:no-underline cursor-pointer">
+                        <span>
+                          <span className="font-bold">لوازم جانبی</span>{" "}
+                          <span className="font-light">
+                            مرتبط با گوشی موبایل
+                          </span>
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="lg:mt-4">
+                        <FiltersSection
+                          sortOptions={sortOptions}
+                          sortBy={sortBy}
+                          setSortBy={setSortBy}
+                          setIsSpecsDialogOpen={setIsSpecsDialogOpen}
+                          setIsBrandDialogOpen={setIsBrandDialogOpen}
+                          setIsPriceDialogOpen={setIsPriceDialogOpen}
+                          setIsSellerTypeDialogOpen={setIsSellerTypeDialogOpen}
+                        />
+                        <ProductsList products={mockProducts} isDesktop />
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+                {/* First White Box - Parts */}
+                <div className="bg-white rounded-b-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]">
+                  <Accordion type="single" collapsible defaultValue="parts">
+                    <AccordionItem value="parts">
+                      <AccordionTrigger className="hidden lg:flex font-bold! text-base lg:text-xl text-primary justify-between hover:no-underline cursor-pointer">
+                        <span>
+                          <span className="font-bold">قطعات</span>{" "}
+                          <span className="font-light">
+                            مرتبط با گوشی موبایل
+                          </span>
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="lg:mt-4">
+                        <FiltersSection
+                          sortOptions={sortOptions}
+                          sortBy={sortBy}
+                          setSortBy={setSortBy}
+                          setIsSpecsDialogOpen={setIsSpecsDialogOpen}
+                          setIsBrandDialogOpen={setIsBrandDialogOpen}
+                          setIsPriceDialogOpen={setIsPriceDialogOpen}
+                          setIsSellerTypeDialogOpen={setIsSellerTypeDialogOpen}
+                        />
+                        <ProductsList products={mockProducts} isDesktop />
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
               </div>
-            </div>
-
-            {/* Filters */}
-            <div className="mt-4 overflow-x-auto">
-              <div className="flex items-center gap-0 min-w-max">
-                {/* Sort Options */}
-                <div className="flex items-center gap-5 pr-[10px] pl-[18px] border-l-2 border-gray-200">
-                  <span className="text-gray-800 shrink-0">ترتیب نمایش:</span>
-                  <div className="flex items-center gap-5">
-                    {sortOptions.map((option) => (
-                      <button
-                        key={option.id}
-                        onClick={() => setSortBy(option.id)}
-                        className={`transition-all shrink-0 cursor-pointer ${
-                          sortBy === option.id
-                            ? "text-primary"
-                            : "text-gray-600 hover:opacity-80"
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
+            ) : (
+              /* Normal View */
+              <div className="bg-white rounded-lg px-[100px] pt-[54px] pb-8">
+                {/* Header */}
+                <div className="flex items-center justify-between pr-[10px]">
+                  <h1 className="text-[20px] text-primary">
+                    <span className="font-bold">دسته بندی</span> گوشی موبایل
+                  </h1>
+                  <div className="flex items-center gap-[30px]">
+                    <AvailableProductsIcon
+                      onClick={() => setShowAvailable(!showAvailable)}
+                      active={showAvailable}
+                      size={20}
+                    />
+                    <Link
+                      href="/"
+                      onClick={handleLocateClick}
+                      className="transition-colors"
+                      aria-label="بازگشت به صفحه اصلی"
+                    >
+                      <LocateIcon size={20} className="text-black" />
+                    </Link>
                   </div>
                 </div>
 
-                {/* Specifications Filter */}
-                <div className="px-4 border-l-2 border-gray-200">
-                  <button
-                    onClick={() => setIsSpecsDialogOpen(true)}
-                    className="text-primary shrink-0"
-                  >
-                    مشخصات خاصی در نظر دارید ؟
-                  </button>
-                </div>
+                <FiltersSection
+                  sortOptions={sortOptions}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  setIsSpecsDialogOpen={setIsSpecsDialogOpen}
+                  setIsBrandDialogOpen={setIsBrandDialogOpen}
+                  setIsPriceDialogOpen={setIsPriceDialogOpen}
+                  setIsSellerTypeDialogOpen={setIsSellerTypeDialogOpen}
+                />
+                <ProductsList products={mockProducts} isDesktop />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
-                {/* Brand Filter */}
-                <div className="px-4 border-l-2 border-gray-200">
-                  <button
-                    onClick={() => setIsBrandDialogOpen(true)}
-                    className="text-primary shrink-0"
-                  >
-                    به برند خاصی علاقه دارید ؟
-                  </button>
+      {/* Mobile Layout */}
+      <div className="lg:hidden flex flex-col h-screen bg-white">
+        {viewType === "accessories" ? (
+          /* Accessories View with Tabs */
+          <div className="px-[10px]">
+            {/* Fixed Header with Search */}
+            <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-[20px] pb-4">
+              <div className="relative">
+                <div
+                  onClick={handleSearchInputClick}
+                  className="cursor-pointer"
+                >
+                  <SearchInput
+                    value=""
+                    onChange={() => {}}
+                    hasLogo
+                    placeholder="برند، کالا، لوازم جانبی، قطعات"
+                    showSearchIcon={false}
+                    readOnly
+                  />
                 </div>
-
-                {/* Price Range Filter */}
-                <div className="px-4 border-l-2 border-gray-200">
-                  <button
-                    onClick={() => setIsPriceDialogOpen(true)}
-                    className="text-primary shrink-0"
-                  >
-                    بازه قیمتی
-                  </button>
-                </div>
-
-                {/* Seller Type Filter */}
-                <div className="pr-4">
-                  <button
-                    onClick={() => setIsSellerTypeDialogOpen(true)}
-                    className="text-primary shrink-0"
-                  >
-                    نوع فروشنده
-                  </button>
-                </div>
+                <button
+                  onClick={() => setIsFiltersDrawerOpen(true)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2"
+                >
+                  <ArrowUpDownIcon size={20} color="#000000" />
+                </button>
               </div>
             </div>
 
-            {/* Products List */}
-            <div className="mt-9 space-y-10">
-              {mockProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="grid grid-cols-2 border-b-2 border-gray-100 pb-8"
+            <Tabs defaultValue="parts">
+              <TabsList
+                dir="rtl"
+                className="fixed top-[80px] right-0 left-0 bg-white! z-20 w-full max-w-[540px] flex items-center px-0! py-0! h-12!"
+              >
+                <TabsTrigger
+                  value="parts"
+                  className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
                 >
-                  <div className="flex justify-center items-center">
-                    <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
+                  قطعات
+                </TabsTrigger>
+                <TabsTrigger
+                  value="accessories"
+                  className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
+                >
+                  لوازم جانبی
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent className="pt-[140px]" value="parts" dir="rtl">
+                <ProductsList products={mockProducts} />
+              </TabsContent>
+              <TabsContent className="pt-[140px]" value="accessories" dir="rtl">
+                <ProductsList products={mockProducts} />
+              </TabsContent>
+            </Tabs>
+
+            {/* Filters Drawer */}
+            <FiltersDrawer
+              isOpen={isFiltersDrawerOpen}
+              onClose={() => setIsFiltersDrawerOpen(false)}
+              mobileFilters={mobileFilters}
+              expandedFilter={expandedFilter}
+              onFilterToggle={handleFilterToggle}
+              getFilterValue={getFilterValue}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              priceRange={priceRange}
+              onPriceChange={setPriceRange}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              selectedBrands={selectedBrands}
+              onBrandToggle={handleBrandToggle}
+              selectedSpecs={selectedSpecs}
+              onSpecToggle={handleSpecToggle}
+              sellerType={sellerType}
+              onSellerTypeChange={setSellerType}
+              hasFiltersChanged={hasFiltersChanged}
+              onResetFilters={handleResetFilters}
+              availableProductsIconActive={showAvailable}
+              onAvailableProductsToggle={() => setShowAvailable(!showAvailable)}
+            />
+
+            {/* Main Navigation */}
+            <MainNavigation isHomePage={false} />
+          </div>
+        ) : (
+          /* Normal View */
+          <>
+            {/* Fixed Header */}
+            <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-[20px] pb-4">
+              <div className="relative">
+                <div
+                  onClick={handleSearchInputClick}
+                  className="cursor-pointer"
+                >
+                  <SearchInput
+                    value=""
+                    onChange={() => {}}
+                    hasLogo
+                    placeholder="برند، کالا، لوازم جانبی، قطعات"
+                    showSearchIcon={false}
+                    readOnly
+                  />
+                </div>
+                <button
+                  onClick={() => setIsFiltersDrawerOpen(true)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2"
+                >
+                  <ArrowUpDownIcon size={20} color="#000000" />
+                </button>
+              </div>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex-1 flex flex-col overflow-y-auto py-[80px]">
+              {/* Products List */}
+              <div className="flex-1 py-3 px-[10px]">
+                {mockProducts.map((product) => (
+                  <div key={product.id} className="flex gap-[10px] pb-4 mb-4">
+                    {/* Product Image */}
+                    <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
                       <Image
                         src={product.img || "/assets/images/fallback/phone.png"}
                         fill
@@ -322,143 +469,76 @@ function SearchResults() {
                         className="object-contain"
                       />
                     </div>
-                  </div>
-                  <div className="flex flex-col items-start justify-start gap-8">
-                    <div className="flex items-center justify-between w-full">
-                      <span className="text-error-medium text-xl">
-                        فروش ویژه
-                      </span>
-                      <span className="text-error-medium text-xl">
-                        00:00:00
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-600 line-clamp-1 mb-4">
+
+                    {/* Product Info */}
+                    <div className="flex flex-col flex-1 gap-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-error-medium font-bold">
+                          فروش ویژه
+                        </span>
+                        <span className="text-xs text-error-medium font-bold">
+                          00:00:00
+                        </span>
+                      </div>
+
+                      <p className="text-xs font-bold text-gray-600 line-clamp-2">
                         {product.name}
                       </p>
-                      <div className="flex items-center gap-2 mb-2 text-gray-600">
-                        <span className="font-bold">محدوده قیمت</span>
-                        <span>
+
+                      <div className="flex gap-1">
+                        <span className="text-xs text-gray-600 font-bold">
+                          محدوده قیمت
+                        </span>
+                        <span className="text-xs text-gray-600">
                           {formatPrice(product.minPrice)} تا{" "}
                           {formatPrice(product.maxPrice)} تومان
                         </span>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Layout */}
-      <div className="lg:hidden flex flex-col h-screen bg-white">
-        {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-[20px] pb-4">
-          {/* Search Input with Filter Button */}
-          <div className="relative">
-            <div onClick={handleSearchInputClick}>
-              <SearchInput
-                value="گوشی موبایل"
-                onChange={() => {}}
-                placeholder="برند، کالا، لوازم جانبی، قطعات"
-                showSearchIcon={false}
-                readOnly
-              />
-            </div>
-            <button
-              onClick={() => setIsFiltersDrawerOpen(true)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2"
-            >
-              <ArrowUpDownIcon size={20} color="#000000" />
-            </button>
-          </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="flex-1 flex flex-col overflow-y-auto py-[80px]">
-          {/* Products List */}
-          <div className="flex-1 py-3 px-[10px]">
-            {mockProducts.map((product) => (
-              <div key={product.id} className="flex gap-[10px] pb-4 mb-4">
-                {/* Product Image */}
-                <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                  <Image
-                    src={product.img || "/assets/images/fallback/phone.png"}
-                    fill
-                    alt={product.name}
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* Product Info */}
-                <div className="flex flex-col flex-1 gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-error-medium font-bold">
-                      فروش ویژه
-                    </span>
-                    <span className="text-xs text-error-medium font-bold">
-                      00:00:00
-                    </span>
-                  </div>
-
-                  <p className="text-xs font-bold text-gray-600 line-clamp-2">
-                    {product.name}
-                  </p>
-
-                  <div className="flex gap-1">
-                    <span className="text-xs text-gray-600 font-bold">
-                      محدوده قیمت
-                    </span>
-                    <span className="text-xs text-gray-600">
-                      {formatPrice(product.minPrice)} تا{" "}
-                      {formatPrice(product.maxPrice)} تومان
-                    </span>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Location Text */}
-          <div className="bg-white px-[10px] mt-auto py-3">
-            <Link href="/" onClick={handleLocateClick}>
-              <p className="text-primary text-center cursor-pointer">
-                موقعیت یابی گروه کالایی &quot; گوشی موبایل &quot;
-              </p>
-            </Link>
-          </div>
-        </div>
+              {/* Location Text */}
+              <div className="bg-white px-[10px] mt-auto py-3">
+                <Link href="/" onClick={handleLocateClick}>
+                  <p className="text-primary text-center cursor-pointer">
+                    موقعیت یابی گروه کالایی &quot; گوشی موبایل &quot;
+                  </p>
+                </Link>
+              </div>
+            </div>
 
-        {/* Filters Drawer */}
-        <FiltersDrawer
-          isOpen={isFiltersDrawerOpen}
-          onClose={() => setIsFiltersDrawerOpen(false)}
-          mobileFilters={mobileFilters}
-          expandedFilter={expandedFilter}
-          onFilterToggle={handleFilterToggle}
-          getFilterValue={getFilterValue}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-          priceRange={priceRange}
-          onPriceChange={setPriceRange}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          selectedBrands={selectedBrands}
-          onBrandToggle={handleBrandToggle}
-          selectedSpecs={selectedSpecs}
-          onSpecToggle={handleSpecToggle}
-          sellerType={sellerType}
-          onSellerTypeChange={setSellerType}
-          hasFiltersChanged={hasFiltersChanged}
-          onResetFilters={handleResetFilters}
-          availableProductsIconActive={showAvailable}
-          onAvailableProductsToggle={() => setShowAvailable(!showAvailable)}
-        />
+            {/* Filters Drawer */}
+            <FiltersDrawer
+              isOpen={isFiltersDrawerOpen}
+              onClose={() => setIsFiltersDrawerOpen(false)}
+              mobileFilters={mobileFilters}
+              expandedFilter={expandedFilter}
+              onFilterToggle={handleFilterToggle}
+              getFilterValue={getFilterValue}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              priceRange={priceRange}
+              onPriceChange={setPriceRange}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              selectedBrands={selectedBrands}
+              onBrandToggle={handleBrandToggle}
+              selectedSpecs={selectedSpecs}
+              onSpecToggle={handleSpecToggle}
+              sellerType={sellerType}
+              onSellerTypeChange={setSellerType}
+              hasFiltersChanged={hasFiltersChanged}
+              onResetFilters={handleResetFilters}
+              availableProductsIconActive={showAvailable}
+              onAvailableProductsToggle={() => setShowAvailable(!showAvailable)}
+            />
 
-        {/* Fixed Bottom Navigation */}
-        <MainNavigation isHomePage={false} />
+            {/* Fixed Bottom Navigation */}
+            <MainNavigation isHomePage={false} />
+          </>
+        )}
       </div>
 
       {/* Search Box */}

@@ -13,12 +13,18 @@ export async function GenerateTempToken() {
   return { res: response.data };
 }
 
-export async function saveTokenUser(token, user) {
+export async function saveToken(token) {
   const oneWeek = 7 * 24 * 60 * 60 * 1000;
   const cookieStore = await cookies();
   cookieStore.set("accessToken", token, { expires: Date.now() + oneWeek });
+}
+
+export async function saveUser(user) {
+  const oneWeek = 7 * 24 * 60 * 60 * 1000;
+  const cookieStore = await cookies();
   cookieStore.set("user", user, { expires: Date.now() + oneWeek });
 }
+
 export async function getToken() {
   const cookieStore = await cookies();
   const token = cookieStore.get("accessToken");

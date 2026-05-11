@@ -7,7 +7,6 @@ import {
   ProductsSlider,
   SellerDetails,
 } from "@/components/modules/home";
-import { SellerReviewsModal } from "@/components/modules/seller-reviews";
 import {
   ArrowUpDownIcon,
   StarIcon,
@@ -26,6 +25,9 @@ import {
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import { SearchResultBox } from "@/components/ui/search";
 import { mockSellerReviewsData } from "@/lib/client/mockReviewsData";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import SellerReviewsContent from "../../seller-reviews/components/SellerReviewsContent";
 
 const Map = dynamic(() => import("@/components/modules/home/components/Map"), {
   ssr: false,
@@ -93,6 +95,9 @@ export default function MainHome() {
   const [isProductsListOpen, setIsProductsListOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const [desktopFilterOpen, setDesktopFilterOpen] = useState(false);
+
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
   const mapActionsRef = useRef(null);
 
   const handleSellerSelect = (sellerId) => {
@@ -162,11 +167,28 @@ export default function MainHome() {
           purchasedProducts={filteredPurchasedForList}
         />
       )}
-      <SellerReviewsModal
-        isOpen={isReviewsModalOpen}
-        onClose={() => setIsReviewsModalOpen(false)}
-        sellerData={mockSellerReviewsData}
-      />
+      {isDesktop ? (
+        isReviewsModalOpen && (
+          <div className="fixed inset-0 z-1000 bg-white h-screen">
+            <SellerReviewsContent
+              onClose={() => setIsReviewsModalOpen(false)}
+              sellerData={mockSellerReviewsData}
+            />
+          </div>
+        )
+      ) : (
+        <Drawer
+          open={isReviewsModalOpen}
+          onOpenChange={() => setIsReviewsModalOpen(false)}
+        >
+          <DrawerContent
+            className="z-100! px-[10px] h-[96%]!"
+            overlayClassName="z-100 lg:hidden"
+          >
+            <SellerReviewsContent sellerData={mockSellerReviewsData} />
+          </DrawerContent>
+        </Drawer>
+      )}
       <div className="hidden lg:block">
         <SearchResultBox isMobile={false} />
       </div>
@@ -245,7 +267,7 @@ export default function MainHome() {
               className="flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
             >
               <div className="flex items-center gap-1">
-                <StarIcon className="text-yellow-500 w-4 h-4" />
+                <StarIcon className="text-yellow-500 w-[15px] h-[15px]" />
                 <span>
                   {activeSellerInfo.rating}
                   <span className="text-xs text-gray-600/70">/5</span>

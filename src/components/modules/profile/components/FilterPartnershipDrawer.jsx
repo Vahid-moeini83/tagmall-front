@@ -27,9 +27,9 @@ function FilterPartnershipDrawer({
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>
-      <DrawerContent overlayClassName="lg:hidden">
+      <DrawerContent overlayClassName="lg:hidden z-100!" className="z-100!">
         {/* Header */}
-        <div className="relative bg-white px-[10px]">
+        <div className="relative bg-white px-[10px] pt-2">
           <p className="text-right text-base font-bold text-primary">
             مشارکت در فروش
           </p>

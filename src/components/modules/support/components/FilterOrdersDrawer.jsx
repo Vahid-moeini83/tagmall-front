@@ -41,7 +41,7 @@ function FilterOrdersDrawer({
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent overlayClassName="lg:hidden">
         {/* Header */}
-        <div className="px-[10px]">
+        <div className="px-[10px] pt-2">
           <h3 className="text-primary text-base font-bold pb-2 cursor-pointer">
             پیگیری سفارشات
           </h3>

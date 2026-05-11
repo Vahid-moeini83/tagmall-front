@@ -23,6 +23,7 @@ import DialogWrapper, {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { formatPrice } from "@/lib/client/utils";
+import ResponsiveModal from "@/components/ui/responsive-modal";
 
 const mockCartItems = [
   {
@@ -30,6 +31,8 @@ const mockCartItems = [
     name: "گوشی موبایل سامسونگ Galaxy S24 Ultra",
     img: "/assets/images/fallback/phone.png",
     price: 34580000,
+    purchaseType: "online", // "online" or "in-person"
+    shippingCost: 50000,
     seller: {
       name: "دیجی‌کالا",
       profileImage: "/assets/images/fallback/avatar.png",
@@ -40,6 +43,8 @@ const mockCartItems = [
     name: "گوشی موبایل اپل iPhone 15 Pro Max",
     img: "/assets/images/fallback/phone.png",
     price: 36500000,
+    purchaseType: "in-person",
+    shippingCost: 0,
     seller: {
       name: "موبایل سنتر",
       profileImage: "/assets/images/fallback/avatar.png",
@@ -50,6 +55,32 @@ const mockCartItems = [
     name: "گوشی موبایل شیائومی 11T",
     img: "/assets/images/fallback/phone.png",
     price: 15000000,
+    purchaseType: "online",
+    shippingCost: 30000,
+    seller: {
+      name: "موبایل سنتر",
+      profileImage: "/assets/images/fallback/avatar.png",
+    },
+  },
+  {
+    id: 4,
+    name: "گوشی موبایل شیائومی 11T",
+    img: "/assets/images/fallback/phone.png",
+    price: 15000000,
+    purchaseType: "online",
+    shippingCost: 25000,
+    seller: {
+      name: "موبایل سنتر",
+      profileImage: "/assets/images/fallback/avatar.png",
+    },
+  },
+  {
+    id: 5,
+    name: "گوشی موبایل شیائومی 11T",
+    img: "/assets/images/fallback/phone.png",
+    price: 15000000,
+    purchaseType: "in-person",
+    shippingCost: 0,
     seller: {
       name: "موبایل سنتر",
       profileImage: "/assets/images/fallback/avatar.png",
@@ -86,7 +117,7 @@ function CartItems({ handleNextStep, isMobile = false }) {
               سبد خرید ( 3 کالا )
             </AccordionTrigger>
           )}
-          <AccordionContent className="lg:mt-4">
+          <AccordionContent className="lg:mt-4 ">
             <div className={isMobile ? "space-y-4" : "space-y-10"}>
               {mockCartItems.map((product, index) => (
                 <div
@@ -112,9 +143,11 @@ function CartItems({ handleNextStep, isMobile = false }) {
                           )}
                           {product.seller.name}
                         </div>
-                        <span className="text-error-medium text-xl">
-                          00:00:00
-                        </span>
+                        {product.id === 1 && (
+                          <span className="text-error-medium text-xl">
+                            00:00:00
+                          </span>
+                        )}
                       </div>
 
                       {/* Product Details Box */}
@@ -137,8 +170,38 @@ function CartItems({ handleNextStep, isMobile = false }) {
                                 {product.name}
                               </p>
                               <div className="flex items-center gap-1 text-gray-600 text-xs">
-                                <span className="font-bold">قیمت</span>
-                                <span>{formatPrice(product.price)} تومان</span>
+                                <p>
+                                  <span>
+                                    <span className="font-bold">قیمت</span>
+                                    <span>
+                                      {formatPrice(product.price)} تومان
+                                    </span>
+                                  </span>
+                                  {product.purchaseType === "online" &&
+                                    product.shippingCost > 0 && (
+                                      <span>
+                                        {" "}
+                                        و{" "}
+                                        <span className="font-bold">
+                                          هزینه ارسال
+                                        </span>
+                                        <span>
+                                          {formatPrice(product.shippingCost)}{" "}
+                                          تومان
+                                        </span>
+                                        <span className="text-gray-600">
+                                          {" "}
+                                          (خرید آنلاین)
+                                        </span>
+                                      </span>
+                                    )}
+                                  {product.purchaseType === "in-person" && (
+                                    <span className="text-gray-600">
+                                      {" "}
+                                      (خرید حضوری)
+                                    </span>
+                                  )}
+                                </p>
                               </div>
                             </div>
                             <div className="flex items-center gap-4 shrink-0">
@@ -154,7 +217,7 @@ function CartItems({ handleNextStep, isMobile = false }) {
                                   onClick={() =>
                                     handleQuantityChange(product.id, "decrease")
                                   }
-                                  className={`cursor-pointer ${quantities[product.id] <= 1 ? "text-gray-400" : "text-gray-800"}`}
+                                  className={`cursor-pointer ${quantities[product.id] <= 1 ? "text-gray-400" : "text-error-medium"}`}
                                 />
                                 <span className="text-gray-600 min-w-[30px] text-center select-none">
                                   {quantities[product.id]}
@@ -169,12 +232,12 @@ function CartItems({ handleNextStep, isMobile = false }) {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center justify-between gap-2 cursor-pointer pl-2 mt-4">
+                          <div className="flex items-center justify-between gap-2 cursor-pointer pl-3 mt-4">
                             <span className="text-primary font-bold text-xs">
                               لوازم جانبی و قطعات مرتبط
                             </span>
                             <SquarePlusIcon
-                              size={16}
+                              size={20}
                               className="text-primary"
                             />
                           </div>
@@ -242,7 +305,7 @@ function CartItems({ handleNextStep, isMobile = false }) {
                                   onClick={() =>
                                     handleQuantityChange(product.id, "decrease")
                                   }
-                                  className={`cursor-pointer ${quantities[product.id] <= 1 ? "text-gray-400" : "text-gray-800"}`}
+                                  className={`cursor-pointer ${quantities[product.id] <= 1 ? "text-gray-400" : "text-error-medium"}`}
                                 />
                                 <span className="text-gray-600 min-w-[30px] text-center select-none">
                                   {quantities[product.id]}
@@ -258,8 +321,32 @@ function CartItems({ handleNextStep, isMobile = false }) {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 mb-2 text-gray-600">
-                            <span className="font-bold">قیمت</span>
-                            <span>{formatPrice(product.price)} تومان</span>
+                            <p>
+                              <span className="font-bold">قیمت</span>
+                              <span>{formatPrice(product.price)} تومان</span>
+                              {product.purchaseType === "online" &&
+                                product.shippingCost > 0 && (
+                                  <span>
+                                    {" "}
+                                    و{" "}
+                                    <span className="font-bold">
+                                      هزینه ارسال
+                                    </span>
+                                    <span>
+                                      {formatPrice(product.shippingCost)} تومان
+                                    </span>
+                                    <span className="text-gray-600">
+                                      (خرید آنلاین)
+                                    </span>
+                                  </span>
+                                )}
+                              {product.purchaseType === "in-person" && (
+                                <span className="text-gray-600">
+                                  {" "}
+                                  (خرید حضوری)
+                                </span>
+                              )}
+                            </p>
                           </div>
                         </div>
 
@@ -276,32 +363,29 @@ function CartItems({ handleNextStep, isMobile = false }) {
                 </div>
               ))}
             </div>
-            <div className="fixed bg-white right-0 left-0 bottom-21 py-3 lg:static flex items-center justify-center lg:justify-end lg:gap-[50px] lg:mt-4">
+            <div className="fixed bg-white right-0 left-0 bottom-18 py-4 lg:static flex items-center justify-center lg:justify-end lg:pl-[140px] lg:mt-4">
               <button
                 onClick={handleNextStep}
                 className="lg:text-xl text-primary cursor-pointer"
               >
                 ثبت سفارش ( مبلغ {formatPrice(51530000)} تومان )
               </button>
-              <MoreSquareIcon
-                size={20}
-                className="absolute left-4 lg:static lg:left-0"
-              />
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
 
-      <DialogWrapper
+      <ResponsiveModal
+        isHintBox
         title={"یادداشت"}
         isOpen={noteDialogOpen}
         onClose={() => setNoteDialogOpen(false)}
       >
-        <p className="text-gray-600 text-center">
+        <p className="text-gray-600 leading-7 text-justify">
           این یک متن تستی برای یادداشت محصول است. می‌توانید یادداشت‌های خود را
           در اینجا مشاهده و ویرایش کنید.
         </p>
-      </DialogWrapper>
+      </ResponsiveModal>
     </>
   );
 }

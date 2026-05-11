@@ -14,6 +14,8 @@ export default async function Home() {
   // Get initial data according to location info
   const { homePageRes, homePageErr } = await getHomePageData(35.73, 51.42, 800);
 
+  console.log("HOME RES: ", homePageRes);
+
   return (
     <MainLayout>
       <Suspense fallback={<div className="w-full h-screen bg-gray-100" />}>

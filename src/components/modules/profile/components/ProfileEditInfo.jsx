@@ -1,142 +1,437 @@
 "use client";
-import DialogWrapper from "@/components/ui/dialog";
-import { DragHandler } from "@/components/ui/drag-handler";
+
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import toast from "react-hot-toast";
+
+import { CheckIcon } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
-import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
-import { Radio } from "@/components/ui/radio";
-import { PlusIcon, StrokeArrowLeftIcon } from "@/icons";
+import {
+  Skeleton,
+  EmailsSkeleton,
+  MobilesSkeleton,
+  AddressesSkeleton,
+  BankAccountsSkeleton,
+} from "@/components/ui/loading";
+
+import usePublicStore from "@/app/store/publicStore";
 import {
   getUserProfile,
-  updateUserProfile,
+  updateUserProfileAvatar,
+  getUserEmails,
+  setDefaultEmail,
+  getUserMobiles,
+  setDefaultMobile,
+  getUserBankAccounts,
+  setDefaultBankAccount,
+  submitBankAccount,
+  getUserAddresses,
+  setDefaultAddress,
+  submitUserAddress,
 } from "@/lib/server/actions/profile";
-import { getToken } from "@/lib/server/cookies";
-import { Check, Edit, Trash2 } from "lucide-react";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { Skeleton } from "@/components/ui/loading";
-import usePublicStore from "@/app/store/publicStore";
-import { ProfileUserAddresses, ProfileUserSessions } from "..";
+import { getToken, saveUser } from "@/lib/server/cookies";
+import { CustomAccordion } from "@/components/ui/accordion";
+import { getBankBySheba } from "@/lib/client/banks";
+import { formatSheba } from "@/lib/client/utils";
+import { IranianBank } from "iranian-bank-logo-react";
+import { CustomOptions } from "@/components/ui/option";
+import { HintIcon, LogoutIcon, UserIcon } from "@/icons";
+import Link from "next/link";
+import {
+  ProfileAddress,
+  ProfileAvatar,
+  ProfileBankAccount,
+  ProfileEmail,
+  ProfileLogout,
+  ProfilePhone,
+  ProfileSessions,
+  ProfileSessionsHint,
+} from "..";
+import { Checkbox } from "@/components/ui/checkbox";
+import DialogWrapper from "@/components/ui/dialog";
 
-const ProfileEditInfo = ({ setIsEditingProfile }) => {
+const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
   const setUserInfo = usePublicStore((state) => state.setUserInfo);
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [nationalCode, setNationalCode] = useState("");
-  const [profileImage, setProfileImage] = useState(null);
+
+  // Basic info states
+  const [fullName, setFullName] = useState();
+  const [nationalCode, setNationalCode] = useState();
   const [profilePreview, setProfilePreview] = useState(null);
 
-  // Dialog State for Edit Session
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  // Loading states
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoadingEmails, setIsLoadingEmails] = useState(false);
+  const [isLoadingMobiles, setIsLoadingMobiles] = useState(false);
+  const [isLoadingAddresses, setIsLoadingAddresses] = useState(false);
+  const [isLoadingBankAccounts, setIsLoadingBankAccounts] = useState(false);
 
-  // Image Handler
-  const handleImageChange = (e) => {
-    if (!e.target.files?.length) return;
+  // Accordion state
+  const [expanded, setExpanded] = useState([
+    // "contact",
+    // "contact-phone",
+    // "contact-email",
+    // "address",
+    // "bank",
+  ]);
+  const toggleExpand = (id) => {
+    setExpanded((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
+
+  // Option selections
+  const [selectedPhoneOption, setSelectedPhoneOption] = useState(null);
+  const [selectedEmailOption, setSelectedEmailOption] = useState(null);
+  const [selectedAddressOption, setSelectedAddressOption] = useState(null);
+  const [selectedBankOption, setSelectedBankOption] = useState(null);
+
+  // Lists
+  const [phoneList, setPhoneList] = useState([]);
+  const [emailList, setEmailList] = useState([]);
+  const [addressList, setAddressList] = useState([]);
+  const [bankList, setBankList] = useState([]);
+
+  // Modal or Drawers
+  const [isAvatarOpen, setIsAvatarOpen] = useState(false);
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [isPhoneOpen, setIsPhoneOpen] = useState(false);
+  const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [isAddressOpen, setIsAddressOpen] = useState(false);
+  const [activeAddressAuth, setAddressActiveAuth] = useState(false);
+  const [isAddressHintOpen, setIsAddressHintOpen] = useState(false);
+  const [isBankOpen, setIsBankOpen] = useState(false);
+  const [isSessionsOpen, setIsSessionsOpen] = useState(false);
+  const [selectedPhoneForSessions, setSelectedPhoneForSessions] = useState("");
+  const [isSessionsHintOpen, setIsSessionsHintOpen] = useState(false);
+
+  // Handle image upload and update to server
+  const handleImageChange = async (e) => {
+    if (!e.target.files.length) return;
 
     const file = e.target.files[0];
-
     const maxSize = 3 * 1024 * 1024;
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
     if (!allowedTypes.includes(file.type)) {
       toast.error("فرمت تصویر باید jpg، png یا webp باشد");
-      e.target.value = "";
       return;
     }
 
     if (file.size > maxSize) {
-      toast.error("حجم فایل باید حداکثر 3 مگابایت باشد");
-      e.target.value = "";
+      toast.error("حجم فایل باید حداکثر ۳ مگابایت باشد");
       return;
     }
 
-    setProfileImage(file);
-    setProfilePreview(URL.createObjectURL(file));
+    const imageUrl = URL.createObjectURL(file);
+
+    setProfilePreview(imageUrl);
+
+    // آپدیت state گلوبال
+    setUserInfo((prev) => ({
+      ...prev,
+      avatar: imageUrl,
+    }));
+
+    await uploadAvatar(file);
   };
 
-  const handleProfileSubmit = async (e) => {
-    e.preventDefault();
-
+  // Upload avatar to server
+  const uploadAvatar = async (file) => {
     const token = await getToken();
-
     const formData = new FormData();
-    formData.append("full_name", fullName);
-    formData.append("mobile", phoneNumber);
-    formData.append("national_code", nationalCode);
-
-    if (profileImage instanceof File) {
-      formData.append("avatar", profileImage);
-    }
+    formData.append("avatar", file);
 
     setIsUpdating(true);
-    const { updateProfileRes, updateProfileErr } = await updateUserProfile(
-      token,
-      formData,
-    );
+    const { updateProfileRes } = await updateUserProfileAvatar(token, formData);
+
     if (updateProfileRes) {
-      toast.success("پروفایل با موفقیت بروزرسانی شد");
-    } else if (updateProfileErr) {
-      toast.error("خطا در بروزرسانی پروفایل");
+      toast.success("تصویر پروفایل با موفقیت بروزرسانی شد");
+      setUserInfo(updateProfileRes.data.user);
+      await saveUser(JSON.stringify(updateProfileRes.data.user));
+      setProfilePreview(updateProfileRes.data.user.avatar);
+    } else {
+      toast.error("خطا در بروزرسانی تصویر پروفایل");
     }
+
     setIsUpdating(false);
-    setIsEditingProfile(false);
   };
 
-  // Get user base fields
+  // Remove avatar from server
+  const removeAvatar = async () => {
+    const token = await getToken();
+    const formData = new FormData();
+    formData.append("delete_avatar", "1");
+
+    setIsUpdating(true);
+    const { updateProfileRes } = await updateUserProfileAvatar(token, formData);
+
+    if (updateProfileRes) {
+      toast.success("تصویر پروفایل با موفقیت حذف شد");
+      setUserInfo(updateProfileRes.data.user);
+      await saveUser(JSON.stringify(updateProfileRes.data.user));
+      setProfilePreview(null);
+    } else {
+      toast.error("خطا در حذف تصویر پروفایل");
+    }
+
+    setIsUpdating(false);
+  };
+
+  // Fetch profile data
   const getUserData = async () => {
     const token = await getToken();
-
     setIsLoading(true);
-    const { userProfileRes, userProfileErr } = await getUserProfile(token);
+
+    const { userProfileRes } = await getUserProfile(token);
+
     if (userProfileRes) {
-      console.log(userProfileRes);
-      const user = userProfileRes?.data?.user;
+      const user = userProfileRes.data.user;
       setUserInfo(user);
-      setFullName(`${user?.name} ${user?.family}`);
-      setNationalCode(user?.national_code);
-      setPhoneNumber(user?.mobile);
-      setProfileImage(null); // چون File نیست
-      setProfilePreview(user?.avatar); // نمایش از URL
-    } else if (userProfileErr) {
-      console.log(userProfileErr);
+
+      setFullName(`${user.name} ${user.family}`);
+      setNationalCode(user.national_code);
+      setProfilePreview(user.avatar);
     }
+
     setIsLoading(false);
+  };
+
+  // Fetch user emails
+  const getUserEmailsList = async () => {
+    const token = await getToken();
+    setIsLoadingEmails(true);
+    const { getEmailsRes } = await getUserEmails(token);
+
+    if (getEmailsRes && getEmailsRes.data) {
+      const emails = getEmailsRes.data.map((email) => ({
+        id: email.id,
+        label: email.email,
+        isDefault: email.is_default,
+      }));
+      setEmailList(emails);
+
+      // تنظیم ایمیل پیشفرض
+      const defaultEmail = emails.find((e) => e.isDefault);
+      if (defaultEmail) {
+        setSelectedEmailOption(defaultEmail.id);
+      }
+    } else {
+      setEmailList([]);
+    }
+    setIsLoadingEmails(false);
+  };
+
+  // Fetch user mobiles
+  const getUserMobilesList = async () => {
+    const token = await getToken();
+    setIsLoadingMobiles(true);
+    const { getMobilesRes, getMobilesErr } = await getUserMobiles(token);
+
+    if (getMobilesRes) {
+      const mobiles = getMobilesRes.data.map((mobile) => ({
+        id: mobile.id,
+        label: mobile.mobile,
+        isDefault: mobile.is_default,
+      }));
+      setPhoneList(mobiles);
+
+      // تنظیم شماره موبایل پیشفرض
+      const defaultMobile = mobiles.find((m) => m.isDefault);
+      if (defaultMobile) {
+        setSelectedPhoneOption(defaultMobile.id);
+      }
+    } else if (getMobilesErr) {
+      toast.error("خطا در دریافت شماره تماس");
+    }
+    setIsLoadingMobiles(false);
+  };
+
+  // Fetch user bank accounts
+  const getUserBankAccountsList = async () => {
+    const token = await getToken();
+    setIsLoadingBankAccounts(true);
+    const { getBankAccountsRes } = await getUserBankAccounts(token);
+
+    if (getBankAccountsRes) {
+      console.log(getBankAccountsRes);
+      const bankAccounts = getBankAccountsRes.data.map((account) => ({
+        id: account.id,
+        label: `بانک: ${account.bank_name}`,
+        sheba: account.shaba_number,
+        isDefault: account.is_default,
+      }));
+      setBankList(bankAccounts);
+
+      // تنظیم حساب بانکی پیشفرض
+      const defaultBank = bankAccounts.find((b) => b.isDefault);
+      if (defaultBank) {
+        setSelectedBankOption(defaultBank.id);
+      }
+    } else {
+      setBankList([]);
+    }
+    setIsLoadingBankAccounts(false);
+  };
+
+  // Fetch user addresses
+  const getUserAddressesList = async () => {
+    const token = await getToken();
+    setIsLoadingAddresses(true);
+    const { getAddressesRes, getAddressesErr } = await getUserAddresses(token);
+
+    if (getAddressesRes) {
+      const addresses = getAddressesRes.data.map((address) => ({
+        id: address.id,
+        label: address.address,
+        isDefault: address.is_default,
+        extra: address.postal_code
+          ? [{ label: "کد پستی", value: address.postal_code }]
+          : [],
+      }));
+      setAddressList(addresses);
+
+      // تنظیم آدرس پیشفرض
+      const defaultAddress = addresses.find((a) => a.isDefault);
+      if (defaultAddress) {
+        setSelectedAddressOption(defaultAddress.id);
+      }
+    } else if (getAddressesErr) {
+      setAddressList([]);
+    }
+    setIsLoadingAddresses(false);
+  };
+
+  // Set default email
+  const handleSetDefaultEmail = async (emailId) => {
+    const previousSelectedEmail = selectedEmailOption;
+    const token = await getToken();
+    const { setDefaultEmailRes, setDefaultEmailErr } = await setDefaultEmail(
+      token,
+      emailId,
+    );
+
+    if (setDefaultEmailRes) {
+      await getUserEmailsList();
+    } else if (setDefaultEmailErr) {
+      toast.error("خطا در تنظیم ایمیل پیشفرض");
+      setSelectedEmailOption(previousSelectedEmail);
+    }
+  };
+
+  // Set default mobile
+  const handleSetDefaultMobile = async (mobileId) => {
+    const previousSelectedMobile = selectedPhoneOption;
+    const token = await getToken();
+    const { setDefaultMobileRes, setDefaultMobileErr } = await setDefaultMobile(
+      token,
+      mobileId,
+    );
+
+    if (setDefaultMobileRes) {
+      await getUserMobilesList();
+    } else {
+      toast.error("خطا در تنظیم شماره موبایل پیشفرض");
+      setSelectedPhoneOption(previousSelectedMobile);
+    }
+  };
+
+  // Set default address
+  const handleSetDefaultAddress = async (addressId) => {
+    const previousSelectedAddress = selectedAddressOption;
+    const token = await getToken();
+    const { setDefaultAddressRes, setDefaultAddressErr } =
+      await setDefaultAddress(token, addressId);
+
+    if (setDefaultAddressRes) {
+      await getUserAddressesList();
+    } else {
+      toast.error("خطا در تنظیم آدرس پیشفرض");
+      setSelectedAddressOption(previousSelectedAddress);
+    }
+  };
+
+  // Set default bank account
+  const handleSetDefaultBankAccount = async (bankId) => {
+    const previousSelectedBank = selectedBankOption;
+    const token = await getToken();
+    const { setDefaultBankAccountRes, setDefaultBankAccountErr } =
+      await setDefaultBankAccount(token, bankId);
+
+    if (setDefaultBankAccountRes) {
+      await getUserBankAccountsList();
+    } else {
+      toast.error("خطا در تنظیم حساب بانکی پیشفرض");
+      setSelectedBankOption(previousSelectedBank);
+    }
+  };
+
+  // Submit new bank account
+  const handleSubmitBankAccount = async (data) => {
+    const token = await getToken();
+    const bodyData = {
+      shaba_number: data.sheba,
+    };
+
+    const { submitBankAccountRes, submitBankAccountErr } =
+      await submitBankAccount(token, bodyData);
+
+    if (submitBankAccountRes) {
+      toast.success("حساب بانکی با موفقیت اضافه شد");
+      await getUserBankAccountsList();
+      return true;
+    } else {
+      toast.error("خطا در افزودن حساب بانکی");
+      return false;
+    }
+  };
+
+  // Submit new address
+  const handleSubmitAddress = async (data) => {
+    const token = await getToken();
+    const bodyData = {
+      address: data.address,
+      postal_code: data.postalCode || undefined,
+      use_verification: activeAddressAuth,
+    };
+
+    const { submitAddressRes, submitAddressErr } = await submitUserAddress(
+      token,
+      bodyData,
+    );
+
+    if (submitAddressRes) {
+      toast.success("آدرس با موفقیت اضافه شد");
+      await getUserAddressesList();
+      return true;
+    } else {
+      toast.error("خطا در افزودن آدرس");
+      return false;
+    }
   };
 
   useEffect(() => {
     getUserData();
+    getUserEmailsList();
+    getUserMobilesList();
+    getUserBankAccountsList();
+    getUserAddressesList();
   }, []);
 
   return (
-    <div className="h-full select-none flex flex-col">
-      <div className="absolute top-2 right-1/2 translate-x-1/2 z-50">
-        <DragHandler
-          hasCloseEvent={true}
-          onClose={() => setIsEditingProfile(false)}
-        />
-      </div>
-      {/* Scrollable Content Area */}
-      <div className="flex-1 h-full overflow-y-auto bg-white px-6 pb-6 pt-10">
-        {/* Header Section */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">
-              ویرایش مشخصات
-            </h1>
-            <span className="text-base text-gray-500 font-medium">
-              مشخصات خود را مدیریت کنید
-            </span>
-          </div>
-          <div className="relative group">
-            {isLoading ? (
-              <Skeleton className="w-16 h-16 rounded-md" />
-            ) : (
-              <>
-                <label
-                  htmlFor="modalProfileImage"
-                  className="relative w-16 h-16 rounded-md border border-gray-200 overflow-hidden flex items-center justify-center cursor-pointer bg-white shadow-sm"
+    <>
+      <div className="h-full overflow-y-auto scroll-hidden select-none flex flex-col relative">
+        {/* Header */}
+        <div className="flex items-center justify-between px-[10px] lg:px-[50px] lg:pt-[50px]">
+          <div className="flex items-center gap-2">
+            <div className="relative group">
+              {isLoading ? (
+                <Skeleton className="w-[50px] h-[50px] rounded-md" />
+              ) : (
+                <div
+                  className={`relative w-[50px] h-[50px] rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center ${profilePreview ? "bg-white" : "bg-gray-200"}`}
+                  onClick={() => setIsAvatarOpen(true)}
                 >
                   {profilePreview ? (
                     <Image
@@ -146,97 +441,397 @@ const ProfileEditInfo = ({ setIsEditingProfile }) => {
                       className="object-cover"
                     />
                   ) : (
-                    <span className="text-xs text-center text-gray-400 px-1">
-                      انتخاب عکس
-                    </span>
+                    <UserIcon size={20} />
                   )}
-                </label>
-                <input
-                  type="file"
-                  id="modalProfileImage"
-                  name="modalProfileImage"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
+                </div>
+              )}
+            </div>
+
+            <h1 className="text-gray-600 text-base">
+              {fullName || "اسم کاربر"}
+            </h1>
+          </div>
+
+          <LogoutIcon
+            onClick={() => setIsLogoutOpen(true)}
+            className="text-error-medium ml-4 cursor-pointer"
+            size={20}
+          />
+        </div>
+
+        {/* Scrollable content */}
+        <div>
+          {/* Section 1: National code */}
+          <div className="py-3 px-[10px] lg:px-[50px] lg:pb-[50px]">
+            <div className="relative">
+              <Input
+                label="شناسه ملی:"
+                type="number"
+                id="m_nationalCode"
+                value={nationalCode}
+                onChange={(e) => setNationalCode(e.target.value)}
+                disabled={isLoading}
+                readOnly
+                className="text-center text-gray-600 bg-gray-200 border-0!"
+              />
+              <CheckIcon
+                className="text-success-medium absolute top-1/2 translate-y-1/2 left-4"
+                size={16}
+              />
+            </div>
+            <div className="flex items-start gap-4 pr-4">
+              <HintIcon size={24} className="mt-3 w-6 h-6" />
+              <p className="text-gray-600 leading-12 text-justify">
+                با{" "}
+                <Link href="#" className="text-primary font-bold">
+                  احراز هویت
+                </Link>{" "}
+                نشست های فعال را مدیریت کنید و از خدمات کیف پول اعتباری بهره مند
+                شوید
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full h-[4px] bg-gray-200" />
+
+          {/* Section 2: Contact information */}
+          <div className="px-[10px] lg:px-[50px] lg:py-[50px]">
+            <CustomAccordion
+              id="contact"
+              expandedItems={expanded}
+              onToggle={toggleExpand}
+              triggerClassName="lg:pt-0!"
+              iconClassName="left-[18px]"
+              customLabel={
+                <span className="text-primary font-bold">
+                  چگونه با شما در ارتباط باشیم؟
+                </span>
+              }
+            >
+              {/* Phone */}
+              <CustomAccordion
+                id="contact-phone"
+                expandedItems={expanded}
+                onToggle={toggleExpand}
+                label="شماره تماس:"
+                iconClassName="left-[18px]"
+                labelClassName="text-gray-600!"
+              >
+                {isLoadingMobiles ? (
+                  <MobilesSkeleton />
+                ) : phoneList.length > 0 ? (
+                  <CustomOptions
+                    type="radio"
+                    hasBorder={false}
+                    value={selectedPhoneOption}
+                    onChange={(value) => {
+                      setSelectedPhoneOption(value);
+                      handleSetDefaultMobile(value);
+                    }}
+                    bottomButtonText="دسترسی به شماره تماس دیگری دارید؟"
+                    buttonOnClick={() => setIsPhoneOpen(true)}
+                    onItemClick={(item) => {
+                      setSelectedPhoneForSessions(item.label);
+                      setIsSessionsOpen(true);
+                    }}
+                    options={phoneList}
+                    centerLabel={true}
+                  />
+                ) : (
+                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
+                    <p className="text-center text-gray-600 mb-6">
+                      هنوز شماره تماسی ثبت نکرده‌اید
+                    </p>
+                    <button
+                      onClick={() => setIsPhoneOpen(true)}
+                      className="w-full text-center text-primary"
+                    >
+                      ثبت شماره تماس
+                    </button>
+                  </div>
+                )}
+              </CustomAccordion>
+
+              {/* Divider between phone and email when both are closed */}
+              {!expanded.includes("contact-phone") && (
+                <div className="w-full h-[2px] bg-gray-200" />
+              )}
+
+              {/* Email */}
+              <CustomAccordion
+                id="contact-email"
+                expandedItems={expanded}
+                onToggle={toggleExpand}
+                label="پست الکترونیک:"
+                iconClassName="left-[18px]"
+                labelClassName="text-gray-600!"
+              >
+                {isLoadingEmails ? (
+                  <EmailsSkeleton />
+                ) : emailList.length > 0 ? (
+                  <CustomOptions
+                    type="radio"
+                    value={selectedEmailOption}
+                    onChange={(value) => {
+                      setSelectedEmailOption(value);
+                      handleSetDefaultEmail(value);
+                    }}
+                    bottomButtonText="دسترسی به پست الکترونیک دیگری دارید؟"
+                    buttonOnClick={() => setIsEmailOpen(true)}
+                    options={emailList}
+                    centerLabel={true}
+                    containerClassName="mb-[10px]"
+                  />
+                ) : (
+                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
+                    <p className="text-center text-gray-600 mb-6">
+                      هنوز پست الکترونیکی ثبت نکرده‌اید
+                    </p>
+                    <button
+                      onClick={() => setIsEmailOpen(true)}
+                      className="w-full text-center text-primary"
+                    >
+                      {emailList.length > 0
+                        ? " دسترسی به پست الکترونیک دیگری دارید؟"
+                        : "ثبت پست الکترونیک"}
+                    </button>
+                  </div>
+                )}
+              </CustomAccordion>
+            </CustomAccordion>
+          </div>
+
+          <div className="w-full h-[4px] bg-gray-200" />
+
+          {/* Section 3: Addresses */}
+          <div className="px-[10px] lg:px-[50px] lg:py-[50px]">
+            <CustomAccordion
+              id="address"
+              expandedItems={expanded}
+              onToggle={toggleExpand}
+              triggerClassName="lg:pt-0!"
+              iconClassName="left-[18px]"
+              customLabel={
+                <span className="text-primary font-bold">
+                  سفارشات شما به کجا ارسال شود؟
+                </span>
+              }
+            >
+              <CustomAccordion
+                id="order-address"
+                expandedItems={expanded}
+                onToggle={toggleExpand}
+                label="آدرس:"
+                alwaysOpen
+                iconClassName="hidden"
+                labelClassName="text-gray-600!"
+              >
+                {isLoadingAddresses ? (
+                  <AddressesSkeleton />
+                ) : addressList.length > 0 ? (
+                  <CustomOptions
+                    type="radio"
+                    value={selectedAddressOption}
+                    onChange={(value) => {
+                      setSelectedAddressOption(value);
+                      handleSetDefaultAddress(value);
+                    }}
+                    bottomButtonText="سفارشات به آدرس دیگری ارسال شود؟"
+                    buttonOnClick={() => setIsAddressOpen(true)}
+                    options={addressList}
+                  />
+                ) : (
+                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
+                    <p className="text-center text-gray-600 mb-6">
+                      هنوز آدرسی ثبت نکرده‌اید
+                    </p>
+                    <button
+                      onClick={() => setIsAddressOpen(true)}
+                      className="w-full text-center text-primary"
+                    >
+                      ثبت آدرس
+                    </button>
+                  </div>
+                )}
+              </CustomAccordion>
+              <div className="flex items-start gap-2 pr-4 pb-3 pt-4">
+                <Checkbox
+                  checked={activeAddressAuth}
+                  onChange={() => setAddressActiveAuth(!activeAddressAuth)}
+                  hasBorder={false}
+                  className="bg-gray-200!"
                 />
-              </>
-            )}
+                <p className="text-justify">
+                  با احراز کد پستی با اطمینان از خدمات ما بهره مند شوید
+                </p>
+              </div>
+            </CustomAccordion>
+          </div>
+
+          <div className="w-full h-[4px] bg-gray-200" />
+
+          {/* Section 4: Bank info */}
+          <div className="px-[10px] lg:px-[50px] lg:py-[50px]">
+            <CustomAccordion
+              id="bank"
+              expandedItems={expanded}
+              onToggle={toggleExpand}
+              triggerClassName="lg:pt-0!"
+              iconClassName="left-[18px]"
+              customLabel={
+                <span className="text-primary font-bold">
+                  واریز به کدام حساب بانکی شما انجام شود؟
+                </span>
+              }
+              containerClassName="pb-0!"
+            >
+              <CustomAccordion
+                id="contact-email"
+                expandedItems={expanded}
+                onToggle={toggleExpand}
+                alwaysOpen
+                label="شماره شبا:"
+                iconClassName="hidden"
+                labelClassName="text-gray-600!"
+                containerClassName="pb-0!"
+              >
+                {isLoadingBankAccounts ? (
+                  <BankAccountsSkeleton />
+                ) : bankList.length > 0 ? (
+                  <CustomOptions
+                    type="radio"
+                    value={selectedBankOption}
+                    onChange={(value) => {
+                      setSelectedBankOption(value);
+                      handleSetDefaultBankAccount(value);
+                    }}
+                    bottomButtonText="واریز به حساب دیگری انجام شود؟"
+                    buttonOnClick={() => setIsBankOpen(true)}
+                    options={bankList}
+                    containerClassName="pb-0!"
+                    renderLabel={(item) => {
+                      const bankInfo = getBankBySheba(item.sheba);
+                      const formattedSheba = formatSheba(item.sheba);
+
+                      return (
+                        <div className="relative w-full flex justify-center">
+                          <span className="pl-10">{formattedSheba}</span>
+                          {bankInfo?.icon && (
+                            <div className="absolute -left-1 top-1/2 -translate-y-1/2">
+                              <IranianBank name={bankInfo.icon} size={24} />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }}
+                  />
+                ) : (
+                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
+                    <p className="text-center text-gray-600 mb-6">
+                      هنوز حساب بانکی ثبت نکرده‌اید
+                    </p>
+                    <button
+                      onClick={() => setIsBankOpen(true)}
+                      className="w-full text-center text-primary"
+                    >
+                      ثبت حساب بانکی
+                    </button>
+                  </div>
+                )}
+              </CustomAccordion>
+            </CustomAccordion>
           </div>
         </div>
-
-        {/* Inputs Section */}
-        <div className="space-y-6 mb-8">
-          <Input
-            label={"نام و نام خانوادگی"}
-            type="text"
-            id="m_fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            disabled={isLoading}
-          />
-          <Input
-            label={"تلفن همراه"}
-            type="number"
-            id="m_phone"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            disabled={isLoading}
-          />
-          <Input
-            label={"کد ملی"}
-            type="number"
-            id="m_nationalCode"
-            value={nationalCode}
-            onChange={(e) => setNationalCode(e.target.value)}
-            disabled={isLoading}
-          />
-        </div>
-
-        {/* Address Section */}
-        <ProfileUserAddresses />
-
-        {/* Active Sessions Section */}
-        <ProfileUserSessions />
-
-        {/* Save button */}
-        <button
-          onClick={handleProfileSubmit}
-          className="bg-primary text-white rounded-md w-full h-12 mt-12 flex items-center justify-center gap-2 transition-all hover:bg-primary/90 hover:gap-3 cursor-pointer font-medium"
-        >
-          {isUpdating ? <SpinnerLoading /> : "ذخیره تغییرات"}
-        </button>
       </div>
 
-      {/* Edit Session Dialog */}
+      {/* Profile avatar */}
+      <ProfileAvatar
+        isOpen={isAvatarOpen}
+        setIsOpen={setIsAvatarOpen}
+        isUpdating={isUpdating}
+        user={{
+          name: fullName?.split(" ")[0],
+          family: fullName?.split(" ")[1],
+          avatar: profilePreview,
+        }}
+        onUpdateAvatar={(e) => handleImageChange(e)}
+        onRemoveAvatar={removeAvatar}
+      />
+
+      {/* Profile logout */}
+      <ProfileLogout
+        isOpen={isLogoutOpen}
+        setIsOpen={setIsLogoutOpen}
+        user={{
+          name: fullName?.split(" ")[0],
+          family: fullName?.split(" ")[1],
+          avatar: profilePreview,
+        }}
+        onLogout={() => {
+          setIsEditingProfile(false);
+          setIsProfileOpen(false);
+        }}
+      />
+
+      {/* Profile phone */}
+      <ProfilePhone
+        isOpen={isPhoneOpen}
+        setIsOpen={setIsPhoneOpen}
+        onVerifyOtp={() => {
+          // بروزرسانی لیست شماره موبایل‌ها از سرور
+          getUserMobilesList();
+          setIsPhoneOpen(false);
+        }}
+      />
+
+      {/* Profile email */}
+      <ProfileEmail
+        isOpen={isEmailOpen}
+        setIsOpen={setIsEmailOpen}
+        onVerifyOtp={() => {
+          // بروزرسانی لیست ایمیل‌ها از سرور
+          getUserEmailsList();
+          setIsEmailOpen(false);
+        }}
+      />
+
+      {/* Profile address */}
+      <ProfileAddress
+        isOpen={isAddressOpen}
+        setIsOpen={setIsAddressOpen}
+        activeAddressAuth={activeAddressAuth}
+        onSubmit={handleSubmitAddress}
+      />
+
+      {/* Address hint box */}
       <DialogWrapper
-        isOpen={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)}
-        title="تغییر شماره"
+        isOpen={isAddressHintOpen}
+        onClose={() => setIsAddressHintOpen(false)}
       >
-        <div className="flex flex-col gap-4">
-          <p className="text-gray-700 leading-7 text-sm lg:text-base">
-            برای تغییر شماره همراه ابتدا باید در سامانه هدی کد ملی و شماره تلفن
-            خود را تطبیق دهید
-          </p>
-          <div className="flex items-center justify-center gap-3 mt-2">
-            <button
-              onClick={() => setIsEditDialogOpen(false)}
-              className="flex-1 h-10 lg:h-12 rounded-md text-primary border-2 border-primary cursor-pointer"
-            >
-              انصراف
-            </button>
-            <button
-              onClick={() => {
-                window.location.href = "https://aut.ncr.ir/";
-              }}
-              className="flex-1 h-10 lg:h-12 rounded-md text-white bg-primary cursor-pointer"
-            >
-              ادامه
-            </button>
-          </div>
-        </div>
+        <p className="text-center">احراز کد پستی توسط اداره پست انجام می‌شود</p>
       </DialogWrapper>
-    </div>
+
+      {/* Profile bank account */}
+      <ProfileBankAccount
+        isOpen={isBankOpen}
+        setIsOpen={setIsBankOpen}
+        onSubmit={handleSubmitBankAccount}
+      />
+
+      {/* Profile sessions */}
+      <ProfileSessions
+        isOpen={isSessionsOpen}
+        setIsOpen={setIsSessionsOpen}
+        phone={selectedPhoneForSessions}
+        setIsSessionsHintOpen={setIsSessionsHintOpen}
+      />
+
+      {/* Sessions hint modal */}
+      <ProfileSessionsHint
+        isOpen={isSessionsHintOpen}
+        setIsOpen={setIsSessionsHintOpen}
+      />
+    </>
   );
 };
 

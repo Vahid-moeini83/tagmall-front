@@ -4,3 +4,4 @@ export {
   AccordionTrigger,
   AccordionContent,
 } from "./Accordion";
+export { CustomAccordion } from "./CustomAccordion";

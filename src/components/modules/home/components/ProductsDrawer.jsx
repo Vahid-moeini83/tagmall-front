@@ -415,7 +415,7 @@ export default function ProductsDrawer({
   return (
     <>
       <div
-        className={`fixed inset-0 z-10 bg-gray-200/50 backdrop-blur-sm transition-opacity ${isListMode ? "opacity-100 visible" : "opacity-0 invisible"}`}
+        className={`fixed inset-0 z-10 bg-gray-200/20 backdrop-blur-sm transition-opacity ${isListMode ? "opacity-100 visible" : "opacity-0 invisible"}`}
       ></div>
       <Drawer
         open
@@ -428,24 +428,23 @@ export default function ProductsDrawer({
       >
         <DrawerContent
           className={cn(
-            "rounded-t-xl pt-0 px-0! border-0! lg:hidden bg-gray-200! outline-none!",
+            "rounded-t-xl pt-0 px-0! border-0! lg:hidden bg-gray-200/20! backdrop-blur-sm outline-none!",
             showSellerDetails
-              ? `data-[vaul-drawer-direction=bottom]:bottom-[calc(48px+env(safe-area-inset-bottom))]!`
-              : `data-[vaul-drawer-direction=bottom]:bottom-[calc(64px+env(safe-area-inset-bottom))]!`,
+              ? `data-[vaul-drawer-direction=bottom]:mb-[calc(32px+env(safe-area-inset-bottom))]!`
+              : `data-[vaul-drawer-direction=bottom]:mb-[calc(64px+env(safe-area-inset-bottom))]!`,
             "data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-2rem-env(safe-area-inset-bottom))]!",
             "data-[vaul-drawer-direction=bottom]:left-1/2 data-[vaul-drawer-direction=bottom]:right-auto data-[vaul-drawer-direction=bottom]:-translate-x-1/2",
             "data-[vaul-drawer-direction=bottom]:w-full data-[vaul-drawer-direction=bottom]:max-w-[640px]",
           )}
           overlayClassName="lg:hidden"
           dragHandleClassName="pb-3!"
+          dragHandleLineClassName="bg-white!"
         >
           <div
             ref={drawerContentRef}
             className={cn(
               "rounded-t-xl flex flex-col overflow-hidden pb-4 px-4 transition-[background-color,backdrop-filter]",
-              homeFilterPopoverOpen
-                ? "bg-gray-200/60 backdrop-blur-md"
-                : "bg-gray-200/40 backdrop-blur-sm",
+              homeFilterPopoverOpen ? "bg-gray-200/60 backdrop-blur-md" : "",
             )}
             data-vaul-no-drag
           >
@@ -643,7 +642,7 @@ export default function ProductsDrawer({
       </Drawer>
 
       {showShopImagesGallery && (
-        <div className="fixed inset-0 z-1000 flex flex-col bg-gray-200/50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-1000 flex flex-col bg-gray-200/20 backdrop-blur-sm">
           <Image
             src="/assets/images/logo/main-logo.svg"
             width={110}

@@ -2,15 +2,13 @@ import Image from "next/image";
 import { ChevronLeftIcon } from "@/icons";
 import Link from "next/link";
 
-export default function ProductRelatedAccessories() {
-  const accessories = [
-    "/assets/images/fallback/phone.png",
-    "/assets/images/fallback/phone.png",
-    "/assets/images/fallback/phone.png",
-    "/assets/images/fallback/phone.png",
-    "/assets/images/fallback/phone.png",
-    "/assets/images/fallback/phone.png",
-  ];
+export default function ProductRelatedAccessories({ accessories }) {
+  const accessoriesData =
+    accessories && accessories.length > 0 ? accessories : [];
+
+  if (accessoriesData.length === 0) {
+    return null;
+  }
 
   return (
     <div className="bg-white rounded-lg py-[10px] px-[10px] lg:pt-[50px] lg:px-[100px]">
@@ -36,17 +34,20 @@ export default function ProductRelatedAccessories() {
 
       {/* Accessories Images - Desktop */}
       <div className="hidden lg:flex items-center gap-6 overflow-x-auto">
-        {accessories.map((image, index) => (
-          <div key={index} className="flex items-center gap-6 shrink-0 mb-12">
+        {accessoriesData.map((accessory, index) => (
+          <div
+            key={accessory.id}
+            className="flex items-center gap-6 shrink-0 mb-12"
+          >
             <div className="relative w-[200px] h-[200px]">
               <Image
-                src={image}
+                src={accessory.image || "/assets/images/fallback/phone.png"}
                 fill
-                alt={`Accessory ${index + 1}`}
+                alt={accessory.name || `Accessory ${index + 1}`}
                 className="object-contain"
               />
             </div>
-            {index < accessories.length - 1 && (
+            {index < accessoriesData.length - 1 && (
               <div className="w-[2px] h-[200px] bg-gray-200" />
             )}
           </div>

@@ -7,13 +7,19 @@ const usePublicStore = create((set, get) => ({
     set((state) => {
       return { ...state, userInfo: newUserInfo };
     }),
+  clearUserInfo: () => set({ userInfo: {} }),
 
   // Token
   token: "",
   setAccessToken: (token) =>
     set((state) => {
-      return { ...state, accessToken: token };
+      return { ...state, token: token };
     }),
+  clearToken: () => set({ token: "" }),
+
+  // Login box
+  isLoginOpen: false,
+  setLoginOpen: (open) => set({ isLoginOpen: open }),
 
   // Home filter: at least one of special/visit must be true (responsive + desktop)
   homeFilterSpecial: true,
@@ -60,6 +66,20 @@ const usePublicStore = create((set, get) => ({
   searchResultData: null,
   setShowSearchResultBox(show, data = null) {
     set({ showSearchResultBox: show, searchResultData: data });
+  },
+
+  // Product attributes (for single product page)
+  selectedProductAttributes: {},
+  setProductAttribute(key, value) {
+    set((state) => ({
+      selectedProductAttributes: {
+        ...state.selectedProductAttributes,
+        [key]: value,
+      },
+    }));
+  },
+  clearProductAttributes() {
+    set({ selectedProductAttributes: {} });
   },
 }));
 

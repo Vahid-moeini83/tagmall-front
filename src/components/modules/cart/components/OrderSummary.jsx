@@ -15,6 +15,7 @@ function OrderSummary({
   setIsOrderItemsOpen,
   handleNextStep,
   isMobile = false,
+  isOrderSubmitted = false,
 }) {
   const [paymentMethod, setPaymentMethod] = useState("gateway");
 
@@ -32,12 +33,16 @@ function OrderSummary({
   return (
     <Accordion
       type="single"
-      collapsible={isMobile ? false : true}
-      defaultValue="order-summary"
+      collapsible={isMobile ? false : isOrderSubmitted}
+      value={isMobile ? "order-summary" : isOrderSubmitted ? undefined : ""}
     >
       <AccordionItem value="order-summary">
         {!isMobile && (
-          <AccordionTrigger className="font-bold text-base lg:text-xl text-primary justify-between hover:no-underline cursor-pointer">
+          <AccordionTrigger
+            className="font-bold text-base lg:text-xl text-primary justify-between hover:no-underline cursor-pointer"
+            disabled={!isOrderSubmitted}
+            showArrow={isOrderSubmitted}
+          >
             صورت حساب
           </AccordionTrigger>
         )}
@@ -47,12 +52,6 @@ function OrderSummary({
             <div className="flex items-center justify-between">
               <span className="font-bold lg:text-xl text-primary lg:text-gray-600">
                 تحویل گیرنده
-              </span>
-              <span
-                className="text-primary lg:text-xl cursor-pointer"
-                onClick={() => setIsOrderItemsOpen(!isOrderItemsOpen)}
-              >
-                سفارشات
               </span>
             </div>
 

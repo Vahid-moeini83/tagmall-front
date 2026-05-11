@@ -13,6 +13,8 @@
     "@neshan-maps-platform/mapbox-gl": "^1.1.5",
     "axios": "^1.13.5",
     "clsx": "^2.1.1",
+    "iranian-bank-logo-react": "^1.0.8",
+    "iranianbanklogos": "^3.1.2",
     "keen-slider": "^6.8.6",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",

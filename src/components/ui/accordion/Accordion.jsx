@@ -25,19 +25,29 @@ function AccordionItem({ className, ...props }) {
   );
 }
 
-function AccordionTrigger({ className, children, ...props }) {
+function AccordionTrigger({
+  className,
+  children,
+  showArrow = true,
+  disabled = false,
+  ...props
+}) {
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:after:border-ring text-right text-sm font-medium focus-visible:ring-3 group/accordion-trigger relative flex flex-1 items-center border border-transparent transition-all outline-none disabled:pointer-events-none disabled:opacity-50",
+          "focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:after:border-ring text-right text-sm font-medium focus-visible:ring-3 group/accordion-trigger relative flex flex-1 items-center border border-transparent transition-all outline-none",
+          disabled && "pointer-events-none",
           className,
         )}
+        disabled={disabled}
         {...props}
       >
         {children}
-        <ChevronDownIcon className="pointer-events-none shrink-0 transition-transform duration-200 group-aria-expanded/accordion-trigger:rotate-180 text-black size-5" />
+        {showArrow && (
+          <ChevronDownIcon className="pointer-events-none shrink-0 transition-transform duration-200 group-aria-expanded/accordion-trigger:rotate-180 text-black size-5" />
+        )}
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

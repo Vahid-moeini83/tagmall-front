@@ -1,9 +1,10 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { ArrowRightIcon, HintIcon } from "@/icons";
+import { HintIcon } from "@/icons";
 import { isValidIranianMobile } from "@/lib/client/validations";
 import { sendOtp } from "@/lib/server/actions/auth";
+import Image from "next/image";
 import { useState } from "react";
 
 function LoginEnterPhone({
@@ -12,6 +13,7 @@ function LoginEnterPhone({
   setPhoneNumber,
   setOtpExpireTime,
   setIsNewUser,
+  setReceivedOtp,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ phone: "" });
@@ -32,6 +34,7 @@ function LoginEnterPhone({
     const { sendOtpRes, sendOtpErr } = await sendOtp({ mobile: phoneNumber });
     if (sendOtpRes) {
       console.log(sendOtpRes);
+      setReceivedOtp(sendOtpRes.data.otp);
       setIsNewUser(sendOtpRes.data.is_new_user);
       setOtpExpireTime(sendOtpRes.data.expires_in_seconds);
       handleNextStep();
@@ -42,19 +45,27 @@ function LoginEnterPhone({
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="flex flex-col h-full justify-between mt-6 lg:mt-0">
       <div>
+        {/* Slogan logo */}
+        <div className="flex items-center justify-center">
+          <Image
+            src="/assets/images/logo/slogan-logo.svg"
+            width={160}
+            height={50}
+            alt="لوگوی شعار"
+          />
+        </div>
         {/* Title */}
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold">ورود یا ثبت‌نام</h1>
-          <span className="text-gray-600 text-base">
-            لطفا شماره موبایل خود را وارد نمایید.
-          </span>
+        <div className="mt-9">
+          <h1 className="font-bold text-primary text-lg">
+            ورود به حساب کاربری
+          </h1>
         </div>
         {/* Main content */}
-        <div className="mt-10">
+        <div className="mt-7">
           <Input
-            label={"شماره موبایل"}
+            label={"شماره تماس:"}
             id="phone"
             numeric
             maxLength={11}
@@ -62,11 +73,14 @@ function LoginEnterPhone({
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={isLoading}
             error={errors.phone}
+            className={`text-center text-gray-600 bg-gray-200 ${
+              errors.phone ? "" : "border-0!"
+            }`}
           />
-          <div className="flex items-center gap-2 mt-4">
-            <HintIcon size={16} className="text-gray-600" />
+          <div className="flex items-center gap-2 mt-4 mr-4">
+            <HintIcon size={20} />
             <span className="font-bold text-sm text-gray-600">
-              شماره موبایل باید به نام شما باشد.
+              کد تایید به شماره تماس شما ارسال می‌شود
             </span>
           </div>
         </div>
@@ -74,10 +88,14 @@ function LoginEnterPhone({
       {/* Submit button */}
       <button
         onClick={handleConfirm}
-        className="mt-10 bg-primary text-white rounded-md w-full h-12 flex items-center justify-center gap-2 transition-all hover:bg-primary/90 hover:gap-3 cursor-pointer"
+        disabled={!phoneNumber || isLoading}
+        className={`mt-7 mb-4 w-full font-bold ${
+          !phoneNumber || isLoading
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-primary cursor-pointer"
+        }`}
       >
-        تایید و ادامه
-        <ArrowRightIcon size={20} className="rotate-180" />
+        ارسال کد تایید
       </button>
     </div>
   );

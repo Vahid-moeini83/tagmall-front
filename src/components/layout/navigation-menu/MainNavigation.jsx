@@ -6,8 +6,11 @@ import {
   LocationIcon,
   StrokeLocationIcon,
   MailIcon,
+  StrokeMailIcon,
   SearchIcon,
+  StrokeSearchIcon,
   ShoppingBagIcon,
+  StrokeShoppingBagIcon,
   UserIcon,
 } from "@/icons";
 import Image from "next/image";
@@ -15,26 +18,57 @@ import Link from "next/link";
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import usePublicStore from "@/app/store/publicStore";
 import { ProfileModal } from "@/components/modules/profile";
+import { LoginContent } from "@/components/modules/login";
 import { PopoverWithTrigger } from "@/components/ui/popover";
 import { getToken, getUser } from "@/lib/server/cookies";
 import { getUserProfile } from "@/lib/server/actions/profile";
 import toast from "react-hot-toast";
 
 const navLinks = [
-  { id: "location", icon: <LocationIcon size={20} />, href: "/" },
-  { id: "shop", icon: <ShoppingBagIcon size={20} />, href: "#" },
-  { id: "mail", icon: <MailIcon size={20} />, href: "#" },
-  { id: "search", icon: <SearchIcon size={20} /> },
+  {
+    id: "location",
+    icon: <LocationIcon size={20} />,
+    activeIcon: <StrokeLocationIcon size={20} />,
+    href: "/",
+  },
+  {
+    id: "shop",
+    icon: <ShoppingBagIcon size={20} />,
+    activeIcon: <StrokeShoppingBagIcon size={20} />,
+    href: "/cart",
+  },
+  {
+    id: "support",
+    icon: <MailIcon size={20} />,
+    activeIcon: <StrokeMailIcon size={20} />,
+    href: "/support",
+  },
+  {
+    id: "search",
+    icon: <SearchIcon size={20} />,
+    activeIcon: <StrokeSearchIcon size={20} />,
+  },
 ];
 
 const LONG_PRESS_MS = 500;
 
-function MainNavigation({ isHomePage = false }) {
+function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
   const pathname = usePathname();
-  const globalUser = usePublicStore((state) => state.user);
+  const user = usePublicStore((state) => state.userInfo);
+  const accessToken = usePublicStore((state) => state.token);
+  const setUserInfo = usePublicStore((state) => state.setUserInfo);
+  const isLoginOpen = usePublicStore((state) => state.isLoginOpen);
+  const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
 
-  const [user, setUser] = useState(globalUser ?? {});
-  const [leftLinks, rightLinks] = [navLinks.slice(0, 2), navLinks.slice(2, 4)];
+  // فیلتر کردن ایکن سرچ در دسکتاپ اگر صفحه دارای سرچ باکس باشد
+  const filteredNavLinks = hasSearchBox
+    ? navLinks.filter((item) => item.id !== "search")
+    : navLinks;
+
+  const [leftLinks, rightLinks] = [
+    filteredNavLinks.slice(0, 2),
+    filteredNavLinks.slice(2, 4),
+  ];
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [mobileIndicatorStyle, setMobileIndicatorStyle] = useState({});
 
@@ -52,16 +86,33 @@ function MainNavigation({ isHomePage = false }) {
   const getUserData = async () => {
     const token = await getToken();
 
+    if (!token) return;
+
     const { userProfileRes, userProfileErr } = await getUserProfile(token);
     if (userProfileRes) {
-      setUser(userProfileRes?.data?.user);
+      console.log(userProfileRes);
+      setUserInfo(userProfileRes?.data?.user);
     } else if (userProfileErr) {
       toast.error("خطا در دریافت اطلاعات کاربر");
     }
   };
 
+  // Open modal if user is logged in
+  const handleAvatarClick = async () => {
+    // چک کردن token برای تشخیص لاگین بودن
+    const token = await getToken();
+
+    if (token || accessToken) {
+      setIsProfileOpen(true);
+    } else {
+      setLoginOpen(true);
+    }
+  };
+
   // Get active button ID
   function getActiveButtonId() {
+    // When profile is open, return a special ID to hide/move indicator
+    if (isProfileOpen) return "profile";
     if (searchBoxOpen) return "search";
     // Check if we're on a search page
     if (pathname.startsWith("/search")) return "search";
@@ -73,16 +124,28 @@ function MainNavigation({ isHomePage = false }) {
 
   // Calculate indicator position for desktop
   const indicatorStyle = useMemo(() => {
-    const buttonIndex = navLinks.findIndex(
+    // When profile is open, hide the indicator by moving it out of view
+    if (activeButtonId === "profile") {
+      return {
+        opacity: 0,
+        pointerEvents: "none",
+      };
+    }
+    const buttonIndex = filteredNavLinks.findIndex(
       (item) => item.id === activeButtonId,
     );
     return {
       transform: `translateY(${buttonIndex * -56}px)`,
+      opacity: 1,
     };
-  }, [activeButtonId]);
+  }, [activeButtonId, filteredNavLinks]);
 
   // Function to check if button is active
   function isButtonActive(item) {
+    // When profile is open, no nav link should be active
+    if (isProfileOpen) {
+      return false;
+    }
     // When search box is open, only search button is active
     if (searchBoxOpen) {
       return item.id === "search";
@@ -123,10 +186,12 @@ function MainNavigation({ isHomePage = false }) {
 
   function handleSearchClick(e) {
     e.preventDefault();
+    setIsProfileOpen(false);
     setSearchBoxOpen(true);
   }
 
   function handleOtherButtonClick(e) {
+    setIsProfileOpen(false);
     if (searchBoxOpen) {
       setSearchBoxOpen(false);
     }
@@ -134,6 +199,15 @@ function MainNavigation({ isHomePage = false }) {
 
   // Update indicator position for mobile
   useEffect(() => {
+    // When profile is open, hide the indicator
+    if (activeButtonId === "profile") {
+      setMobileIndicatorStyle({
+        opacity: 0,
+        pointerEvents: "none",
+      });
+      return;
+    }
+
     const activeButton = buttonRefs.current[activeButtonId];
     const container = navContainerRef.current;
 
@@ -146,27 +220,34 @@ function MainNavigation({ isHomePage = false }) {
       setMobileIndicatorStyle({
         left: `${left}px`,
         top: `${top}px`,
+        opacity: 1,
       });
     }
   }, [activeButtonId, searchBoxOpen]);
 
   useEffect(() => {
-    getUserData();
-  }, [user]);
+    if (!user || Object.keys(user).length === 0) {
+      getUserData();
+    }
+  }, []);
 
   const avatarElement = (
-    <div className="w-12 h-12 relative flex items-center justify-center">
-      {/* user && user?.avatar */}
-      {true ? (
-        <Image
-          src={user?.avatar}
-          fill
-          alt="avatar"
-          onClick={() => setIsProfileOpen(true)}
-          className="bg-white rounded-lg object-cover"
-        />
+    <div
+      onClick={handleAvatarClick}
+      className="w-12 h-12 cursor-pointer relative z-10"
+    >
+      {user.avatar ? (
+        <div className="w-full h-full relative flex items-center justify-center rounded-lg overflow-hidden border border-gray-200">
+          <Image src={user.avatar} fill alt="avatar" className="object-cover" />
+        </div>
       ) : (
-        <UserIcon />
+        <div
+          className={`w-full h-full flex items-center justify-center rounded-lg transition-colors duration-300 ${
+            isProfileOpen ? "text-primary" : "text-black"
+          }`}
+        >
+          <UserIcon />
+        </div>
       )}
     </div>
   );
@@ -181,24 +262,22 @@ function MainNavigation({ isHomePage = false }) {
         triggerElement={avatarElement}
       />
 
+      {/* Login Modal */}
+      <LoginContent isOpen={isLoginOpen} setIsOpen={setLoginOpen} />
+
       {/* Inline variant - simplified buttons without background indicator (Desktop only) */}
       {!isHomePage && (
-        <div className="hidden lg:flex flex-col items-center gap-4">
+        <div className="hidden lg:flex flex-col items-center gap-2">
           <div className="flex flex-col-reverse relative gap-2">
             {/* Animated background indicator */}
             <div
               className="absolute bottom-0 w-12 h-12 bg-gray-200 shadow-inner border border-white rounded-lg transition-all duration-300 ease-in-out pointer-events-none"
               style={indicatorStyle}
             />
-            {navLinks.map((item) => {
+            {filteredNavLinks.map((item) => {
               const Component = item.href ? Link : "button";
               const isActive = isButtonActive(item);
-              const icon =
-                item.id === "location" && isActive ? (
-                  <StrokeLocationIcon size={20} />
-                ) : (
-                  item.icon
-                );
+              const icon = isActive ? item.activeIcon : item.icon;
               return (
                 <Component
                   key={item.id}
@@ -210,18 +289,27 @@ function MainNavigation({ isHomePage = false }) {
                       : handleOtherButtonClick
                   }
                   className={`relative flex items-center justify-center w-12 h-12 rounded-lg z-10 transition-colors duration-300 ${
-                    isActive ? "text-primary" : "text-black"
+                    isActive ? "text-primary!" : "text-black"
                   }`}
                 >
                   {icon}
                   {item.id === "location" && (
                     <span className="block absolute w-1.5 h-1.5 bg-success-medium rounded-full top-2 right-2"></span>
                   )}
+                  {item.id === "support" && (
+                    <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
+                  )}
                 </Component>
               );
             })}
           </div>
-          {avatarElement}
+          <div className="relative">
+            {/* Background indicator for avatar when profile is open and no avatar image */}
+            {isProfileOpen && !user.avatar && (
+              <div className="absolute inset-0 w-12 h-12 bg-gray-200 shadow-inner border border-white rounded-lg pointer-events-none" />
+            )}
+            {avatarElement}
+          </div>
         </div>
       )}
 
@@ -230,22 +318,19 @@ function MainNavigation({ isHomePage = false }) {
         <div
           className={`hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 px-6 xl:pr-10 flex-col justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
         >
-          <div className="flex flex-col items-center gap-6">
+          <div
+            className={`flex flex-col items-center ${user?.avatar ? "gap-4" : "gap-2"}`}
+          >
             <div className="flex flex-col-reverse relative gap-2">
               {/* Animated background indicator */}
               <div
                 className="absolute bottom-0 w-12 h-12 bg-white shadow-inner border border-white rounded-lg transition-all duration-300 ease-in-out pointer-events-none"
                 style={indicatorStyle}
               />
-              {navLinks.map((item, index) => {
+              {filteredNavLinks.map((item, index) => {
                 const Component = item.href ? Link : "button";
                 const isActive = isButtonActive(item);
-                const icon =
-                  item.id === "location" && isActive ? (
-                    <StrokeLocationIcon size={20} />
-                  ) : (
-                    item.icon
-                  );
+                const icon = isActive ? item.activeIcon : item.icon;
                 return (
                   <Component
                     key={item.id}
@@ -265,11 +350,20 @@ function MainNavigation({ isHomePage = false }) {
                     {item.id === "location" ? (
                       <span className="block absolute w-1.5 h-1.5 bg-success-medium rounded-full top-2 right-2"></span>
                     ) : null}
+                    {item.id === "support" && (
+                      <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
+                    )}
                   </Component>
                 );
               })}
             </div>
-            {avatarElement}
+            <div className="relative">
+              {/* Background indicator for avatar when profile is open and no avatar image */}
+              {isProfileOpen && !user.avatar && (
+                <div className="absolute inset-0 w-12 h-12 bg-white shadow-inner border border-white rounded-lg pointer-events-none" />
+              )}
+              {avatarElement}
+            </div>
           </div>
         </div>
       )}
@@ -299,7 +393,7 @@ function MainNavigation({ isHomePage = false }) {
         >
           <span
             onClick={() => setFilterPopoverOpen(false)}
-            className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-1 block bg-black hover:bg-gray-600 transition-colors rounded-full"
+            className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-1 block bg-gray-300 rounded-full"
           ></span>
           <HomeFilterContent onClose={() => setFilterPopoverOpen(false)} />
         </PopoverWithTrigger>
@@ -311,9 +405,9 @@ function MainNavigation({ isHomePage = false }) {
           isHomePage
             ? searchBoxOpen
               ? "bg-white border-t border-gray-200"
-              : "bg-gray-200/50 backdrop-blur-sm border-t-2 border-white"
+              : "bg-gray-200/20 backdrop-blur-sm border-t-2 border-white"
             : "bg-white border-t border-gray-200"
-        } ${filterPopoverOpen ? "z-80" : "z-100"}`}
+        } ${isProfileOpen ? "bg-white! border-t-2! border-gray-200!" : ""} ${filterPopoverOpen ? "z-80" : "z-100"}`}
       >
         <nav
           ref={navContainerRef}
@@ -332,13 +426,9 @@ function MainNavigation({ isHomePage = false }) {
           />
           {leftLinks.map((item) => {
             const isActive = isButtonActive(item);
+            const icon = isActive ? item.activeIcon : item.icon;
 
             if (item.id === "location" && isHomePage) {
-              const icon = isActive ? (
-                <StrokeLocationIcon size={20} />
-              ) : (
-                item.icon
-              );
               return (
                 <Link
                   key={item.id}
@@ -361,12 +451,6 @@ function MainNavigation({ isHomePage = false }) {
             }
 
             const Component = item.href ? Link : "button";
-            const icon =
-              item.id === "location" && isActive ? (
-                <StrokeLocationIcon size={20} />
-              ) : (
-                item.icon
-              );
             return (
               <Component
                 key={item.id}
@@ -374,17 +458,24 @@ function MainNavigation({ isHomePage = false }) {
                 href={item.href}
                 onClick={handleOtherButtonClick}
                 className={`flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
-                  isActive ? "text-primary" : "text-black"
+                  isActive ? "text-primary!" : "text-black"
                 }`}
               >
                 {icon}
               </Component>
             );
           })}
-          <div className="shrink-0">{avatarElement}</div>
+          <div className="shrink-0 relative">
+            {/* Background indicator for avatar when profile is open and no avatar image */}
+            {isProfileOpen && !user.avatar && (
+              <div className="absolute inset-0 w-12 h-12 rounded-lg pointer-events-none bg-gray-200 shadow-inner border border-gray-200" />
+            )}
+            {avatarElement}
+          </div>
           {rightLinks.map((item) => {
             const Component = item.href ? Link : "button";
             const isActive = isButtonActive(item);
+            const icon = isActive ? item.activeIcon : item.icon;
             return (
               <Component
                 key={item.id}
@@ -396,10 +487,10 @@ function MainNavigation({ isHomePage = false }) {
                     : handleOtherButtonClick
                 }
                 className={`flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
-                  isActive ? "text-primary" : "text-black"
+                  isActive ? "text-primary!" : "text-black"
                 }`}
               >
-                {item.icon}
+                {icon}
               </Component>
             );
           })}

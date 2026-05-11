@@ -6,10 +6,9 @@ import {
   HintIcon,
   StrokeArrowLeftIcon,
 } from "@/icons";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { PartnershipHintDialog } from "@/components/ui/dialog";
-import Link from "next/link";
 import FilterPartnershipDrawer from "./FilterPartnershipDrawer";
 
 // Mock products data for partnership
@@ -29,6 +28,26 @@ const mockProducts = [
     name: "پاوربانک 20000 میلی‌آمپری",
     img: "/assets/images/products/powerbank.png",
   },
+  {
+    id: 4,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 5,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 6,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 7,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
 ];
 
 const partnershipOptions = [
@@ -36,17 +55,19 @@ const partnershipOptions = [
   { id: "best-selling", label: "پرفروش ترین" },
 ];
 
-export default function ProfilePartnership({ setActiveSection }) {
+export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState("most-viewed");
   const [isHintBoxOpen, setIsHintBoxOpen] = useState(false);
+  const [showFilter, setShowFilter] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   // Mobile Drawer States
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
   const [expandedFilter, setExpandedFilter] = useState([]);
 
   const handleGoBack = () => {
-    router.back();
+    setIsOpen(false);
   };
 
   // Mobile Filter Handlers
@@ -72,8 +93,31 @@ export default function ProfilePartnership({ setActiveSection }) {
     return option ? option.label : "پیشنهادات";
   };
 
+  // Handle scroll to change filter button opacity
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    let lastScrollTop = 0;
+
+    const handleScroll = () => {
+      const scrollTop = scrollContainer.scrollTop;
+
+      if (scrollTop > lastScrollTop) {
+        setShowFilter(false);
+      } else if (scrollTop < lastScrollTop) {
+        setShowFilter(true);
+      }
+
+      lastScrollTop = scrollTop;
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+    return () => scrollContainer.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="flex flex-col justify-between h-full pt-6 pb-20 lg:pt-12 lg:pb-24 px-[10px] lg:px-[140px]">
+    <div className="flex flex-col justify-between h-full pt-2 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
       {/* Header section */}
       <div className="flex items-center justify-between mb-8">
         <h3 className="font-bold text-primary text-base lg:text-xl">
@@ -82,14 +126,9 @@ export default function ProfilePartnership({ setActiveSection }) {
         <HintIcon
           onClick={() => setIsHintBoxOpen(true)}
           size={20}
-          className="cursor-pointer ml-[6px] lg:ml-0"
+          className="cursor-pointer ml-4 lg:ml-0"
         />
       </div>
-
-      {/* Slogan */}
-      <p className="lg:hidden font-iransans font-bold text-gray-600 text-center mb-8 lg:mb-6">
-        با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
-      </p>
 
       {/* Filter section (Desktop) */}
       <div className="hidden lg:flex items-center gap-5 mb-8">
@@ -114,43 +153,55 @@ export default function ProfilePartnership({ setActiveSection }) {
 
       {/* Filter button in mobile */}
       <div
-        className="lg:hidden text-xs flex items-center gap-2 mb-8 pr-4 cursor-pointer"
+        className={`lg:hidden text-xs flex items-center gap-2 mb-8 pr-4 cursor-pointer transition-all duration-300 ${
+          true ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
+        }`}
         onClick={() => setIsFiltersDrawerOpen(true)}
       >
-        <ArrowUpDownIcon size={24} />
+        <ArrowUpDownIcon size={20} />
         پیشنهادات: {getFilterLabel()}
       </div>
 
-      {/* Products list */}
-      <div className="space-y-4 lg:space-y-8 overflow-y-auto flex-1">
-        {mockProducts.map((product) => (
-          <div
-            key={product.id}
-            className="flex items-start gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 pb-0 lg:pb-8"
-          >
-            {/* Product image */}
-            <div className="flex justify-center items-center">
-              <div className="relative w-20 h-20 lg:w-50 lg:h-50 rounded-lg overflow-hidden">
-                <Image
-                  src={product.img || "/assets/images/fallback/no-photo.jpg"}
-                  fill
-                  alt={product.name}
-                  className="object-contain"
-                />
+      {/* Scrollable content area */}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto scroll-hidden"
+      >
+        {/* Slogan */}
+        <p className="lg:hidden font-iransans font-bold text-gray-600 text-center mb-5 lg:mb-6">
+          با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
+        </p>
+        {/* Products list */}
+        <div className="space-y-4 lg:space-y-8 pb-4">
+          {mockProducts.map((product) => (
+            <div
+              key={product.id}
+              className="flex items-start gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 pb-0 lg:pb-8"
+            >
+              {/* Product image */}
+              <div className="flex justify-center items-center">
+                <div className="relative w-20 h-20 lg:w-50 lg:h-50 rounded-lg overflow-hidden">
+                  <Image
+                    src={product.img || "/assets/images/fallback/no-photo.jpg"}
+                    fill
+                    alt={product.name}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+              {/* Product Info */}
+              <div className="w-full space-y-2 lg:space-y-4">
+                <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
+                  {product.name}
+                </p>
+                <div className="flex items-center gap-1 text-gray-600 text-xs lg:text-base">
+                  <span className="font-bold">سود مشارکت در فروش</span> 1 درصد
+                  به ازای فروش هر کالا
+                </div>
               </div>
             </div>
-            {/* Product Info */}
-            <div className="w-full space-y-2 lg:space-y-4">
-              <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
-                {product.name}
-              </p>
-              <div className="flex items-center gap-1 text-gray-600 text-xs lg:text-base">
-                <span className="font-bold">سود مشارکت در فروش</span> 1 درصد به
-                ازای فروش هر کالا
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Footer section */}

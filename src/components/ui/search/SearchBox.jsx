@@ -11,7 +11,7 @@ import { VALID_LOADERS } from "next/dist/shared/lib/image-config";
 import http from "@/app/api/axiosInstance";
 import usePublicStore from "@/app/store/publicStore";
 
-function SearchBox({ isOpen, onClose }) {
+function SearchBox({ isOpen, onClose, isHomePage = true }) {
   const searchDeafaultValue = usePublicStore((s) => s.searchValue);
   const [searchValue, setSearchValue] = useState(searchDeafaultValue);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
@@ -24,26 +24,6 @@ function SearchBox({ isOpen, onClose }) {
     }
 
     setIsLoadingSuggestions(true);
-    // const { searchSuggestionsRes, searchSuggestionsErr } =
-    //   await fetchSearchSuggestions({ keyword });
-
-    // console.log("RESPONSE: ", searchSuggestionsRes);
-
-    // if (searchSuggestionsRes) {
-    //   const { products = [], categories = [] } = searchSuggestionsRes.data;
-
-    //   // Combine categories and products without transformation
-    //   const combinedData = [
-    //     ...categories.map((cat) => ({ ...cat, type: "category" })),
-    //     ...products.map((prod) => ({ ...prod, type: "product" })),
-    //   ];
-
-    //   setSuggestions(combinedData);
-    // } else if (searchSuggestionsErr) {
-    //   console.log(searchSuggestionsErr);
-    //   toast.error("خطا در نمایش پیشنهادات جست و جو");
-    //   setSuggestions([]);
-    // }
 
     try {
       const response = await http({
@@ -98,7 +78,7 @@ function SearchBox({ isOpen, onClose }) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed hidden lg:block inset-0 bg-black/20 backdrop-blur-sm z-60"
+        className={`fixed inset-0 bg-black/20 backdrop-blur-sm ${isHomePage ? "hidden lg:block z-60" : "z-50"}`}
         onClick={onClose}
       />
 
@@ -110,6 +90,7 @@ function SearchBox({ isOpen, onClose }) {
             value={searchValue}
             onChange={setSearchValue}
             placeholder="برند، کالا، لوازم جانبی، قطعات"
+            hasLogo
             // autoFocus
           />
         </div>
@@ -132,28 +113,62 @@ function SearchBox({ isOpen, onClose }) {
 
       {/* Desktop Positioned Layout */}
       <div className="hidden lg:block">
-        <div className="fixed top-[25px] right-[140px] z-60 w-full max-w-[495px] bg-white rounded-t-md shadow-lg">
-          <SearchInput
-            value={searchValue}
-            onChange={setSearchValue}
-            placeholder="برند، کالا، لوازم جانبی، قطعات"
-            autoFocus
-            bgColor="bg-white"
-            className="rounded-t-md py-1"
-          />
-        </div>
+        {isHomePage ? (
+          <>
+            {/* Home page layout - centered */}
+            <div className="fixed top-[25px] right-[140px] z-60 w-full max-w-[495px] bg-white rounded-t-md shadow-lg">
+              <SearchInput
+                value={searchValue}
+                onChange={setSearchValue}
+                placeholder="برند، کالا، لوازم جانبی، قطعات"
+                autoFocus
+                hasLogo
+                bgColor="bg-white"
+                className="rounded-t-md py-1"
+              />
+            </div>
 
-        <div className="fixed top-[calc(25px+60px)] right-[140px] z-60 w-full max-w-[495px] bg-white rounded-b-lg shadow-lg max-h-[600px] overflow-hidden flex flex-col animate-slide-in-down">
-          {showHistory ? (
-            <SearchHistory />
-          ) : (
-            <SearchSuggestions
-              searchQuery={searchValue}
-              suggestions={suggestions}
-              isLoading={isLoadingSuggestions}
-            />
-          )}
-        </div>
+            <div className="fixed top-[calc(25px+60px)] right-[140px] z-60 w-full max-w-[495px] bg-white rounded-b-lg shadow-lg max-h-[600px] overflow-hidden flex flex-col animate-slide-in-down">
+              {showHistory ? (
+                <SearchHistory />
+              ) : (
+                <SearchSuggestions
+                  searchQuery={searchValue}
+                  suggestions={suggestions}
+                  isLoading={isLoadingSuggestions}
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Other pages layout - aligned with search input */}
+            <div className="fixed top-[25px] right-[140px] z-60 w-full max-w-[642px] bg-white rounded-t-md shadow-lg">
+              <SearchInput
+                value={searchValue}
+                onChange={setSearchValue}
+                placeholder="برند، کالا، لوازم جانبی، قطعات"
+                autoFocus
+                hasLogo={false}
+                bgColor="bg-white"
+                className="rounded-t-md py-1"
+                maxWidth="w-full"
+              />
+            </div>
+
+            <div className="fixed top-[calc(25px+60px)] right-[140px] z-60 w-full max-w-[642px] bg-white rounded-b-lg shadow-lg max-h-[600px] overflow-hidden flex flex-col animate-slide-in-down">
+              {showHistory ? (
+                <SearchHistory />
+              ) : (
+                <SearchSuggestions
+                  searchQuery={searchValue}
+                  suggestions={suggestions}
+                  isLoading={isLoadingSuggestions}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

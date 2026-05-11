@@ -1,5 +1,5 @@
 "use client";
-import { DotsLoading } from "@/components/ui/loading";
+
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { HintIcon } from "@/icons";
 import { formatPrice, toEnglishNumber } from "@/lib/client/utils";
@@ -7,8 +7,6 @@ import { chargeWalletAmount } from "@/lib/server/actions/profile";
 import { getToken } from "@/lib/server/cookies";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-import http from "@/app/api/axiosInstance";
 
 function ProfileWalletContent({ setIsOpen }) {
   const [amount, setAmount] = useState("");

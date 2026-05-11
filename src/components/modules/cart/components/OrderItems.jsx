@@ -15,6 +15,7 @@ import DialogWrapper, {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import ResponsiveModal from "@/components/ui/responsive-modal";
 
 const mockOrderItems = [
   {
@@ -100,7 +101,7 @@ function OrderItems({ isMobile = false }) {
                             <NoteIcon
                               size={20}
                               onClick={() => setNoteDialogOpen(true)}
-                              className="cursor-pointer"
+                              className="cursor-pointer ml-4"
                             />
                           </div>
                           <div className="flex items-center gap-1 text-gray-600 text-xs">
@@ -191,7 +192,8 @@ function OrderItems({ isMobile = false }) {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <DialogWrapper
+      <ResponsiveModal
+        isHintBox
         title={"یادداشت"}
         isOpen={noteDialogOpen}
         onClose={() => setNoteDialogOpen(false)}
@@ -200,7 +202,7 @@ function OrderItems({ isMobile = false }) {
           این یک متن تستی برای یادداشت محصول است. می‌توانید یادداشت‌های خود را
           در اینجا مشاهده و ویرایش کنید.
         </p>
-      </DialogWrapper>
+      </ResponsiveModal>
     </>
   );
 }

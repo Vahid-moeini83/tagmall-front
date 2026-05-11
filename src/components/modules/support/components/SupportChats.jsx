@@ -7,35 +7,83 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Image from "next/image";
-import { CloseIcon, SupportIcon } from "@/icons";
+import { CloseIcon, SupportIcon, UserIcon } from "@/icons";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { SupportSingleChat } from "..";
+import { useRouter, useSearchParams } from "next/navigation";
+import { formatRelativeTime } from "@/lib/client/utils";
+import { deleteConversations } from "@/lib/server/actions/support";
+import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
+import { getToken } from "@/lib/server/cookies";
+import toast from "react-hot-toast";
 
-function SupportChats({ isMobile = false }) {
+function SupportChats({ conversations, isMobile = false }) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const conversationIdFromUrl = searchParams.get("conversationId");
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [deleteMode, setDeleteMode] = useState(false);
   const [pendingDeletes, setPendingDeletes] = useState([]);
-  const [chatItems, setChatItems] = useState([
-    {
-      id: "s-0",
-      name: "واحد پشتیبانی",
-      msg: "سلام باشه ممنون از شما...",
-      isSupport: true,
-    },
-    ...[1, 2, 3, 4, 5, 6, 7, 8].map((i) => ({
-      id: `${i}`,
-      name: `آرش ${i}`,
-      msg: "سلام باشه ممنون از شما خیلی راضی هستم از کیفیت کار شما",
-      isSupport: false,
-    })),
-  ]);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [chatItems, setChatItems] = useState([]);
+
+  useEffect(() => {
+    if (conversations?.data) {
+      const formattedChats = conversations.data.map((conv) => {
+        const otherUser = conv.other_user;
+
+        return {
+          id: conv.id,
+          name:
+            conv.department === 2
+              ? "واحد پشتیبانی"
+              : otherUser?.name || "کاربر",
+          msg: conv.latest_message?.body
+            ? conv.latest_message?.body
+            : conv.latest_message?.attachments.length > 0
+              ? "تصویر"
+              : "بدون پیام",
+          isSupport: conv.department === 2,
+          department: conv.department,
+          department_text: conv.department_text,
+          status: conv.status,
+          unread_count: conv.unread_count,
+          last_message_at: conv.last_message_at,
+          created_at: conv.created_at,
+          updated_at: conv.updated_at,
+          other_user: otherUser,
+          latest_message: conv.latest_message,
+        };
+      });
+
+      setChatItems(formattedChats);
+    }
+  }, [conversations]);
+
+  useEffect(() => {
+    // بررسی conversationId در URL و باز کردن modal/drawer
+    if (conversationIdFromUrl && chatItems.length > 0) {
+      const conversation = chatItems.find(
+        (chat) => chat.id === parseInt(conversationIdFromUrl),
+      );
+      if (conversation) {
+        setSelectedConversation(conversation);
+        setIsOpen(true);
+      }
+    } else if (!conversationIdFromUrl) {
+      // وقتی conversationId از URL حذف شد، modal/drawer را ببند
+      setIsOpen(false);
+      setSelectedConversation(null);
+    }
+  }, [conversationIdFromUrl, chatItems]);
 
   const [imagesSliderRef, imagesSlider] = useKeenSlider({
     vertical: isMobile ? false : true,
@@ -61,25 +109,62 @@ function SupportChats({ isMobile = false }) {
       handleConfirmDeletes();
     } else {
       setDeleteMode(true);
+      setPendingDeletes([]);
     }
   };
 
-  const handleDeleteItem = (id) => {
-    const deletedItem = chatItems.find((item) => item.id === id);
+  const handleMarkForDeletion = (e, id) => {
+    e.stopPropagation();
 
+    setPendingDeletes((prev) => [...prev, id]);
+
+    // Delete temporaray
     setChatItems((prev) => prev.filter((item) => item.id !== id));
-
-    setPendingDeletes((prev) => [...prev, deletedItem]);
   };
 
-  const handleConfirmDeletes = () => {
+  const handleConfirmDeletes = async () => {
+    if (pendingDeletes.length === 0) {
+      setDeleteMode(false);
+      return;
+    }
+
+    setIsDeleting(true);
+    const token = await getToken();
+    const payload = {
+      ids: pendingDeletes,
+    };
+    const { deleteConversationsErr } = await deleteConversations(
+      token,
+      payload,
+    );
+
+    if (deleteConversationsErr) {
+      toast.error("خطا در حذف گفت‌و‌گوها");
+      setIsDeleting(false);
+      return;
+    }
+
     setPendingDeletes([]);
     setDeleteMode(false);
+    setIsDeleting(false);
   };
 
-  const handleOpenChat = () => {
+  const handleOpenChat = (conversation) => {
+    setSelectedConversation(conversation);
     setIsOpen(true);
+    router.push(`/support?conversationId=${conversation.id}`, {
+      scroll: false,
+    });
   };
+
+  const handleCloseChat = () => {
+    setIsOpen(false);
+    setSelectedConversation(null);
+    router.push("/support", { scroll: false });
+  };
+
+  const supportChat = chatItems.find((chat) => chat.isSupport);
+  const otherChats = chatItems.filter((chat) => !chat.isSupport);
 
   return (
     <>
@@ -92,92 +177,129 @@ function SupportChats({ isMobile = false }) {
           <AccordionContent className="lg:mt-4 lg:h-[500px] pb-40 lg:pb-0 overflow-hidden">
             <div className="flex flex-col-reverse lg:flex-row gap-2 h-full">
               <div className="flex flex-1 flex-col h-full">
-                <div className="flex flex-col gap-1 overflow-y-auto scroll-hidden flex-1 pr-1 mt-2">
-                  {chatItems.length > 0 && chatItems[0]?.isSupport && (
-                    <div className="flex items-start gap-[6px] lg:gap-3 pb-1 lg:pb-3">
-                      <div className="w-10 h-10 flex items-center justify-center rounded-[14px] border-2 border-gray-200">
-                        <SupportIcon size={20} />
-                      </div>
-
-                      <div className="flex flex-col lg:gap-6">
+                {chatItems.length === 0 ? (
+                  <div className="flex items-center justify-center h-full">
+                    <p className="font-iransans text-gray-400 text-sm lg:text-base mt-6 lg:mt-0">
+                      هنوز گفت و گویی وجود ندارد
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex flex-col gap-1 overflow-y-auto scroll-hidden flex-1 pr-1 mt-2">
+                      {supportChat && (
                         <div
-                          onClick={() => handleOpenChat()}
-                          className="font-bold text-gray-600 text-xs lg:text-base"
+                          onClick={() => handleOpenChat(supportChat)}
+                          className="flex items-start gap-[6px] lg:gap-3 pb-1 lg:pb-3 cursor-pointer"
                         >
-                          واحد پشتیبانی
-                        </div>
+                          <div className="w-10 h-10 flex items-center justify-center rounded-[14px] border-2 border-gray-200">
+                            <SupportIcon size={20} />
+                          </div>
 
-                        <div className="flex items-center gap-1">
-                          <p className="font-iransans font-semibold text-gray-600 mb-0! max-w-[180px] line-clamp-1 text-xs lg:text-base">
-                            {chatItems[0].msg}
-                          </p>
-                          <span className="font-bold text-gray-400 text-xs lg:text-base">
-                            2 ساعت پیش دریافت شد
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {chatItems
-                    .filter((i) => !i.isSupport)
-                    .map((item) => (
-                      <div key={item.id}>
-                        <div className="w-full h-[2px] bg-gray-200 mr-12" />
-
-                        <div className="relative flex items-start gap-[6px] lg:gap-3 pt-2 pb-1 lg:pb-3">
-                          <Image
-                            src="/assets/images/fallback/avatar.png"
-                            width={40}
-                            height={40}
-                            alt="عکس پروفایل"
-                            className="rounded-[14px] bg-gray-200"
-                          />
-
-                          <div className="flex flex-col lg:gap-6 lg:pt-2">
-                            <div
-                              onClick={() => handleOpenChat()}
-                              className="font-bold text-gray-600 text-xs lg:text-base cursor-pointer"
-                            >
-                              {item.name}
+                          <div className="flex flex-col lg:gap-6">
+                            <div className="font-bold text-gray-600 text-xs lg:text-base lg:pt-2">
+                              {supportChat.name}
                             </div>
 
-                            <div className="flex items-center">
-                              <p className="font-iransans font-semibold text-gray-600 mb-0! max-w-[180px] line-clamp-1 text-xs lg:text-base">
-                                {item.msg}
+                            <div className="flex items-center gap-2">
+                              <p className="font-iransans font-semibold text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
+                                {supportChat.msg}
                               </p>
-                              <span className="font-bold text-gray-400 text-xs lg:text-base">
-                                2 ساعت پیش دریافت شد
-                              </span>
+                              {supportChat?.last_message_at && (
+                                <p className="text-gray-400 text-xs lg:text-base pt-2">
+                                  {formatRelativeTime(
+                                    supportChat?.last_message_at,
+                                  )}
+                                </p>
+                              )}
                             </div>
                           </div>
 
-                          {/* Delete icon */}
-                          {deleteMode && (
-                            <button
-                              onClick={() => handleDeleteItem(item.id)}
-                              className="absolute left-[6px] top-1/2 -translate-y-1/2 cursor-pointer"
-                            >
-                              <CloseIcon />
-                            </button>
-                          )}
-                          {/* Notification */}
-                          {!deleteMode && item.id % 3 === 0 && (
-                            <div className="absolute left-[6px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-error-medium" />
+                          {supportChat.unread_count > 0 && (
+                            <div className="mr-auto ml-4 bg-error-medium rounded-full w-2 h-2 my-auto"></div>
                           )}
                         </div>
-                      </div>
-                    ))}
-                </div>
+                      )}
 
-                <div className="hidden lg:flex sticky bottom-0 bg-white pt-4 pb-2 justify-center">
-                  <button
-                    className="text-primary cursor-pointer"
-                    onClick={handleDeleteButtonClick}
-                  >
-                    {deleteMode ? "تایید" : "پاک کردن پیام ها"}
-                  </button>
-                </div>
+                      {otherChats.map((item, index) => (
+                        <div key={item.id}>
+                          <div
+                            onClick={() => handleOpenChat(item)}
+                            className="relative flex items-start gap-[6px] lg:gap-3 not-first:pt-2 pb-1 lg:pb-3 cursor-pointer"
+                          >
+                            {item.other_user?.avatar ? (
+                              <Image
+                                src={item.other_user?.avatar}
+                                width={40}
+                                height={40}
+                                alt="عکس پروفایل"
+                                className="rounded-[14px] bg-gray-200 object-cover w-10 h-10"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-[14px] flex items-center justify-center bg-gray-200">
+                                <UserIcon size={20} className="text-gray-600" />
+                              </div>
+                            )}
+
+                            <div className="flex flex-col lg:gap-6 lg:pt-2 flex-1">
+                              <div className="font-bold text-gray-600 text-xs lg:text-base">
+                                {item.name}
+                              </div>
+
+                              <div className="flex items-center gap-2">
+                                <p className="font-iransans font-semibold text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
+                                  {item.msg}
+                                </p>
+                                {item?.last_message_at && (
+                                  <p className="text-gray-400 text-xs lg:text-base pt-2">
+                                    {formatRelativeTime(item?.last_message_at)}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            {supportChat?.unread_count > 0 && (
+                              <div className="mr-auto ml-4 bg-error-medium rounded-full w-2 h-2 my-auto"></div>
+                            )}
+
+                            {deleteMode && (
+                              <div className="absolute left-[6px] top-1/2 -translate-y-1/2">
+                                <button
+                                  onClick={(e) =>
+                                    handleMarkForDeletion(e, item.id)
+                                  }
+                                  className="cursor-pointer"
+                                >
+                                  <CloseIcon />
+                                </button>
+                              </div>
+                            )}
+
+                            {/* Unread sign */}
+                            {!deleteMode && item.unread_count > 0 && (
+                              <div className="absolute left-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-error-medium" />
+                            )}
+                          </div>
+                          {index < otherChats.length - 1 && (
+                            <div className="w-full h-[2px] bg-gray-200 mr-12" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="hidden lg:flex sticky bottom-0 bg-white pt-4 pb-2 justify-center gap-4">
+                      {!isDeleting ? (
+                        <button
+                          className="text-primary cursor-pointer"
+                          onClick={handleDeleteButtonClick}
+                        >
+                          {deleteMode ? "تایید" : "پاک کردن پیام ها"}
+                        </button>
+                      ) : (
+                        <SpinnerLoading />
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="relative flex-1 flex mt-2">
@@ -199,7 +321,6 @@ function SupportChats({ isMobile = false }) {
                     </div>
                   ))}
                 </div>
-                {/* Bullet navigation */}
                 <div className="lg:hidden absolute bottom-2 left-1/2 -translate-x-1/2 flex justify-center gap-2 z-10 pointer-events-none">
                   {[0, 1, 2].map((_, idx) => (
                     <button
@@ -218,30 +339,52 @@ function SupportChats({ isMobile = false }) {
               </div>
             </div>
 
-            <div className="lg:hidden fixed bottom-17 right-0 left-0 bg-white py-4 flex justify-center items-center">
-              <button
-                className="text-primary cursor-pointer"
-                onClick={handleDeleteButtonClick}
-              >
-                {deleteMode ? "تایید" : "پاک کردن پیام ها"}
-              </button>
-            </div>
+            {chatItems.length > 0 && (
+              <div className="lg:hidden fixed bottom-17 right-0 left-0 bg-white py-4 flex justify-center items-center gap-4">
+                {!isDeleting ? (
+                  <button
+                    className="text-primary cursor-pointer"
+                    onClick={handleDeleteButtonClick}
+                  >
+                    {deleteMode ? "تایید" : "پاک کردن پیام ها"}
+                  </button>
+                ) : (
+                  <SpinnerLoading className="border-primary" />
+                )}
+              </div>
+            )}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      {isDesktop ? (
-        isOpen && (
-          <div className="fixed inset-0 z-1000 bg-white h-screen">
-            <SupportSingleChat isOpen={isOpen} setIsOpen={setIsOpen} />
-          </div>
-        )
-      ) : (
-        <Drawer open={isOpen} onOpenChange={() => setIsOpen(false)}>
+
+      {!isMobile && isDesktop && isOpen && selectedConversation && (
+        <div className="fixed inset-0 z-1000 bg-white h-screen">
+          <SupportSingleChat
+            isOpen={isOpen}
+            setIsOpen={handleCloseChat}
+            conversation={selectedConversation}
+          />
+        </div>
+      )}
+
+      {isMobile && !isDesktop && (
+        <Drawer
+          open={isOpen}
+          onOpenChange={handleCloseChat}
+          dismissible={true}
+          shouldScaleBackground={false}
+        >
           <DrawerContent
-            className="z-100! px-[10px] h-[92vh]!"
+            className="z-100! px-[10px] h-[96%]! fixed!"
             overlayClassName="z-100 lg:hidden"
           >
-            <SupportSingleChat isOpen={isOpen} setIsOpen={setIsOpen} />
+            {selectedConversation && (
+              <SupportSingleChat
+                isOpen={isOpen}
+                setIsOpen={handleCloseChat}
+                conversation={selectedConversation}
+              />
+            )}
           </DrawerContent>
         </Drawer>
       )}

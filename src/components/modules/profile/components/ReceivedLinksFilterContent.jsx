@@ -8,7 +8,7 @@ const sortOptions = [
 
 function ReceivedLinksFilterContent({ selectedFilter, onFilterChange }) {
   return (
-    <div className="flex flex-col pr-[10px]">
+    <div className="flex flex-col overflow-hidden">
       {sortOptions.map((option, index) => (
         <>
           <div key={option.id} className="py-3">

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { cn } from "@/lib/client/utils";
-import { CloseCircleIcon } from "@/icons";
+import { CloseIcon, StrokeArrowLeftIcon } from "@/icons";
 
 function Dialog(props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -37,28 +37,54 @@ function DialogOverlay({ className, ...props }) {
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
+  onBack,
+  overlayClassName,
   ...props
 }) {
   return (
     <DialogPortal>
-      <DialogOverlay />
+      <DialogOverlay className={overlayClassName} />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-white border border-gray-200 rounded-lg shadow-xl p-4 lg:p-6 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-200 fixed top-1/2 left-1/2 z-200 w-full max-w-[340px] sm:max-w-[480px] -translate-x-1/2 -translate-y-1/2",
+          "outline-none focus:outline-none bg-white border border-gray-200 rounded-lg shadow-xl py-4 px-[10px] lg:px-[50px] lg:py-[50px] data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 duration-200 fixed top-1/2 left-1/2 z-200 w-full max-w-[340px] sm:max-w-[480px] lg:max-w-[600px] -translate-x-1/2 -translate-y-1/2",
           className,
         )}
         {...props}
       >
         {children}
-        {showCloseButton && (
+
+        {/* دکمه‌های بیرونی */}
+        {onBack ? (
+          <div className="absolute left-0 -top-14 bg-white w-[100px] h-[50px] rounded-lg border border-gray-200 flex items-center justify-between overflow-hidden">
+            {/* Back Button */}
+            <button
+              onClick={onBack}
+              className="w-1/2 h-full flex items-center justify-center border-l-2 border-gray-200 outline-none focus:outline-none"
+              aria-label="بازگشت"
+            >
+              <StrokeArrowLeftIcon size={20} />
+              <span className="sr-only">بازگشت</span>
+            </button>
+
+            {/* Close Button */}
+            <DialogPrimitive.Close data-slot="dialog-close" asChild>
+              <button
+                className="w-1/2 h-full flex items-center justify-center outline-none focus:outline-none"
+                aria-label="بستن"
+              >
+                <CloseIcon size={20} />
+                <span className="sr-only">بستن</span>
+              </button>
+            </DialogPrimitive.Close>
+          </div>
+        ) : (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
             <button
-              className="absolute right-4 top-4 text-gray-500 hover:text-gray-700 transition-colors"
+              className="absolute left-0 -top-14 bg-white w-[50px] h-[50px] rounded-lg border border-gray-200 flex items-center justify-center transition-colors cursor-pointer outline-none focus:outline-none"
               aria-label="بستن"
             >
-              <CloseCircleIcon size={20} />
+              <CloseIcon size={20} />
               <span className="sr-only">بستن</span>
             </button>
           </DialogPrimitive.Close>

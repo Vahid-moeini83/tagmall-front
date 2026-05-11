@@ -129,7 +129,7 @@ const ProfileUserSessions = () => {
                   onClick={() => setIsEditDialogOpen(true)}
                   className="text-primary"
                 >
-                  <Edit size={16} />
+                  <Edit size={20} />
                 </button>
               </div>
             </div>

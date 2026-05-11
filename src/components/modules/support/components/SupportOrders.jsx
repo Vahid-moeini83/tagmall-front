@@ -10,6 +10,11 @@ import { ArrowUpDownIcon, NoteIcon, VerifyIcon } from "@/icons";
 import Image from "next/image";
 import { useState } from "react";
 import { FilterOrdersDrawer, OrderStatusFilterDialog } from "..";
+import { getToken } from "@/lib/server/cookies";
+import { useRouter } from "next/navigation";
+import usePublicStore from "@/app/store/publicStore";
+import toast from "react-hot-toast";
+import { createConversation } from "@/lib/server/actions/support";
 
 const mockOrderItems = [
   {
@@ -50,6 +55,10 @@ function SupportOrders() {
   const [orderType, setOrderType] = useState("in-person");
   const [orderStatus, setOrderStatus] = useState("sending");
 
+  const router = useRouter();
+
+  const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
+
   const handleFilterToggle = (filterId) => {
     setExpandedFilter((prev) =>
       prev.includes(filterId)
@@ -61,6 +70,34 @@ function SupportOrders() {
   const getFilterLabel = () => {
     const option = sortOptions.find((o) => o.id === orderType);
     return option?.label || "";
+  };
+
+  const handleSupport = async () => {
+    const token = await getToken();
+
+    if (!token) {
+      setLoginOpen(true);
+      return;
+    }
+
+    const bodyData = {
+      department: 2, // For support chat
+    };
+
+    const { createConversationRes, createConversationErr } =
+      await createConversation(token, bodyData);
+
+    if (createConversationRes) {
+      const conversationId = createConversationRes.data?.id;
+
+      if (conversationId) {
+        router.push(`/support?conversationId=${conversationId}`);
+      } else {
+        toast.error("خطا در برقراری ارتباط با پشتیبانی");
+      }
+    } else if (createConversationErr) {
+      toast.error("خطا در برقراری ارتباط با پشتیبانی");
+    }
   };
 
   return (
@@ -113,7 +150,10 @@ function SupportOrders() {
 
               {/* Support */}
               <div className="pr-4">
-                <button className="font-iransans font-semibold! text-primary shrink-0 cursor-pointer">
+                <button
+                  onClick={handleSupport}
+                  className="font-iransans font-semibold! text-primary shrink-0 cursor-pointer"
+                >
                   ارتباط با واحد پشتیبانی
                 </button>
               </div>
@@ -124,7 +164,7 @@ function SupportOrders() {
               className="lg:hidden text-xs flex items-center gap-2 mt-6 mb-8 pr-2 cursor-pointer"
               onClick={() => setIsFiltersDrawerOpen(true)}
             >
-              <ArrowUpDownIcon size={24} />
+              <ArrowUpDownIcon size={20} />
               <span>نوع سفارش: {getFilterLabel()}</span>
             </div>
 
@@ -168,7 +208,7 @@ function SupportOrders() {
                           <NoteIcon
                             size={20}
                             onClick={() => setNoteDialogOpen(true)}
-                            className="cursor-pointer"
+                            className="cursor-pointer ml-4"
                           />
                         </div>
                         <div className="flex items-center gap-1 text-gray-600 text-xs">

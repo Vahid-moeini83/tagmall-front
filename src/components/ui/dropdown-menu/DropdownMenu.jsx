@@ -83,7 +83,7 @@ function DropdownMenuCheckboxItem({ className, children, checked, ...props }) {
         data-slot="dropdown-menu-checkbox-item-indicator"
       >
         <DropdownMenuPrimitive.ItemIndicator>
-          <CheckCircleIcon size={16} />
+          <CheckCircleIcon size={20} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -115,7 +115,7 @@ function DropdownMenuRadioItem({ className, children, ...props }) {
         data-slot="dropdown-menu-radio-item-indicator"
       >
         <DropdownMenuPrimitive.ItemIndicator>
-          <CheckCircleIcon size={16} />
+          <CheckCircleIcon size={20} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -176,7 +176,7 @@ function DropdownMenuSubTrigger({ className, inset, children, ...props }) {
       {...props}
     >
       {children}
-      <ChevronRightIcon className="ml-auto" size={16} />
+      <ChevronRightIcon className="ml-auto" size={20} />
     </DropdownMenuPrimitive.SubTrigger>
   );
 }

@@ -11,12 +11,7 @@ function Checkbox({
   ...props
 }) {
   return (
-    <label
-      className={cn(
-        "flex items-center gap-2.5 cursor-pointer select-none",
-        className,
-      )}
-    >
+    <label className="flex items-center gap-2.5 cursor-pointer select-none">
       <input
         type="checkbox"
         checked={checked}
@@ -31,6 +26,7 @@ function Checkbox({
           checked
             ? "border-primary text-primary"
             : "border-gray-400 text-transparent",
+          className,
         )}
         aria-hidden
       >

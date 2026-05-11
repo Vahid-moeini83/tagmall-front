@@ -11,8 +11,10 @@ function DialogWrapper({
   hideInMobile = false,
   children,
   showCloseButton = true,
+  onBack,
   className,
   titleClassName,
+  overlayClassName,
 }) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -23,12 +25,16 @@ function DialogWrapper({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
+        onBack={onBack}
         showCloseButton={showCloseButton}
         className={cn(className, `${hideInMobile ? "hidden lg:block" : ""}`)}
+        overlayClassName={overlayClassName}
       >
         {title && (
           <DialogHeader>
-            <DialogTitle className="text-primary">{title}</DialogTitle>
+            <DialogTitle className="text-primary text-right">
+              {title}
+            </DialogTitle>
           </DialogHeader>
         )}
         <div className={`text-sm lg:text-base ${title ? "mt-2 lg:mt-4" : ""}`}>

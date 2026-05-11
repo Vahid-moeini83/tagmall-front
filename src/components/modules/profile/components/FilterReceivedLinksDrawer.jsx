@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Drawer, DrawerContent, DrawerFooter } from "@/components/ui/drawer";
 import { AvailableProductsIcon, ChevronDownIcon, ChevronUpIcon } from "@/icons";
 import ReceivedLinksFilterContent from "./ReceivedLinksFilterContent";
 import DateRangeFilterContent from "./DateRangeFilterContent";
-import { useState } from "react";
+import { formatPersianDate } from "@/lib/client/utils";
 
 function FilterReceivedLinksDrawer({
   isOpen,
@@ -13,12 +14,13 @@ function FilterReceivedLinksDrawer({
   onFilterToggle,
   selectedFilter,
   onFilterChange,
-  hasFiltersChanged,
-  onResetFilters,
   options,
   showAvailable,
   setShowAvailable,
 }) {
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+
   const mobileFilters = [
     { id: "sort", label: "ترتیب نمایش" },
     { id: "dateRange", label: "بازه زمانی" },
@@ -30,16 +32,26 @@ function FilterReceivedLinksDrawer({
       return option ? option.label : "";
     }
     if (filterId === "dateRange") {
-      return "۱۴۰۲/۱۰/۰۱ تا ۱۴۰۲/۱۲/۲۹";
+      if (fromDate && toDate) {
+        // تبدیل به فرمت استاندارد با اعداد انگلیسی
+        const fromFormatted = formatPersianDate(
+          fromDate.format("YYYY/MM/DD", false),
+        );
+        const toFormatted = formatPersianDate(
+          toDate.format("YYYY/MM/DD", false),
+        );
+        return `از ${fromFormatted} تا ${toFormatted}`;
+      }
+      return "";
     }
     return "";
   };
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>
-      <DrawerContent overlayClassName="lg:hidden">
+      <DrawerContent overlayClassName="lg:hidden z-100!" className="z-100!">
         {/* Header */}
-        <div className="relative flex items-center justify-between bg-white rounded-t-2xl px-[10px] pb-2">
+        <div className="relative flex items-center justify-between bg-white rounded-t-2xl px-[10px] py-2">
           <p className="text-center text-base font-bold text-primary">
             لینک های دریافت شده
           </p>
@@ -107,7 +119,14 @@ function FilterReceivedLinksDrawer({
                         onFilterChange={onFilterChange}
                       />
                     )}
-                    {filter.id === "dateRange" && <DateRangeFilterContent />}
+                    {filter.id === "dateRange" && (
+                      <DateRangeFilterContent
+                        fromDate={fromDate}
+                        setFromDate={setFromDate}
+                        toDate={toDate}
+                        setToDate={setToDate}
+                      />
+                    )}
                   </div>
                 )}
               </div>

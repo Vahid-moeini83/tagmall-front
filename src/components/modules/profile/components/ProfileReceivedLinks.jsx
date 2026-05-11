@@ -1,15 +1,14 @@
 "use client";
 import Image from "next/image";
 import {
-  ArrowRightIcon,
   StrokeArrowLeftIcon,
-  AvailableProductsIcon,
   ArrowUpDownIcon,
+  HintIcon,
+  SquarePlusIcon2,
 } from "@/icons";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import DialogWrapper, { PartnershipHintDialog } from "@/components/ui/dialog";
-import Link from "next/link";
+import DialogWrapper from "@/components/ui/dialog";
 import FilterReceivedLinksDrawer from "./FilterReceivedLinksDrawer";
 import { DateRangeFilterContent } from "..";
 
@@ -30,6 +29,31 @@ const mockProducts = [
     name: "پاوربانک 20000 میلی‌آمپری",
     img: "/assets/images/products/powerbank.png",
   },
+  {
+    id: 4,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 5,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 6,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 7,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
+  {
+    id: 8,
+    name: "پاوربانک 20000 میلی‌آمپری",
+    img: "/assets/images/products/powerbank.png",
+  },
 ];
 
 const sortOptions = [
@@ -43,6 +67,10 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
   const [selectedFilter, setSelectedFilter] = useState("newest");
   const [showAvailable, setShowAvailable] = useState(true);
   const [dateRangeDialogOpen, setDateRangeDialogOpen] = useState(false);
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [showFilter, setShowFilter] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   // Mobile Drawer States
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
@@ -76,19 +104,37 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
     return option ? option.label : "پیشنهادات";
   };
 
+  // Handle scroll to change filter button opacity
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    let lastScrollTop = 0;
+
+    const handleScroll = () => {
+      const scrollTop = scrollContainer.scrollTop;
+
+      if (scrollTop > lastScrollTop) {
+        setShowFilter(false); // hide
+      } else if (scrollTop < lastScrollTop) {
+        setShowFilter(true); // show
+      }
+
+      lastScrollTop = scrollTop;
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+    return () => scrollContainer.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="flex flex-col justify-between h-full pt-6 pb-20 lg:pt-12 lg:pb-24 px-[10px] lg:px-[140px]">
+    <div className="flex flex-col justify-between h-full pt-2 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
       {/* Header section */}
       <div className="flex items-center justify-between mb-8">
         <h3 className="font-bold text-primary text-base lg:text-xl">
           لینک های دریافت شده
         </h3>
-        <AvailableProductsIcon
-          onClick={() => setShowAvailable(!showAvailable)}
-          active={showAvailable}
-          size={20}
-          className="cursor-pointer ml-[6px] lg:ml-0"
-        />
+        <HintIcon size={20} className="cursor-pointer ml-4 lg:ml-0" />
       </div>
 
       {/* Filter section (Desktop) */}
@@ -124,49 +170,73 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
 
       {/* Filter button in mobile */}
       <div
-        className="lg:hidden text-xs flex items-center gap-2 mb-8 pr-4 cursor-pointer"
-        onClick={() => setIsFiltersDrawerOpen(true)}
+        className={`lg:hidden text-xs inline-flex items-center justify-start gap-2 mb-6 pr-4 transition-all duration-300 ${
+          true ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
+        }`}
       >
-        <ArrowUpDownIcon />
-        پیشنهادات: {getFilterLabel()}
+        <ArrowUpDownIcon size={20} />
+        <span
+          className="cursor-pointer"
+          onClick={() => setIsFiltersDrawerOpen(true)}
+        >
+          ترتیب نمایش: {getFilterLabel()}
+        </span>
       </div>
 
-      {/* Products list */}
-      <div className="space-y-4 lg:space-y-8 overflow-y-auto flex-1">
-        {mockProducts.map((product) => (
-          <div
-            key={product.id}
-            className="flex items-start lg:items-center gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 lg:pb-8"
-          >
-            {/* Product image */}
-            <div className="flex justify-center items-center">
-              <div className="relative w-20 h-20 lg:w-50 lg:h-50 rounded-lg overflow-hidden">
-                <Image
-                  src={product.img || "/assets/images/fallback/no-photo.jpg"}
-                  fill
-                  alt={product.name}
-                  className="object-contain"
-                />
+      {/* Scrollable content area */}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto scroll-hidden"
+      >
+        {/* Partnership button */}
+        <button
+          onClick={() => setActiveSection("partnership")}
+          className="relative lg:hidden w-full max-w-[480px] text-center border-2 border-gray-200 rounded-lg text-xs h-12 mb-3"
+        >
+          <SquarePlusIcon2
+            size={20}
+            className="absolute top-1/2 -translate-y-1/2 right-4"
+          />
+          پیشنهادات مشارکت در فروش
+        </button>
+
+        {/* Products list */}
+        <div className="space-y-4 lg:space-y-8 pb-4">
+          {mockProducts.map((product) => (
+            <div
+              key={product.id}
+              className="flex items-start lg:items-center gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 lg:pb-8"
+            >
+              {/* Product image */}
+              <div className="flex justify-center items-center">
+                <div className="relative w-20 h-20 lg:w-50 lg:h-50 rounded-lg overflow-hidden">
+                  <Image
+                    src={product.img || "/assets/images/fallback/no-photo.jpg"}
+                    fill
+                    alt={product.name}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+              {/* Product Info */}
+              <div className="w-full space-y-4 lg:space-y-6">
+                <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
+                  {product.name}
+                </p>
+                {/* <div className="text-gray-600 text-xs lg:text-base">
+                  <span className="font-bold">سود مشارکت در فروش</span> 1 درصد به
+                  ازای فروش هر کالا
+                </div> */}
+                <div className="text-gray-600 text-xs lg:text-base">
+                  <span className="font-bold">وضعیت</span> موجود
+                </div>
+                <div className="text-gray-400 text-xs lg:text-base">
+                  بازدید 1000، خرید موفق 10 بار
+                </div>
               </div>
             </div>
-            {/* Product Info */}
-            <div className="w-full space-y-4 lg:space-y-6">
-              <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
-                {product.name}
-              </p>
-              <div className="text-gray-600 text-xs lg:text-base">
-                <span className="font-bold">سود مشارکت در فروش</span> 1 درصد به
-                ازای فروش هر کالا
-              </div>
-              <div className="text-gray-600 text-xs lg:text-base">
-                <span className="font-bold">وضعیت</span> موجود
-              </div>
-              <div className="hidden lg:block text-gray-400 text-xs lg:text-base">
-                بازدید 1000، خرید موفق 10 بار
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Footer section */}
@@ -185,26 +255,21 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
           <button className="text-primary text-center hover:opacity-80 transition-opacity">
             سود مشارکت در فروش
           </button>
-          <button
-            onClick={() => setActiveSection("partnership")}
-            className="w-full max-w-[480px] flex items-center lg:justify-center bg-gray-200 rounded-lg gap-2 text-xs px-4 py-4"
-          >
-            <StrokeArrowLeftIcon size={16} className="rotate-180" />
-            پیشنهادات مشارکت در فروش
-          </button>
         </div>
       </div>
 
       {/* Date range desktop dialog */}
-      {dateRangeDialogOpen && (
-        <DialogWrapper
-          title={"بازه زمانی"}
-          isOpen={dateRangeDialogOpen}
-          onClose={() => setDateRangeDialogOpen(false)}
-        >
-          <DateRangeFilterContent />
-        </DialogWrapper>
-      )}
+      <DialogWrapper
+        isOpen={dateRangeDialogOpen}
+        onClose={() => setDateRangeDialogOpen(false)}
+      >
+        <DateRangeFilterContent
+          fromDate={fromDate}
+          setFromDate={setFromDate}
+          toDate={toDate}
+          setToDate={setToDate}
+        />
+      </DialogWrapper>
 
       {/* Mobile Filters Drawer */}
       <FilterReceivedLinksDrawer

@@ -22,7 +22,7 @@ function ProductCardMobile({
   return (
     <>
       <div className="rounded-lg shrink-0">
-        <div className="w-full text-start flex items-center justify-between gap-2 py-1.5 px-1 rounded-lg hover:opacity-80 focus:outline-none">
+        <div className="w-full text-start flex items-center justify-between gap-2 pb-1.5 px-1 rounded-lg hover:opacity-80 focus:outline-none">
           <div
             onClick={() => onSellerClick?.(product)}
             className={`flex items-center gap-2 min-w-0 ${isListMode ? "cursor-pointer" : ""}`}
@@ -63,13 +63,13 @@ function ProductCardMobile({
           >
             <span>(آرا 1000)</span>
             <div className="flex items-center gap-1">
-              <StarIcon className="w-3 h-3 text-yellow-500 mb-1" />
+              <StarIcon className="w-[10px] h-[10px] text-yellow-500 mb-1" />
               <span className="text-gray-600">{product.seller.rating}/۵</span>
             </div>
           </div>
         </div>
         <Link
-          href="#"
+          href="/products/2"
           className="mt-2 bg-white rounded-md flex flex-col pt-[14px] pb-[10px] px-[10px] overflow-hidden gap-3"
         >
           {isOrder ? (
@@ -84,10 +84,10 @@ function ProductCardMobile({
           ) : (
             product.isSpecialSale && (
               <div className="flex items-center justify-between gap-2">
-                <span className="text-error-medium text-xs sm:text-sm font-bold sm:pr-4">
+                <span className="text-error-medium text-sm font-bold sm:pr-4">
                   فروش ویژه
                 </span>
-                <span className="text-error-medium text-xs sm:text-sm font-bold tabular-nums">
+                <span className="text-error-medium text-sm font-bold tabular-nums">
                   ۰۰:۰۰:۰۰
                 </span>
               </div>
