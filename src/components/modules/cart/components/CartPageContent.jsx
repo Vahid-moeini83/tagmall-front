@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { SearchInput } from "@/components/ui/search";
 import MainNavigation from "@/components/layout/navigation-menu/MainNavigation";
 import CartItems from "./CartItems";
@@ -8,14 +8,58 @@ import OrderSummary from "./OrderSummary";
 import OrderItems from "./OrderItems";
 import Image from "next/image";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { getCart, getCartInvoice } from "@/lib/server/actions/cart";
+import { getToken } from "@/lib/server/cookies";
+import toast from "react-hot-toast";
+import usePublicStore from "@/app/store/publicStore";
 
-function CartPageContent() {
+function CartPageContent({ initialCartData }) {
   const [isOrderItemsOpen, setIsOrderItemsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [isOrderSubmitted, setIsOrderSubmitted] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState("");
+  const [cartData, setCartData] = useState(initialCartData);
+  const [invoiceData, setInvoiceData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+
+  const setCartItemsCount = usePublicStore((s) => s.setCartItemsCount);
+
+  const orderSummaryRef = useRef(null);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  // Fetch cart data
+  const fetchCart = async () => {
+    const token = await getToken();
+    if (!token) return;
+
+    const { cartRes, cartErr } = await getCart(token);
+    if (cartRes) {
+      setCartData(cartRes);
+      // به‌روزرسانی تعداد آیتم‌های سبد خرید
+      if (cartRes?.summary) {
+        setCartItemsCount(cartRes.summary.items_count || 0);
+      }
+    } else if (cartErr) {
+      toast.error("خطا در دریافت سبد خرید");
+    }
+  };
+
+  // Fetch invoice data
+  const fetchInvoice = async () => {
+    const token = await getToken();
+    if (!token) return;
+
+    const { invoiceRes, invoiceErr } = await getCartInvoice(token);
+    if (invoiceRes) {
+      console.log(invoiceRes);
+      setInvoiceData(invoiceRes);
+    } else if (invoiceErr) {
+      toast.error("خطا در دریافت صورت‌حساب");
+    }
+  };
 
   const handleNextStep = () => {
     if (currentStep < 3) {
@@ -23,8 +67,23 @@ function CartPageContent() {
     }
   };
 
-  const handleOrderSubmit = () => {
+  const handleOrderSubmit = async () => {
+    setIsLoading(true);
+    await fetchInvoice();
     setIsOrderSubmitted(true);
+    setOpenAccordion("order-summary");
+
+    if (!isDesktop) {
+      setCurrentStep(2);
+    }
+
+    setTimeout(() => {
+      orderSummaryRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+    setIsLoading(false);
   };
 
   const handlePayment = () => {
@@ -37,6 +96,13 @@ function CartPageContent() {
     }
   };
 
+  // Set initial cart count
+  useEffect(() => {
+    if (initialCartData?.summary) {
+      setCartItemsCount(initialCartData.summary.items_count || 0);
+    }
+  }, [initialCartData, setCartItemsCount]);
+
   return (
     <>
       {/* Mobile Layout */}
@@ -44,30 +110,36 @@ function CartPageContent() {
         {/* Main Content */}
         <div className="px-[10px] pt-20 pb-40">
           {/* Steps */}
-          <div className="fixed top-0 right-0 left-0 bg-white py-5 flex items-center justify-center z-50">
+          <div className="fixed top-0 right-0 left-0 bg-white py-4 px-[10px] flex items-center justify-center z-50">
             <div
               onClick={handlePreviousStep}
-              className={`rounded-md w-25 h-10 flex items-center justify-center bg-gray-200 ${currentStep === 1 ? "text-primary" : currentStep > 1 ? "text-gray-600" : "text-gray-400"}`}
+              className={`rounded-md w-25 h-10 flex flex-1 items-center justify-center bg-gray-200 ${currentStep === 1 ? "text-primary" : currentStep > 1 ? (currentStep === 3 ? "text-gray-400" : "text-gray-600") : "text-gray-400"}`}
             >
               سبد خرید
             </div>
             <div className="w-7 h-[3px] bg-gray-200" />
             <div
-              className={`rounded-md w-25 h-10 flex items-center justify-center bg-gray-200 ${currentStep === 2 ? "text-primary" : currentStep > 2 ? "text-gray-600" : "text-gray-400"}`}
+              className={`rounded-md w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${currentStep === 2 ? "text-primary" : "text-gray-400"}`}
             >
               صورت حساب
             </div>
             <div className="w-7 h-[3px] bg-gray-200" />
             <div
-              className={`rounded-md w-25 h-10 flex items-center justify-center bg-gray-200  ${currentStep === 3 ? "text-primary" : "text-gray-400"}`}
+              className={`rounded-md w-25 h-10 flex flex-1  items-center justify-center bg-gray-200  ${currentStep === 3 ? "text-primary" : "text-gray-400"}`}
             >
-              تحویل سفارش
+              سفارشات
             </div>
           </div>
 
           {/* Content based on step */}
           {currentStep === 1 && (
-            <CartItems handleNextStep={handleNextStep} isMobile={true} />
+            <CartItems
+              handleNextStep={handleOrderSubmit}
+              isMobile={true}
+              cartData={cartData}
+              onCartUpdate={fetchCart}
+              isSubmitting={isLoading}
+            />
           )}
 
           {currentStep === 2 && (
@@ -76,10 +148,15 @@ function CartPageContent() {
               setIsOrderItemsOpen={setIsOrderItemsOpen}
               handleNextStep={handleNextStep}
               isMobile={true}
+              invoiceData={invoiceData}
+              onPaymentSuccess={() => setCurrentStep(3)}
+              setOrderId={setOrderId}
             />
           )}
 
-          {currentStep === 3 && <OrderItems isMobile={true} />}
+          {currentStep === 3 && (
+            <OrderItems isMobile={true} orderId={orderId} />
+          )}
         </div>
 
         {/* Main Navigation */}
@@ -128,17 +205,26 @@ function CartPageContent() {
                     <CartItems
                       handleNextStep={handleOrderSubmit}
                       isMobile={false}
+                      cartData={cartData}
+                      onCartUpdate={fetchCart}
+                      isSubmitting={isLoading}
                     />
                   </div>
 
                   {/* Second White Box - Order Summary */}
-                  <div className="bg-white rounded-b-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]">
+                  <div
+                    ref={orderSummaryRef}
+                    className="bg-white rounded-b-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]"
+                  >
                     <OrderSummary
-                      isOrderItemsOpen={isOrderItemsOpen}
-                      setIsOrderItemsOpen={setIsOrderItemsOpen}
                       handleNextStep={handlePayment}
                       isMobile={false}
                       isOrderSubmitted={isOrderSubmitted}
+                      openAccordion={openAccordion}
+                      setOpenAccordion={setOpenAccordion}
+                      invoiceData={invoiceData}
+                      onPaymentSuccess={() => setIsPaid(true)}
+                      setOrderId={setOrderId}
                     />
                   </div>
                 </>
@@ -147,7 +233,7 @@ function CartPageContent() {
               {/* Show Order Items only after payment */}
               {isPaid && (
                 <div className="bg-white rounded-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]">
-                  <OrderItems isMobile={false} />
+                  <OrderItems isMobile={false} orderId={orderId} />
                 </div>
               )}
             </div>

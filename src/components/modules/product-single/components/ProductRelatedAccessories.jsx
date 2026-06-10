@@ -4,9 +4,9 @@ import Link from "next/link";
 
 export default function ProductRelatedAccessories({ accessories }) {
   const accessoriesData =
-    accessories && accessories.length > 0 ? accessories : [];
+    accessories && accessories?.length > 0 ? accessories : [];
 
-  if (accessoriesData.length === 0) {
+  if (accessoriesData?.length === 0) {
     return null;
   }
 
@@ -19,7 +19,10 @@ export default function ProductRelatedAccessories({ accessories }) {
         </h2>
 
         {/* Desktop: Show All Link */}
-        <Link href="#" className="hidden lg:block text-primary">
+        <Link
+          href="/search/1?view=accessories"
+          className="hidden lg:block text-primary"
+        >
           نمایش همه
         </Link>
       </div>
@@ -34,7 +37,7 @@ export default function ProductRelatedAccessories({ accessories }) {
 
       {/* Accessories Images - Desktop */}
       <div className="hidden lg:flex items-center gap-6 overflow-x-auto">
-        {accessoriesData.map((accessory, index) => (
+        {accessoriesData?.map((accessory, index) => (
           <div
             key={accessory.id}
             className="flex items-center gap-6 shrink-0 mb-12"
@@ -47,7 +50,7 @@ export default function ProductRelatedAccessories({ accessories }) {
                 className="object-contain"
               />
             </div>
-            {index < accessoriesData.length - 1 && (
+            {index < accessoriesData?.length - 1 && (
               <div className="w-[2px] h-[200px] bg-gray-200" />
             )}
           </div>

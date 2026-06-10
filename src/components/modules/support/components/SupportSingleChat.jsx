@@ -25,10 +25,6 @@ import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { ChatSkeleton } from "@/components/ui/loading";
 
 function SupportSingleChat({ setIsOpen, conversation }) {
-  console.log(conversation);
-
-  const user = usePublicStore((state) => state.userInfo);
-
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [showRecommended, setShowRecommended] = useState(true);
@@ -51,111 +47,128 @@ function SupportSingleChat({ setIsOpen, conversation }) {
   const menuRef = useRef(null);
   const triggerRefs = useRef({});
 
-  // Fetch preset messages
-  // Fetch preset messages
-  useEffect(() => {
-    const fetchPresetMessages = async () => {
-      const token = await getToken();
-      const cookieUser = await getUser();
+  const fetchMessages = async () => {
+    const token = await getToken();
+    if (!token || !conversation?.id) {
+      setLoading(false);
+      return;
+    }
 
-      if (!token || !cookieUser) return;
+    setLoading(true);
+    const { messagesRes, messagesErr } = await getConversationMessages(
+      token,
+      conversation?.id,
+    );
 
-      const userId = JSON.parse(cookieUser.value).id;
-      const { presetMessagesRes, presetMessagesErr } = await getPresetMessages(
-        token,
-        userId,
+    if (messagesRes) {
+      const formattedMessages = messagesRes.data.map((msg) => {
+        const sender = msg.is_mine ? "user" : "support";
+        const hasAttachment = msg.attachments && msg.attachments.length > 0;
+        const type = hasAttachment ? "image" : "text";
+        const imageUrl = hasAttachment ? msg.attachments[0] : null;
+
+        let replyToData = null;
+        if (msg.reply_to) {
+          replyToData = {
+            id: msg.reply_to.id,
+            text: msg.reply_to.body || "پیام",
+          };
+        }
+
+        return {
+          id: msg.id,
+          sender: sender,
+          text: msg.body || (hasAttachment ? "فایل پیوست شده" : ""),
+          date: new Date(msg.created_at),
+          type: type,
+          image: imageUrl,
+          replyTo: replyToData,
+          is_read: msg.is_read,
+          read_at: msg.read_at,
+          attachments: msg.attachments,
+        };
+      });
+
+      setMessages(formattedMessages);
+      setTimeout(() => {
+        lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else if (messagesErr) {
+      toast.error("خطا در دریافت پیام های گفت‌و‌گو");
+    }
+
+    setLoading(false);
+  };
+
+  const fetchPresetMessages = async () => {
+    const token = await getToken();
+    const cookieUser = await getUser();
+
+    if (!token || !cookieUser) return;
+
+    const otherUserId = conversation?.other_user?.id;
+    const { presetMessagesRes, presetMessagesErr } = await getPresetMessages(
+      token,
+      otherUserId,
+    );
+
+    if (presetMessagesRes) {
+      // Transform API data to component format - استفاده از فیلد question
+      const formattedMessages = presetMessagesRes.data.map((msg, index) => ({
+        id: msg.id || index + 1,
+        question: msg.question || "",
+        answer: msg.answer || "",
+        sort_order: msg.sort_order || index,
+      }));
+
+      // مرتب‌سازی بر اساس sort_order
+      const sortedMessages = formattedMessages.sort(
+        (a, b) => a.sort_order - b.sort_order,
       );
+      setRecommendedMessages(sortedMessages);
+    } else if (presetMessagesErr) {
+      // Keep default messages if API fails
+      setRecommendedMessages([]);
+    }
+  };
 
-      if (presetMessagesRes) {
-        console.log("Preset messages: ", presetMessagesRes);
+  const handleRecommendedMessageClick = async (recommendedItem) => {
+    await handleSendMessage(recommendedItem.question);
 
-        // Transform API data to component format
-        const formattedMessages = presetMessagesRes.data.map((msg, index) => ({
-          id: msg.id || index + 1,
-          messgae: msg.body || msg.message || "",
-        }));
-
-        setRecommendedMessages(formattedMessages);
-      } else if (presetMessagesErr) {
-        console.error("Error fetching preset messages: ", presetMessagesErr);
-        // Keep default messages if API fails
-        setRecommendedMessages([
-          {
-            id: 1,
-            messgae: "زمان تحویل سفارش من حدودا چه قدر است؟",
-          },
-          {
-            id: 2,
-            messgae: "چگونه میتوانم سفارشی را بازگردانده یا مرجوع کنم؟",
-          },
-          {
-            id: 3,
-            messgae: "شرایط بازگردانی یا مرجوع کردن سفارش چگونه است؟",
-          },
-        ]);
-      }
-    };
-
-    fetchPresetMessages();
-  }, []);
-
-  // Fetch messages
-  useEffect(() => {
-    const fetchMessages = async () => {
+    // Show the answer
+    setTimeout(async () => {
       const token = await getToken();
-      if (!token || !conversation?.id) {
-        setLoading(false);
+      if (!token) {
+        toast.error("لطفاً وارد حساب کاربری خود شوید");
         return;
       }
 
-      setLoading(true);
-      const { messagesRes, messagesErr } = await getConversationMessages(
+      const formData = new FormData();
+      formData.append("body", recommendedItem.answer);
+
+      const { sendMessageRes, sendMessageErr } = await sendMessage(
         token,
         conversation?.id,
+        formData,
       );
 
-      if (messagesRes) {
-        const formattedMessages = messagesRes.data.map((msg) => {
-          const sender = msg.is_mine ? "user" : "support";
-          const hasAttachment = msg.attachments && msg.attachments.length > 0;
-          const type = hasAttachment ? "image" : "text";
-          const imageUrl = hasAttachment ? msg.attachments[0] : null;
-
-          let replyToData = null;
-          if (msg.reply_to) {
-            replyToData = {
-              id: msg.reply_to.id,
-              text: msg.reply_to.body || "پیام",
-            };
-          }
-
-          return {
-            id: msg.id,
-            sender: sender,
-            text: msg.body || (hasAttachment ? "فایل پیوست شده" : ""),
-            date: new Date(msg.created_at),
-            type: type,
-            image: imageUrl,
-            replyTo: replyToData,
-            is_read: msg.is_read,
-            read_at: msg.read_at,
-            attachments: msg.attachments,
-          };
-        });
-
-        setMessages(formattedMessages);
-        setTimeout(() => {
-          lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      } else if (messagesErr) {
-        toast.error("خطا در دریافت پیام های گفت‌و‌گو");
+      if (sendMessageErr) {
+        toast.error("خطا در ارسال پاسخ");
+        return;
       }
 
-      setLoading(false);
-    };
+      const newSupportMsg = {
+        id: sendMessageRes.data?.id || Date.now(),
+        sender: "support",
+        text: recommendedItem.answer,
+        date: new Date(),
+        type: "text",
+      };
 
-    fetchMessages();
-  }, [conversation?.id]);
+      setMessages((prev) => [...prev, newSupportMsg]);
+      setShowRecommended(false);
+    }, 1000);
+  };
 
   const handleSendMessage = async (messageText) => {
     if (!messageText.trim()) return;
@@ -354,6 +367,20 @@ function SupportSingleChat({ setIsOpen, conversation }) {
     handleCloseMenu();
   };
 
+  const lastUserMessageId = messages
+    .filter((m) => m.sender === "user")
+    .at(-1)?.id;
+
+  // Fetch preset messages
+  useEffect(() => {
+    fetchPresetMessages();
+  }, []);
+
+  // Fetch messages
+  useEffect(() => {
+    fetchMessages();
+  }, [conversation?.id]);
+
   // Close menu with outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -369,10 +396,6 @@ function SupportSingleChat({ setIsOpen, conversation }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [contextMenuOpen]);
-
-  const lastUserMessageId = messages
-    .filter((m) => m.sender === "user")
-    .at(-1)?.id;
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -689,10 +712,10 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                 {recommendedMessages.map((item) => (
                   <p
                     key={item.id}
-                    onClick={() => handleSendMessage(item.messgae)}
+                    onClick={() => handleRecommendedMessageClick(item)}
                     className="font-iransans font-semibold text-primary text-center cursor-pointer text-xs lg:text-sm"
                   >
-                    {item.messgae}
+                    {item.question}
                   </p>
                 ))}
               </div>

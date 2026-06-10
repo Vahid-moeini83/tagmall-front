@@ -13,11 +13,16 @@ export default async function ProductPage({ params }) {
 
   // Fetch product and comments in parallel
   const [{ productRes, productErr }, { commentsRes, commentsErr }] =
-    await Promise.all([getProductById(2), getProductComments(2, token)]);
+    await Promise.all([
+      getProductById(productId),
+      getProductComments(productId, token),
+    ]);
+
+  console.log("Product: ", productRes);
 
   return (
     <ProductSingle
-      product={productRes}
+      product={productRes?.data}
       productError={productErr}
       comments={commentsRes}
       commentsError={commentsErr}

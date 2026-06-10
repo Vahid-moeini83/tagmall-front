@@ -6,3 +6,4 @@ export { MobilesSkeleton } from "./mobiles";
 export { AddressesSkeleton } from "./addresses";
 export { BankAccountsSkeleton } from "./bank-accounts";
 export { ChatSkeleton } from "./chat";
+export { OrderSummarySkeleton, OrderItemsSkeleton } from "./cart";

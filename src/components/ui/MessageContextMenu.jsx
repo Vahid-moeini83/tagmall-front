@@ -76,10 +76,10 @@ export default function MessageContextMenu({
             onReply();
             onClose();
           }}
-          className="flex items-center justify-between text-xs lg:text-base text-gray-700 px-2 py-3 cursor-pointer hover:bg-gray-100 rounded-sm transition-colors select-none"
+          className="relative text-center text-xs lg:text-base text-gray-700 px-2 py-3 lg:py-2 cursor-pointer hover:bg-gray-100 rounded-sm transition-colors select-none"
         >
-          <ReplyIcon size={20} />
-          پاسخ
+          <ReplyIcon size={20} className="absolute top-1/2 -translate-y-1/2" />
+          <span className="mr-2">پاسخ</span>
         </div>
       )}
 
@@ -91,18 +91,23 @@ export default function MessageContextMenu({
             onDelete();
             // منو را بعد از حذف نمی‌بندیم، چون می‌خواهیم لودینگ را نشان دهیم
           }}
-          className={`flex items-center justify-between text-xs lg:text-base text-error-medium px-2 py-3 lg:py-2 rounded-sm transition-colors select-none ${
+          className={`relative text-center text-xs lg:text-base text-error-medium px-2 py-3 lg:py-2 rounded-sm transition-colors select-none ${
             isDeleting
               ? "cursor-not-allowed opacity-70"
               : "cursor-pointer hover:bg-error-light"
           }`}
         >
-          {isDeleting && deleteLoadingComponent ? (
-            deleteLoadingComponent
-          ) : (
-            <Trash2Icon size={20} />
-          )}
-          حذف
+          <div className="absolute top-1/2 -translate-y-1/2">
+            {isDeleting && deleteLoadingComponent ? (
+              deleteLoadingComponent
+            ) : (
+              <Trash2Icon
+                size={20}
+                className="absolute top-1/2 -translate-y-1/2"
+              />
+            )}
+          </div>
+          <span className="mr-2">حذف</span>
         </div>
       )}
 
@@ -113,10 +118,10 @@ export default function MessageContextMenu({
             onReport();
             onClose();
           }}
-          className="flex items-center justify-between text-xs lg:text-base text-error-medium px-2 py-3 lg:py-2 cursor-pointer hover:bg-error-light rounded-sm transition-colors select-none"
+          className="relative text-center text-xs lg:text-base text-error-medium px-2 py-3 lg:py-2 cursor-pointer hover:bg-error-light rounded-sm transition-colors select-none"
         >
-          <HintIcon size={20} />
-          گزارش
+          <HintIcon size={20} className="absolute top-1/2 -translate-y-1/2" />
+          <span className="mr-2">گزارش</span>
         </div>
       )}
     </div>

@@ -1,13 +1,22 @@
 import { SupportContent } from "@/components/modules/support";
 import { getConversations } from "@/lib/server/actions/support";
+import { getUserOrders } from "@/lib/server/actions/cart";
 import { getToken } from "@/lib/server/cookies";
 
 async function SupportPage() {
   const token = await getToken();
 
-  const { conversationsRes, conversationsErr } = await getConversations(token);
+  const { conversationsRes } = await getConversations(token);
+  const { ordersRes } = await getUserOrders(token, 1);
 
-  return <SupportContent conversations={conversationsRes} />;
+  console.log(ordersRes);
+
+  return (
+    <SupportContent
+      conversations={conversationsRes}
+      initialOrders={ordersRes}
+    />
+  );
 }
 
 export default SupportPage;

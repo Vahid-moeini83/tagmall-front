@@ -189,7 +189,7 @@ function SupportChats({ conversations, isMobile = false }) {
                       {supportChat && (
                         <div
                           onClick={() => handleOpenChat(supportChat)}
-                          className="flex items-start gap-[6px] lg:gap-3 pb-1 lg:pb-3 cursor-pointer"
+                          className="flex items-start gap-[6px] lg:gap-3 lg:pb-3 cursor-pointer"
                         >
                           <div className="w-10 h-10 flex items-center justify-center rounded-[14px] border-2 border-gray-200">
                             <SupportIcon size={20} />
@@ -224,7 +224,7 @@ function SupportChats({ conversations, isMobile = false }) {
                         <div key={item.id}>
                           <div
                             onClick={() => handleOpenChat(item)}
-                            className="relative flex items-start gap-[6px] lg:gap-3 not-first:pt-2 pb-1 lg:pb-3 cursor-pointer"
+                            className="relative flex items-start gap-[6px] lg:gap-3 pt-1 lg:pt-3 pb-1 lg:pb-3 border-t-2 border-gray-200 cursor-pointer"
                           >
                             {item.other_user?.avatar ? (
                               <Image

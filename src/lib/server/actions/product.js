@@ -2,7 +2,7 @@
 
 import http from "@/app/api/axiosInstance";
 
-// دریافت اطلاعات یک محصول
+// Get product details (no token required)
 export async function getProductById(productId) {
   try {
     const response = await http({
@@ -16,7 +16,22 @@ export async function getProductById(productId) {
   }
 }
 
-// دریافت لیست نظرات یک محصول
+// Resolve variant and inventories based on selected attribute values (no token required)
+export async function resolveVariant(bodyData) {
+  try {
+    const response = await http({
+      url: "/products/resolve-variant",
+      method: "POST",
+      data: bodyData,
+    });
+    return { resolveVariantRes: response.data };
+  } catch (err) {
+    console.log("Error resolving variant: ", err);
+    return { resolveVariantErr: err };
+  }
+}
+
+// Get product comments list
 export async function getProductComments(productId, token = null) {
   try {
     const config = {
@@ -42,7 +57,7 @@ export async function getProductComments(productId, token = null) {
   }
 }
 
-// ثبت نظر جدید
+// Create new comment
 export async function createComment(token, bodyData) {
   try {
     const response = await http({
@@ -60,7 +75,7 @@ export async function createComment(token, bodyData) {
   }
 }
 
-// حذف نظر
+// Delete comment
 export async function deleteComment(token, commentId) {
   try {
     const response = await http({
@@ -77,7 +92,7 @@ export async function deleteComment(token, commentId) {
   }
 }
 
-// لایک یا آنلایک کردن نظر
+// Toggle comment like/unlike
 export async function toggleCommentLike(token, commentId) {
   try {
     const response = await http({

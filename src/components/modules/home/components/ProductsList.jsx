@@ -51,7 +51,8 @@ export default function ProductsList({
                       <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
                         <Image
                           src={
-                            product.img || "/assets/images/fallback/phone.png"
+                            product.img ||
+                            "/assets/images/fallback/no-photo.jpg"
                           }
                           fill
                           alt={product.name}
@@ -82,18 +83,28 @@ export default function ProductsList({
                         <p className="font-medium text-gray-800 line-clamp-1 mb-4">
                           {product.name}
                         </p>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span>قیمت</span>
-                          <span className="font-bold">
-                            {Number(product.finalPrice).toLocaleString("fa-IR")}{" "}
-                            تومان
-                          </span>
-                        </div>
-                        {product.discountPercent > 0 && (
-                          <span className="text-gray-400 line-through text-sm">
-                            {Number(product.price).toLocaleString("fa-IR")}{" "}
-                            تومان
-                          </span>
+                        {product.finalPrice > 0 ? (
+                          <>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span>قیمت</span>
+                              <span className="font-bold">
+                                {Number(product.finalPrice).toLocaleString(
+                                  "fa-IR",
+                                )}{" "}
+                                تومان
+                              </span>
+                            </div>
+                            {product.discountPercent > 0 && (
+                              <span className="text-gray-400 line-through text-sm">
+                                {Number(product.price).toLocaleString("fa-IR")}{" "}
+                                تومان
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="font-bold">قیمت نامشخص</span>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -130,7 +141,8 @@ export default function ProductsList({
                       <div className="relative w-40 xl:w-50 h-40 xl:h-50 rounded-lg overflow-hidden">
                         <Image
                           src={
-                            product.img || "/assets/images/fallback/phone.png"
+                            product.img ||
+                            "/assets/images/fallback/no-photo.jpg"
                           }
                           fill
                           alt={product.name}

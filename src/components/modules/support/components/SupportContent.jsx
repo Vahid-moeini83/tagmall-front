@@ -9,7 +9,7 @@ import Image from "next/image";
 import usePublicStore from "@/app/store/publicStore";
 import Link from "next/link";
 
-function SupportContent({ conversations }) {
+function SupportContent({ conversations, initialOrders }) {
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
 
@@ -71,7 +71,7 @@ function SupportContent({ conversations }) {
 
               {/* Second White Box - Order Summary */}
               <div className="bg-white rounded-b-lg py-[10px] px-[10px] lg:py-[50px] lg:px-[100px]">
-                <SupportOrders />
+                <SupportOrders initialOrders={initialOrders} />
               </div>
             </div>
           </div>
@@ -103,8 +103,8 @@ function SupportContent({ conversations }) {
               <SupportChats isMobile={true} conversations={conversations} />
             </div>
           </TabsContent>
-          <TabsContent className="pt-10" value="orders" dir="rtl">
-            <SupportOrders />
+          <TabsContent className="pt-10 pb-[140px]" value="orders" dir="rtl">
+            <SupportOrders initialOrders={initialOrders} />
           </TabsContent>
         </Tabs>
         {/* Main Navigation */}

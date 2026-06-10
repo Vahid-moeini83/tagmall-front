@@ -9,32 +9,124 @@ import {
 } from "@/components/ui/accordion";
 import { Radio } from "@/components/ui/radio";
 import { formatPrice } from "@/lib/client/utils";
+import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
+import { checkoutOrder } from "@/lib/server/actions/cart";
+import { getToken } from "@/lib/server/cookies";
+import toast from "react-hot-toast";
+import { OrderSummarySkeleton } from "@/components/ui/loading/cart";
 
 function OrderSummary({
-  isOrderItemsOpen,
-  setIsOrderItemsOpen,
-  handleNextStep,
   isMobile = false,
   isOrderSubmitted = false,
+  openAccordion,
+  setOpenAccordion,
+  invoiceData,
+  onPaymentSuccess,
+  setOrderId,
 }) {
   const [paymentMethod, setPaymentMethod] = useState("gateway");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const user = invoiceData?.data?.user || {};
+  const address = invoiceData?.data?.address || {};
+  const invoice = invoiceData?.data?.invoice || {};
+  const wallet = invoiceData?.data?.wallet || {};
 
   const receiverInfo = {
-    fullName: "وحید معینی",
-    phone: "09151234567",
-    address: "استان تهران - خیابان افسریه - افسریه 44",
-    postalCode: "1234567890",
+    fullName: user.full_name || "نامشخص",
+    phone: user.mobile || "نامشخص",
+    address: address.address || "آدرسی ثبت نشده است",
+    postalCode: address.postal_code || "نامشخص",
+    city: address.city || "",
+    province: address.province || "",
   };
 
-  const walletBalance = 5000000;
-  const totalAmount = 2000000;
+  const walletBalance = wallet.balance || 0;
+  const totalAmount = invoice.total || 0;
   const isWalletSufficient = walletBalance >= totalAmount;
+
+  const handleCheckout = async () => {
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+    const token = await getToken();
+
+    if (!token) {
+      toast.error("لطفا ابتدا وارد شوید");
+      setIsProcessing(false);
+      return;
+    }
+
+    if (!address.id) {
+      toast.error("لطفا آدرس تحویل را انتخاب کنید");
+      setIsProcessing(false);
+      return;
+    }
+
+    const bodyData = {
+      payment_method: paymentMethod,
+      address_id: address.id,
+    };
+
+    const { checkoutRes, checkoutErr } = await checkoutOrder(token, bodyData);
+
+    console.log(checkoutRes);
+    if (checkoutRes) {
+      // if (paymentMethod === "wallet" && !checkoutRes?.payment_url) {
+      //   toast.success("سفارش با موفقیت ثبت شد");
+      //   onPaymentSuccess();
+      // } else if (checkoutRes.payment_url) {
+      //   // Redirect to payment gateway
+      //   // window.location.href = checkoutRes.payment_url;
+      //   // return;
+      // }
+
+      if (setOrderId && checkoutRes?.order_number) {
+        setOrderId(checkoutRes?.order?.id);
+      }
+      onPaymentSuccess();
+    } else if (checkoutErr) {
+      toast.error("خطا در ثبت سفارش");
+    }
+
+    setIsProcessing(false);
+  };
+
+  // Show skeleton while loading invoice data
+  if (!invoiceData) {
+    return (
+      <Accordion
+        type="single"
+        collapsible={isMobile ? false : true}
+        value={
+          isMobile ? "order-summary" : isOrderSubmitted ? openAccordion : ""
+        }
+        onValueChange={setOpenAccordion}
+      >
+        <AccordionItem value="order-summary">
+          {!isMobile && (
+            <AccordionTrigger
+              className="font-bold text-base lg:text-xl text-primary justify-between hover:no-underline cursor-pointer"
+              disabled={!isOrderSubmitted}
+              showArrow={isOrderSubmitted}
+            >
+              صورت حساب
+            </AccordionTrigger>
+          )}
+          <AccordionContent className="lg:mt-4">
+            <OrderSummarySkeleton isMobile={isMobile} />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+  }
 
   return (
     <Accordion
       type="single"
-      collapsible={isMobile ? false : isOrderSubmitted}
-      value={isMobile ? "order-summary" : isOrderSubmitted ? undefined : ""}
+      collapsible={isMobile ? false : true}
+      value={isMobile ? "order-summary" : isOrderSubmitted ? openAccordion : ""}
+      onValueChange={setOpenAccordion}
     >
       <AccordionItem value="order-summary">
         {!isMobile && (
@@ -66,7 +158,10 @@ function OrderSummary({
                 {receiverInfo.phone}
               </div>
               <div className="text-gray-600">
-                <span className="font-bold">آدرس:</span> {receiverInfo.address}
+                <span className="font-bold">آدرس:</span>{" "}
+                {receiverInfo.province && `${receiverInfo.province} - `}
+                {receiverInfo.city && `${receiverInfo.city} - `}
+                {receiverInfo.address}
               </div>
               <div className="text-gray-600">
                 <span className="font-bold">کدپستی:</span>{" "}
@@ -120,13 +215,23 @@ function OrderSummary({
             {/* Final Payment Info */}
             <div className="fixed right-0 left-0 bottom-26 lg:static text-center lg:mt-[114px]">
               <button
-                onClick={handleNextStep}
-                className="text-primary cursor-pointer lg:text-xl"
+                onClick={handleCheckout}
+                className="text-primary cursor-pointer lg:text-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 justify-center mx-auto"
+                disabled={isProcessing || (!isMobile && !isOrderSubmitted)}
               >
-                {paymentMethod === "gateway"
-                  ? "پرداخت از درگاه بانکی"
-                  : "پرداخت از کیف پول اعتباری"}{" "}
-                (مبلغ {formatPrice(totalAmount)} تومان)
+                {isProcessing ? (
+                  <>
+                    <SpinnerLoading size={20} className="border-primary" />
+                    <span>در حال پردازش...</span>
+                  </>
+                ) : (
+                  <>
+                    {paymentMethod === "gateway"
+                      ? "پرداخت از درگاه بانکی"
+                      : "پرداخت از کیف پول اعتباری"}{" "}
+                    (مبلغ {formatPrice(totalAmount)} تومان)
+                  </>
+                )}
               </button>
             </div>
           </div>

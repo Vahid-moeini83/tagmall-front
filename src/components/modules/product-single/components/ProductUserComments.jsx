@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SupportIcon, HeartIcon, CloseSquareIcon } from "@/icons";
 import {
   Accordion,
@@ -20,39 +20,32 @@ import toast from "react-hot-toast";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import usePublicStore from "@/app/store/publicStore";
 
+// Helper function to get user display name based on type (outside component to avoid useMemo dependency)
+function getUserDisplayName(user) {
+  if (!user) return "کاربر";
+
+  const { type, type_str, name, family } = user;
+
+  if (type === 1) {
+    return `${name} ${family || ""}`.trim();
+  } else if (type === 2) {
+    return type_str || "مدیر";
+  } else if (type === 3) {
+    const fullName = `${name} ${family || ""}`.trim();
+    return `${type_str || "فروشنده"} ${fullName}`.trim();
+  }
+
+  return `${name} ${family || ""}`.trim();
+}
+
 export default function ProductUserComments({
   productId,
   initialComments,
   commentsError,
 }) {
-  // Helper function to get user display name based on type
-  const getUserDisplayName = (user) => {
-    if (!user) return "کاربر";
-
-    const { type, type_str, name, family } = user;
-
-    if (type === 1) {
-      // کاربر عادی: name + family
-      return `${name} ${family || ""}`.trim();
-    } else if (type === 2) {
-      // مدیر: فقط type_str
-      return type_str || "مدیر";
-    } else if (type === 3) {
-      // فروشنده: type_str + name + family
-      const fullName = `${name} ${family || ""}`.trim();
-      return `${type_str || "فروشنده"} ${fullName}`.trim();
-    }
-
-    return `${name} ${family || ""}`.trim();
-  };
-
-  // Transform API data to chatBoxes format
-  const transformedData = useMemo(() => {
-    if (commentsError) {
-      return { boxes: [], liked: {} };
-    }
-
-    if (!initialComments || !initialComments.data) {
+  // Transform API data to chatBoxes format - must be before useState
+  const getTransformedData = () => {
+    if (commentsError || !initialComments || !initialComments.data) {
       return { boxes: [], liked: {} };
     }
 
@@ -74,8 +67,7 @@ export default function ProductUserComments({
         },
       ];
 
-      // Add replies
-      if (comment.replies && comment.replies.length > 0) {
+      if (comment?.replies && comment?.replies?.length > 0) {
         comment.replies.forEach((reply) => {
           messages.push({
             id: `${reply.id}`,
@@ -103,7 +95,6 @@ export default function ProductUserComments({
       };
     });
 
-    // Calculate initial liked state
     const initialLiked = {};
     transformedBoxes.forEach((box) => {
       box.messages.forEach((msg) => {
@@ -114,18 +105,20 @@ export default function ProductUserComments({
     });
 
     return { boxes: transformedBoxes, liked: initialLiked };
-  }, [initialComments, commentsError]);
+  };
 
-  const [chatBoxes, setChatBoxes] = useState(transformedData.boxes);
-  const [likedMessages, setLikedMessages] = useState(transformedData.liked);
+  const initialData = getTransformedData();
+
+  const [chatBoxes, setChatBoxes] = useState(initialData.boxes);
+  const [likedMessages, setLikedMessages] = useState(initialData.liked);
   const [isOpen, setIsOpen] = useState(true);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [activeMessageId, setActiveMessageId] = useState(null);
   const [activeTriggerElement, setActiveTriggerElement] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [replyInputs, setReplyInputs] = useState({}); // {messageId: {show: true, text: ''}}
-  const [activeReplyId, setActiveReplyId] = useState(null); // ID of message being replied to
+  const [replyInputs, setReplyInputs] = useState({});
+  const [activeReplyId, setActiveReplyId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [deletingMessageId, setDeletingMessageId] = useState(null);
 
@@ -139,13 +132,6 @@ export default function ProductUserComments({
   const inputRef = useRef(null);
   const activeReplyInputRef = useRef(null);
   const messagesContainerRef = useRef(null);
-
-  // Show error toast if there's an error
-  useEffect(() => {
-    if (commentsError) {
-      toast.error("خطا در دریافت نظرات");
-    }
-  }, [commentsError]);
 
   // Helper: Find message and its box by message ID
   const findMessageAndBox = (messageId) => {
@@ -174,9 +160,9 @@ export default function ProductUserComments({
 
     // Update likes count optimistically
     setChatBoxes((prev) =>
-      prev.map((box) => ({
+      prev?.map((box) => ({
         ...box,
-        messages: box.messages.map((msg) =>
+        messages: box?.messages?.map((msg) =>
           msg.id === id
             ? { ...msg, likes: wasLiked ? msg.likes - 1 : msg.likes + 1 }
             : msg,
@@ -193,9 +179,9 @@ export default function ProductUserComments({
         [id]: wasLiked,
       }));
       setChatBoxes((prev) =>
-        prev.map((box) => ({
+        prev?.map((box) => ({
           ...box,
-          messages: box.messages.map((msg) =>
+          messages: box?.messages?.map((msg) =>
             msg.id === id
               ? { ...msg, likes: wasLiked ? msg.likes + 1 : msg.likes - 1 }
               : msg,
@@ -206,9 +192,9 @@ export default function ProductUserComments({
     } else if (likeRes) {
       // Update with actual count from server
       setChatBoxes((prev) =>
-        prev.map((box) => ({
+        prev?.map((box) => ({
           ...box,
-          messages: box.messages.map((msg) =>
+          messages: box?.messages?.map((msg) =>
             msg.id === id ? { ...msg, likes: likeRes?.likes_count } : msg,
           ),
         })),
@@ -272,12 +258,12 @@ export default function ProductUserComments({
     // Remove from UI
     setChatBoxes((prev) => {
       return prev
-        .map((box) => {
+        ?.map((box) => {
           const filteredMessages = box.messages.filter(
             (msg) => msg.id !== messageId,
           );
           // If no messages left, remove the box
-          if (filteredMessages.length === 0) return null;
+          if (filteredMessages?.length === 0) return null;
           return { ...box, messages: filteredMessages };
         })
         .filter(Boolean);
@@ -291,22 +277,44 @@ export default function ProductUserComments({
     // اینجا می‌توانید منطق گزارش را پیاده‌سازی کنید
   };
 
-  const handleSubmitComment = async () => {
-    if (!newComment.trim()) return;
+  const handleSubmitComment = async (messageId = null) => {
+    console.log("Msg ID: ", messageId);
+    const isReply = messageId !== null && messageId !== undefined;
+
+    console.log("Is reply: ", isReply);
+    const text = isReply ? replyInputs[messageId]?.text : newComment;
+
+    if (!text?.trim()) return;
 
     const token = await getToken();
+    console.log(token);
     if (!token) {
       setLoginOpen(true);
       return;
     }
 
-    setSubmitting(true);
-
-    const bodyData = {
+    let bodyData = {
       type: "product",
       id: productId,
-      body: newComment,
+      body: text,
     };
+
+    if (isReply) {
+      const { message: replyToMessage, box: targetBox } =
+        findMessageAndBox(messageId);
+
+      if (!replyToMessage || !targetBox) return;
+
+      const firstCommentId = targetBox.messages[0].apiId;
+
+      bodyData = {
+        ...bodyData,
+        first_comment_id: firstCommentId,
+        reply_to_id: replyToMessage.apiId,
+      };
+    }
+
+    setSubmitting(true);
 
     const { createCommentRes, createCommentErr } = await createComment(
       token,
@@ -314,68 +322,77 @@ export default function ProductUserComments({
     );
 
     if (createCommentErr) {
-      toast.error("خطا در ثبت نظر");
+      toast.error(isReply ? "خطا در ثبت پاسخ" : "خطا در ثبت نظر");
       setSubmitting(false);
       return;
     }
 
-    toast.success("نظر شما با موفقیت ثبت شد و پس از تایید نمایش داده می‌شود");
-    setNewComment("");
-    setShowCommentInput(false);
-    setSubmitting(false);
+    // Add the new comment/reply to UI immediately
+    if (createCommentRes?.data) {
+      const newMessageData = {
+        id: `${createCommentRes.data.id}`,
+        apiId: createCommentRes.data.id,
+        user: getUserDisplayName(createCommentRes.data.user),
+        message: createCommentRes.data.body,
+        date: new Date(createCommentRes.data.created_at).toLocaleDateString(
+          "fa-IR",
+          {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          },
+        ),
+        likes: createCommentRes.data.likes_count,
+        isUserMessage: createCommentRes.data.is_mine,
+        isLiked: createCommentRes.data.is_liked,
+      };
 
-    // Optionally refresh comments
-    // fetchComments();
-  };
+      if (isReply) {
+        // Add reply to existing box
+        const { box: targetBox } = findMessageAndBox(messageId);
+        if (targetBox) {
+          // Add replyTo information if exists
+          if (createCommentRes.data.reply_to) {
+            newMessageData.replyTo = `${createCommentRes.data.reply_to.id}`;
+            newMessageData.replyToText = createCommentRes.data.reply_to.body;
+          }
 
-  const handleSubmitReply = async (messageId) => {
-    const replyText = replyInputs[messageId]?.text;
-    if (!replyText?.trim()) return;
+          setChatBoxes((prev) =>
+            prev.map((box) =>
+              box.id === targetBox.id
+                ? { ...box, messages: [...box.messages, newMessageData] }
+                : box,
+            ),
+          );
+        }
+      } else {
+        // Add new comment box
+        const newBox = {
+          id: createCommentRes.data.id,
+          type: "qa",
+          messages: [newMessageData],
+        };
 
-    const token = await getToken();
-    if (!token) {
-      setLoginOpen(true);
-      return;
+        setChatBoxes((prev) => [...prev, newBox]);
+
+        // Scroll to bottom on mobile after adding new comment
+        setTimeout(() => {
+          scrollToBottom();
+        }, 100);
+      }
     }
 
-    // Find the message and box being replied to
-    const { message: replyToMessage, box: targetBox } =
-      findMessageAndBox(messageId);
-
-    if (!replyToMessage || !targetBox) return;
-
-    setSubmitting(true);
-
-    // Find first comment ID in the box (the question)
-    const firstMessage = targetBox.messages[0];
-    const firstCommentId = firstMessage.apiId;
-
-    const bodyData = {
-      type: "product",
-      id: productId,
-      body: replyText,
-      first_comment_id: firstCommentId,
-      reply_to_id: replyToMessage.apiId,
-    };
-
-    const { createCommentRes, createCommentErr } = await createComment(
-      token,
-      bodyData,
-    );
-
-    if (createCommentErr) {
-      toast.error("خطا در ثبت پاسخ");
-      setSubmitting(false);
-      return;
+    if (isReply) {
+      setReplyInputs((prev) => ({
+        ...prev,
+        [messageId]: { show: false, text: "" },
+      }));
+      setActiveReplyId(null);
+    } else {
+      setNewComment("");
+      setShowCommentInput(false);
     }
 
-    toast.success("نظر شما با موفقیت ثبت شد و پس از تایید نمایش داده می‌شود");
-
-    setReplyInputs((prev) => ({
-      ...prev,
-      [messageId]: { show: false, text: "" },
-    }));
-    setActiveReplyId(null);
     setSubmitting(false);
   };
 
@@ -456,6 +473,13 @@ export default function ProductUserComments({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [contextMenuOpen]);
 
+  // Show error toast if there's an error
+  useEffect(() => {
+    if (commentsError) {
+      toast.error("خطا در دریافت نظرات");
+    }
+  }, [commentsError]);
+
   const orderedChatBoxes = isDesktop ? [...chatBoxes].reverse() : chatBoxes;
 
   return (
@@ -485,7 +509,7 @@ export default function ProductUserComments({
           <AccordionContent className="mt-4 flex flex-col h-screen lg:h-auto relative">
             <div
               ref={messagesContainerRef}
-              className={`flex flex-col lg:flex-row items-center gap-[6px] pb-36 lg:pb-0 ${
+              className={`flex flex-col lg:flex-row gap-[6px] pb-36 lg:pb-0 ${
                 hasOverflow ? "overflow-y-auto" : ""
               }  lg:overflow-x-auto`}
             >
@@ -527,7 +551,7 @@ export default function ProductUserComments({
                             انصراف
                           </button>
                           <button
-                            onClick={handleSubmitComment}
+                            onClick={() => handleSubmitComment()}
                             disabled={!newComment.trim() || submitting}
                             className="px-4 py-2 text-xs font-iransans text-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                           >
@@ -561,7 +585,7 @@ export default function ProductUserComments({
               </div>
 
               {/* Chat Boxes */}
-              {orderedChatBoxes.map((box, boxIndex) => {
+              {orderedChatBoxes?.map((box, boxIndex) => {
                 const isUserBox = box.type === "user";
                 const allMessages = box.messages;
 
@@ -573,7 +597,7 @@ export default function ProductUserComments({
                     <div
                       className={`flex flex-col gap-2 w-full lg:w-auto lg:max-h-[208px] scroll-hidden lg:overflow-y-auto relative items-start px-[10px] lg:px-0`}
                     >
-                      {allMessages.map((msg) => {
+                      {allMessages?.map((msg) => {
                         const isUserMsg = msg.isUserMessage;
 
                         return (
@@ -581,7 +605,7 @@ export default function ProductUserComments({
                             {/* Message */}
                             <div
                               className={`flex items-center w-full ${
-                                isUserMsg ? "justify-end" : "justify-start"
+                                isUserMsg ? "justify-start" : "justify-end"
                               } ${
                                 isUserBox
                                   ? "gap-3 lg:gap-[50px]"
@@ -756,7 +780,7 @@ export default function ProductUserComments({
                                         </button>
                                         <button
                                           onClick={() =>
-                                            handleSubmitReply(msg.id)
+                                            handleSubmitComment(msg.id)
                                           }
                                           disabled={
                                             !replyInputs[
@@ -786,7 +810,7 @@ export default function ProductUserComments({
                         );
                       })}
                     </div>
-                    {boxIndex < chatBoxes.length - 1 && (
+                    {boxIndex < chatBoxes?.length - 1 && (
                       <div className="hidden lg:block w-[2px] h-[200px] bg-gray-200" />
                     )}
                   </div>
@@ -838,9 +862,9 @@ export default function ProductUserComments({
                     className="font-iransans placeholder:text-gray-400 text-gray-600 h-14 pr-2 pl-14 w-full outline-none bg-gray-200"
                   />
                   {activeReplyId ? (
-                    replyInputs[activeReplyId]?.text?.trim().length > 0 ? (
+                    replyInputs[activeReplyId]?.text?.trim()?.length > 0 ? (
                       <button
-                        onClick={() => handleSubmitReply(activeReplyId)}
+                        onClick={() => handleSubmitComment(activeReplyId)}
                         disabled={submitting}
                         className="absolute left-2 bottom-4 font-iransans text-primary cursor-pointer disabled:opacity-50 flex items-center gap-1"
                       >
@@ -866,9 +890,9 @@ export default function ProductUserComments({
                       </button>
                     )
                   ) : (
-                    newComment.trim().length > 0 && (
+                    newComment.trim()?.length > 0 && (
                       <button
-                        onClick={handleSubmitComment}
+                        onClick={() => handleSubmitComment()}
                         disabled={submitting}
                         className="absolute left-2 bottom-1/2 translate-y-1/2 font-iransans text-primary cursor-pointer disabled:opacity-50 flex items-center gap-1"
                       >

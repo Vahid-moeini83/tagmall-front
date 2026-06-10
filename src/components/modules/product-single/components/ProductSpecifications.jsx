@@ -7,14 +7,14 @@ import {
 
 export default function ProductSpecifications({ setShowComments, specs }) {
   return (
-    <div className="lg:bg-white lg:rounded-t-lg pb-20 pt-2 lg:py-[50px] lg:px-[100px]">
+    <div className="lg:bg-white lg:rounded-t-lg py-20 lg:py-[50px] lg:px-[100px]">
       <Accordion type="single" collapsible defaultValue="specifications">
         <AccordionItem value="specifications">
           <AccordionTrigger className="hidden lg:flex text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline justify-between">
             مشخصات
           </AccordionTrigger>
           <AccordionContent className="lg:mt-4">
-            {specs.length > 0 ? (
+            {specs?.length > 0 ? (
               <div className="space-y-2 lg:space-y-4">
                 {specs?.map((spec, index) => (
                   <div key={index}>
@@ -26,7 +26,7 @@ export default function ProductSpecifications({ setShowComments, specs }) {
                         {spec.value}
                       </p>
                     </div>
-                    {index < specs.length - 1 && (
+                    {index < specs?.length - 1 && (
                       <div className="border-t-2 border-gray-200 lg:mt-1" />
                     )}
                   </div>
@@ -39,7 +39,7 @@ export default function ProductSpecifications({ setShowComments, specs }) {
             )}
             <button
               onClick={() => setShowComments(true)}
-              className="font-iransans lg:hidden fixed bottom-20 py-4 right-[10px] left-[10px] rounded-lg bg-white text-primary"
+              className="font-iransans lg:hidden fixed bottom-17 py-4 right-[10px] left-[10px] rounded-lg bg-white text-primary"
             >
               پرسش و پاسخ و نظرات کاربران
             </button>

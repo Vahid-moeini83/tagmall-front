@@ -3,6 +3,7 @@
 import { NoteIcon, StarIcon, VerifyIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
 
 function ProductCardMobile({
   product,
@@ -19,9 +20,42 @@ function ProductCardMobile({
     ? (product.orderHistory?.statusLabel ?? "آماده تحویل")
     : null;
 
+  // Drag handling برای جلوگیری از باز شدن لینک هنگام drag
+  // از pointerDown/Move روی wrapper بیرونی استفاده می‌کنیم تا
+  // حتی وقتی Keen Slider رویدادها رو intercept می‌کنه هم کار کنه
+  const dragStartPos = useRef(null);
+  const isDragging = useRef(false);
+
+  const handlePointerDown = (e) => {
+    dragStartPos.current = { x: e.clientX, y: e.clientY };
+    isDragging.current = false;
+  };
+
+  const handlePointerMove = (e) => {
+    if (dragStartPos.current) {
+      const deltaX = Math.abs(e.clientX - dragStartPos.current.x);
+      const deltaY = Math.abs(e.clientY - dragStartPos.current.y);
+      if (deltaX > 5 || deltaY > 5) {
+        isDragging.current = true;
+      }
+    }
+  };
+
+  const handleClick = (e) => {
+    if (isDragging.current) {
+      e.preventDefault();
+      isDragging.current = false;
+    }
+    dragStartPos.current = null;
+  };
+
   return (
     <>
-      <div className="rounded-lg shrink-0">
+      <div
+        className="rounded-lg shrink-0 w-full"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+      >
         <div className="w-full text-start flex items-center justify-between gap-2 pb-1.5 px-1 rounded-lg hover:opacity-80 focus:outline-none">
           <div
             onClick={() => onSellerClick?.(product)}
@@ -31,10 +65,10 @@ function ProductCardMobile({
               <Image
                 src={
                   product.seller.profileImage ||
-                  "/assets/images/fallback/avatar.png"
+                  "/assets/images/fallback/no-photo.jpg"
                 }
                 fill
-                alt={product.seller.name}
+                alt={product.seller.storeName || product.seller.name}
                 className="object-cover"
               />
             </div>
@@ -49,11 +83,11 @@ function ProductCardMobile({
               onTouchEnd={onSellerMouseUp}
               onTouchCancel={onSellerMouseUp}
             >
-              {product.seller.name}
+              {product.seller.storeName || product.seller.name}
             </span>
             <VerifyIcon
               size={20}
-              uniqueId={product.seller.id}
+              uniqueId={`store-${product.storeId}`}
               className="shrink-0"
             />
           </div>
@@ -61,15 +95,18 @@ function ProductCardMobile({
             onClick={() => setIsReviewsModalOpen(true)}
             className="flex items-center gap-1 shrink-0 text-gray-600"
           >
-            <span>(آرا 1000)</span>
+            <span>(آرا {product.seller.totalReviews || 1000})</span>
             <div className="flex items-center gap-1">
               <StarIcon className="w-[10px] h-[10px] text-yellow-500 mb-1" />
-              <span className="text-gray-600">{product.seller.rating}/۵</span>
+              <span className="text-gray-600">
+                {product.seller.rating || 0}/۵
+              </span>
             </div>
           </div>
         </div>
         <Link
           href="/products/2"
+          onClick={handleClick}
           className="mt-2 bg-white rounded-md flex flex-col pt-[14px] pb-[10px] px-[10px] overflow-hidden gap-3"
         >
           {isOrder ? (
@@ -96,7 +133,7 @@ function ProductCardMobile({
           <div className="flex flex-row gap-3">
             <div className="relative w-16 h-20 shrink-0 rounded-md overflow-hidden bg-gray-100">
               <Image
-                src={product.img || "/assets/images/fallback/phone.png"}
+                src={product.img || "/assets/images/fallback/no-photo.jpg"}
                 fill
                 alt={product.name}
                 className="object-cover"
@@ -118,13 +155,26 @@ function ProductCardMobile({
                   </span>
                 ) : (
                   <>
-                    <span className="font-bold text-gray-800">
-                      قیمت {Number(product.finalPrice).toLocaleString("fa-IR")}{" "}
-                      تومان
-                    </span>
-                    {product.discountPercent > 0 && (
-                      <span className="text-gray-500 line-through text-xs">
-                        {Number(product.price).toLocaleString("fa-IR")} تومان
+                    {product.finalPrice > 0 ? (
+                      <>
+                        <span className="font-bold text-gray-800">
+                          قیمت{" "}
+                          {product.formattedPrice ||
+                            Number(product.finalPrice).toLocaleString(
+                              "fa-IR",
+                            )}{" "}
+                          تومان
+                        </span>
+                        {product.discountPercent > 0 && (
+                          <span className="text-gray-500 line-through text-xs">
+                            {Number(product.price).toLocaleString("fa-IR")}{" "}
+                            تومان
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="font-bold text-gray-800">
+                        قیمت نامشخص
                       </span>
                     )}
                   </>

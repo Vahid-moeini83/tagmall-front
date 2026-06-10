@@ -11,15 +11,14 @@ export const metadata = {
 };
 
 export default async function Home() {
-  // Get initial data according to location info
-  const { homePageRes, homePageErr } = await getHomePageData(35.73, 51.42, 800);
+  const { homePageRes, homePageErr } = await getHomePageData(31, 53, 800);
 
-  console.log("HOME RES: ", homePageRes);
+  console.log(homePageRes);
 
   return (
     <MainLayout>
       <Suspense fallback={<div className="w-full h-screen bg-gray-100" />}>
-        <MainHome initialStores={homePageRes} />
+        <MainHome initialData={homePageRes?.data} />
       </Suspense>
     </MainLayout>
   );

@@ -18,12 +18,16 @@ import Image from "next/image";
 import { ShoppingBagIcon } from "@/icons";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { getCart } from "@/lib/server/actions/cart";
+import { getToken } from "@/lib/server/cookies";
 
 function ProductSingle({ product, productError, comments, commentsError }) {
   const router = useRouter();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+  const cartItemsCount = usePublicStore((s) => s.cartItemsCount);
+  const setCartItemsCount = usePublicStore((s) => s.setCartItemsCount);
   const selectedProductAttributes = usePublicStore(
     (s) => s.selectedProductAttributes,
   );
@@ -33,29 +37,25 @@ function ProductSingle({ product, productError, comments, commentsError }) {
   const [activeSection, setActiveSection] = useState("details");
   const [showComments, setShowComments] = useState(false);
 
+  // Fetch cart count on mount
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      const token = await getToken();
+      if (!token) return;
+
+      const { cartRes } = await getCart(token);
+      if (cartRes?.summary) {
+        setCartItemsCount(cartRes.summary.items_count || 0);
+      }
+    };
+
+    fetchCartCount();
+  }, [setCartItemsCount]);
+
   // Product base info
   const productBaseInfo = {
     category: "گوشی موبایل",
     name: product?.name,
-  };
-
-  // Build dynamic title
-  const getProductTitle = () => {
-    const { category, name } = productBaseInfo;
-    const attributes = selectedProductAttributes;
-
-    // Build attributes string
-    const attributesList = Object.values(attributes).filter(Boolean);
-
-    if (attributesList.length === 0) {
-      return (
-        <>
-          <span className="font-bold">{category}</span> {name}
-        </>
-      );
-    }
-
-    return name;
   };
 
   // Clear attributes on unmount
@@ -188,7 +188,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
               className="w-[100px] h-[50px] bg-white rounded-lg flex items-center justify-center gap-[10px]"
             >
               <ShoppingBagIcon size={20} />
-              <span className="text-gray-600">5 کالا</span>
+              <span className="text-gray-600">{`${cartItemsCount} کالا`}</span>
             </Link>
           </div>
 
@@ -262,7 +262,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                     <Tabs defaultValue="specs" className="px-[10px]">
                       <TabsList
                         dir="rtl"
-                        className="w-full bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mt-2"
+                        className="fixed left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mt-2 mx-auto!"
                       >
                         <TabsTrigger
                           value="specs"

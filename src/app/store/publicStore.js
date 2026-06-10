@@ -81,6 +81,12 @@ const usePublicStore = create((set, get) => ({
   clearProductAttributes() {
     set({ selectedProductAttributes: {} });
   },
+
+  // Cart items count
+  cartItemsCount: 0,
+  setCartItemsCount(count) {
+    set({ cartItemsCount: count });
+  },
 }));
 
 export default usePublicStore;

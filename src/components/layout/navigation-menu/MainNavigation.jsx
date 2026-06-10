@@ -32,7 +32,7 @@ const navLinks = [
     href: "/",
   },
   {
-    id: "shop",
+    id: "cart",
     icon: <ShoppingBagIcon size={20} />,
     activeIcon: <StrokeShoppingBagIcon size={20} />,
     href: "/cart",
@@ -59,6 +59,7 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
   const setUserInfo = usePublicStore((state) => state.setUserInfo);
   const isLoginOpen = usePublicStore((state) => state.isLoginOpen);
   const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
+  const cartItemsCount = usePublicStore((state) => state.cartItemsCount);
 
   // فیلتر کردن ایکن سرچ در دسکتاپ اگر صفحه دارای سرچ باکس باشد
   const filteredNavLinks = hasSearchBox
@@ -90,7 +91,6 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
 
     const { userProfileRes, userProfileErr } = await getUserProfile(token);
     if (userProfileRes) {
-      console.log(userProfileRes);
       setUserInfo(userProfileRes?.data?.user);
     } else if (userProfileErr) {
       toast.error("خطا در دریافت اطلاعات کاربر");
@@ -299,6 +299,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                   {item.id === "support" && (
                     <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
                   )}
+                  {item.id === "cart" && cartItemsCount > 0 && (
+                    <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
+                  )}
                 </Component>
               );
             })}
@@ -346,7 +349,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                     }`}
                   >
                     {icon}
-                    {/* If there is ready orders it should be shown */}
+                    {item.id === "cart" && cartItemsCount > 0 && (
+                      <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
+                    )}
                     {item.id === "location" ? (
                       <span className="block absolute w-1.5 h-1.5 bg-success-medium rounded-full top-2 right-2"></span>
                     ) : null}
@@ -435,7 +440,7 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                   ref={(el) => (buttonRefs.current[item.id] = el)}
                   href={item.href}
                   onClick={handleOtherButtonClick}
-                  className={`flex items-center justify-center w-12 h-12 shrink-0 rounded-lg focus:outline-none touch-none z-10 transition-colors duration-300 ${
+                  className={`relative flex items-center justify-center w-12 h-12 shrink-0 rounded-lg focus:outline-none touch-none z-10 transition-colors duration-300 ${
                     isActive ? "text-primary" : "text-black"
                   }`}
                   aria-label="فیلتر موقعیت و نوع نمایش (با نگه داشتن باز می‌شود)"
@@ -446,6 +451,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                   onContextMenu={(e) => e.preventDefault()}
                 >
                   {icon}
+                  {item.id === "location" ? (
+                    <span className="block absolute w-1.5 h-1.5 bg-success-medium rounded-full top-2 right-2"></span>
+                  ) : null}
                 </Link>
               );
             }
@@ -457,11 +465,14 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                 ref={(el) => (buttonRefs.current[item.id] = el)}
                 href={item.href}
                 onClick={handleOtherButtonClick}
-                className={`flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
+                className={`relative flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
                   isActive ? "text-primary!" : "text-black"
                 }`}
               >
                 {icon}
+                {item.id === "cart" && cartItemsCount > 0 && (
+                  <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
+                )}
               </Component>
             );
           })}
@@ -486,11 +497,14 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                     ? handleSearchClick
                     : handleOtherButtonClick
                 }
-                className={`flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
+                className={`relative flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
                   isActive ? "text-primary!" : "text-black"
                 }`}
               >
                 {icon}
+                {item.id === "support" && (
+                  <span className="block absolute w-1.5 h-1.5 bg-error-medium rounded-full top-2 right-2"></span>
+                )}
               </Component>
             );
           })}

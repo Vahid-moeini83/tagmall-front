@@ -4,23 +4,24 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { ChevronDownIcon, ChevronUpIcon, NoteIcon } from "@/icons";
 import { DialogWrapper } from "@/components/ui/dialog";
 import { cn } from "@/lib/client/utils";
 
-// ─── کارت محصولات هر فروشنده ─────────────────────────────────────────────────
-const SellerProductsCard = ({
+// ─── کارت محصولات هر فروشگاه ─────────────────────────────────────────────────
+function StoreProductsCardComponent({
   products,
   filterMode,
   isSpecialSale,
   onNoteOpen,
   isActive,
   sliderHeight,
-}) => {
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const dragStartY = useRef(null);
   const dragStartX = useRef(null);
+  const isDragging = useRef(false);
 
   const goTo = useCallback(
     (idx) => {
@@ -33,17 +34,33 @@ const SellerProductsCard = ({
   const handleDragStart = (clientY, clientX) => {
     dragStartY.current = clientY;
     dragStartX.current = clientX;
+    isDragging.current = false;
   };
 
   const handleDragEnd = (clientY, clientX) => {
     if (dragStartY.current === null) return;
     const deltaY = dragStartY.current - clientY;
     const deltaX = Math.abs(dragStartX.current - clientX);
+
+    // اگر حرکت بیشتر از 10 پیکسل بود، drag محسوب میشه
+    if (Math.abs(deltaY) > 10 || deltaX > 10) {
+      isDragging.current = true;
+    }
+
     dragStartY.current = null;
     dragStartX.current = null;
+
     if (Math.abs(deltaY) < 30 || deltaX > Math.abs(deltaY)) return;
     if (deltaY > 0) goTo(currentIndex + 1);
     else goTo(currentIndex - 1);
+  };
+
+  const handleClick = (e) => {
+    // اگر drag بود، لینک رو باز نکن
+    if (isDragging.current) {
+      e.preventDefault();
+      isDragging.current = false;
+    }
   };
 
   const cardHeight = isActive ? sliderHeight : Math.round(sliderHeight * 0.8);
@@ -51,6 +68,7 @@ const SellerProductsCard = ({
   return (
     <Link
       href="/products/2"
+      onClick={handleClick}
       className="relative w-full transition-all duration-300 flex items-center justify-center"
       style={{ height: cardHeight }}
     >
@@ -88,7 +106,7 @@ const SellerProductsCard = ({
               >
                 <div className="relative rounded-md overflow-hidden">
                   <Image
-                    src={product.img || "/assets/images/fallback/phone.png"}
+                    src={product.img || "/assets/images/fallback/no-photo.jpg"}
                     width={124}
                     height={200}
                     alt={product.name}
@@ -101,13 +119,25 @@ const SellerProductsCard = ({
                   </p>
                   {isSpecialSale ? (
                     <div className="flex flex-col items-center gap-1 mt-4">
-                      <span className="font-bold text-gray-600">
-                        {Number(product.finalPrice).toLocaleString("fa-IR")}{" "}
-                        تومان
-                      </span>
-                      {product.discountPercent > 0 && (
-                        <span className="text-gray-400 line-through text-sm">
-                          {Number(product.price).toLocaleString("fa-IR")} تومان
+                      {product.finalPrice > 0 ? (
+                        <>
+                          <span className="font-bold text-gray-600">
+                            {product.formattedPrice ||
+                              Number(product.finalPrice).toLocaleString(
+                                "fa-IR",
+                              )}{" "}
+                            تومان
+                          </span>
+                          {product.discountPercent > 0 && (
+                            <span className="text-gray-400 line-through text-sm">
+                              {Number(product.price).toLocaleString("fa-IR")}{" "}
+                              تومان
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="font-bold text-gray-600">
+                          قیمت نامشخص
                         </span>
                       )}
                     </div>
@@ -174,11 +204,14 @@ const SellerProductsCard = ({
       )}
     </Link>
   );
-};
+}
+
+const StoreProductsCard = memo(StoreProductsCardComponent);
+StoreProductsCard.displayName = "StoreProductsCard";
 
 // ─── کامپوننت اصلی ────────────────────────────────────────────────────────────
 export default function ProductsSlider({
-  products,
+  storeProducts,
   onProductChange,
   activeSellerId,
   purchasedProducts,
@@ -195,37 +228,54 @@ export default function ProductsSlider({
   const isProgrammaticRef = useRef(false);
   const targetIndexRef = useRef(null);
 
-  const isSpecialSale = products.length > 0 ? products[0].isSpecialSale : true;
   const sliderHeight = filterMode !== "all" ? 460 : 440;
 
-  const productsBySeller = products.reduce((acc, product) => {
-    const sellerId = product.seller?.id;
-    if (!sellerId) return acc;
-    if (!acc[sellerId]) acc[sellerId] = [];
-    acc[sellerId].push(product);
-    return acc;
-  }, {});
+  // فیلتر کردن فروشگاه‌ها براساس filterMode
+  const filteredStores = useMemo(() => {
+    if (!storeProducts || storeProducts.length === 0) {
+      return [];
+    }
 
-  const sellerIds = Object.keys(productsBySeller);
-  const sellerCount = sellerIds.length;
+    if (filterMode === "visit") {
+      // فقط فروشگاه‌هایی که سفارش قبلی دارن
+      return storeProducts.filter((store) => {
+        const hasPurchased = purchasedProducts.some(
+          (p) => p.storeId === store.storeId,
+        );
+        return hasPurchased;
+      });
+    }
 
-  const activeSellerPurchasedProducts = purchasedProducts.filter(
-    (p) => p.seller?.id === activeSellerId,
-  );
+    if (filterMode === "special") {
+      // فقط فروشگاه‌هایی که محصول ویژه دارن
+      return storeProducts.filter((store) =>
+        store.products.some((p) => p.isSpecialSale),
+      );
+    }
+
+    // all mode - همه فروشگاه‌ها
+    return storeProducts;
+  }, [storeProducts, filterMode, purchasedProducts]);
+
+  const storeCount = filteredStores.length;
+  const isSpecialSale = filterMode === "special" || filterMode === "all";
+
+  const activeSellerPurchasedProducts = useMemo(() => {
+    if (!activeSellerId) return [];
+    return purchasedProducts.filter((p) => p.storeId === activeSellerId);
+  }, [purchasedProducts, activeSellerId]);
+
   const hasPurchasedProducts = activeSellerPurchasedProducts.length > 0;
 
-  // ── ref برای دسترسی به آخرین نسخه sellerIds و productsBySeller در callbacks ──
-  const sellerIdsRef = useRef(sellerIds);
-  const productsBySellerRef = useRef(productsBySeller);
+  // ── ref برای دسترسی به آخرین نسخه filteredStores در callbacks ──
+  const filteredStoresRef = useRef(filteredStores);
   useEffect(() => {
-    sellerIdsRef.current = sellerIds;
-    productsBySellerRef.current = productsBySeller;
+    filteredStoresRef.current = filteredStores;
   });
 
   const [sliderRef, sliderInstance] = useKeenSlider({
     rtl: true,
     drag: true,
-    // loop: true,
     mode: "snap",
     slides: {
       perView: 1.4,
@@ -237,21 +287,19 @@ export default function ProductsSlider({
 
       const idx = s.track.details.rel;
       setCurrentSlide(idx);
-      const sellerId = sellerIdsRef.current[idx];
-      const sellerProducts = productsBySellerRef.current[sellerId];
-      if (sellerProducts?.length > 0) {
-        onProductChange?.(sellerProducts[0]);
+      const store = filteredStoresRef.current[idx];
+      if (store?.products?.length > 0) {
+        onProductChange?.(store.products[0]);
       }
     },
     animationEnded() {
-      // ✅ دقیقاً مثل کد نمونه: sync در مقصد
+      // ✅ sync در مقصد
       if (!isProgrammaticRef.current) return;
 
       const idx = targetIndexRef.current;
-      const sellerId = sellerIdsRef.current[idx];
-      const sellerProducts = productsBySellerRef.current[sellerId];
-      if (sellerProducts?.length > 0) {
-        onProductChange?.(sellerProducts[0]);
+      const store = filteredStoresRef.current[idx];
+      if (store?.products?.length > 0) {
+        onProductChange?.(store.products[0]);
       }
 
       isProgrammaticRef.current = false;
@@ -272,22 +320,20 @@ export default function ProductsSlider({
     },
   });
 
-  // ✅ دقیقاً مثل کد نمونه: moveToIdx با true
+  // ✅ moveToIdx با true
   const handleClickBulletPoints = useCallback(
     (index) => {
       if (!sliderInstance.current) return;
 
       setCurrentSlide(index);
-      const sellerId = sellerIdsRef.current[index];
-      const sellerProducts = productsBySellerRef.current[sellerId];
-      if (sellerProducts?.length > 0) {
-        onProductChange?.(sellerProducts[0]);
+      const store = filteredStoresRef.current[index];
+      if (store?.products?.length > 0) {
+        onProductChange?.(store.products[0]);
       }
 
       isProgrammaticRef.current = true;
       targetIndexRef.current = index;
 
-      // ✅ دقیقاً مثل کد نمونه
       sliderInstance.current.moveToIdx(index, true);
     },
     [sliderInstance, onProductChange],
@@ -296,26 +342,26 @@ export default function ProductsSlider({
   // ── sync از خارج (activeSellerId تغییر کرد) ──────────────────────────────
   useEffect(() => {
     if (!sliderInstance.current || !activeSellerId) return;
-    const idx = sellerIds.findIndex((id) => id === String(activeSellerId));
+    const idx = filteredStores.findIndex(
+      (store) => store.storeId === activeSellerId,
+    );
     if (idx < 0) return;
     const currentIdx = sliderInstance.current.track.details?.rel;
     if (currentIdx === idx) return;
 
-    // ✅ فوری: state آپدیت میشه
     setCurrentSlide(idx);
 
     isProgrammaticRef.current = true;
     targetIndexRef.current = idx;
 
-    // ✅ دقیقاً مثل کد نمونه: moveToIdx با true
     sliderInstance.current.moveToIdx(idx, true);
-  }, [activeSellerId]);
+  }, [activeSellerId, filteredStores, sliderInstance]);
 
   useEffect(() => {
-    if (sliderInstance.current && products.length > 0) {
+    if (sliderInstance.current && filteredStores.length > 0) {
       sliderInstance.current.update();
     }
-  }, [products]);
+  }, [filteredStores, sliderInstance]);
 
   useEffect(() => {
     if (
@@ -333,9 +379,9 @@ export default function ProductsSlider({
         container.scrollTo({ top, behavior: "smooth" });
       });
     }
-  }, [isPurchasedSectionOpen]);
+  }, [isPurchasedSectionOpen, scrollContainerRef]);
 
-  if (sellerCount === 0) return null;
+  if (storeCount === 0) return null;
 
   return (
     <div className="flex flex-col overflow-y-auto">
@@ -345,14 +391,14 @@ export default function ProductsSlider({
           className="keen-slider items-center"
           style={{ height: sliderHeight }}
         >
-          {sellerIds.map((sellerId, index) => (
+          {filteredStores.map((store, index) => (
             <div
-              key={sellerId}
+              key={store.storeId}
               className="keen-slider__slide flex items-center justify-center"
               style={{ height: sliderHeight }}
             >
-              <SellerProductsCard
-                products={productsBySeller[sellerId]}
+              <StoreProductsCard
+                products={store.products}
                 filterMode={filterMode}
                 isSpecialSale={isSpecialSale}
                 onNoteOpen={() => setIsNoteOpen(true)}
@@ -363,9 +409,9 @@ export default function ProductsSlider({
           ))}
         </div>
 
-        {sellerCount > 1 && (
+        {storeCount > 1 && (
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex justify-center gap-2 z-10 pointer-events-none">
-            {sellerIds.map((_, idx) => (
+            {filteredStores.map((_, idx) => (
               <button
                 key={idx}
                 type="button"
@@ -376,7 +422,7 @@ export default function ProductsSlider({
                     ? "bg-primary w-6"
                     : "bg-gray-300 w-3 hover:bg-gray-400",
                 )}
-                aria-label={`فروشنده ${idx + 1}`}
+                aria-label={`فروشگاه ${idx + 1}`}
               />
             ))}
           </div>
@@ -399,14 +445,14 @@ export default function ProductsSlider({
               <span
                 className={cn(
                   "font-bold text-sm xl:text-base",
-                  hasPurchasedProducts ? "text-primary" : "text-gray-600",
+                  hasPurchasedProducts ? "text-primary" : "text-gray-400",
                 )}
               >
-                {hasPurchasedProducts
-                  ? `سفارشات از ${activeSellerInfo.name}`
-                  : `سفارشی از ${activeSellerInfo.name} ندارید`}
+                سفارشات از {activeSellerInfo.name}
               </span>
-              <span className="text-gray-400">(بروزرسانی 1 دقیقه پیش)</span>
+              {hasPurchasedProducts && (
+                <span className="text-gray-400">(بروزرسانی 1 دقیقه پیش)</span>
+              )}
             </div>
             {hasPurchasedProducts &&
               (isPurchasedSectionOpen ? (
@@ -441,7 +487,9 @@ export default function ProductsSlider({
                 >
                   <div className="relative rounded-lg overflow-hidden">
                     <Image
-                      src={product.img || "/assets/images/fallback/phone.png"}
+                      src={
+                        product.img || "/assets/images/fallback/no-photo.jpg"
+                      }
                       width={124}
                       height={200}
                       alt={product.name}

@@ -117,9 +117,6 @@ export async function getPresetMessages(token, userId) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      params: {
-        user_id: userId,
-      },
     });
     return { presetMessagesRes: response.data };
   } catch (err) {

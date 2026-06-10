@@ -480,7 +480,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               />
             </div>
             <div className="flex items-start gap-4 pr-4">
-              <HintIcon size={24} className="mt-3 w-6 h-6" />
+              <HintIcon size={28} className="mt-2.5" />
               <p className="text-gray-600 leading-12 text-justify">
                 با{" "}
                 <Link href="#" className="text-primary font-bold">

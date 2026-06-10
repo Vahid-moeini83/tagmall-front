@@ -58,16 +58,6 @@ export default function ProductNavigation({ activeSection, setActiveSection }) {
     <>
       {/* Desktop Navigation - Sidebar */}
       <div className="fixed right-[60px] bottom-[64px] z-10 hidden lg:flex flex-col gap-[16px]">
-        {/* Back button */}
-        <button
-          onClick={handleGoBack}
-          className={`p-[15px] rounded-lg transition-colors`}
-        >
-          <StrokeArrowLeftIcon
-            size={20}
-            className="rotate-180 cursor-pointer"
-          />
-        </button>
         {sectionButtons.map((section) => (
           <button
             key={section.id}
@@ -81,6 +71,16 @@ export default function ProductNavigation({ activeSection, setActiveSection }) {
             {section.icon}
           </button>
         ))}
+        {/* Back button */}
+        <button
+          onClick={handleGoBack}
+          className={`p-[15px] rounded-lg transition-colors`}
+        >
+          <StrokeArrowLeftIcon
+            size={20}
+            className="rotate-180 cursor-pointer"
+          />
+        </button>
       </div>
 
       {/* Mobile Navigation - Bottom Bar */}
