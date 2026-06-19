@@ -133,16 +133,12 @@ src/
 - فقط از **Shadcn** برای کامپوننت‌ها استفاده کن.
 - رنگ‌ها و فونت‌ها با استفاده از `@theme` در `globals.css` تعریف شوند (بدون `tailwind.config.js`).
 - هیچ رنگ یا استایل سفارشی خارج از theme مجاز نیست.
-- برای همه‌ی eventها (hover, click, focus) باید transition نرم تعریف شود.
 - لینک‌ها باید با `<Link>` ساخته شوند، نه `<a>`.
 - دکمه‌ها و فرم‌ها حتی بدون منطق نهایی باید رفتار تعاملی و UX مناسب داشته باشند.
 - تمامی صفحات SSR-first باشند و فقط بخش‌های کوچک از CSR استفاده کنند.
-- استفاده از **grid و flex** برای layout و spacing یکنواخت بین المان‌ها.
-- تعریف **Typography hierarchy**: heading, subheading, body با font-size و font-weight مشخص.
+- استفاده از **grid و flex** برای layout و spacing یکنواخت بین المان‌ها با توجه به ساختار فعلی.
 - استفاده از **line-height و letter-spacing** مناسب برای خوانایی بهتر.
-- تضمین **تضاد رنگی کافی** برای call-to-action ها و المان‌های مهم.
 - انیمیشن‌های subtle برای **hover و click** و micro-interactions برای فرم‌ها و buttons.
-- تست کامل **responsiveness** در همه breakpoints (mobile / tablet / desktop).
 - رعایت **accessibility**: کنتراست رنگ مناسب، دسترسی با کیبورد، aria-label برای عناصر interactive.
 - حفظ **Consistency**: همه کامپوننت‌ها سبک بصری، spacing، shadows و transitions یکسان داشته باشند.
 
@@ -175,19 +171,9 @@ async function exampleApi(token, data) {
     return {res: response.data};
   } catch (error) {
     console.log(error)
-    const errObj = {
-      message:
-        err?.response?.data?.message ||
-        err?.response?.data?.data?.message ||
-        err?.message ||
-        'خطا',
-      status: err?.response?.status,
-      data: err?.response?.data,
-    };
-    return {err: errObj}
-  } finally {
-    setIsLoading(false);
+    return {err: error || error.response}
   }
+  setIsLoading(false);
 }
 ```
 
@@ -197,14 +183,12 @@ async function exampleApi(token, data) {
 
 - مدیریت state سراسری با **Zustand** انجام شود.
 - برای بهینه‌سازی **re-render** از **selector** استفاده شود.
-- داده‌های موقت (مثل فیلترها، مودال‌ها، ورودی‌ها) در **state محلی کامپوننت** نگهداری شوند.
 
 ---
 
 ## 🧰 مدیریت خطا و لاگ‌ها (ERROR HANDLING & LOGGING)
 
 - تمام خطاها باید با **try/catch** کنترل شوند.
-- پیام‌های خطا در UI باید **واضح و کاربرپسند** باشند.
 - خطاها باید توسط پکیج react-hot-toast نمایش داده شوند
 - لاگ‌های فنی فقط در **محیط توسعه (development)** چاپ شوند.
 
@@ -291,7 +275,7 @@ async function exampleApi(token, data) {
 - از **TailwindCSS نسخه 4** استفاده شود (بدون فایل config).
 - هر ماژول باید یک فایل `index.jsx` داشته باشد.
 - هیچ **کد تکراری** نباید وجود داشته باشد.
-- منطق‌های پیچیده باید **کامنت توضیحی به صورت انگلیسی** داشته باشند.
+- بخش های مختلف باید **کامنت توضیحی به صورت انگلیسی** داشته باشند.
 
 ### ❌ ممنوع
 

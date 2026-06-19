@@ -7,46 +7,27 @@ import toast from "react-hot-toast";
 import { SellerMarker, UserMarker } from "@/components/ui/markers";
 import { GPSIcon } from "@/icons";
 import usePublicStore from "@/app/store/publicStore";
+import {
+  HOME_MAP_INITIAL_CENTER,
+  HOME_MAP_INITIAL_ZOOM,
+} from "@/lib/constants/homeMap";
+import {
+  getVisibleMapFetchArea,
+  isDesktopMapLayout,
+} from "@/lib/client/homeMapViewport";
 
 const CUSTOM_TILE_URL =
   "https://api.neshan.org/tile/raster/basemap/{z}/{x}/{y}?style=neshan&Api-key=service.cfd22467b9064762be3c1beec3756c47";
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OSM contributors</a>';
 
-/**
- * ضریب کاهش radius — کمی کمتر از viewport واقعی ارسال می‌کنیم
- * تا فروشگاه‌هایی که در لبه‌ی دید کاربر هستن (و احتمالاً ناقص دیده می‌شن)
- * وارد نتایج نشن و دیتای دقیق‌تری داشته باشیم.
- * مثال: viewport=50km → ارسال‌شده=48km (50 * 0.96)
- */
-const RADIUS_REDUCTION_FACTOR = 0.96;
-
-/**
- * محاسبه radius به کیلومتر بر اساس viewport جغرافیایی نقشه.
- * فاصله واقعی از مرکز نقشه تا گوشه‌ی شمال‌شرقی viewport رو حساب می‌کنه
- * تا همه گوشه‌های صفحه کاربر پوشش داده بشن — مستقل از zoom و اندازه صفحه.
- * سپس یک ضریب کاهشی اعمال می‌کنه تا فقط دیتای دقیقِ داخل ویو نمایش داده بشه.
- * نکته: این تابع هم برای pan و هم برای zoom درست عمل می‌کنه،
- * چون Leaflet بعد از هر دو عملیات، moveend رو fire می‌کنه.
- * @param {L.Map} map - instance نقشه Leaflet
- * @returns {number} radius به کیلومتر (گرد شده به بالا)
- */
-function getViewportRadiusKm(map) {
-  const center = map.getCenter();
-  const bounds = map.getBounds();
-  const northEast = bounds.getNorthEast();
-  // distanceTo فاصله به متر برمی‌گردونه (فرمول Haversine داخل Leaflet)
-  const distanceMeters = center.distanceTo(northEast);
-  return Math.ceil((distanceMeters / 1000) * RADIUS_REDUCTION_FACTOR);
-}
-
 function MapComponent({
   activeSellerId,
   onSellerSelect,
   onMapReady,
-  filteredProducts,
   sellers,
   onMapMove,
+  skipInitialAreaFetch = false,
 }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -62,6 +43,8 @@ function MapComponent({
   const mapMoveDebounceRef = useRef(null);
   const onMapMoveRef = useRef(onMapMove);
   const sellersRef = useRef(sellers);
+  const activeSellerIdRef = useRef(activeSellerId);
+  const skipInitialAreaFetchRef = useRef(skipInitialAreaFetch);
 
   const [isGpsEnabled, setIsGpsEnabled] = useState(false);
   const [userPosition, setUserPosition] = useState(null);
@@ -75,7 +58,7 @@ function MapComponent({
 
   const isSearchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
 
-  // همیشه آخرین نسخه onMapMove و sellers رو نگه می‌داریم بدون نیاز به re-setup listener
+  // Keep latest callbacks without re-attaching map listeners
   useEffect(() => {
     onMapMoveRef.current = onMapMove;
   }, [onMapMove]);
@@ -84,7 +67,14 @@ function MapComponent({
     sellersRef.current = sellers;
   }, [sellers]);
 
-  // بازنشانی نقشه به موقعیت اولیه
+  useEffect(() => {
+    activeSellerIdRef.current = activeSellerId;
+  }, [activeSellerId]);
+
+  useEffect(() => {
+    skipInitialAreaFetchRef.current = skipInitialAreaFetch;
+  }, [skipInitialAreaFetch]);
+
   const resetMapView = () => {
     if (!mapRef.current) return;
     isProgrammaticMoveRef.current = true;
@@ -94,13 +84,12 @@ function MapComponent({
     });
   };
 
-  // حرکت نقشه با در نظر گرفتن دسکتاپ (افست برای نیم‌صفحه)
+  // Pan with desktop offset so the marker stays visible beside the sidebar
   const panToWithDesktopOffset = (map, latLng) => {
     if (!LRef.current) return;
     const L = LRef.current;
 
-    const isDesktop =
-      typeof window !== "undefined" && window.innerWidth >= 1024;
+    const isDesktop = isDesktopMapLayout();
     if (isDesktop) {
       const targetLatLng =
         latLng instanceof L.LatLng
@@ -122,7 +111,7 @@ function MapComponent({
     }
   };
 
-  // پرواز به سمت یک فروشگاه — از sellersRef استفاده می‌کنیم تا همیشه آخرین لیست داشته باشیم
+  // Fly to a store — reads sellersRef so programmatic moves always use fresh data
   const panToSeller = (storeId) => {
     if (!mapRef.current || !LRef.current) return;
     const L = LRef.current;
@@ -131,13 +120,11 @@ function MapComponent({
     if (!seller) return;
     const map = mapRef.current;
     const targetLatLng = new L.LatLng(seller.location.lat, seller.location.lng);
-    const isDesktop =
-      typeof window !== "undefined" && window.innerWidth >= 1024;
+    const isDesktop = isDesktopMapLayout();
 
     isProgrammaticMoveRef.current = true;
 
     if (isDesktop) {
-      // محاسبه مستقیم مرکز جابجاشده در فضای CRS بدون نیاز به حرکت اولیه نقشه
       const targetZoom = 15;
       const targetPoint = map.project(targetLatLng, targetZoom);
       const shiftAmount = map.getSize().x * 0.25;
@@ -150,34 +137,44 @@ function MapComponent({
   };
 
   const buildSellerIcon = (seller, isActive) => {
-    if (!LRef.current) return { icon: null, root: null };
+    if (!LRef.current) return { icon: null, root: null, container: null };
     const L = LRef.current;
 
     const container = document.createElement("div");
     const root = createRoot(container);
     root.render(<SellerMarker seller={seller} isActive={isActive} />);
-    // چک کردن اینکه آیا این فروشگاه محصول ویژه داره یا نه
-    const hasSpecialProduct = filteredProducts.some(
-      (p) => p.storeId === seller.storeId && p.isSpecialSale,
-    );
-    const iconSize = hasSpecialProduct ? [48, 52] : [12, 12];
-    const iconAnchor = hasSpecialProduct ? [24, 52] : [6, 6];
+    const iconSize = seller.hasSpecialSale ? [48, 52] : [12, 12];
+    const iconAnchor = seller.hasSpecialSale ? [24, 52] : [6, 6];
     const icon = L.divIcon({
       className: "custom-marker",
       html: container,
       iconSize,
       iconAnchor,
     });
-    return { icon, root };
+    return { icon, root, container };
   };
 
-  // افزودن یا به‌روزرسانی مارکرهای فروشگاه‌ها
+  // Re-render marker React trees in place — avoids Leaflet setIcon flicker
+  const syncMarkerActiveState = () => {
+    markerRootsRef.current.forEach((root, i) => {
+      const seller = sellerDataRef.current[i];
+      if (!root || !seller) return;
+      root.render(
+        <SellerMarker
+          seller={seller}
+          isActive={seller.storeId === activeSellerIdRef.current}
+        />,
+      );
+    });
+  };
+
+  // Create or update store markers for every seller in the current region
   const addMarkers = () => {
     if (!mapRef.current || !LRef.current) return;
     const L = LRef.current;
     const map = mapRef.current;
 
-    const visibleStoreIds = new Set(filteredProducts.map((p) => p.storeId));
+    const visibleStoreIds = new Set(sellers.map((s) => s.storeId));
     const prevIds = prevVisibleSellerIdsRef.current;
     const sameSet =
       prevIds &&
@@ -185,18 +182,7 @@ function MapComponent({
       [...visibleStoreIds].every((id) => prevIds.has(id));
 
     if (sameSet && markersRef.current.length > 0) {
-      markersRef.current.forEach((marker, i) => {
-        const seller = sellerDataRef.current[i];
-        if (!seller) return;
-        const root = markerRootsRef.current[i];
-        if (root) {
-          setTimeout(() => root.unmount(), 0);
-        }
-        const isActive = seller.storeId === activeSellerId;
-        const { icon, root: newRoot } = buildSellerIcon(seller, isActive);
-        markerRootsRef.current[i] = newRoot;
-        marker.setIcon(icon);
-      });
+      syncMarkerActiveState();
       return;
     }
 
@@ -213,24 +199,21 @@ function MapComponent({
     sellerDataRef.current = [];
 
     sellers.forEach((seller) => {
-      if (visibleStoreIds.has(seller.storeId)) {
-        const isActive = seller.storeId === activeSellerId;
-        const { icon, root } = buildSellerIcon(seller, isActive);
-        markerRootsRef.current.push(root);
-        sellerDataRef.current.push(seller);
+      const isActive = seller.storeId === activeSellerId;
+      const { icon, root } = buildSellerIcon(seller, isActive);
+      markerRootsRef.current.push(root);
+      sellerDataRef.current.push(seller);
 
-        const marker = L.marker([seller.location.lat, seller.location.lng], {
-          icon,
-        }).addTo(map);
-        marker.on("click", () => {
-          onSellerSelect(seller.storeId);
-        });
-        markersRef.current.push(marker);
-      }
+      const marker = L.marker([seller.location.lat, seller.location.lng], {
+        icon,
+      }).addTo(map);
+      marker.on("click", () => {
+        onSellerSelect(seller.storeId);
+      });
+      markersRef.current.push(marker);
     });
   };
 
-  // فعال/غیرفعال کردن GPS
   const toggleGps = () => {
     if (isLongPressTriggeredRef.current) {
       isLongPressTriggeredRef.current = false;
@@ -280,7 +263,6 @@ function MapComponent({
     }
   };
 
-  // Long-press روی دکمه GPS (پن به موقعیت کاربر)
   const handleGpsButtonMouseDown = () => {
     isLongPressTriggeredRef.current = false;
     gpsButtonLongPressTimerRef.current = setTimeout(() => {
@@ -300,7 +282,6 @@ function MapComponent({
     }
   };
 
-  // در معرض قرار دادن توابع نقشه برای والد
   useEffect(() => {
     if (onMapReady) {
       onMapReady({ panToSeller, resetMapView });
@@ -312,7 +293,6 @@ function MapComponent({
     isGpsEnabledRef.current = isGpsEnabled;
   }, [isGpsEnabled]);
 
-  // بارگذاری Leaflet استاندارد (بدون وابستگی به نشان)
   useEffect(() => {
     const loadLeaflet = async () => {
       if (typeof window === "undefined") return;
@@ -324,7 +304,6 @@ function MapComponent({
     loadLeaflet();
   }, []);
 
-  // همگام‌سازی مارکر کاربر (GPS یا دستی)
   useEffect(() => {
     if (!mapRef.current || !LRef.current) return;
     const L = LRef.current;
@@ -383,23 +362,22 @@ function MapComponent({
     panToWithDesktopOffset(map, userPosition);
   }, [userPosition, isManualMode]);
 
-  // راه‌اندازی نقشه با تایل دلخواه
   useEffect(() => {
     if (!mapContainerRef.current || !isLeafletLoaded || !LRef.current) return;
-    if (mapRef.current) return; // جلوگیری از راه‌اندازی مجدد
+    if (mapRef.current) return;
 
     const L = LRef.current;
-    // ایجاد نقشه بدون تنظیمات نشان
-    const map = L.map(mapContainerRef.current).setView([31.1, 53.5], 13);
+    const map = L.map(mapContainerRef.current).setView(
+      [HOME_MAP_INITIAL_CENTER.lat, HOME_MAP_INITIAL_CENTER.lng],
+      HOME_MAP_INITIAL_ZOOM,
+    );
     mapRef.current = map;
 
-    // اضافه کردن لایه تایل سفارشی
     L.tileLayer(CUSTOM_TILE_URL, {
       attribution: TILE_ATTRIBUTION,
       maxZoom: 19,
     }).addTo(map);
 
-    // --- رویدادهای long-press برای انتخاب موقعیت دستی (بدون تغییر) ---
     let longPressTimeout = null;
 
     const handleMouseDown = (e) => {
@@ -445,46 +423,48 @@ function MapComponent({
     map.on("mousemove", handleMouseUpOrMove);
     map.on("contextmenu", handleContextMenu);
 
-    // ─── درخواست فروشگاه‌های منطقه جدید هنگام جابجایی نقشه توسط کاربر ───
+    const notifyVisibleAreaFetch = () => {
+      if (!onMapMoveRef.current) return;
+      const { lat, lng, radiusKm } = getVisibleMapFetchArea(map);
+      onMapMoveRef.current(lat, lng, radiusKm);
+    };
+
     const handleMoveEnd = () => {
-      // حرکت‌های برنامه‌ای (panToSeller / resetMapView) رو نادیده بگیر
       if (isProgrammaticMoveRef.current) {
         isProgrammaticMoveRef.current = false;
         return;
       }
-      if (!onMapMoveRef.current) return;
 
-      // debounce: فقط وقتی نقشه کاملاً ایستاد (pan یا zoom)، درخواست بزن
-      // moveend هم بعد از drag و هم بعد از تغییر zoom fire می‌شه — پس هر دو پوشش دارن
       if (mapMoveDebounceRef.current) {
         clearTimeout(mapMoveDebounceRef.current);
       }
-      mapMoveDebounceRef.current = setTimeout(() => {
-        const center = map.getCenter();
-        // فاصله واقعی جغرافیایی از مرکز تا گوشه viewport — به کیلومتر (با ضریب کاهشی)
-        const radiusKm = getViewportRadiusKm(map);
-        onMapMoveRef.current(center.lat, center.lng, radiusKm);
-      }, 600);
+      mapMoveDebounceRef.current = setTimeout(notifyVisibleAreaFetch, 600);
+    };
+
+    const handleViewportResize = () => {
+      if (mapMoveDebounceRef.current) {
+        clearTimeout(mapMoveDebounceRef.current);
+      }
+      mapMoveDebounceRef.current = setTimeout(notifyVisibleAreaFetch, 600);
     };
 
     map.on("moveend", handleMoveEnd);
+    map.on("resize", handleViewportResize);
+    window.addEventListener("resize", handleViewportResize);
 
-    // ─── FIX: fetch اولیه برای viewport واقعی بعد از بارگذاری نقشه ──────────
-    // بدون این، دیتای SSR (مختصات هاردکد شده) تا اولین حرکت کاربر نمایش داده می‌شه.
-    // requestAnimationFrame اطمینان می‌ده که container ابعاد نهایی‌اش رو گرفته.
-    requestAnimationFrame(() => {
-      if (onMapMoveRef.current) {
-        const center = map.getCenter();
-        const radiusKm = getViewportRadiusKm(map);
-        onMapMoveRef.current(center.lat, center.lng, radiusKm);
-      }
-    });
-    // ─────────────────────────────────────────────────────────────────────────
+    // Desktop always refetches with the left-visible bounds (SSR uses full viewport).
+    const shouldInitialFetch =
+      !skipInitialAreaFetchRef.current || isDesktopMapLayout();
+
+    if (shouldInitialFetch) {
+      requestAnimationFrame(notifyVisibleAreaFetch);
+    }
 
     addMarkers();
 
     return () => {
       if (mapMoveDebounceRef.current) clearTimeout(mapMoveDebounceRef.current);
+      window.removeEventListener("resize", handleViewportResize);
       markerRootsRef.current.forEach((root) => root?.unmount());
       markerRootsRef.current = [];
       if (userMarkerRootRef.current) {
@@ -499,11 +479,17 @@ function MapComponent({
     };
   }, [isLeafletLoaded]);
 
-  // بازآفرینی مارکرها هنگام تغییر فیلتر یا فروشنده فعال
   useEffect(() => {
     addMarkers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeSellerId, filteredProducts]);
+  }, [sellers]);
+
+  useEffect(() => {
+    if (markersRef.current.length > 0) {
+      syncMarkerActiveState();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSellerId]);
 
   return (
     <div className="absolute inset-0 z-0 w-full h-full">

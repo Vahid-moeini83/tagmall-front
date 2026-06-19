@@ -29,6 +29,10 @@ import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import SellerReviewsContent from "../../seller-reviews/components/SellerReviewsContent";
 import { getHomePageData } from "@/lib/server/actions/home";
+import {
+  HomeSliderEmptyState,
+  HomeSliderSkeleton,
+} from "@/components/ui/loading";
 
 const Map = dynamic(() => import("@/components/modules/home/components/Map"), {
   ssr: false,
@@ -40,19 +44,21 @@ export default function MainHome({ initialData }) {
   const homeFilterVisit = usePublicStore((s) => s.homeFilterVisit);
   const scrollContainerRef = useRef(null);
 
-  // Dynamic stores to show on map and slider
+  // Regional store data — SSR seed, then refreshed on map move (CSR)
   const [dynamicData, setDynamicData] = useState(initialData);
+  const [isStoresLoading, setIsStoresLoading] = useState(false);
   const isLoadingRef = useRef(false);
   const pendingMoveRef = useRef(null);
+  const lastFetchParamsRef = useRef(null);
   const [storeDataVersion, setStoreDataVersion] = useState(0);
-  const prevStoreIdsRef = useRef(null);
-  /**
-   * وقتی دیتای جدید از API میاد و slider remount می‌شه،
-   * اولین slide یه onProductChange fire می‌کنه که باعث می‌شه
-   * نقشه ناخواسته روی اولین فروشگاه pan کنه.
-   * این ref برای چند فریم، panToSeller رو در handleProductChange خاموش می‌کنه
-   * تا فقط انتخاب دستی کاربر باعث حرکت نقشه بشه.
-   */
+  const prevStoreIdsRef = useRef(
+    initialData?.stores
+      ? new Set(
+          initialData.stores.map((s) => s.store?.id).filter(Boolean),
+        )
+      : null,
+  );
+  // Suppress programmatic map pan after slider remount or bulk data refresh
   const suppressMapPanRef = useRef(false);
 
   const filterMode =
@@ -64,7 +70,6 @@ export default function MainHome({ initialData }) {
 
   const [remainingTime, setRemainingTime] = useState("00:00:00");
 
-  // تابع برای پارس کردن ساعات کاری
   const parseWorkingHours = useCallback((workingDays) => {
     if (
       !workingDays ||
@@ -89,10 +94,10 @@ export default function MainHome({ initialData }) {
 
       if (!days || days.length === 0) return null;
 
-      // مرتب کردن روزها
+      // Sort weekday indices and merge consecutive ranges
       const sortedDays = [...days].sort((a, b) => a - b);
 
-      // پیدا کردن بازه‌های پیوسته
+      // Build contiguous day ranges for display
       let ranges = [];
       let start = sortedDays[0];
       let end = sortedDays[0];
@@ -108,7 +113,7 @@ export default function MainHome({ initialData }) {
       }
       ranges.push({ start, end });
 
-      // ساخت متن روزها
+      // Format day labels
       const daysText = ranges
         .map((range) => {
           if (range.start === range.end) {
@@ -156,7 +161,7 @@ export default function MainHome({ initialData }) {
     return () => clearInterval(interval);
   }, [initialData?.featured_sale_remainings_seconds]);
 
-  // تبدیل داده‌های API به فرمت مورد نیاز — هم SSR اولیه هم CSR به‌روزرسانی‌ها
+  // Normalize API payload for map markers and vertical slider
   const {
     specialProducts,
     purchasedProducts,
@@ -180,25 +185,25 @@ export default function MainHome({ initialData }) {
     dynamicData.stores.forEach((storeData) => {
       const { store, seller, products } = storeData;
 
-      // بررسی اینکه آیا این فروشنده محصول ویژه داره
       const hasSpecialProducts =
+        storeData.has_featured_products === true ||
         products.pickup?.some((p) => p.is_featured) ||
-        false ||
-        products.shipping?.some((p) => p.is_featured) ||
-        false;
+        products.shipping?.some((p) => p.is_featured);
 
-      // ساخت seller object
+      const hasReadyDelivery =
+        Array.isArray(products.pickup) && products.pickup.length > 0;
+
       const sellerObj = {
         id: seller.id,
         storeId: store.id,
         name: seller.seller_name || seller.business_name,
-        storeName: store.name || seller.seller_name || seller.business_name, // نام فروشگاه
+        storeName: store.name ?? "نامشخص",
         rating: seller.rating || 0,
-        workingHours: parseWorkingHours(store.working_days), // پارس ساعات کاری
+        workingHours: parseWorkingHours(store.working_days),
         address: store.address || "",
         location: {
-          lat: store.latitude || 0,
-          lng: store.longitude || 0,
+          lat: parseFloat(store.latitude) || 0,
+          lng: parseFloat(store.longitude) || 0,
         },
         profileImage:
           seller.attachments?.[0]?.full_url ||
@@ -206,14 +211,14 @@ export default function MainHome({ initialData }) {
         isVerified: seller.is_verified || false,
         totalReviews: seller.total_reviews || 0,
         hasSpecialSale: hasSpecialProducts,
-        hasReadyDelivery: false, // فعلاً false چون در API نیست
+        hasReadyDelivery,
       };
 
       sellersData.push(sellerObj);
 
       const storeProductsList = [];
 
-      // پردازش محصولات pickup
+      // Pickup products (in-store ready delivery)
       if (products.pickup && Array.isArray(products.pickup)) {
         products.pickup.forEach((product) => {
           const singlePrice = product.price_range?.single_price || 0;
@@ -230,7 +235,7 @@ export default function MainHome({ initialData }) {
             price: singlePrice,
             discountPercent: 0,
             finalPrice: singlePrice,
-            formattedPrice: formattedPrice, // قیمت فرمت شده
+            formattedPrice: formattedPrice,
             deliveryType: "pickup",
             isSpecialSale: product.is_featured || false,
             rating: parseFloat(product.rating) || 0,
@@ -249,7 +254,7 @@ export default function MainHome({ initialData }) {
         });
       }
 
-      // پردازش محصولات shipping
+      // Shipping products
       if (products.shipping && Array.isArray(products.shipping)) {
         products.shipping.forEach((product) => {
           const singlePrice = product.price_range?.single_price || 0;
@@ -266,7 +271,7 @@ export default function MainHome({ initialData }) {
             price: singlePrice,
             discountPercent: 0,
             finalPrice: singlePrice,
-            formattedPrice: formattedPrice, // قیمت فرمت شده
+            formattedPrice: formattedPrice,
             deliveryType: "shipping",
             isSpecialSale: product.is_featured || false,
             rating: parseFloat(product.rating) || 0,
@@ -285,8 +290,6 @@ export default function MainHome({ initialData }) {
         });
       }
 
-      // اضافه کردن فروشگاه با محصولاتش
-      // همیشه فروشگاه رو اضافه کن، حتی اگر محصولی نداشته باشه
       storesData.push({
         storeId: store.id,
         seller: sellerObj,
@@ -308,13 +311,6 @@ export default function MainHome({ initialData }) {
     return specialProducts;
   }, [filterMode, specialProducts, purchasedProducts]);
 
-  const mapProducts = useMemo(() => {
-    if (filterMode === "all") {
-      return [...specialProducts, ...purchasedProducts];
-    }
-    return sliderProducts;
-  }, [filterMode, specialProducts, purchasedProducts, sliderProducts]);
-
   const filteredSpecialForList = useMemo(
     () => (filterMode === "visit" ? [] : specialProducts),
     [filterMode, specialProducts],
@@ -325,24 +321,42 @@ export default function MainHome({ initialData }) {
     [filterMode, purchasedProducts],
   );
 
-  const initialSellerId =
-    sliderProducts.length > 0 ? sliderProducts[0].storeId : null;
+  const filteredStoreProducts = useMemo(() => {
+    if (!storeProducts?.length) return [];
 
-  const [activeSellerId, setActiveSellerId] = useState(initialSellerId);
+    if (filterMode === "visit") {
+      return storeProducts.filter((store) =>
+        filteredPurchasedForList.some((p) => p.storeId === store.storeId),
+      );
+    }
+
+    if (filterMode === "special") {
+      return storeProducts.filter((store) =>
+        store.products.some((p) => p.isSpecialSale),
+      );
+    }
+
+    return storeProducts;
+  }, [storeProducts, filterMode, filteredPurchasedForList]);
+
+  const hasSliderStores = filteredStoreProducts.length > 0;
+
+  const [activeSellerId, setActiveSellerId] = useState(
+    () => initialData?.stores?.[0]?.store?.id ?? null,
+  );
   const [viewMode, setViewMode] = useState("slider");
 
-  // محاسبه activeSellerInfo با useMemo - بر اساس storeId
+  // Derive active store card info from regional store list
   const activeSellerInfo = useMemo(() => {
     if (activeSellerId) {
-      // پیدا کردن فروشگاه فعال از storeProducts بر اساس storeId
       const activeStore = storeProducts.find(
         (s) => s.storeId === activeSellerId,
       );
       if (activeStore) {
         return {
           storeId: activeStore.storeId,
-          name: activeStore.seller.storeName || activeStore.seller.name, // نام فروشگاه
-          sellerName: activeStore.seller.name, // نام فروشنده
+          name: activeStore.seller.storeName || activeStore.seller.name,
+          sellerName: activeStore.seller.name,
           rating: activeStore.seller.rating,
           reviews: activeStore.seller.totalReviews || 1000,
           address: activeStore.seller.address,
@@ -386,60 +400,72 @@ export default function MainHome({ initialData }) {
 
   const mapActionsRef = useRef(null);
 
-  // فچ فروشگاه‌های منطقه جدید — با الگوی pending برای جلوگیری از درخواست‌های موازی
-  const handleMapMove = useCallback(async (lat, lng, radius) => {
-    if (isLoadingRef.current) {
-      pendingMoveRef.current = { lat, lng, radius };
-      return;
-    }
+  const buildFetchKey = useCallback((lat, lng, radius) => {
+    return `${Number(lat).toFixed(4)}:${Number(lng).toFixed(4)}:${radius}`;
+  }, []);
 
-    isLoadingRef.current = true;
-    try {
-      const { homePageRes } = await getHomePageData(lat, lng, radius);
-      if (homePageRes?.data) {
-        const newData = homePageRes.data;
-        const newStoreIds = newData.stores?.map((s) => s.store?.id) ?? [];
-        const newStoreIdsSet = new Set(newStoreIds);
+  // Fetch stores for the visible map viewport — queued to avoid parallel requests
+  const handleMapMove = useCallback(
+    async (lat, lng, radius) => {
+      const fetchKey = buildFetchKey(lat, lng, radius);
 
-        // فقط اگر لیست فروشگاه‌ها واقعاً عوض شده، اسلایدر رو ریست کن
-        const prevIds = prevStoreIdsRef.current;
-        const storesChanged =
-          !prevIds ||
-          prevIds.size !== newStoreIdsSet.size ||
-          newStoreIds.some((id) => !prevIds.has(id));
+      if (isLoadingRef.current) {
+        pendingMoveRef.current = { lat, lng, radius };
+        return;
+      }
 
-        // React 18 این سه setState رو در یک render اجرا می‌کنه (auto-batching)
-        setDynamicData(newData);
+      if (lastFetchParamsRef.current === fetchKey) {
+        return;
+      }
 
-        if (storesChanged) {
-          prevStoreIdsRef.current = newStoreIdsSet;
-          // قبل از remount اسلایدر، pan رو موقتاً خاموش کن
-          // تا اولین onProductChange اسلایدر باعث پریدن نقشه نشه
-          suppressMapPanRef.current = true;
-          setTimeout(() => {
-            suppressMapPanRef.current = false;
-          }, 500);
-          // اسلایدر رو remount کن تا Swiper state قدیمی پاک بشه
-          setStoreDataVersion((v) => v + 1);
-          // activeSellerId رو همزمان با دیتا ریست کن (نه با useEffect جداگانه)
-          if (newStoreIds.length > 0) {
-            setActiveSellerId((prev) =>
-              newStoreIdsSet.has(prev) ? prev : newStoreIds[0],
-            );
+      isLoadingRef.current = true;
+      setIsStoresLoading(true);
+      try {
+        const { homePageRes } = await getHomePageData(lat, lng, radius);
+        if (homePageRes?.data) {
+          lastFetchParamsRef.current = fetchKey;
+          const newData = homePageRes.data;
+          const newStoreIds = newData.stores?.map((s) => s.store?.id) ?? [];
+          const newStoreIdsSet = new Set(newStoreIds);
+
+          const prevIds = prevStoreIdsRef.current;
+          const storesChanged =
+            !prevIds ||
+            prevIds.size !== newStoreIdsSet.size ||
+            newStoreIds.some((id) => !prevIds.has(id));
+
+          setDynamicData(newData);
+
+          if (storesChanged) {
+            prevStoreIdsRef.current = newStoreIdsSet;
+            suppressMapPanRef.current = true;
+            setTimeout(() => {
+              suppressMapPanRef.current = false;
+            }, 500);
+            setStoreDataVersion((v) => v + 1);
+            if (newStoreIds.length > 0) {
+              setActiveSellerId((prev) =>
+                newStoreIdsSet.has(prev) ? prev : newStoreIds[0],
+              );
+            } else {
+              setActiveSellerId(null);
+            }
           }
         }
+      } catch (err) {
+        console.error("Error fetching stores for map area:", err);
+      } finally {
+        isLoadingRef.current = false;
+        setIsStoresLoading(false);
+        if (pendingMoveRef.current) {
+          const pending = pendingMoveRef.current;
+          pendingMoveRef.current = null;
+          handleMapMove(pending.lat, pending.lng, pending.radius);
+        }
       }
-    } catch (err) {
-      console.error("Error fetching stores for map area:", err);
-    } finally {
-      isLoadingRef.current = false;
-      if (pendingMoveRef.current) {
-        const pending = pendingMoveRef.current;
-        pendingMoveRef.current = null;
-        handleMapMove(pending.lat, pending.lng, pending.radius);
-      }
-    }
-  }, []);
+    },
+    [buildFetchKey],
+  );
 
   const handleSellerSelect = useCallback((storeId) => {
     setActiveSellerId(storeId);
@@ -448,15 +474,19 @@ export default function MainHome({ initialData }) {
   const handleProductChange = useCallback((product) => {
     if (product?.storeId) {
       setActiveSellerId(product.storeId);
-
-      // فقط اگه کاربر دستی انتخاب کرده (نه remount اتوماتیک اسلایدر) پن بزن
-      if (!suppressMapPanRef.current && mapActionsRef.current) {
-        mapActionsRef.current.panToSeller(product.storeId);
-      }
     }
   }, []);
 
   const handleSellerGoToMap = useCallback((storeId) => {
+    if (suppressMapPanRef.current) return;
+    if (mapActionsRef.current) {
+      mapActionsRef.current.panToSeller(storeId);
+    }
+  }, []);
+
+  const handleSellerNameClick = useCallback((storeId) => {
+    setViewMode("seller-details");
+    if (suppressMapPanRef.current) return;
     if (mapActionsRef.current) {
       mapActionsRef.current.panToSeller(storeId);
     }
@@ -465,13 +495,6 @@ export default function MainHome({ initialData }) {
   const toggleProductsList = useCallback(() => {
     setIsProductsListOpen(!isProductsListOpen);
   }, [isProductsListOpen]);
-
-  const handleSellerNameClick = useCallback((storeId) => {
-    setViewMode("seller-details");
-    if (mapActionsRef.current) {
-      mapActionsRef.current.panToSeller(storeId);
-    }
-  }, []);
 
   const handleBackToSlider = useCallback(() => {
     setViewMode("slider");
@@ -516,12 +539,12 @@ export default function MainHome({ initialData }) {
         <Map
           activeSellerId={activeSellerId}
           onSellerSelect={handleSellerSelect}
-          filteredProducts={mapProducts}
           sellers={transformedSellers}
           onMapReady={(actions) => {
             mapActionsRef.current = actions;
           }}
           onMapMove={handleMapMove}
+          skipInitialAreaFetch={Boolean(initialData?.stores?.length)}
         />
       </div>
       <div className="lg:hidden" data-drawer-wrapper>
@@ -533,75 +556,36 @@ export default function MainHome({ initialData }) {
           onProductChange={handleProductChange}
           onSellerGoToMap={handleSellerGoToMap}
           setIsReviewsModalOpen={setIsReviewsModalOpen}
+          remainingTime={remainingTime}
+          isStoresLoading={isStoresLoading}
+          hasSliderStores={hasSliderStores}
         />
       </div>
       <div className="hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-[40%] xl:w-[44%] max-w-200 lg:px-4 lg:mr-24 xl:px-8 2xl:px-16 bg-gray-200/50 backdrop-blur-sm rounded-l-lg flex-col z-10">
-        <div className="flex flex-col gap-2 shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="relative w-[50px] h-[50px]">
-                <Image
-                  src={
-                    activeSellerInfo.profileImage ||
-                    "/assets/images/fallback/no-photo.jpg"
-                  }
-                  fill
-                  alt="avatar"
-                  objectFit="contain"
-                  className="bg-white rounded-md"
-                />
-              </div>
-              <div className="flex items-center gap-0.5">
-                <span
-                  className="text-gray-600 cursor-pointer select-none"
-                  onClick={() => handleSellerNameClick(activeSellerId)}
-                >
-                  {activeSellerInfo.name}
-                </span>
-                <VerifyIcon size={20} />
-              </div>
-            </div>
-            {viewMode === "slider" && specialProducts.length > 0 && (
-              <div className="text-error-medium">{remainingTime}</div>
-            )}
-          </div>
-          <div className="flex items-end justify-between">
-            <div
-              onClick={() => setIsReviewsModalOpen(true)}
-              className="flex flex-col gap-1 cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <div className="flex items-center gap-1">
-                <StarIcon className="text-yellow-500 w-[15px] h-[15px]" />
-                <span>
-                  {activeSellerInfo.rating}
-                  <span className="text-xs text-gray-600/70">/5</span>
-                </span>
-              </div>
-              <span className="text-gray-600/70">
-                آرا {activeSellerInfo.reviews}
-              </span>
-            </div>
-          </div>
-        </div>
-
         <div
           ref={scrollContainerRef}
-          className="flex-1 relative overflow-y-auto mt-2"
+          className="flex-1 relative overflow-y-auto"
         >
-          {viewMode === "slider" && (
-            <ProductsSlider
-              key={`${filterMode}-${storeDataVersion}`}
-              storeProducts={storeProducts}
-              onProductChange={handleProductChange}
-              activeSellerId={activeSellerId}
-              purchasedProducts={filteredPurchasedForList}
-              activeSellerInfo={activeSellerInfo}
-              filterMode={filterMode}
-              scrollContainerRef={scrollContainerRef}
-            />
-          )}
+          {viewMode === "slider" &&
+            (isStoresLoading ? (
+              <HomeSliderSkeleton variant="desktop" />
+            ) : !hasSliderStores ? (
+              <HomeSliderEmptyState variant="desktop" />
+            ) : (
+              <ProductsSlider
+                key={`${filterMode}-${storeDataVersion}`}
+                storeProducts={storeProducts}
+                onProductChange={handleProductChange}
+                activeSellerId={activeSellerId}
+                purchasedProducts={filteredPurchasedForList}
+                activeSellerInfo={activeSellerInfo}
+                filterMode={filterMode}
+                scrollContainerRef={scrollContainerRef}
+                remainingTime={remainingTime}
+              />
+            ))}
 
-          {viewMode === "seller-details" && (
+          {viewMode === "seller-details" && hasSliderStores && (
             <SellerDetails
               activeSellerInfo={activeSellerInfo}
               viewMode={viewMode}

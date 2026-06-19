@@ -248,7 +248,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
       {!isDesktop && (
         <Drawer open={true} onOpenChange={() => router.back()}>
           <DrawerContent className="z-100! h-[96%]!" overlayClassName="z-100">
-            <h2 className="font-extralight text-center text-gray-600 text-base lg:text-lg mt-4 mb-4 px-[10px]">
+            <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-4 mb-4 px-[10px]">
               {product?.name}
             </h2>
             <div className="flex flex-col h-full">

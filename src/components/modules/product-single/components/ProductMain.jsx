@@ -21,6 +21,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { CustomAccordion } from "@/components/ui/accordion";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import ProductImageSlider from "./ProductImageSlider";
 import { Radio } from "@/components/ui/radio";
 import { formatPrice, formatSecondsToTime } from "@/lib/client/utils";
@@ -43,6 +44,7 @@ export default function ProductMain({ product }) {
     product?.featured_sale_remainings_seconds,
   );
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [showOtherSellers, setShowOtherSellers] = useState(false);
 
   // Get store actions
   const setProductAttribute = usePublicStore((s) => s.setProductAttribute);
@@ -387,9 +389,11 @@ export default function ProductMain({ product }) {
                 </span>
               </div>
             </div>
-            <Link href={"#"} className="rotate-90 mt-6 ml-4 lg:hidden">
-              <ChevronDownIcon size={20} />
-            </Link>
+            <ChevronDownIcon
+              size={20}
+              className="rotate-90 mt-6 ml-4 lg:hidden cursor-pointer"
+              onClick={() => setShowOtherSellers(true)}
+            />
           </div>
 
           {/* Product Image Slider */}
@@ -1034,6 +1038,98 @@ export default function ProductMain({ product }) {
           </div>
         </div>
       </div>
+
+      {/* Other Sellers Drawer - Mobile Only */}
+      <Drawer open={showOtherSellers} onOpenChange={setShowOtherSellers}>
+        <DrawerContent
+          className="z-100! h-[96%]! overflow-hidden"
+          overlayClassName="z-100 lg:hidden"
+        >
+          <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-4 mb-4 px-[10px]">
+            {product?.name}
+          </h2>
+
+          <div className="flex-1 overflow-y-auto px-[10px] pb-4">
+            <div className="space-y-[10px]">
+              {/* Mock Sellers List - Replace with real data later */}
+              {[1, 2, 3, 4, 5].map((seller, index) => {
+                const isFeaturedSale = index === 0 || index === 2; // Mock featured sale
+
+                return (
+                  <Link href="#" key={seller} className="block">
+                    {/* Seller Header */}
+                    <div className="flex items-center justify-between mb-2">
+                      {/* Right side - Avatar, name, verify icon */}
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src={
+                            sellerData.sellerAvatar ||
+                            "/assets/images/fallback/avatar.png"
+                          }
+                          width={48}
+                          height={48}
+                          alt="پروفایل فروشنده"
+                          className="bg-white rounded-lg"
+                        />
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-gray-600">
+                            {sellerData.sellerName} {index + 1}
+                          </span>
+                          <VerifyIcon size={20} />
+                        </div>
+                      </div>
+
+                      {/* Left side - Rating */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-400">
+                          آرا {sellerData.totalReviews}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <StarIcon className="w-[10px] h-[10px] text-yellow-600" />
+                          <span className="text-lg">
+                            {sellerData.rating}
+                            <span className="text-xs text-gray-400">/5</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Seller Info Box */}
+                    <div className="border-2 border-gray-200 rounded-lg p-[10px]">
+                      {/* Featured Sale or Update Time */}
+                      {isFeaturedSale ? (
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-error-medium font-bold text-sm">
+                            فروش ویژه
+                          </span>
+                          <span className="text-error-medium font-bold text-sm">
+                            {formatSecondsToTime(3600)}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="text-center mb-4">
+                          <span className="text-gray-600 text-sm">
+                            <span className="font-bold">بروزرسانی</span> 1 دقیقه
+                            پیش
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Price Box */}
+                      <div className="border-2 border-gray-200 rounded-lg py-2 text-center">
+                        <span className="text-gray-700 text-sm">
+                          از {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
+                          تومان
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

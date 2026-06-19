@@ -8,14 +8,15 @@ import {
   StrokeArrowLeftIcon,
   VerifyIcon,
 } from "@/icons";
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/client/utils";
 import ProductCardMobile from "./ProductCardMobile";
 import usePublicStore from "@/app/store/publicStore";
 import { SearchResultBox } from "@/components/ui/search";
+import { Skeleton } from "@/components/ui/loading";
 
 const SHOP_IMAGES = [
   "/assets/images/home/sampleMap.jpg",
@@ -26,6 +27,92 @@ const SHOP_IMAGES = [
 const SNAP_CLOSED_DEFAULT_HEIGHT = 260;
 const SNAP_CLOSED_WITH_SEARCH_HEIGHT = 320;
 const SNAP_OPEN_MAX_RATIO = 0.92;
+const SNAP_FALLBACK_VIEWPORT_HEIGHT = 812;
+// Mobile bottom nav: h-12 (48px) + py-3 (24px) = 72px, plus breathing room
+const MOBILE_NAV_BOTTOM_OFFSET_CLASS =
+  "data-[vaul-drawer-direction=bottom]:mb-[calc(88px+env(safe-area-inset-bottom))]!";
+const MOBILE_NAV_BOTTOM_OFFSET_COMPACT_CLASS =
+  "data-[vaul-drawer-direction=bottom]:mb-[calc(84px+env(safe-area-inset-bottom))]!";
+
+function getDrawerSnapPoints(withSearch = false) {
+  const closedDefault = withSearch
+    ? SNAP_CLOSED_WITH_SEARCH_HEIGHT
+    : SNAP_CLOSED_DEFAULT_HEIGHT;
+
+  const vh =
+    typeof window !== "undefined" && window.innerHeight > 0
+      ? window.innerHeight
+      : SNAP_FALLBACK_VIEWPORT_HEIGHT;
+
+  const closedHeight = Math.min(closedDefault, vh * 0.9);
+  return [closedHeight / vh, SNAP_OPEN_MAX_RATIO];
+}
+
+// Matches ProductCardMobile layout inside the closed drawer
+function DrawerProductCardSkeleton() {
+  return (
+    <div className="rounded-lg shrink-0 w-full select-none">
+      <div className="w-full flex items-center justify-between gap-2 pb-1.5 px-1">
+        <div className="flex items-center gap-2 min-w-0">
+          <Skeleton className="w-10 h-10 rounded-md shrink-0" />
+          <Skeleton className="w-28 h-4" />
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Skeleton className="w-14 h-3" />
+          <Skeleton className="w-10 h-3" />
+        </div>
+      </div>
+      <div className="mt-2 bg-white rounded-md flex flex-col pt-[14px] pb-[10px] px-[10px] gap-3">
+        <div className="flex items-center justify-between gap-2">
+          <Skeleton className="w-20 h-4" />
+          <Skeleton className="w-16 h-4" />
+        </div>
+        <div className="flex flex-row gap-3">
+          <Skeleton className="w-16 h-20 rounded-md shrink-0" />
+          <div className="flex-1 flex flex-col gap-2 min-w-0">
+            <Skeleton className="w-full h-4" />
+            <Skeleton className="w-24 h-3" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DrawerEmptyState({ isListMode = false }) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center text-center select-none w-full",
+        isListMode ? "py-8 px-2" : "py-2 px-1",
+      )}
+    >
+      <div className="bg-white rounded-md flex flex-col items-center gap-2 w-full p-4 shadow-sm">
+        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+          <LocationIcon size={22} />
+        </div>
+        <p className="font-bold text-gray-700 text-sm">
+          فروشگاهی در این ناحیه یافت نشد
+        </p>
+        <p className="text-xs text-gray-500 leading-relaxed">
+          نقشه را جابه‌جا کنید تا فروشگاه‌های اطراف را ببینید
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function DrawerSliderPlaceholder({ isLoading, isListMode = false }) {
+  return (
+    <div className="flex-1 min-h-0 w-full flex flex-col justify-center">
+      {isLoading ? (
+        <DrawerProductCardSkeleton />
+      ) : (
+        <DrawerEmptyState isListMode={isListMode} />
+      )}
+    </div>
+  );
+}
 
 function SellerHorizontalSlider({
   products,
@@ -34,48 +121,28 @@ function SellerHorizontalSlider({
   isListMode,
   setIsReviewsModalOpen,
   isActive,
+  nested = false,
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const touchStartRef = useRef(null);
+  const swiperRef = useRef(null);
 
   // کنترل fade-in: اسلاید فعال از ابتدا visible، بقیه hidden
   const [isVisible, setIsVisible] = useState(() => isActive !== false);
 
-  const [sliderRef, sliderInstance] = useKeenSlider(
-    {
-      rtl: true,
-      drag: true,
-      mode: "snap",
-      rubberband: false,
-      slides: { perView: 1, spacing: 10 },
-    },
-    [
-      (slider) => {
-        slider.on("created", () => setCurrentSlide(slider.track.details.rel));
-        slider.on("slideChanged", () =>
-          setCurrentSlide(slider.track.details.rel),
-        );
-      },
-    ],
-  );
-
   useEffect(() => {
     if (isActive === false) {
-      // اسلاید غیرفعال: مخفی بشه (بدون delay)
       setIsVisible(false);
       return;
     }
 
-    // dimensions رو فوری update کن (layout بعد از animationEnded آماده‌ست)
-    sliderInstance.current?.update();
+    swiperRef.current?.update();
 
-    // fade-in در اولین frame بعد از update — بدون تاخیر مصنوعی
     const raf = requestAnimationFrame(() => {
       setIsVisible(true);
     });
 
     return () => cancelAnimationFrame(raf);
-  }, [isActive]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isActive]);
 
   if (!products || products.length === 0) return null;
 
@@ -86,35 +153,22 @@ function SellerHorizontalSlider({
         isVisible ? "opacity-100" : "opacity-0",
       )}
     >
-      <div
-        ref={sliderRef}
-        className="keen-slider overflow-hidden w-full"
-        style={{ touchAction: "pan-x" }}
-        onTouchStart={(e) => {
-          const touch = e.touches[0];
-          if (touch) {
-            touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-          }
+      <Swiper
+        dir="rtl"
+        nested={nested}
+        slidesPerView={1}
+        spaceBetween={10}
+        grabCursor
+        className="w-full overflow-hidden"
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
         }}
-        onTouchMove={(e) => {
-          const touch = e.touches[0];
-          if (!touch || !touchStartRef.current) return;
-
-          // delta حرکت نسبت به نقطه شروع، نه مختصات مطلق صفحه
-          const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
-          const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
-
-          // فقط swipe افقی رو متوقف کن تا به اسلایدر عمودی نرسه
-          if (deltaX > deltaY) {
-            e.stopPropagation();
-          }
+        onSlideChange={(swiper) => {
+          setCurrentSlide(swiper.realIndex);
         }}
       >
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="keen-slider__slide !w-full min-w-0 overflow-hidden"
-          >
+          <SwiperSlide key={product.id} className="w-full! min-w-0 overflow-hidden">
             <ProductCardMobile
               product={product}
               variant={variant}
@@ -122,16 +176,16 @@ function SellerHorizontalSlider({
               isListMode={isListMode}
               setIsReviewsModalOpen={setIsReviewsModalOpen}
             />
-          </div>
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
       {products.length > 1 && (
         <div className="absolute left-1/2 -translate-x-1/2 top-[168px] flex justify-center gap-2 z-10">
           {products.map((_, idx) => (
             <button
               key={idx}
               type="button"
-              onClick={() => sliderInstance.current?.moveToIdx(idx)}
+              onClick={() => swiperRef.current?.slideTo(idx)}
               className={cn(
                 "w-2.5 h-2.5 rounded-full transition-all cursor-pointer",
                 currentSlide === idx
@@ -154,6 +208,8 @@ export default function ProductsDrawer({
   onProductChange,
   onSellerGoToMap,
   setIsReviewsModalOpen,
+  isStoresLoading = false,
+  hasSliderStores = true,
 }) {
   const showSearchResultBox = usePublicStore((s) => s.showSearchResultBox);
   const filterMode = usePublicStore((s) => {
@@ -165,13 +221,13 @@ export default function ProductsDrawer({
 
   const drawerContentRef = useRef(null);
 
-  const [snapPoints, setSnapPoints] = useState(() => {
-    const vh = typeof window !== "undefined" ? window.innerHeight : null;
-    const closedHeight = Math.min(SNAP_CLOSED_DEFAULT_HEIGHT, vh * 0.9);
-    return [closedHeight / vh, SNAP_OPEN_MAX_RATIO];
-  });
+  const [snapPoints, setSnapPoints] = useState(() =>
+    getDrawerSnapPoints(false),
+  );
 
-  const [activeSnapPoint, setActiveSnapPoint] = useState(snapPoints[0]);
+  const [activeSnapPoint, setActiveSnapPoint] = useState(
+    () => getDrawerSnapPoints(false)[0],
+  );
   const [showSellerDetails, setShowSellerDetails] = useState(false);
   const [showShopImagesGallery, setShowShopImagesGallery] = useState(false);
   const [selectedSeller, setSelectedSeller] = useState(null);
@@ -248,98 +304,42 @@ export default function ProductsDrawer({
   }, [closedStateProducts]);
 
   const isListMode = activeSnapPoint === snapPoints[1] && !showSellerDetails;
+  const showSliderPlaceholder = isStoresLoading || !hasSliderStores;
+
+  const closedStateProductsBySellerRef = useRef(closedStateProductsBySeller);
+  useEffect(() => {
+    closedStateProductsBySellerRef.current = closedStateProductsBySeller;
+  }, [closedStateProductsBySeller]);
 
   const [ordersCurrentSlide, setOrdersCurrentSlide] = useState(0);
-  const [ordersSliderRef, ordersSliderInstance] = useKeenSlider(
-    {
-      rtl: true,
-      drag: true,
-      mode: "snap",
-      slides: { perView: 1, spacing: 12 },
-    },
-    [
-      (slider) => {
-        slider.on("created", () => {
-          setOrdersCurrentSlide(slider.track.details.rel);
-        });
-        slider.on("slideChanged", () => {
-          setOrdersCurrentSlide(slider.track.details.rel);
-        });
-      },
-    ],
-  );
+  const ordersSwiperRef = useRef(null);
 
-  // تعداد فروشگاه‌ها برای محاسبه range
-  const storeCount = Object.keys(closedStateProductsBySeller).length;
-
-  // ردیابی اسلاید عمودی فعال برای پاس دادن به SellerHorizontalSlider
   const [currentVerticalSlide, setCurrentVerticalSlide] = useState(0);
+  const verticalSwiperRef = useRef(null);
 
-  // اسلایدر عمودی - جابجایی بین فروشگاه‌ها
-  const [productsSliderRef, productsSliderInstance] = useKeenSlider(
-    {
-      vertical: true,
-      rubberband: false,
-      drag: true,
-      loop: false,
-      dragSpeed: 1,
-      slides: {
-        perView: 1,
-        spacing: 0,
-      },
-      mode: "snap",
-      slideChanged(s) {
-        const idx = s.track.details.rel;
-        // setCurrentVerticalSlide اینجا نیست - به animationEnded منتقل شد
-        // تا re-render در وسط انیمیشن اتفاق نیفته و اسلاید روون بمونه
+  const gallerySwiperRef = useRef(null);
 
-        const storeIds = Object.keys(closedStateProductsBySeller);
-        if (idx >= storeIds.length) return;
+  const handleVerticalSlideChange = useCallback(
+    (swiper) => {
+      const idx = swiper.realIndex;
+      setCurrentVerticalSlide(idx);
 
-        const storeId = storeIds[idx];
-        if (!storeId) return;
+      const storeIds = Object.keys(closedStateProductsBySellerRef.current);
+      const storeId = storeIds[idx];
+      if (!storeId) return;
 
-        const products = closedStateProductsBySeller[storeId];
-        if (!products || products.length === 0) return;
+      const products = closedStateProductsBySellerRef.current[storeId];
+      if (!products || products.length === 0) return;
 
-        if (syncingFromSellerRef.current) {
-          syncingFromSellerRef.current = false;
-          onProductChange?.(products[0]);
-          return;
-        }
-
+      if (syncingFromSellerRef.current) {
+        syncingFromSellerRef.current = false;
         onProductChange?.(products[0]);
-      },
-    },
-    [
-      (slider) => {
-        slider.on("created", () => {
-          setCurrentVerticalSlide(slider.track.details.rel ?? 0);
-        });
-        // state update بعد از پایان انیمیشن - جلوگیری از stutter حین slide
-        slider.on("animationEnded", () => {
-          setCurrentVerticalSlide(slider.track.details.rel ?? 0);
-        });
-      },
-    ],
-  );
+        return;
+      }
 
-  const [gallerySliderRef, galleryInstanceRef] = useKeenSlider(
-    {
-      rtl: true,
-      loop: true,
-      slides: { perView: 1, spacing: 10 },
+      onProductChange?.(products[0]);
     },
-    [
-      (slider) => {
-        slider.on("created", () => {
-          setGalleryCurrentSlide(slider.track.details.rel);
-        });
-        slider.on("slideChanged", () => {
-          setGalleryCurrentSlide(slider.track.details.rel);
-        });
-      },
-    ],
+    [onProductChange],
   );
 
   const handleSellerClick = useCallback(
@@ -389,114 +389,119 @@ export default function ProductsDrawer({
   }, [snapPoints]);
 
   useEffect(() => {
-    const vh = typeof window !== "undefined" ? window.innerHeight : null;
-    const closedHeight = showSearchResultBox
-      ? Math.min(SNAP_CLOSED_WITH_SEARCH_HEIGHT, vh * 0.9)
-      : Math.min(SNAP_CLOSED_DEFAULT_HEIGHT, vh * 0.9);
+    if (!verticalSwiperRef.current || showSliderPlaceholder) return;
+    verticalSwiperRef.current.update();
+  }, [closedStateProductsBySeller, showSliderPlaceholder]);
 
-    setSnapPoints([closedHeight / vh, SNAP_OPEN_MAX_RATIO]);
+  useEffect(() => {
+    const points = getDrawerSnapPoints(showSearchResultBox);
+    setSnapPoints(points);
+    setActiveSnapPoint(points[0]);
   }, [showSearchResultBox]);
 
   useEffect(() => {
-    setActiveSnapPoint(snapPoints[0]);
-  }, [snapPoints]);
-
-  useEffect(() => {
-    if (!productsSliderInstance.current) return;
+    if (!verticalSwiperRef.current || showSliderPlaceholder) return;
 
     const timer = setTimeout(() => {
       requestAnimationFrame(() => {
-        try {
-          productsSliderInstance.current?.refreshOptions({});
-        } catch (e) {
-          // slider ممکن است هنوز آماده نباشد
-        }
+        verticalSwiperRef.current?.update();
       });
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [snapPoints, showSearchResultBox, productsSliderInstance]);
+  }, [snapPoints, showSearchResultBox, showSliderPlaceholder]);
 
   useEffect(() => {
     showSellerDetailsRef.current = showSellerDetails;
   }, [showSellerDetails]);
 
-  // هنگام بسته شدن لیست، اسلایدر رو refresh کن و به index درست برو
+  // Refresh vertical slider when returning to closed drawer with data
   useEffect(() => {
-    if (!isListMode) {
-      const timer = setTimeout(() => {
-        requestAnimationFrame(() => {
-          try {
-            productsSliderInstance.current?.refreshOptions({});
-          } catch (e) {
-            // slider ممکن است آماده نباشد
-          }
+    if (showSliderPlaceholder || isListMode) return;
 
-          if (activeSellerId) {
-            const storeIds = Object.keys(closedStateProductsBySeller);
-            const idx = storeIds.findIndex(
-              (id) => id === String(activeSellerId),
-            );
-            if (idx >= 0) {
-              productsSliderInstance.current?.moveToIdx(idx);
-            }
+    const timer = setTimeout(() => {
+      requestAnimationFrame(() => {
+        verticalSwiperRef.current?.update();
+
+        if (activeSellerId) {
+          const storeIds = Object.keys(closedStateProductsBySeller);
+          const idx = storeIds.findIndex(
+            (id) => id === String(activeSellerId),
+          );
+          if (idx >= 0) {
+            verticalSwiperRef.current?.slideTo(idx, 0);
           }
-        });
-      }, 50);
-      return () => clearTimeout(timer);
-    }
+        }
+      });
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [
     activeSnapPoint,
     showSellerDetails,
     showSearchResultBox,
-    productsSliderInstance,
     isListMode,
     activeSellerId,
     closedStateProductsBySeller,
+    showSliderPlaceholder,
   ]);
 
   useEffect(() => {
     if (
-      isListMode &&
-      activeSellerPurchasedProducts.length > 0 &&
-      ordersSliderInstance.current
+      showSliderPlaceholder ||
+      !isListMode ||
+      activeSellerPurchasedProducts.length === 0 ||
+      !ordersSwiperRef.current
     ) {
-      requestAnimationFrame(() => {
-        try {
-          ordersSliderInstance.current?.refreshOptions({});
-        } catch (e) {
-          // slider ممکن است آماده نباشد
-        }
-      });
+      return;
     }
-  }, [isListMode, activeSellerPurchasedProducts.length, ordersSliderInstance]);
+
+    requestAnimationFrame(() => {
+      ordersSwiperRef.current?.update();
+    });
+  }, [
+    isListMode,
+    activeSellerPurchasedProducts.length,
+    showSliderPlaceholder,
+  ]);
 
   useEffect(() => {
-    if (!productsSliderInstance.current || !activeSellerId || isListMode)
+    if (
+      showSliderPlaceholder ||
+      !verticalSwiperRef.current ||
+      !activeSellerId ||
+      isListMode
+    ) {
       return;
+    }
 
     const storeIds = Object.keys(closedStateProductsBySeller);
     const idx = storeIds.findIndex((id) => id === String(activeSellerId));
 
     if (idx < 0) return;
 
-    const currentIdx = productsSliderInstance.current?.track?.details?.rel;
-    if (currentIdx === undefined || currentIdx === idx) return;
+    const currentIdx = verticalSwiperRef.current?.realIndex;
+    if (currentIdx === idx) return;
 
     syncingFromSellerRef.current = true;
     requestAnimationFrame(() => {
-      productsSliderInstance.current?.moveToIdx(idx);
+      verticalSwiperRef.current?.slideTo(idx, 300);
     });
   }, [
     activeSellerId,
     closedStateProductsBySeller,
-    productsSliderInstance,
     isListMode,
+    showSliderPlaceholder,
   ]);
 
-  if (!storeProducts || storeProducts.length === 0) {
-    return null;
-  }
+  // Reset drawer sub-views while regional data is loading or empty
+  useEffect(() => {
+    if (!showSliderPlaceholder) return;
+
+    setShowSellerDetails(false);
+    setSelectedSeller(null);
+    setCurrentVerticalSlide(0);
+  }, [showSliderPlaceholder]);
 
   return (
     <>
@@ -516,9 +521,10 @@ export default function ProductsDrawer({
           className={cn(
             "rounded-t-xl pt-0 px-0! border-0! lg:hidden bg-gray-200/20! backdrop-blur-sm outline-none!",
             showSellerDetails
-              ? `data-[vaul-drawer-direction=bottom]:mb-[calc(32px+env(safe-area-inset-bottom))]!`
-              : `data-[vaul-drawer-direction=bottom]:mb-[calc(64px+env(safe-area-inset-bottom))]!`,
+              ? MOBILE_NAV_BOTTOM_OFFSET_COMPACT_CLASS
+              : MOBILE_NAV_BOTTOM_OFFSET_CLASS,
             "data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-2rem-env(safe-area-inset-bottom))]!",
+            "data-[vaul-drawer-direction=bottom]:min-h-[92svh]!",
             "data-[vaul-drawer-direction=bottom]:left-1/2 data-[vaul-drawer-direction=bottom]:right-auto data-[vaul-drawer-direction=bottom]:-translate-x-1/2",
             "data-[vaul-drawer-direction=bottom]:w-full data-[vaul-drawer-direction=bottom]:max-w-[640px]",
           )}
@@ -631,81 +637,127 @@ export default function ProductsDrawer({
                 </div>
               ) : isListMode ? (
                 <div className="flex-1 min-h-0 overflow-y-auto pb-12 scroll-hidden flex flex-col gap-3">
-                  {filterMode === "all" &&
-                    activeSellerPurchasedProducts.length > 0 && (
-                      <div className="shrink-0 w-full flex flex-col gap-2">
-                        {!showSearchResultBox && (
-                          <span className="text-center pt-1 text-gray-600">
-                            فروش ویژه و سفارشات آماده تحویل
-                          </span>
-                        )}
-                        <div
-                          ref={ordersSliderRef}
-                          className="keen-slider min-h-0"
-                        >
-                          {activeSellerPurchasedProducts.map((product) => (
-                            <div
-                              key={product.id}
-                              className="keen-slider__slide !w-full relative flex flex-col gap-2"
+                  {showSliderPlaceholder ? (
+                    <DrawerSliderPlaceholder
+                      isLoading={isStoresLoading}
+                      isListMode
+                    />
+                  ) : (
+                    <>
+                      {filterMode === "all" &&
+                        activeSellerPurchasedProducts.length > 0 && (
+                          <div className="shrink-0 w-full flex flex-col gap-2">
+                            {!showSearchResultBox && (
+                              <span className="text-center pt-1 text-gray-600">
+                                فروش ویژه و سفارشات آماده تحویل
+                              </span>
+                            )}
+                            <Swiper
+                              dir="rtl"
+                              slidesPerView={1}
+                              spaceBetween={12}
+                              grabCursor
+                              className="min-h-0 w-full"
+                              onSwiper={(swiper) => {
+                                ordersSwiperRef.current = swiper;
+                              }}
+                              onSlideChange={(swiper) => {
+                                setOrdersCurrentSlide(swiper.realIndex);
+                              }}
                             >
-                              <ProductCardMobile
-                                product={product}
-                                variant="order"
-                                onSellerClick={handleSellerClick}
-                                isListMode={isListMode}
-                              />
-                              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex justify-center gap-2">
-                                {activeSellerPurchasedProducts.map((_, idx) => (
-                                  <button
-                                    key={idx}
-                                    type="button"
-                                    onClick={() =>
-                                      ordersSliderInstance.current?.moveToIdx(
-                                        idx,
-                                      )
-                                    }
-                                    className={cn(
-                                      "w-2 h-2 rounded-full transition-all cursor-pointer",
-                                      ordersCurrentSlide === idx
-                                        ? "bg-primary w-6"
-                                        : "bg-gray-400 hover:bg-gray-400",
-                                    )}
-                                    aria-label={`اسلاید ${idx + 1}`}
+                              {activeSellerPurchasedProducts.map((product) => (
+                                <SwiperSlide
+                                  key={product.id}
+                                  className="w-full! relative flex flex-col gap-2"
+                                >
+                                  <ProductCardMobile
+                                    product={product}
+                                    variant="order"
+                                    onSellerClick={handleSellerClick}
+                                    isListMode={isListMode}
                                   />
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  {/* فروشگاه‌محور - برای هر فروشگاه یک SellerHorizontalSlider */}
-                  {Object.entries(listModeProductsBySeller).map(
-                    ([storeId, products]) => (
-                      <div key={storeId} className="shrink-0">
-                        <SellerHorizontalSlider
-                          products={products}
-                          variant={closedStateVariant}
-                          onSellerClick={handleSellerClick}
-                          isListMode={isListMode}
-                          setIsReviewsModalOpen={setIsReviewsModalOpen}
-                        />
-                      </div>
-                    ),
+                                  <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex justify-center gap-2">
+                                    {activeSellerPurchasedProducts.map(
+                                      (_, idx) => (
+                                        <button
+                                          key={idx}
+                                          type="button"
+                                          onClick={() =>
+                                            ordersSwiperRef.current?.slideTo(idx)
+                                          }
+                                          className={cn(
+                                            "w-2 h-2 rounded-full transition-all cursor-pointer",
+                                            ordersCurrentSlide === idx
+                                              ? "bg-primary w-6"
+                                              : "bg-gray-400 hover:bg-gray-400",
+                                          )}
+                                          aria-label={`اسلاید ${idx + 1}`}
+                                        />
+                                      ),
+                                    )}
+                                  </div>
+                                </SwiperSlide>
+                              ))}
+                            </Swiper>
+                          </div>
+                        )}
+                      {Object.entries(listModeProductsBySeller).map(
+                        ([storeId, products]) => (
+                          <div key={storeId} className="shrink-0">
+                            <SellerHorizontalSlider
+                              products={products}
+                              variant={closedStateVariant}
+                              onSellerClick={handleSellerClick}
+                              isListMode={isListMode}
+                              setIsReviewsModalOpen={setIsReviewsModalOpen}
+                            />
+                          </div>
+                        ),
+                      )}
+                    </>
                   )}
                 </div>
+              ) : showSliderPlaceholder ? (
+                <DrawerSliderPlaceholder isLoading={isStoresLoading} />
               ) : (
-                <div
+                <Swiper
                   key={filterMode}
-                  ref={productsSliderRef}
-                  className="keen-slider flex-1 min-h-0 overflow-hidden"
-                  style={{ touchAction: "pan-y" }}
+                  direction="vertical"
+                  nested
+                  slidesPerView={1}
+                  spaceBetween={0}
+                  grabCursor
+                  className="flex-1 min-h-0 w-full overflow-hidden"
+                  onSwiper={(swiper) => {
+                    verticalSwiperRef.current = swiper;
+                    setCurrentVerticalSlide(swiper.realIndex);
+
+                    if (activeSellerId) {
+                      const storeIds = Object.keys(closedStateProductsBySeller);
+                      const idx = storeIds.findIndex(
+                        (id) => id === String(activeSellerId),
+                      );
+                      if (idx >= 0) {
+                        swiper.slideTo(idx, 0);
+                        return;
+                      }
+                    }
+
+                    const storeIds = Object.keys(closedStateProductsBySeller);
+                    const firstStoreId = storeIds[0];
+                    const firstProducts =
+                      closedStateProductsBySeller[firstStoreId];
+                    if (firstProducts?.length > 0) {
+                      onProductChange?.(firstProducts[0]);
+                    }
+                  }}
+                  onSlideChange={handleVerticalSlideChange}
                 >
                   {Object.entries(closedStateProductsBySeller).map(
                     ([storeId, products], index) => (
-                      <div
+                      <SwiperSlide
                         key={storeId}
-                        className="keen-slider__slide flex flex-col min-h-0 overflow-hidden"
+                        className="flex flex-col min-h-0 overflow-hidden"
                       >
                         <SellerHorizontalSlider
                           products={products}
@@ -714,11 +766,12 @@ export default function ProductsDrawer({
                           isListMode={isListMode}
                           setIsReviewsModalOpen={setIsReviewsModalOpen}
                           isActive={index === currentVerticalSlide}
+                          nested
                         />
-                      </div>
+                      </SwiperSlide>
                     ),
                   )}
-                </div>
+                </Swiper>
               )}
             </div>
           </div>
@@ -735,12 +788,22 @@ export default function ProductsDrawer({
             className="absolute right-2.5 top-6"
           />
           <div className="flex-1 flex flex-col justify-center min-h-0 overflow-hidden px-3 py-4">
-            <div
-              ref={gallerySliderRef}
-              className="keen-slider rounded-lg overflow-hidden shadow-md max-h-64 sm:max-h-72 max-w-full"
+            <Swiper
+              dir="rtl"
+              loop
+              slidesPerView={1}
+              spaceBetween={10}
+              grabCursor
+              className="rounded-lg overflow-hidden shadow-md max-h-64 sm:max-h-72 max-w-full"
+              onSwiper={(swiper) => {
+                gallerySwiperRef.current = swiper;
+              }}
+              onSlideChange={(swiper) => {
+                setGalleryCurrentSlide(swiper.realIndex);
+              }}
             >
               {SHOP_IMAGES.map((src, i) => (
-                <div key={i} className="keen-slider__slide">
+                <SwiperSlide key={i}>
                   <Image
                     src={src}
                     alt={`فروشگاه ${i + 1}`}
@@ -748,15 +811,15 @@ export default function ProductsDrawer({
                     height={800}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
             <div className="flex justify-center gap-2 mt-4">
               {SHOP_IMAGES.map((_, idx) => (
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => galleryInstanceRef.current?.moveToIdx(idx)}
+                  onClick={() => gallerySwiperRef.current?.slideTo(idx)}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all cursor-pointer",
                     galleryCurrentSlide === idx

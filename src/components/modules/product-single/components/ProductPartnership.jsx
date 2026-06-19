@@ -19,16 +19,29 @@ import {
 } from "@/components/ui/accordion";
 import { PartnershipHintDialog } from "@/components/ui/dialog";
 import ResponsiveModal from "@/components/ui/responsive-modal";
+import PopoverWithTrigger from "@/components/ui/popover/PopoverWithTrigger";
 
 export default function ProductPartnership({ cooperation }) {
   const [showLink, setShowLink] = useState(false);
   const [isHintBoxOpen, setIsHintBoxOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isReturnGuideOpen, setIsReturnGuideOpen] = useState(false);
+  const [sharePopoverOpen, setSharePopoverOpen] = useState(false);
 
   const affiliateLink = cooperation?.cooperation_link;
   const cooperationImage =
     cooperation?.image || "/assets/images/fallback/no-photo.jpg";
+
+  const socialPlatforms = [
+    {
+      name: "اینستاگرام",
+      logo: "/assets/images/logo/instagram.svg",
+      url: "#",
+    },
+    { name: "یوتیوب", logo: "/assets/images/logo/youtube.svg", url: "#" },
+    { name: "بله", logo: "/assets/images/logo/bale.svg", url: "#" },
+    { name: "تلگرام", logo: "/assets/images/logo/telegram.svg", url: "#" },
+  ];
 
   const handleOpenReturnGuide = () => {
     setIsReturnGuideOpen(true);
@@ -131,8 +144,8 @@ export default function ProductPartnership({ cooperation }) {
                     >
                       دریافت لینک مشارکت در فروش
                     </button>
-                  ) : affiliateLink ? (
-                    <div className="flex items-center gap-4 mt-5 lg:mt-0">
+                  ) : true ? (
+                    <div className="flex items-center gap-4 mt-5 lg:mt-0 relative">
                       {/* Link Box */}
                       <div className="bg-white flex-1 p-[10px] rounded-lg flex justify-end items-center lg:gap-6">
                         {/* Link */}
@@ -152,7 +165,11 @@ export default function ProductPartnership({ cooperation }) {
                         </div>
                       </div>
                       {/* External Link Icon */}
-                      <ExternalLinkIcon size={20} />
+                      <ExternalLinkIcon
+                        size={20}
+                        className="cursor-pointer"
+                        onClick={() => setSharePopoverOpen(true)}
+                      />
                     </div>
                   ) : (
                     <p className="bg-white lg:bg-gray-200 rounded-lg mt-5 lg:mt-0 py-[10px] lg:py-2 text-gray-600 text-center">
@@ -213,6 +230,63 @@ export default function ProductPartnership({ cooperation }) {
           </p>
         </div>
       </ResponsiveModal>
+
+      {/* Share Popover */}
+      <PopoverWithTrigger
+        isOpen={sharePopoverOpen}
+        onClose={() => setSharePopoverOpen(false)}
+        trigger={
+          <div className="flex items-center gap-4">
+            {/* Empty space to match the link box width */}
+            <div className="flex-1"></div>
+            {/* External Link Icon in its original position */}
+            <button
+              type="button"
+              className="flex items-center justify-center shrink-0 text-primary focus:outline-none touch-none pointer-events-auto"
+              onClick={() => setSharePopoverOpen(false)}
+            >
+              <ExternalLinkIcon className="text-primary" size={20} />
+            </button>
+          </div>
+        }
+        triggerPosition="bottom-[calc(100px+env(safe-area-inset-bottom))] left-[20px]"
+        popoverClassName="bottom-[calc(132px+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-[608px] bg-white rounded-lg shadow-lg lg:hidden animate-slide-up-simple"
+      >
+        <span
+          onClick={() => setSharePopoverOpen(false)}
+          className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-1 block bg-gray-300 rounded-full cursor-pointer"
+        ></span>
+        <div className="pr-[5px] py-[5px] pt-6">
+          <h3 className="text-center text-primary font-bold text-base mb-3 px-[5px]">
+            بستر اشتراک گذاری محتوا
+          </h3>
+          <div>
+            {socialPlatforms.map((platform, index) => (
+              <div key={index}>
+                <Link
+                  href={platform.url}
+                  onClick={() => setSharePopoverOpen(false)}
+                  className="flex items-center gap-2 hover:bg-gray-50 transition-colors h-[64px]"
+                >
+                  <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+                    <Image
+                      src={platform.logo}
+                      width={40}
+                      height={40}
+                      alt={platform.name}
+                      className="object-contain w-full h-full"
+                    />
+                  </div>
+                  <span className="text-gray-600">{platform.name}</span>
+                </Link>
+                {index < socialPlatforms.length - 1 && (
+                  <div className="border-t-2 border-gray-200 mr-[5px]" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </PopoverWithTrigger>
     </div>
   );
 }

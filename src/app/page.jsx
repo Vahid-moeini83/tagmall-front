@@ -2,6 +2,10 @@ import { Suspense } from "react";
 import MainLayout from "@/components/layout/main-layout";
 import { MainHome } from "@/components/modules/home";
 import { getHomePageData } from "@/lib/server/actions/home";
+import {
+  HOME_MAP_INITIAL_CENTER,
+  HOME_MAP_SSR_RADIUS_KM,
+} from "@/lib/constants/homeMap";
 
 export const metadata = {
   title: "60750292",
@@ -11,9 +15,11 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const { homePageRes, homePageErr } = await getHomePageData(31, 53, 800);
-
-  console.log(homePageRes);
+  const { homePageRes } = await getHomePageData(
+    HOME_MAP_INITIAL_CENTER.lat,
+    HOME_MAP_INITIAL_CENTER.lng,
+    HOME_MAP_SSR_RADIUS_KM,
+  );
 
   return (
     <MainLayout>
