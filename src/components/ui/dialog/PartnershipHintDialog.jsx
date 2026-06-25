@@ -5,33 +5,40 @@ function PartnershipHintDialog({ open, setIsHintBoxOpen }) {
     <ResponsiveModal
       isOpen={open}
       onClose={() => setIsHintBoxOpen(false)}
-      title="بررسی بازدهی لینک های به اشتراک گذاشته شده"
+      title="مشارکت در فروش"
       isHintBox
     >
-      <div className="border-b-2 border-gray-200 pb-3">
-        <h3 className="text-xs lg:text-base text-gray-600 font-bold">
-          بازدیدها و ثبت سفارش ها
-        </h3>
-        <p className="text-xs/8 lg:text-sm/8 text-gray-600 mt-3 text-justify">
-          با بررسی بازدهی لینک های به اشتراک گذاشته شده؛ می‌توانید عملکرد بهتری
-          داشته باشید و سود بیشتری کسب کنید.
-          <br />
-          شما می‌توانید پس از به اشتراک گذاشتن لینک فروش محصولات، بازدهی لینک ها
-          که براساس آمار بازدید و سفارش های ثبت شده است را بررسی کنید
+      <div className="text-gray-600 text-sm lg:text-base leading-7 text-justify">
+        <p className="leading-10 text-justify font-extralight">
+          با به اشتراک گذاری لینک فروش محصولات،{" "}
+          <span className="font-bold">یک درصد از فروش هر کالا</span> را بهره مند
+          شوید.
         </p>
-      </div>
 
-      <div className="mt-3">
-        <h3 className="text-xs lg:text-base text-gray-600 font-bold">
-          خرید موفق و سود مشارکت
-        </h3>
-        <p className="text-xs/8 lg:text-sm/8 text-gray-600 mt-3 text-justify">
-          با بررسی بازدهی لینک های به اشتراک گذاشته شده؛ می‌توانید عملکرد بهتری
-          داشته باشید و سود بیشتری کسب کنید.
-          <br />
-          شما می‌توانید پس از به اشتراک گذاشتن لینک فروش محصولات، بازدهی لینک ها
-          که براساس آمار بازدید و سفارش های ثبت شده است را بررسی کنید
+        <p className="leading-8 text-justify font-extralight mt-2 mb-4">
+          لینک مشارکت فروش هر کالا برای شما اختصاصی می باشد.
         </p>
+
+        <div className="space-y-2">
+          <h3 className="font-bold text-gray-600">
+            بررسی بازدهی لینک های به اشتراک گذاشته شده:
+          </h3>
+          <p className="leading-10 text-justify font-extralight">
+            با بررسی لینک های به اشتراک گذاشته شده؛ عملکرد بهتر و سود بیشتری کسب
+            کنید.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="font-bold text-gray-600">
+            محاسبه و پرداخت سود مشارکت در فروش:
+          </h3>
+          <p className="leading-10 text-justify font-extralight">
+            با توجه به امکان مرجوع شدن کالا توسط خریدار سود مشارکت در فروش پس از
+            پایان <span className="text-primary">فرصت مرجوع شدن کالا</span> به
+            حساب شما واریز می شود.
+          </p>
+        </div>
       </div>
     </ResponsiveModal>
   );

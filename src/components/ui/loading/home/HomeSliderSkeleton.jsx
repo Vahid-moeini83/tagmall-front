@@ -12,22 +12,10 @@ function VerticalSlideCardSkeleton({
     return (
       <div
         className={cn(
-          "mx-auto w-[80%] overflow-hidden rounded-2xl bg-white origin-center",
+          "mx-auto w-[80%] overflow-hidden bg-white origin-center",
           className,
         )}
-      >
-        {position === "top" ? (
-          <div className="h-full flex flex-col justify-end px-[10px] pb-3">
-            <Skeleton className="w-[80%] h-[2.5px] rounded-full mx-auto mb-2" />
-            <Skeleton className="w-32 h-3 mx-auto" />
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 px-[50px] pt-[32px] pb-4">
-            <Skeleton className="w-[50px] h-[50px] rounded-lg shrink-0" />
-            <Skeleton className="w-24 h-4" />
-          </div>
-        )}
-      </div>
+      ></div>
     );
   }
 
@@ -74,11 +62,11 @@ function DesktopHomeSliderSkeleton() {
         slidesPerView 1.16, spaceBetween 5, paddingY 8px
         peek ≈ 6.9% each, active slide ≈ 86.2%
       */}
-      <div className="flex flex-col h-full w-full gap-[5px] pt-2 pb-2">
+      <div className="flex flex-col h-full w-full gap-[5px]">
         <VerticalSlideCardSkeleton
           variant="peek"
           position="top"
-          className="shrink-0 flex-[0_0_6.9%]"
+          className="shrink-0 flex-[0_0_6.9%] rounded-b-2xl"
         />
 
         <VerticalSlideCardSkeleton
@@ -89,7 +77,7 @@ function DesktopHomeSliderSkeleton() {
         <VerticalSlideCardSkeleton
           variant="peek"
           position="bottom"
-          className="shrink-0 flex-[0_0_6.9%]"
+          className="shrink-0 flex-[0_0_6.9%] rounded-t-2xl"
         />
       </div>
     </div>

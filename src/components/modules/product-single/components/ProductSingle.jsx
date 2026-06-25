@@ -237,6 +237,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
               >
                 <ProductPartnership
                   cooperation={product?.cooperation_in_sale}
+                  productName={product?.name}
                 />
               </div>
             </div>
@@ -294,6 +295,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                   {activeSection === "partnership" && (
                     <ProductPartnership
                       cooperation={product?.cooperation_in_sale}
+                      productName={product?.name}
                     />
                   )}
                 </div>

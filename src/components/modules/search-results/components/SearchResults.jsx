@@ -3,7 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AvailableProductsIcon, LocateIcon, ArrowUpDownIcon } from "@/icons";
+import {
+  AvailableProductsIcon,
+  LocateIcon,
+  ArrowUpDownIcon,
+  LocationIcon,
+} from "@/icons";
 import { SearchInput, SearchBox } from "@/components/ui/search";
 import MainNavigation from "@/components/layout/navigation-menu/MainNavigation";
 import BrandFilterDialog from "./BrandFilterDialog";
@@ -13,8 +18,10 @@ import SpecsFilterDialog from "./SpecsFilterDialog";
 import FiltersDrawer from "./FiltersDrawer";
 import FiltersSection from "./FiltersSection";
 import ProductsList from "./ProductsList";
+import MobileSortFilterRow from "./MobileSortFilterRow";
 import usePublicStore from "@/app/store/publicStore";
 import { formatPrice } from "@/lib/client/utils";
+import { mockSearchProducts } from "@/lib/client/mockRelatedAccessories";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   Accordion,
@@ -25,46 +32,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSearchParams } from "next/navigation";
 
-const mockProducts = [
-  {
-    id: 1,
-    name: "گوشی موبایل سامسونگ Galaxy S24 Ultra",
-    img: "/assets/images/fallback/phone.png",
-    minPrice: 42000000,
-    maxPrice: 45000000,
-    seller: {
-      name: "فروشگاه دیجی‌کالا",
-      profileImage: "/assets/images/fallback/brand.png",
-    },
-  },
-  {
-    id: 2,
-    name: "گوشی موبایل اپل iPhone 15 Pro Max",
-    img: "/assets/images/fallback/phone.png",
-    minPrice: 63000000,
-    maxPrice: 67000000,
-    seller: {
-      name: "فروشگاه موبایل سنتر",
-      profileImage: "/assets/images/fallback/brand.png",
-    },
-  },
-  {
-    id: 3,
-    name: "گوشی موبایل شیائومی Redmi Note 13 Pro",
-    img: "/assets/images/fallback/phone.png",
-    minPrice: 10000000,
-    maxPrice: 12500000,
-    seller: {
-      name: "فروشگاه تکنو",
-      profileImage: "/assets/images/fallback/brand.png",
-    },
-  },
-];
-
 function SearchResults() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const searchParams = useSearchParams();
   const viewType = searchParams.get("view"); // "accessories" or null for normal
+  const relatedProductName =
+    searchParams.get("product") || "گوشی موبایل اپل آیفون ۱۶ پرو مکس";
 
   const [sortBy, setSortBy] = useState("newest");
   const [showAvailable, setShowAvailable] = useState(true);
@@ -83,6 +56,7 @@ function SearchResults() {
   const minPrice = 500;
   const maxPrice = 100000000;
   const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
+  const [activeAccessoryTab, setActiveAccessoryTab] = useState("parts");
 
   const setShowSearchResultBox = usePublicStore(
     (s) => s.setShowSearchResultBox,
@@ -95,6 +69,21 @@ function SearchResults() {
     setSearchBoxOpen(false);
     setShowSearchResultBox(true, { name: "گوشی موبایل" });
   };
+
+  const handleAccessoryLocateClick = () => {
+    setSearchBoxOpen(false);
+    const categoryName =
+      activeAccessoryTab === "parts" ? "قطعات مرتبط" : "لوازم جانبی مرتبط";
+    setShowSearchResultBox(true, { name: categoryName });
+  };
+
+  const accessoryTabLabel =
+    activeAccessoryTab === "parts" ? "قطعات" : "لوازم جانبی";
+
+  const accessoryLocateLabel =
+    activeAccessoryTab === "parts"
+      ? "موقعیت یابی قطعات مرتبط"
+      : "موقعیت یابی لوازم جانبی مرتبط";
 
   const handleSearchInputClick = () => {
     setDefaultSearchValue(searchValue);
@@ -109,6 +98,7 @@ function SearchResults() {
   ];
 
   const sortOptions = [
+    { id: "mostSold", label: "پرفروش‌ترین" },
     { id: "newest", label: "جدیدترین" },
     { id: "mostViewed", label: "پربازدیدترین" },
     { id: "cheapest", label: "ارزان ترین" },
@@ -267,7 +257,7 @@ function SearchResults() {
                           setIsPriceDialogOpen={setIsPriceDialogOpen}
                           setIsSellerTypeDialogOpen={setIsSellerTypeDialogOpen}
                         />
-                        <ProductsList products={mockProducts} isDesktop />
+                        <ProductsList products={mockSearchProducts} isDesktop />
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -294,7 +284,7 @@ function SearchResults() {
                           setIsPriceDialogOpen={setIsPriceDialogOpen}
                           setIsSellerTypeDialogOpen={setIsSellerTypeDialogOpen}
                         />
-                        <ProductsList products={mockProducts} isDesktop />
+                        <ProductsList products={mockSearchProducts} isDesktop />
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -334,7 +324,7 @@ function SearchResults() {
                   setIsPriceDialogOpen={setIsPriceDialogOpen}
                   setIsSellerTypeDialogOpen={setIsSellerTypeDialogOpen}
                 />
-                <ProductsList products={mockProducts} isDesktop />
+                <ProductsList products={mockSearchProducts} isDesktop />
               </div>
             )}
           </div>
@@ -345,57 +335,76 @@ function SearchResults() {
       <div className="lg:hidden flex flex-col h-screen bg-white">
         {viewType === "accessories" ? (
           /* Accessories View with Tabs */
-          <div className="px-[10px]">
-            {/* Fixed Header with Search */}
-            <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-[20px] pb-4">
-              <div className="relative">
-                <div
-                  onClick={handleSearchInputClick}
-                  className="cursor-pointer"
-                >
-                  <SearchInput
-                    value=""
-                    onChange={() => {}}
-                    hasLogo
-                    placeholder="برند، کالا، لوازم جانبی، قطعات"
-                    showSearchIcon={false}
-                    readOnly
-                  />
-                </div>
-                <button
-                  onClick={() => setIsFiltersDrawerOpen(true)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2"
-                >
-                  <ArrowUpDownIcon size={20} color="#000000" />
-                </button>
-              </div>
-            </div>
+          <div className="px-[10px] flex flex-col h-screen">
+            <Tabs
+              value={activeAccessoryTab}
+              onValueChange={setActiveAccessoryTab}
+            >
+              <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-4 pb-3">
+                <h1 className="text-center text-sm text-primary">
+                  <span className="font-bold">{accessoryTabLabel}</span>{" "}
+                  {relatedProductName}
+                </h1>
 
-            <Tabs defaultValue="parts">
-              <TabsList
+                <TabsList
+                  dir="rtl"
+                  className="mt-4 bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! w-full"
+                >
+                  <TabsTrigger
+                    value="parts"
+                    className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                  >
+                    قطعات
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="accessories"
+                    className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                  >
+                    لوازم جانبی
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent
+                className="flex-1 overflow-y-auto pt-[108px] pb-28"
+                value="parts"
                 dir="rtl"
-                className="fixed top-[80px] right-0 left-0 bg-white! z-20 w-full max-w-[540px] flex items-center px-0! py-0! h-12!"
               >
-                <TabsTrigger
-                  value="parts"
-                  className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
-                >
-                  قطعات
-                </TabsTrigger>
-                <TabsTrigger
-                  value="accessories"
-                  className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
-                >
-                  لوازم جانبی
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent className="pt-[140px]" value="parts" dir="rtl">
-                <ProductsList products={mockProducts} />
+                <MobileSortFilterRow
+                  sortLabel={
+                    sortOptions.find((o) => o.id === sortBy)?.label || ""
+                  }
+                  onClick={() => setIsFiltersDrawerOpen(true)}
+                />
+                <ProductsList products={mockSearchProducts} />
               </TabsContent>
-              <TabsContent className="pt-[140px]" value="accessories" dir="rtl">
-                <ProductsList products={mockProducts} />
+              <TabsContent
+                className="flex-1 overflow-y-auto pt-[108px] pb-28"
+                value="accessories"
+                dir="rtl"
+              >
+                <MobileSortFilterRow
+                  sortLabel={
+                    sortOptions.find((o) => o.id === sortBy)?.label || ""
+                  }
+                  onClick={() => setIsFiltersDrawerOpen(true)}
+                />
+                <ProductsList products={mockSearchProducts} />
               </TabsContent>
             </Tabs>
+
+            <div className="fixed bottom-17 right-0 left-0 bg-white py-4 px-[10px] flex justify-center items-center z-10">
+              <button
+                type="button"
+                onClick={handleAccessoryLocateClick}
+                className="border-2 border-primary rounded-full px-4 py-2 flex items-center justify-center gap-2 w-full"
+              >
+                <LocationIcon size={20} className={"text-primary"} />
+                <p className="text-primary text-center text-sm">
+                  {accessoryLocateLabel}
+                </p>
+              </button>
+            </div>
 
             {/* Filters Drawer */}
             <FiltersDrawer
@@ -455,54 +464,19 @@ function SearchResults() {
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 flex flex-col overflow-y-auto py-[80px]">
-              {/* Products List */}
+            <div className="flex-1 flex flex-col overflow-y-auto py-[80px] pb-28">
               <div className="flex-1 py-3 px-[10px]">
-                {mockProducts.map((product) => (
-                  <div key={product.id} className="flex gap-[10px] pb-4 mb-4">
-                    {/* Product Image */}
-                    <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                      <Image
-                        src={product.img || "/assets/images/fallback/phone.png"}
-                        fill
-                        alt={product.name}
-                        className="object-contain"
-                      />
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="flex flex-col flex-1 gap-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-error-medium font-bold">
-                          فروش ویژه
-                        </span>
-                        <span className="text-xs text-error-medium font-bold">
-                          00:00:00
-                        </span>
-                      </div>
-
-                      <p className="text-xs font-bold text-gray-600 line-clamp-2">
-                        {product.name}
-                      </p>
-
-                      <div className="flex gap-1">
-                        <span className="text-xs text-gray-600 font-bold">
-                          محدوده قیمت
-                        </span>
-                        <span className="text-xs text-gray-600">
-                          {formatPrice(product.minPrice)} تا{" "}
-                          {formatPrice(product.maxPrice)} تومان
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                <ProductsList products={mockSearchProducts} />
               </div>
 
               {/* Location Text */}
-              <div className="bg-white px-[10px] mt-auto py-3">
-                <Link href="/" onClick={handleLocateClick}>
-                  <p className="text-primary text-center cursor-pointer">
+              <div className="lg:hidden fixed bottom-17 right-0 left-0 bg-white py-4 px-[10px] flex justify-center items-center z-10">
+                <Link
+                  href="/"
+                  onClick={handleLocateClick}
+                  className="border-2 border-primary rounded-full px-4 py-2 flex items-center justify-center w-full"
+                >
+                  <p className="text-primary text-center text-sm cursor-pointer">
                     موقعیت یابی گروه کالایی &quot; گوشی موبایل &quot;
                   </p>
                 </Link>

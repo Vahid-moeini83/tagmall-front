@@ -21,6 +21,10 @@ const CUSTOM_TILE_URL =
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OSM contributors</a>';
 
+function normalizeStoreId(id) {
+  return id == null ? null : String(id);
+}
+
 function MapComponent({
   activeSellerId,
   onSellerSelect,
@@ -116,7 +120,9 @@ function MapComponent({
     if (!mapRef.current || !LRef.current) return;
     const L = LRef.current;
 
-    const seller = sellersRef.current.find((s) => s.storeId === storeId);
+    const seller = sellersRef.current.find(
+      (s) => normalizeStoreId(s.storeId) === normalizeStoreId(storeId),
+    );
     if (!seller) return;
     const map = mapRef.current;
     const targetLatLng = new L.LatLng(seller.location.lat, seller.location.lng);
@@ -162,7 +168,10 @@ function MapComponent({
       root.render(
         <SellerMarker
           seller={seller}
-          isActive={seller.storeId === activeSellerIdRef.current}
+          isActive={
+            normalizeStoreId(seller.storeId) ===
+            normalizeStoreId(activeSellerIdRef.current)
+          }
         />,
       );
     });
@@ -199,7 +208,8 @@ function MapComponent({
     sellerDataRef.current = [];
 
     sellers.forEach((seller) => {
-      const isActive = seller.storeId === activeSellerId;
+      const isActive =
+        normalizeStoreId(seller.storeId) === normalizeStoreId(activeSellerId);
       const { icon, root } = buildSellerIcon(seller, isActive);
       markerRootsRef.current.push(root);
       sellerDataRef.current.push(seller);
@@ -504,7 +514,7 @@ function MapComponent({
         className="absolute bottom-[calc(360px+env(safe-area-inset-bottom))] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
       >
         <div
-          className={`bg-gray-200/40 backdrop-blur-sm border border-white sm:bg-gray-100/70 rounded-md flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${
+          className={`bg-gray-200/40 backdrop-blur-sm border border-white sm:bg-gray-100/70 rounded-lg flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${
             isGpsEnabled ? "text-primary" : "text-gray-800"
           }`}
         >

@@ -10,11 +10,11 @@ import toast from "react-hot-toast";
 import {
   fetchSearchHistory,
   deleteSearchHistoryItem,
-  deleteAllSearchHistory,
 } from "@/lib/server/actions/search";
 import { getToken } from "@/lib/server/cookies";
 import { v4 as uuidv4 } from "uuid";
 import SearchSkeleton from "../loading/search/SearchSkeleton";
+import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 
 // Get or create persistent user search ID
 const getUserSearchId = () => {
@@ -27,12 +27,90 @@ const getUserSearchId = () => {
   return userSearchId;
 };
 
+function ConfirmCancelButtons({
+  onConfirm,
+  onCancel,
+  isConfirming = false,
+  isConfirmEnabled = false,
+}) {
+  return (
+    <div className="flex w-full gap-2">
+      <button
+        type="button"
+        disabled={isConfirming || !isConfirmEnabled}
+        onClick={onConfirm}
+        className={`flex-1 border-2 py-2 rounded-full text-sm font-medium flex items-center justify-center disabled:cursor-not-allowed ${
+          isConfirmEnabled
+            ? "text-primary border-primary disabled:opacity-70"
+            : "text-gray-400 border-gray-400"
+        }`}
+      >
+        {isConfirming ? (
+          <SpinnerLoading size={18} className="border-primary" />
+        ) : (
+          "تایید"
+        )}
+      </button>
+      <button
+        type="button"
+        disabled={isConfirming}
+        onClick={onCancel}
+        className="flex-1 text-error-medium py-2 rounded-full text-sm font-medium disabled:opacity-70"
+      >
+        انصراف
+      </button>
+    </div>
+  );
+}
+
 function SearchHistory() {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [historyItems, setHistoryItems] = useState([]);
-  const [deleteMode, setDeleteMode] = useState(false);
+  const [deleteMode, setDeleteMode] = useState(null);
   const [pendingDeletes, setPendingDeletes] = useState([]);
+  const [itemsSnapshot, setItemsSnapshot] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+
+  const transformHistoryData = (data) => {
+    const transformedData = [];
+    if (data) {
+      data.forEach((item) => {
+        if (item.type === "product" && item.product_ids) {
+          item.product_ids.forEach((product) => {
+            transformedData.push({
+              historyId: item?.id,
+              searchIdentifier: item?.search_identifier,
+              id: product?.id,
+              uniqueKey: `${item?.id}-product-${product?.id}`,
+              type: "product",
+              name: product?.name,
+            });
+          });
+        } else if (item.type === "category" && item.category_ids) {
+          item.category_ids.forEach((category) => {
+            const hasProducts =
+              category?.products && category.products.length > 0;
+            transformedData.push({
+              historyId: item?.id,
+              searchIdentifier: item?.search_identifier,
+              id: category?.id,
+              uniqueKey: `${item?.id}-category-${category?.id}`,
+              type: "category",
+              name: category?.name,
+              subcategories: hasProducts
+                ? category.products.map((prod) => ({
+                    ...prod,
+                    uniqueKey: `${item?.id}-${category?.id}-${prod?.id}`,
+                  }))
+                : undefined,
+            });
+          });
+        }
+      });
+    }
+    return transformedData;
+  };
 
   const fetchHistory = async () => {
     setIsLoading(true);
@@ -43,43 +121,7 @@ function SearchHistory() {
       userSearchId,
     );
     if (searchHistoryRes) {
-      const transformedData = [];
-      if (searchHistoryRes?.data) {
-        searchHistoryRes.data.forEach((item) => {
-          if (item.type === "product" && item.product_ids) {
-            item.product_ids.forEach((product) => {
-              transformedData.push({
-                historyId: item?.id,
-                searchIdentifier: item?.search_identifier,
-                id: product?.id,
-                uniqueKey: `${item?.id}-product-${product?.id}`,
-                type: "product",
-                name: product?.name,
-              });
-            });
-          } else if (item.type === "category" && item.category_ids) {
-            item.category_ids.forEach((category) => {
-              const hasProducts =
-                category?.products && category.products.length > 0;
-              transformedData.push({
-                historyId: item?.id,
-                searchIdentifier: item?.search_identifier,
-                id: category?.id,
-                uniqueKey: `${item?.id}-category-${category?.id}`,
-                type: "category",
-                name: category?.name,
-                subcategories: hasProducts
-                  ? category.products.map((prod) => ({
-                      ...prod,
-                      uniqueKey: `${item?.id}-${category?.id}-${prod?.id}`,
-                    }))
-                  : undefined,
-              });
-            });
-          }
-        });
-      }
-      setHistoryItems(transformedData);
+      setHistoryItems(transformHistoryData(searchHistoryRes?.data));
     } else if (searchHistoryErr) {
       toast.error("خطا در نمایش تاریخچه جست‌و‌جو و بازدیدهای اخیر");
     }
@@ -91,30 +133,25 @@ function SearchHistory() {
   }, []);
 
   const toggleCategory = (categoryId) => {
+    if (deleteMode) return;
     setExpandedCategory((prev) => (prev === categoryId ? null : categoryId));
   };
 
-  // مدیریت کلیک روی دکمه پایین (حالت حذف / حذف همه)
-  const handleDeleteModeToggle = () => {
-    if (deleteMode) {
-      // اگر قبلاً وارد حالت حذف شده‌ایم، یعنی کاربر می‌خواهد "همه" را حذف کند
-      // همه آیتم‌ها را به لیست انتظار حذف اضافه می‌کنیم (مشابه حذف تکی)
-      const allItemsToDelete = historyItems.map((item) => ({
-        type: "item",
-        item: item,
-      }));
-      setPendingDeletes((prev) => [...prev, ...allItemsToDelete]);
-
-      // خالی کردن UI
-      setHistoryItems([]);
-      setExpandedCategory(null);
-    } else {
-      // ورود به حالت حذف
-      setDeleteMode(true);
-    }
+  const enterDeleteMode = (mode) => {
+    setItemsSnapshot(structuredClone(historyItems));
+    setDeleteMode(mode);
+    setPendingDeletes([]);
   };
 
-  // مدیریت کلیک روی دکمه ضربدر آیتم‌ها
+  const handleCancelDeletes = () => {
+    if (itemsSnapshot) {
+      setHistoryItems(itemsSnapshot);
+    }
+    setItemsSnapshot(null);
+    setPendingDeletes([]);
+    setDeleteMode(null);
+  };
+
   const handleDeleteClick = (target) => {
     let deletedItem;
     if (target.type === "item") {
@@ -136,64 +173,50 @@ function SearchHistory() {
         categoryId: target.categoryId,
       };
       setHistoryItems((prev) =>
-        prev?.map((item) => {
-          if (item?.id === target.categoryId) {
-            const updatedSubcategories = item?.subcategories?.filter(
-              (sub) => sub?.id !== target.id,
-            );
-            if (
-              updatedSubcategories?.length === 0 &&
-              expandedCategory === target.categoryId
-            ) {
-              setExpandedCategory(null);
+        prev
+          ?.map((item) => {
+            if (item?.id === target.categoryId) {
+              const updatedSubcategories = item?.subcategories?.filter(
+                (sub) => sub?.id !== target.id,
+              );
+              if (updatedSubcategories?.length === 0) {
+                setExpandedCategory(null);
+                return null;
+              }
+              return {
+                ...item,
+                subcategories: updatedSubcategories,
+              };
             }
-            return {
-              ...item,
-              subcategories: updatedSubcategories,
-            };
-          }
-          return item;
-        }),
+            return item;
+          })
+          .filter(Boolean),
       );
     }
     setPendingDeletes((prev) => [...prev, deletedItem]);
   };
 
-  // تایید نهایی حذف (هم برای تکی و هم برای همه)
   const handleConfirmDeletes = async () => {
     if (pendingDeletes.length === 0) {
-      setDeleteMode(false);
+      handleCancelDeletes();
       return;
     }
 
-    // بستن مودال و حالت حذف قبل از شروع درخواست API
-    setDeleteMode(false);
+    const snapshotForRecovery = itemsSnapshot;
+    setDeleteMode(null);
     setExpandedCategory(null);
+    setItemsSnapshot(null);
+    setIsConfirmingDelete(true);
 
-    // انجام عملیات حذف
-    await performDelete();
+    await performDelete(snapshotForRecovery);
+
+    setIsConfirmingDelete(false);
   };
 
-  // انجام عملیات API (هوشمند: تشخیص حذف تکی یا همه)
-  const performDelete = async () => {
+  const performDelete = async (snapshotForRecovery = null) => {
     const token = await getToken();
     const userSearchId = getUserSearchId();
 
-    // --- اصلاح شده: اگر تعداد موارد در انتظار حذف بیشتر از 1 باشد، یعنی حذف همه است ---
-    if (pendingDeletes.length > 1) {
-      const { deleteAllSearchHistoryErr } = await deleteAllSearchHistory(
-        token,
-        userSearchId,
-      );
-      if (deleteAllSearchHistoryErr) {
-        toast.error("خطا در حذف همه تاریخچه و بازدیدها");
-      }
-      // پاک کردن لیست موارد در انتظار حذف
-      setPendingDeletes([]);
-      return;
-    }
-
-    // در غیر این صورت، حذف آیتم‌های مشخص (تکی)
     const categoryIds = {};
     const productIds = [];
     let searchIdentifier = null;
@@ -230,9 +253,13 @@ function SearchHistory() {
 
     if (deleteSearchHistoryItemErr) {
       toast.error("خطا در حذف موارد");
+      if (snapshotForRecovery) {
+        setHistoryItems(snapshotForRecovery);
+      } else {
+        await fetchHistory();
+      }
     }
 
-    // پاک کردن لیست موارد در انتظار حذف
     setPendingDeletes([]);
   };
 
@@ -240,21 +267,11 @@ function SearchHistory() {
     (item) => item?.id === expandedCategory,
   );
 
-  const getDeleteButtonText = () => {
-    if (deleteMode) {
-      if (expandedCategory && expandedCategoryData) {
-        return `پاک کردن همه بازدیدهای اخیر "${expandedCategoryData?.name}"`;
-      }
-      return "پاک کردن همه تاریخچه جست و جو و بازدیدهای اخیر";
-    }
-    if (expandedCategory && expandedCategoryData) {
-      return `پاک کردن بازدیدهای اخیر "${expandedCategoryData?.name}"`;
-    }
-    return "پاک کردن تاریخچه جست و جو و بازدیدهای اخیر";
-  };
-
-  const showDeleteButtons = deleteMode && !expandedCategory;
-  const showSubcategoryDeleteButtons = deleteMode && expandedCategory;
+  const isGlobalDeleteMode = deleteMode === "global";
+  const isCategoryDeleteMode =
+    deleteMode !== null &&
+    deleteMode !== "global" &&
+    deleteMode === expandedCategory;
 
   return (
     <>
@@ -263,14 +280,6 @@ function SearchHistory() {
           <h3 className="text-primary font-bold text-sm lg:text-base">
             تاریخچه جست و جو و بازدیدهای اخیر
           </h3>
-          {deleteMode && (
-            <button
-              onClick={handleConfirmDeletes}
-              className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
-            >
-              تایید
-            </button>
-          )}
         </div>
         {isLoading ? (
           <SearchSkeleton />
@@ -304,7 +313,7 @@ function SearchHistory() {
                     )}
                   </span>
                   <div className="flex items-center gap-2">
-                    {showDeleteButtons ? (
+                    {isGlobalDeleteMode ? (
                       <button
                         onClick={() =>
                           handleDeleteClick({
@@ -320,6 +329,7 @@ function SearchHistory() {
                       item?.type === "category" &&
                       item?.subcategories &&
                       item?.subcategories?.length > 0 &&
+                      !deleteMode &&
                       (expandedCategory === null ||
                         expandedCategory === item?.id) && (
                         <button
@@ -346,7 +356,7 @@ function SearchHistory() {
                   <div
                     className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
                       expandedCategory === item?.id
-                        ? "max-h-96 opacity-100 mt-1"
+                        ? "max-h-[600px] opacity-100 mt-1"
                         : "max-h-0 opacity-0"
                     }`}
                   >
@@ -364,7 +374,7 @@ function SearchHistory() {
                             {sub?.name}
                           </span>
                         </div>
-                        {showSubcategoryDeleteButtons && (
+                        {isCategoryDeleteMode && (
                           <button
                             onClick={() =>
                               handleDeleteClick({
@@ -380,6 +390,28 @@ function SearchHistory() {
                         )}
                       </div>
                     ))}
+
+                    {expandedCategory === item?.id && (
+                      <div className="pt-2">
+                        {isCategoryDeleteMode ? (
+                          <ConfirmCancelButtons
+                            onConfirm={handleConfirmDeletes}
+                            onCancel={handleCancelDeletes}
+                            isConfirming={isConfirmingDelete}
+                            isConfirmEnabled={pendingDeletes.length > 0}
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={!item?.subcategories?.length}
+                            onClick={() => enterDeleteMode(item?.id)}
+                            className="w-full bg-white text-primary py-2 rounded-lg text-sm font-medium disabled:text-gray-400"
+                          >
+                            {`پاک کردن بازدیدهای اخیر "${item?.name}"`}
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -387,15 +419,32 @@ function SearchHistory() {
           </div>
         )}
       </div>
-      <div className="p-4">
-        <button
-          disabled={historyItems.length === 0}
-          onClick={handleDeleteModeToggle}
-          className={`w-full py-2 font-medium transition-all duration-200 text-sm ${historyItems?.length > 0 ? "text-primary hover:text-primary/80 rounded-lg" : "text-gray-400"}`}
-        >
-          {getDeleteButtonText()}
-        </button>
-      </div>
+
+      {!expandedCategory && (
+        <div className="py-4 px-[10px]">
+          {isGlobalDeleteMode ? (
+            <ConfirmCancelButtons
+              onConfirm={handleConfirmDeletes}
+              onCancel={handleCancelDeletes}
+              isConfirming={isConfirmingDelete}
+              isConfirmEnabled={pendingDeletes.length > 0}
+            />
+          ) : (
+            <button
+              type="button"
+              disabled={historyItems.length === 0}
+              onClick={() => enterDeleteMode("global")}
+              className={`w-full py-2 font-medium transition-all duration-200 rounded-full border-2 text-sm ${
+                historyItems?.length > 0
+                  ? "text-primary border-primary"
+                  : "text-gray-400 border-gray-400"
+              }`}
+            >
+              پاک کردن تاریخچه جست و جو و بازدیدهای اخیر
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 }

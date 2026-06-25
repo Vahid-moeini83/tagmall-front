@@ -87,6 +87,14 @@ const usePublicStore = create((set, get) => ({
   setCartItemsCount(count) {
     set({ cartItemsCount: count });
   },
+
+  homeProductsListOpen: false,
+  setHomeProductsListOpen(open) {
+    set({ homeProductsListOpen: open });
+  },
+  toggleHomeProductsListOpen() {
+    set((state) => ({ homeProductsListOpen: !state.homeProductsListOpen }));
+  },
 }));
 
 export default usePublicStore;

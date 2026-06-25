@@ -148,24 +148,24 @@ function SupportLoading() {
         <Tabs defaultValue="chats">
           <TabsList
             dir="rtl"
-            className="fixed top-0 right-0 left-0 bg-white! z-20 w-full max-w-[540px] flex items-center px-0! py-0! h-12! mx-auto"
+            className="fixed top-[10px] left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
           >
             <TabsTrigger
               value="chats"
-              className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
+              className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
             >
               پیام ها
             </TabsTrigger>
             <TabsTrigger
               value="orders"
-              className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
+              className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
             >
               پیگیری سفارشات
             </TabsTrigger>
           </TabsList>
 
           {/* Chats Tab Skeleton */}
-          <div className="pt-10 pb-40">
+          <div className="pt-[76px] pb-40">
             <div className="flex flex-col gap-1 pr-1 mt-2">
               {/* Slider Skeleton - Mobile */}
               <div className="relative mt-2">

@@ -106,7 +106,7 @@ function OrderItems({ isMobile = false, orderId }) {
                                 className="rounded-md"
                               />
                               <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600">
+                                <span className="text-sm text-gray-600 line-clamp-1">
                                   {product.seller.name}
                                 </span>
                                 <VerifyIcon size={20} />

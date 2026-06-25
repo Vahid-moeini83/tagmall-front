@@ -64,14 +64,14 @@ export default function SellerHorizontalSlider({
           </div>
         ))}
       </div>
-      <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex justify-center gap-2">
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-[10px] z-10 flex justify-center gap-2 pointer-events-none">
         {products.map((_, idx) => (
           <button
             key={idx}
             type="button"
             onClick={() => instanceRef.current?.moveToIdx(idx)}
             className={cn(
-              "w-2.5 h-2.5 rounded-full transition-all cursor-pointer",
+              "w-2.5 h-2.5 rounded-full transition-all cursor-pointer pointer-events-auto",
               currentSlide === idx
                 ? "bg-primary w-6"
                 : "bg-gray-400 hover:bg-gray-400",

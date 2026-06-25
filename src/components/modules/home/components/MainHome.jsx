@@ -16,7 +16,7 @@ import {
 import Image from "next/image";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import usePublicStore from "@/app/store/publicStore";
-import { formatPrice } from "@/lib/client/utils";
+import { formatPrice, cn } from "@/lib/client/utils";
 import {
   Popover,
   PopoverContent,
@@ -50,12 +50,9 @@ export default function MainHome({ initialData }) {
   const isLoadingRef = useRef(false);
   const pendingMoveRef = useRef(null);
   const lastFetchParamsRef = useRef(null);
-  const [storeDataVersion, setStoreDataVersion] = useState(0);
   const prevStoreIdsRef = useRef(
     initialData?.stores
-      ? new Set(
-          initialData.stores.map((s) => s.store?.id).filter(Boolean),
-        )
+      ? new Set(initialData.stores.map((s) => s.store?.id).filter(Boolean))
       : null,
   );
   // Suppress programmatic map pan after slider remount or bulk data refresh
@@ -195,7 +192,7 @@ export default function MainHome({ initialData }) {
 
       const sellerObj = {
         id: seller.id,
-        storeId: store.id,
+        storeId: String(store.id),
         name: seller.seller_name || seller.business_name,
         storeName: store.name ?? "نامشخص",
         rating: seller.rating || 0,
@@ -226,7 +223,7 @@ export default function MainHome({ initialData }) {
 
           const productObj = {
             id: `${store.id}-pickup-${product.id}`,
-            storeId: store.id,
+            storeId: String(store.id),
             sellerId: seller.id,
             name: product.name,
             img:
@@ -250,6 +247,14 @@ export default function MainHome({ initialData }) {
 
           if (productObj.isSpecialSale) {
             special.push(productObj);
+          } else {
+            purchased.push({
+              ...productObj,
+              orderHistory: {
+                statusLabel: "آماده تحویل",
+                userNote: product.user_note || null,
+              },
+            });
           }
         });
       }
@@ -262,7 +267,7 @@ export default function MainHome({ initialData }) {
 
           const productObj = {
             id: `${store.id}-shipping-${product.id}`,
-            storeId: store.id,
+            storeId: String(store.id),
             sellerId: seller.id,
             name: product.name,
             img:
@@ -291,7 +296,7 @@ export default function MainHome({ initialData }) {
       }
 
       storesData.push({
-        storeId: store.id,
+        storeId: String(store.id),
         seller: sellerObj,
         products: storeProductsList,
       });
@@ -341,9 +346,10 @@ export default function MainHome({ initialData }) {
 
   const hasSliderStores = filteredStoreProducts.length > 0;
 
-  const [activeSellerId, setActiveSellerId] = useState(
-    () => initialData?.stores?.[0]?.store?.id ?? null,
-  );
+  const [activeSellerId, setActiveSellerId] = useState(() => {
+    const id = initialData?.stores?.[0]?.store?.id;
+    return id != null ? String(id) : null;
+  });
   const [viewMode, setViewMode] = useState("slider");
 
   // Derive active store card info from regional store list
@@ -392,7 +398,10 @@ export default function MainHome({ initialData }) {
     };
   }, [activeSellerId, storeProducts]);
 
-  const [isProductsListOpen, setIsProductsListOpen] = useState(false);
+  const isProductsListOpen = usePublicStore((s) => s.homeProductsListOpen);
+  const setHomeProductsListOpen = usePublicStore(
+    (s) => s.setHomeProductsListOpen,
+  );
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const [desktopFilterOpen, setDesktopFilterOpen] = useState(false);
 
@@ -442,11 +451,15 @@ export default function MainHome({ initialData }) {
             setTimeout(() => {
               suppressMapPanRef.current = false;
             }, 500);
-            setStoreDataVersion((v) => v + 1);
             if (newStoreIds.length > 0) {
-              setActiveSellerId((prev) =>
-                newStoreIdsSet.has(prev) ? prev : newStoreIds[0],
-              );
+              const normalizedIds = newStoreIds.map((id) => String(id));
+              const normalizedSet = new Set(normalizedIds);
+              setActiveSellerId((prev) => {
+                const prevId = prev != null ? String(prev) : null;
+                return prevId && normalizedSet.has(prevId)
+                  ? prevId
+                  : normalizedIds[0];
+              });
             } else {
               setActiveSellerId(null);
             }
@@ -468,12 +481,12 @@ export default function MainHome({ initialData }) {
   );
 
   const handleSellerSelect = useCallback((storeId) => {
-    setActiveSellerId(storeId);
+    setActiveSellerId(storeId != null ? String(storeId) : null);
   }, []);
 
   const handleProductChange = useCallback((product) => {
-    if (product?.storeId) {
-      setActiveSellerId(product.storeId);
+    if (product?.storeId != null) {
+      setActiveSellerId(String(product.storeId));
     }
   }, []);
 
@@ -492,9 +505,9 @@ export default function MainHome({ initialData }) {
     }
   }, []);
 
-  const toggleProductsList = useCallback(() => {
-    setIsProductsListOpen(!isProductsListOpen);
-  }, [isProductsListOpen]);
+  const closeProductsList = useCallback(() => {
+    setHomeProductsListOpen(false);
+  }, [setHomeProductsListOpen]);
 
   const handleBackToSlider = useCallback(() => {
     setViewMode("slider");
@@ -502,12 +515,13 @@ export default function MainHome({ initialData }) {
 
   return (
     <div className="h-screen flex flex-row-reverse relative">
-      {isProductsListOpen && (
+      {isDesktop && isProductsListOpen && (
         <ProductsList
-          isOpen={isProductsListOpen}
-          onClose={toggleProductsList}
+          onClose={closeProductsList}
           specialProducts={filteredSpecialForList}
           purchasedProducts={filteredPurchasedForList}
+          filterMode={filterMode}
+          remainingTime={remainingTime}
         />
       )}
       {isDesktop ? (
@@ -548,23 +562,28 @@ export default function MainHome({ initialData }) {
         />
       </div>
       <div className="lg:hidden" data-drawer-wrapper>
-        <ProductsDrawer
-          storeProducts={storeProducts}
-          specialProducts={filteredSpecialForList}
-          purchasedProducts={filteredPurchasedForList}
-          activeSellerId={activeSellerId}
-          onProductChange={handleProductChange}
-          onSellerGoToMap={handleSellerGoToMap}
-          setIsReviewsModalOpen={setIsReviewsModalOpen}
-          remainingTime={remainingTime}
-          isStoresLoading={isStoresLoading}
-          hasSliderStores={hasSliderStores}
-        />
+        {!isDesktop && (
+          <ProductsDrawer
+            storeProducts={storeProducts}
+            specialProducts={filteredSpecialForList}
+            purchasedProducts={filteredPurchasedForList}
+            activeSellerId={activeSellerId}
+            onProductChange={handleProductChange}
+            onSellerGoToMap={handleSellerGoToMap}
+            setIsReviewsModalOpen={setIsReviewsModalOpen}
+            remainingTime={remainingTime}
+            isStoresLoading={isStoresLoading}
+            hasSliderStores={hasSliderStores}
+          />
+        )}
       </div>
       <div className="hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-[40%] xl:w-[44%] max-w-200 lg:px-4 lg:mr-24 xl:px-8 2xl:px-16 bg-gray-200/50 backdrop-blur-sm rounded-l-lg flex-col z-10">
         <div
           ref={scrollContainerRef}
-          className="flex-1 relative overflow-y-auto"
+          className={cn(
+            "flex-1 relative min-h-0",
+            viewMode === "slider" ? "overflow-hidden" : "overflow-y-auto",
+          )}
         >
           {viewMode === "slider" &&
             (isStoresLoading ? (
@@ -572,17 +591,19 @@ export default function MainHome({ initialData }) {
             ) : !hasSliderStores ? (
               <HomeSliderEmptyState variant="desktop" />
             ) : (
-              <ProductsSlider
-                key={`${filterMode}-${storeDataVersion}`}
-                storeProducts={storeProducts}
-                onProductChange={handleProductChange}
-                activeSellerId={activeSellerId}
-                purchasedProducts={filteredPurchasedForList}
-                activeSellerInfo={activeSellerInfo}
-                filterMode={filterMode}
-                scrollContainerRef={scrollContainerRef}
-                remainingTime={remainingTime}
-              />
+              <div className="h-full min-h-0">
+                <ProductsSlider
+                  key={filterMode}
+                  storeProducts={storeProducts}
+                  onProductChange={handleProductChange}
+                  activeSellerId={activeSellerId}
+                  purchasedProducts={filteredPurchasedForList}
+                  activeSellerInfo={activeSellerInfo}
+                  filterMode={filterMode}
+                  scrollContainerRef={scrollContainerRef}
+                  remainingTime={remainingTime}
+                />
+              </div>
             ))}
 
           {viewMode === "seller-details" && hasSliderStores && (

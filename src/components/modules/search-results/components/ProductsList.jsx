@@ -13,7 +13,7 @@ function ProductsList({ products, isDesktop = false }) {
 
   // Mobile view
   return (
-    <div className="overflow-y-auto">
+    <div className="space-y-[10px]">
       {products.map((product) => (
         <ProductListItem key={product.id} product={product} />
       ))}

@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Image from "next/image";
-import { CloseIcon, SupportIcon, UserIcon } from "@/icons";
+import { CloseSquareIcon, SupportIcon, UserIcon } from "@/icons";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useState, useEffect } from "react";
@@ -20,6 +20,33 @@ import { deleteConversations } from "@/lib/server/actions/support";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
+
+function formatChatItems(conversationsData) {
+  return conversationsData.map((conv) => {
+    const otherUser = conv.other_user;
+
+    return {
+      id: conv.id,
+      name:
+        conv.department === 2 ? "واحد پشتیبانی" : otherUser?.name || "کاربر",
+      msg: conv.latest_message?.body
+        ? conv.latest_message?.body
+        : conv.latest_message?.attachments.length > 0
+          ? "تصویر"
+          : "بدون پیام",
+      isSupport: conv.department === 2,
+      department: conv.department,
+      department_text: conv.department_text,
+      status: conv.status,
+      unread_count: conv.unread_count,
+      last_message_at: conv.last_message_at,
+      created_at: conv.created_at,
+      updated_at: conv.updated_at,
+      other_user: otherUser,
+      latest_message: conv.latest_message,
+    };
+  });
+}
 
 function SupportChats({ conversations, isMobile = false }) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -37,52 +64,41 @@ function SupportChats({ conversations, isMobile = false }) {
 
   useEffect(() => {
     if (conversations?.data) {
-      const formattedChats = conversations.data.map((conv) => {
-        const otherUser = conv.other_user;
-
-        return {
-          id: conv.id,
-          name:
-            conv.department === 2
-              ? "واحد پشتیبانی"
-              : otherUser?.name || "کاربر",
-          msg: conv.latest_message?.body
-            ? conv.latest_message?.body
-            : conv.latest_message?.attachments.length > 0
-              ? "تصویر"
-              : "بدون پیام",
-          isSupport: conv.department === 2,
-          department: conv.department,
-          department_text: conv.department_text,
-          status: conv.status,
-          unread_count: conv.unread_count,
-          last_message_at: conv.last_message_at,
-          created_at: conv.created_at,
-          updated_at: conv.updated_at,
-          other_user: otherUser,
-          latest_message: conv.latest_message,
-        };
-      });
-
-      setChatItems(formattedChats);
+      setChatItems(formatChatItems(conversations.data));
     }
   }, [conversations]);
 
+  const restoreChatItems = () => {
+    if (conversations?.data) {
+      setChatItems(formatChatItems(conversations.data));
+    }
+  };
+
   useEffect(() => {
-    // بررسی conversationId در URL و باز کردن modal/drawer
-    if (conversationIdFromUrl && chatItems.length > 0) {
-      const conversation = chatItems.find(
-        (chat) => chat.id === parseInt(conversationIdFromUrl),
-      );
-      if (conversation) {
-        setSelectedConversation(conversation);
-        setIsOpen(true);
-      }
-    } else if (!conversationIdFromUrl) {
-      // وقتی conversationId از URL حذف شد، modal/drawer را ببند
+    if (!conversationIdFromUrl) {
       setIsOpen(false);
       setSelectedConversation(null);
+      return;
     }
+
+    const parsedId = Number.parseInt(conversationIdFromUrl, 10);
+    const conversation = chatItems.find((chat) => chat.id === parsedId);
+
+    if (conversation) {
+      setSelectedConversation(conversation);
+      setIsOpen(true);
+      return;
+    }
+
+    // Newly created support chat may not exist in list yet
+    setSelectedConversation({
+      id: parsedId,
+      name: "واحد پشتیبانی",
+      isSupport: true,
+      department: 2,
+      msg: "",
+    });
+    setIsOpen(true);
   }, [conversationIdFromUrl, chatItems]);
 
   const [imagesSliderRef, imagesSlider] = useKeenSlider({
@@ -105,12 +121,14 @@ function SupportChats({ conversations, isMobile = false }) {
   };
 
   const handleDeleteButtonClick = () => {
-    if (deleteMode) {
-      handleConfirmDeletes();
-    } else {
-      setDeleteMode(true);
-      setPendingDeletes([]);
-    }
+    setDeleteMode(true);
+    setPendingDeletes([]);
+  };
+
+  const handleCancelDeletes = () => {
+    restoreChatItems();
+    setPendingDeletes([]);
+    setDeleteMode(false);
   };
 
   const handleMarkForDeletion = (e, id) => {
@@ -165,6 +183,8 @@ function SupportChats({ conversations, isMobile = false }) {
 
   const supportChat = chatItems.find((chat) => chat.isSupport);
   const otherChats = chatItems.filter((chat) => !chat.isSupport);
+
+  const isConfirmDeleteEnabled = pendingDeletes.length > 0;
 
   return (
     <>
@@ -269,7 +289,7 @@ function SupportChats({ conversations, isMobile = false }) {
                                   }
                                   className="cursor-pointer"
                                 >
-                                  <CloseIcon />
+                                  <CloseSquareIcon size={20} />
                                 </button>
                               </div>
                             )}
@@ -286,16 +306,45 @@ function SupportChats({ conversations, isMobile = false }) {
                       ))}
                     </div>
 
-                    <div className="hidden lg:flex sticky bottom-0 bg-white pt-4 pb-2 justify-center gap-4">
-                      {!isDeleting ? (
+                    <div className="hidden lg:flex sticky bottom-0 bg-white pt-4 pb-2 px-2">
+                      {deleteMode ? (
+                        <div className="flex w-full gap-2">
+                          <button
+                            type="button"
+                            disabled={isDeleting || !isConfirmDeleteEnabled}
+                            className={`flex-1 cursor-pointer border-2 py-2 rounded-full flex items-center justify-center disabled:cursor-not-allowed ${
+                              isConfirmDeleteEnabled
+                                ? "text-primary border-primary disabled:opacity-70"
+                                : "text-gray-400 border-gray-400"
+                            }`}
+                            onClick={handleConfirmDeletes}
+                          >
+                            {isDeleting ? (
+                              <SpinnerLoading
+                                size={20}
+                                className="border-primary"
+                              />
+                            ) : (
+                              "تایید"
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={isDeleting}
+                            className="flex-1 text-error-medium cursor-pointer py-2 rounded-full disabled:opacity-70"
+                            onClick={handleCancelDeletes}
+                          >
+                            انصراف
+                          </button>
+                        </div>
+                      ) : (
                         <button
-                          className="text-primary cursor-pointer"
+                          type="button"
+                          className="w-full text-primary cursor-pointer"
                           onClick={handleDeleteButtonClick}
                         >
-                          {deleteMode ? "تایید" : "پاک کردن پیام ها"}
+                          پاک کردن پیام ها
                         </button>
-                      ) : (
-                        <SpinnerLoading />
                       )}
                     </div>
                   </>
@@ -340,16 +389,42 @@ function SupportChats({ conversations, isMobile = false }) {
             </div>
 
             {chatItems.length > 0 && (
-              <div className="lg:hidden fixed bottom-17 right-0 left-0 bg-white py-4 flex justify-center items-center gap-4">
-                {!isDeleting ? (
+              <div className="lg:hidden fixed bottom-17 right-0 left-0 bg-white py-4 px-[10px]">
+                {deleteMode ? (
+                  <div className="flex w-full gap-2">
+                    <button
+                      type="button"
+                      disabled={isDeleting || !isConfirmDeleteEnabled}
+                      className={`flex-1 cursor-pointer border-2 py-2 rounded-full flex items-center justify-center disabled:cursor-not-allowed ${
+                        isConfirmDeleteEnabled
+                          ? "text-primary border-primary disabled:opacity-70"
+                          : "text-gray-400 border-gray-400"
+                      }`}
+                      onClick={handleConfirmDeletes}
+                    >
+                      {isDeleting ? (
+                        <SpinnerLoading size={20} className="border-primary" />
+                      ) : (
+                        "تایید"
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isDeleting}
+                      className="flex-1 text-error-medium cursor-pointer py-2 rounded-full disabled:opacity-70"
+                      onClick={handleCancelDeletes}
+                    >
+                      انصراف
+                    </button>
+                  </div>
+                ) : (
                   <button
-                    className="text-primary cursor-pointer"
+                    type="button"
+                    className="w-full text-primary cursor-pointer border-2 border-primary py-2 rounded-full"
                     onClick={handleDeleteButtonClick}
                   >
-                    {deleteMode ? "تایید" : "پاک کردن پیام ها"}
+                    پاک کردن پیام ها
                   </button>
-                ) : (
-                  <SpinnerLoading className="border-primary" />
                 )}
               </div>
             )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainNavigation from "@/components/layout/navigation-menu";
 import { SearchInput, SearchBox } from "@/components/ui/search";
 import { SupportChats, SupportOrders } from "..";
@@ -8,10 +8,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import usePublicStore from "@/app/store/publicStore";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 function SupportContent({ conversations, initialOrders }) {
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState("chats");
+
+  useEffect(() => {
+    if (searchParams.get("conversationId")) {
+      setActiveTab("chats");
+    }
+  }, [searchParams]);
 
   const handleSearchClick = (e) => {
     e.preventDefault();
@@ -80,30 +89,30 @@ function SupportContent({ conversations, initialOrders }) {
 
       {/* Mobile layout */}
       <div className="lg:hidden px-[10px]">
-        <Tabs defaultValue="chats">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList
             dir="rtl"
-            className="fixed top-0 right-0 left-0 bg-white! z-20 w-full max-w-[540px] flex items-center px-0! py-0! h-12! mx-auto"
+            className="fixed top-[10px] left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
           >
             <TabsTrigger
               value="chats"
-              className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
+              className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
             >
               پیام ها
             </TabsTrigger>
             <TabsTrigger
               value="orders"
-              className="flex-1 shadow-none! rounded-none! h-full! text-gray-600 data-[state=active]:text-primary border-b-2 border-gray-200 data-[state=active]:border-primary font-bold!"
+              className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
             >
               پیگیری سفارشات
             </TabsTrigger>
           </TabsList>
-          <TabsContent className="pt-10" value="chats" dir="rtl">
+          <TabsContent className="pt-[76px]" value="chats" dir="rtl">
             <div className="overflow-y-auto">
               <SupportChats isMobile={true} conversations={conversations} />
             </div>
           </TabsContent>
-          <TabsContent className="pt-10 pb-[140px]" value="orders" dir="rtl">
+          <TabsContent className="pt-[76px] pb-[140px]" value="orders" dir="rtl">
             <SupportOrders initialOrders={initialOrders} />
           </TabsContent>
         </Tabs>

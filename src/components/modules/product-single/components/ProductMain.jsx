@@ -31,8 +31,12 @@ import { createConversation } from "@/lib/server/actions/support";
 import { addCartItem, getCart } from "@/lib/server/actions/cart";
 import { getToken } from "@/lib/server/cookies";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import SellerReviewsContent from "../../seller-reviews/components/SellerReviewsContent";
+import { mockSellerReviewsData } from "@/lib/client/mockReviewsData";
 import toast from "react-hot-toast";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
+import ProductOrderAccessoriesDrawer from "./ProductOrderAccessoriesDrawer";
 
 export default function ProductMain({ product }) {
   const [selectedAttributes, setSelectedAttributes] = useState({});
@@ -45,6 +49,11 @@ export default function ProductMain({ product }) {
   );
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showOtherSellers, setShowOtherSellers] = useState(false);
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  const [showOrderAccessoriesDrawer, setShowOrderAccessoriesDrawer] =
+    useState(false);
+
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   // Get store actions
   const setProductAttribute = usePublicStore((s) => s.setProductAttribute);
@@ -304,6 +313,10 @@ export default function ProductMain({ product }) {
         if (cartRes?.summary) {
           setCartItemsCount(cartRes.summary.items_count || 0);
         }
+      }
+
+      if (!isDesktop) {
+        setShowOrderAccessoriesDrawer(true);
       }
     } else if (addCartItemErr) {
       toast.error(addCartItemErr);
@@ -1009,7 +1022,7 @@ export default function ProductMain({ product }) {
 
             {/* Mobile specs link */}
             <Link
-              href={"/search/1?view=accessories"}
+              href={`/search/1?view=accessories&product=${encodeURIComponent(product?.name || "")}`}
               className="lg:hidden my-3 flex items-center justify-between px-[10px]"
             >
               <div className="flex items-center gap-4">
@@ -1042,25 +1055,25 @@ export default function ProductMain({ product }) {
       {/* Other Sellers Drawer - Mobile Only */}
       <Drawer open={showOtherSellers} onOpenChange={setShowOtherSellers}>
         <DrawerContent
-          className="z-100! h-[96%]! overflow-hidden"
+          className="z-100! h-[96%]! overflow-hidden flex flex-col"
           overlayClassName="z-100 lg:hidden"
         >
-          <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-4 mb-4 px-[10px]">
+          <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-4 mb-4 px-[10px] shrink-0">
             {product?.name}
           </h2>
 
-          <div className="flex-1 overflow-y-auto px-[10px] pb-4">
+          <div className="flex-1 overflow-y-auto px-[10px] pb-28">
             <div className="space-y-[10px]">
               {/* Mock Sellers List - Replace with real data later */}
               {[1, 2, 3, 4, 5].map((seller, index) => {
                 const isFeaturedSale = index === 0 || index === 2; // Mock featured sale
 
                 return (
-                  <Link href="#" key={seller} className="block">
+                  <div key={seller} className="block">
                     {/* Seller Header */}
                     <div className="flex items-center justify-between mb-2">
                       {/* Right side - Avatar, name, verify icon */}
-                      <div className="flex items-center gap-2">
+                      <Link href="#" className="flex items-center gap-2">
                         <Image
                           src={
                             sellerData.sellerAvatar ||
@@ -1077,10 +1090,14 @@ export default function ProductMain({ product }) {
                           </span>
                           <VerifyIcon size={20} />
                         </div>
-                      </div>
+                      </Link>
 
                       {/* Left side - Rating */}
-                      <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsReviewsModalOpen(true)}
+                        className="flex items-center gap-2 text-gray-600"
+                      >
                         <span className="text-gray-400">
                           آرا {sellerData.totalReviews}
                         </span>
@@ -1091,45 +1108,98 @@ export default function ProductMain({ product }) {
                             <span className="text-xs text-gray-400">/5</span>
                           </span>
                         </div>
-                      </div>
+                      </button>
                     </div>
 
                     {/* Seller Info Box */}
-                    <div className="border-2 border-gray-200 rounded-lg p-[10px]">
+                    <Link href="#" className="block">
                       {/* Featured Sale or Update Time */}
                       {isFeaturedSale ? (
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-error-medium font-bold text-sm">
-                            فروش ویژه
-                          </span>
-                          <span className="text-error-medium font-bold text-sm">
-                            {formatSecondsToTime(3600)}
-                          </span>
+                        <div className="border-2 border-gray-200 rounded-lg p-[10px]">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-error-medium font-bold text-sm">
+                              فروش ویژه
+                            </span>
+                            <span className="text-error-medium font-bold text-sm">
+                              {formatSecondsToTime(3600)}
+                            </span>
+                          </div>
+
+                          {/* Price Box */}
+                          <div className="border-2 border-gray-200 rounded-lg py-2 text-center">
+                            <span className="text-gray-700 text-sm">
+                              از {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
+                              تومان
+                            </span>
+                          </div>
                         </div>
                       ) : (
-                        <div className="text-center mb-4">
-                          <span className="text-gray-600 text-sm">
-                            <span className="font-bold">بروزرسانی</span> 1 دقیقه
-                            پیش
-                          </span>
+                        <div className="border-2 border-gray-200 rounded-lg p-[10px]">
+                          <div className="text-center mb-4">
+                            <span className="text-gray-600 text-sm">
+                              <span className="font-bold">بروزرسانی</span> 1 دقیقه
+                              پیش
+                            </span>
+                          </div>
+
+                          {/* Price Box */}
+                          <div className="border-2 border-gray-200 rounded-lg py-2 text-center">
+                            <span className="text-gray-700 text-sm">
+                              از {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
+                              تومان
+                            </span>
+                          </div>
                         </div>
                       )}
-
-                      {/* Price Box */}
-                      <div className="border-2 border-gray-200 rounded-lg py-2 text-center">
-                        <span className="text-gray-700 text-sm">
-                          از {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
-                          تومان
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 );
               })}
             </div>
           </div>
+
+          <div className="bg-white fixed bottom-0 py-6 right-0 left-0 px-[10px] flex items-center justify-center">
+            <button
+              type="button"
+              className="w-full rounded-full text-primary border-2 border-primary py-2 flex items-center justify-center gap-2"
+            >
+              <LocationIcon size={20} />
+              موقعیت یابی فروشندگان کالا
+            </button>
+          </div>
         </DrawerContent>
       </Drawer>
+
+      {isDesktop ? (
+        isReviewsModalOpen && (
+          <div className="fixed inset-0 z-1000 bg-white h-screen">
+            <SellerReviewsContent
+              onClose={() => setIsReviewsModalOpen(false)}
+              sellerData={mockSellerReviewsData}
+            />
+          </div>
+        )
+      ) : (
+        <Drawer
+          open={isReviewsModalOpen}
+          onOpenChange={() => setIsReviewsModalOpen(false)}
+        >
+          <DrawerContent
+            className="z-100! px-[10px] h-[96%]!"
+            overlayClassName="z-100 lg:hidden"
+          >
+            <SellerReviewsContent sellerData={mockSellerReviewsData} />
+          </DrawerContent>
+        </Drawer>
+      )}
+
+      {!isDesktop ? (
+        <ProductOrderAccessoriesDrawer
+          open={showOrderAccessoriesDrawer}
+          onOpenChange={setShowOrderAccessoriesDrawer}
+          productName={product?.name || ""}
+        />
+      ) : null}
     </div>
   );
 }

@@ -109,42 +109,29 @@ function ProductCardMobile({
           onClick={handleClick}
           className="mt-2 bg-white rounded-md flex flex-col pt-[14px] pb-[10px] px-[10px] overflow-hidden gap-3"
         >
-          <div className="flex items-center justify-between gap-2 min-h-5 shrink-0">
-            {isOrder ? (
-              <>
-                <span className="text-primary text-xs sm:text-sm font-bold sm:pr-4">
-                  سفارشات(خرید حضوری)
-                </span>
-                <span className="text-gray-600 text-xs sm:text-sm">
-                  بروزرسانی اطلاعات (1 دقیقه پیش)
-                </span>
-              </>
-            ) : product.isSpecialSale ? (
-              <>
-                <span className="text-error-medium text-sm font-bold sm:pr-4">
-                  فروش ویژه
-                </span>
-                <span className="text-error-medium text-sm font-bold tabular-nums">
-                  ۰۰:۰۰:۰۰
-                </span>
-              </>
-            ) : (
-              <>
-                <span
-                  className="invisible text-sm font-bold sm:pr-4"
-                  aria-hidden
-                >
-                  فروش ویژه
-                </span>
-                <span
-                  className="invisible text-sm font-bold tabular-nums"
-                  aria-hidden
-                >
-                  ۰۰:۰۰:۰۰
-                </span>
-              </>
-            )}
-          </div>
+          {(isOrder || product.isSpecialSale) && (
+            <div className="flex items-center justify-between gap-2 min-h-5 shrink-0">
+              {isOrder ? (
+                <>
+                  <span className="text-primary text-xs sm:text-sm font-bold sm:pr-4">
+                    سفارشات(خرید حضوری)
+                  </span>
+                  <span className="text-gray-600 text-xs sm:text-sm">
+                    بروزرسانی اطلاعات (1 دقیقه پیش)
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-error-medium text-sm font-bold sm:pr-4">
+                    فروش ویژه
+                  </span>
+                  <span className="text-error-medium text-sm font-bold tabular-nums">
+                    ۰۰:۰۰:۰۰
+                  </span>
+                </>
+              )}
+            </div>
+          )}
           <div className="flex flex-row gap-3">
             <div className="relative w-16 h-20 shrink-0 rounded-md overflow-hidden bg-gray-100">
               <Image

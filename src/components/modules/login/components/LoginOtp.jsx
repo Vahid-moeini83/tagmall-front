@@ -90,6 +90,7 @@ function LoginOtp({
             if (onSuccess) onSuccess();
             setLoginOpen(false);
           } else if (registerErr) {
+            console.log(registerErr);
             toast.error("مشکلی در ورود به سامانه پیش آمده است");
           }
         } else {

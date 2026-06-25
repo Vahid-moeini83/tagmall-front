@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { formatPrice } from "@/lib/client/utils";
+import MobileSearchProductCard from "./MobileSearchProductCard";
 
 function ProductListItem({ product, isDesktop = false }) {
   if (isDesktop) {
@@ -37,35 +38,7 @@ function ProductListItem({ product, isDesktop = false }) {
     );
   }
 
-  // Mobile view
-  return (
-    <div className="flex gap-[10px] pb-4 mb-4">
-      <div className="relative w-24 h-24 rounded-lg overflow-hidden shrink-0">
-        <Image
-          src={product.img || "/assets/images/fallback/phone.png"}
-          fill
-          alt={product.name}
-          className="object-contain"
-        />
-      </div>
-      <div className="flex flex-col flex-1 gap-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-error-medium font-bold">فروش ویژه</span>
-          <span className="text-xs text-error-medium font-bold">00:00:00</span>
-        </div>
-        <p className="text-xs font-bold text-gray-600 line-clamp-2">
-          {product.name}
-        </p>
-        <div className="flex gap-1">
-          <span className="text-xs text-gray-600 font-bold">محدوده قیمت</span>
-          <span className="text-xs text-gray-600">
-            {formatPrice(product.minPrice)} تا {formatPrice(product.maxPrice)}{" "}
-            تومان
-          </span>
-        </div>
-      </div>
-    </div>
-  );
+  return <MobileSearchProductCard product={product} />;
 }
 
 export default ProductListItem;

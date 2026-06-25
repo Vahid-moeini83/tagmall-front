@@ -17,7 +17,6 @@ function PriceRangeFilterContent({
   const [minInput, setMinInput] = useState(priceRange[0].toString());
   const [maxInput, setMaxInput] = useState(priceRange[1].toString());
 
-  // وقتی اسلایدر تغییر کرد، فقط اگر در حال ادیت نیست sync کن
   useEffect(() => {
     if (!isEditingMin) setMinInput(priceRange[0].toString());
     if (!isEditingMax) setMaxInput(priceRange[1].toString());
@@ -70,15 +69,8 @@ function PriceRangeFilterContent({
   };
 
   return (
-    <div className="relative pt-4 pr-10 lg:pr-0">
-      {/* Labels */}
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-xs text-gray-600">گران ترین</span>
-        <span className="text-xs text-gray-600">ارزان ترین</span>
-      </div>
-
-      {/* Slider */}
-      <div className="px-6">
+    <div className="bg-gray-200 rounded-2xl overflow-hidden">
+      <div className="px-5 pt-5 pb-6">
         <Slider
           min={minPrice}
           max={maxPrice}
@@ -87,51 +79,58 @@ function PriceRangeFilterContent({
         />
       </div>
 
-      {/* Editable Values */}
-      <div className="flex flex-col gap-4 items-start mt-6">
-        {/* MIN */}
-        <span className="text-gray-600">
-          <span className="text-gray-700 font-bold">از</span>{" "}
+      <div className="border-t border-white">
+        <div className="w-full py-4 text-center text-gray-600">
+          <span className="font-bold text-gray-700">از</span>{" "}
           {isEditingMin ? (
             <input
               autoFocus
-              value={minInput} // ❗ بدون format هنگام تایپ
+              value={minInput}
               onChange={(e) =>
                 setMinInput(e.target.value.replace(/[^0-9]/g, ""))
               }
               onBlur={validateAndSubmitMin}
               onKeyDown={(e) => e.key === "Enter" && validateAndSubmitMin()}
-              className="border rounded px-2 py-1 w-28 text-sm"
+              className="bg-transparent text-center outline-none w-28 text-sm"
             />
           ) : (
-            <button type="button" onClick={() => setIsEditingMin(true)}>
+            <button
+              type="button"
+              onClick={() => setIsEditingMin(true)}
+              className="cursor-pointer"
+            >
               {formatPrice(priceRange[0])}
             </button>
           )}{" "}
           تومان
-        </span>
+        </div>
+      </div>
 
-        {/* MAX */}
-        <span className="text-gray-600">
-          <span className="text-gray-700 font-bold">تا</span>{" "}
+      <div className="border-t border-white">
+        <div className="w-full py-4 text-center text-gray-600">
+          <span className="font-bold text-gray-700">تا</span>{" "}
           {isEditingMax ? (
             <input
               autoFocus
-              value={maxInput} // ❗ بدون format هنگام تایپ
+              value={maxInput}
               onChange={(e) =>
                 setMaxInput(e.target.value.replace(/[^0-9]/g, ""))
               }
               onBlur={validateAndSubmitMax}
               onKeyDown={(e) => e.key === "Enter" && validateAndSubmitMax()}
-              className="border rounded px-2 py-1 w-28 text-sm"
+              className="bg-transparent text-center outline-none w-28 text-sm"
             />
           ) : (
-            <button type="button" onClick={() => setIsEditingMax(true)}>
+            <button
+              type="button"
+              onClick={() => setIsEditingMax(true)}
+              className="cursor-pointer"
+            >
               {formatPrice(priceRange[1])}
             </button>
           )}{" "}
           تومان
-        </span>
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,8 @@
 import http from "@/app/api/axiosInstance";
 
 /** Fetch regional home-page data filtered by map viewport (lat/lng/radius in km). */
-export const getHomePageData = async (lat, lng, radius) => {  try {
+export const getHomePageData = async (lat, lng, radius) => {
+  try {
     const params = new URLSearchParams();
     if (lat != null) params.set("latitude", lat);
     if (lng != null) params.set("longitude", lng);

@@ -31,15 +31,22 @@ function FiltersDrawer({
   onResetFilters,
   availableProductsIconActive,
   onAvailableProductsToggle,
+  overlayClassName = "lg:hidden",
+  drawerClassName = "",
 }) {
   return (
-    <Drawer open={isOpen} onOpenChange={onClose}>
+    <Drawer
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <DrawerContent
-        overlayClassName="lg:hidden"
-        className="data-[vaul-drawer-direction=bottom]:h-full!"
+        overlayClassName={overlayClassName}
+        className={`data-[vaul-drawer-direction=bottom]:h-full! ${drawerClassName}`}
       >
         {/* Content */}
-        <div className="relative bg-white rounded-t-2xl px-[10px]">
+        <div className="relative bg-white rounded-t-2xl px-[10px] mt-4">
           <p className="font-iransans text-center text-sm text-gray-600">
             انتخاب آسان تر براساس اولویت شما
           </p>
@@ -145,8 +152,10 @@ function FiltersDrawer({
           <button
             onClick={onResetFilters}
             disabled={!hasFiltersChanged()}
-            className={`w-full text-center transition-colors ${
-              hasFiltersChanged() ? "text-primary" : "text-gray-400"
+            className={`w-full text-center transition-colors border-2  py-2 rounded-full ${
+              hasFiltersChanged()
+                ? "text-primary border-primary"
+                : "text-gray-400 border-gray-400"
             }`}
           >
             حالت پیش فرض

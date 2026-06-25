@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import toast from "react-hot-toast";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import PartnershipShareChat from "./PartnershipShareChat";
 import {
   DownloadIcon,
   CopyIcon,
@@ -19,14 +22,16 @@ import {
 } from "@/components/ui/accordion";
 import { PartnershipHintDialog } from "@/components/ui/dialog";
 import ResponsiveModal from "@/components/ui/responsive-modal";
-import PopoverWithTrigger from "@/components/ui/popover/PopoverWithTrigger";
 
-export default function ProductPartnership({ cooperation }) {
+export default function ProductPartnership({ cooperation, productName = "" }) {
   const [showLink, setShowLink] = useState(false);
   const [isHintBoxOpen, setIsHintBoxOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isReturnGuideOpen, setIsReturnGuideOpen] = useState(false);
-  const [sharePopoverOpen, setSharePopoverOpen] = useState(false);
+  const [shareChatOpen, setShareChatOpen] = useState(false);
+
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isContributor = cooperation?.is_contributor === true;
 
   const affiliateLink = cooperation?.cooperation_link;
   const cooperationImage =
@@ -46,6 +51,29 @@ export default function ProductPartnership({ cooperation }) {
   const handleOpenReturnGuide = () => {
     setIsReturnGuideOpen(true);
   };
+
+  const handleDownloadImage = useCallback(async () => {
+    try {
+      const response = await fetch(cooperationImage);
+      if (!response.ok) {
+        throw new Error("Download failed");
+      }
+
+      const blob = await response.blob();
+      const objectUrl = window.URL.createObjectURL(blob);
+      const extension =
+        cooperationImage.split(".").pop()?.split("?")[0] || "jpg";
+      const anchor = document.createElement("a");
+      anchor.href = objectUrl;
+      anchor.download = `partnership-content.${extension}`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      window.URL.revokeObjectURL(objectUrl);
+    } catch {
+      toast.error("خطا در دانلود تصویر");
+    }
+  }, [cooperationImage]);
 
   return (
     <div className="bg-white lg:rounded-lg pb-30 lg:py-[50px] lg:px-[100px]">
@@ -132,7 +160,7 @@ export default function ProductPartnership({ cooperation }) {
                     />
                   </div>
                   <div className="block lg:hidden mt-5 space-y-2">
-                    <div className="text-primary font-extralight">
+                    <div className="text-gray-600 font-extralight">
                       <span className="font-bold">سود مشارکت در فروش </span>1
                       درصد به ازای فروش هر کالا
                     </div>
@@ -161,15 +189,25 @@ export default function ProductPartnership({ cooperation }) {
                           {/* Border */}
                           <div className="border-r-2 border-gray-200 h-6 mx-[14px]" />
                           {/* Download Icon */}
-                          <DownloadIcon size={20} />
+                          <button
+                            type="button"
+                            onClick={handleDownloadImage}
+                            className="cursor-pointer"
+                            aria-label="دانلود تصویر"
+                          >
+                            <DownloadIcon size={20} />
+                          </button>
                         </div>
                       </div>
-                      {/* External Link Icon */}
-                      <ExternalLinkIcon
-                        size={20}
-                        className="cursor-pointer"
-                        onClick={() => setSharePopoverOpen(true)}
-                      />
+                      {/* Share Icon */}
+                      <button
+                        type="button"
+                        className="flex items-center justify-center shrink-0 bg-white rounded-lg w-10 h-10 cursor-pointer"
+                        onClick={() => setShareChatOpen(true)}
+                        aria-label="اشتراک گذاری"
+                      >
+                        <ExternalLinkIcon size={20} />
+                      </button>
                     </div>
                   ) : (
                     <p className="bg-white lg:bg-gray-200 rounded-lg mt-5 lg:mt-0 py-[10px] lg:py-2 text-gray-600 text-center">
@@ -193,24 +231,41 @@ export default function ProductPartnership({ cooperation }) {
 
       {/* Fullscreen Image Modal */}
       {isFullScreen && (
-        <div
-          className="fixed inset-0 z-200 bg-gray-200/20 backdrop-blur-sm flex items-center justify-center"
-          onClick={() => setIsFullScreen(false)}
-        >
-          <div className="absolute top-4 left-4">
-            <SmallScreenIcon
-              className="cursor-pointer text-gray-800"
-              size={24}
-              onClick={() => setIsFullScreen(false)}
-            />
+        <div className="fixed inset-0 z-200 bg-gray-200/20 backdrop-blur-sm flex flex-col">
+          {productName && (
+            <h2 className="font-extralight text-center text-primary text-base mt-4 mb-4 px-[10px] shrink-0">
+              {productName}
+            </h2>
+          )}
+
+          <div className="flex-1 min-h-0 px-[10px]">
+            <div className="relative w-full h-full">
+              <Image
+                src={cooperationImage}
+                fill
+                alt="Partnership Fullscreen"
+                className="object-contain rounded-lg"
+              />
+            </div>
           </div>
-          <div className="relative w-full h-full flex items-center justify-center p-4">
-            <Image
-              src={cooperationImage}
-              fill
-              alt="Partnership Fullscreen"
-              className="object-contain rounded-lg"
-            />
+
+          <div className="relative shrink-0 px-[10px] py-6">
+            <button
+              type="button"
+              onClick={() => setIsFullScreen(false)}
+              className="absolute left-[10px] bottom-[calc(100%+20px)] cursor-pointer"
+              aria-label="بستن تمام صفحه"
+            >
+              <SmallScreenIcon size={24} />
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadImage}
+              className="w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center gap-2"
+            >
+              دریافت محتوا
+              <DownloadIcon size={20} />
+            </button>
           </div>
         </div>
       )}
@@ -231,62 +286,32 @@ export default function ProductPartnership({ cooperation }) {
         </div>
       </ResponsiveModal>
 
-      {/* Share Popover */}
-      <PopoverWithTrigger
-        isOpen={sharePopoverOpen}
-        onClose={() => setSharePopoverOpen(false)}
-        trigger={
-          <div className="flex items-center gap-4">
-            {/* Empty space to match the link box width */}
-            <div className="flex-1"></div>
-            {/* External Link Icon in its original position */}
-            <button
-              type="button"
-              className="flex items-center justify-center shrink-0 text-primary focus:outline-none touch-none pointer-events-auto"
-              onClick={() => setSharePopoverOpen(false)}
-            >
-              <ExternalLinkIcon className="text-primary" size={20} />
-            </button>
+      {isDesktop ? (
+        shareChatOpen && (
+          <div className="fixed inset-0 z-1000 bg-white h-screen">
+            <PartnershipShareChat
+              setIsOpen={setShareChatOpen}
+              isContributor={isContributor}
+              affiliateLink={affiliateLink}
+              socialPlatforms={socialPlatforms}
+            />
           </div>
-        }
-        triggerPosition="bottom-[calc(100px+env(safe-area-inset-bottom))] left-[20px]"
-        popoverClassName="bottom-[calc(132px+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-[608px] bg-white rounded-lg shadow-lg lg:hidden animate-slide-up-simple"
-      >
-        <span
-          onClick={() => setSharePopoverOpen(false)}
-          className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-1 block bg-gray-300 rounded-full cursor-pointer"
-        ></span>
-        <div className="pr-[5px] py-[5px] pt-6">
-          <h3 className="text-center text-primary font-bold text-base mb-3 px-[5px]">
-            بستر اشتراک گذاری محتوا
-          </h3>
-          <div>
-            {socialPlatforms.map((platform, index) => (
-              <div key={index}>
-                <Link
-                  href={platform.url}
-                  onClick={() => setSharePopoverOpen(false)}
-                  className="flex items-center gap-2 hover:bg-gray-50 transition-colors h-[64px]"
-                >
-                  <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-                    <Image
-                      src={platform.logo}
-                      width={40}
-                      height={40}
-                      alt={platform.name}
-                      className="object-contain w-full h-full"
-                    />
-                  </div>
-                  <span className="text-gray-600">{platform.name}</span>
-                </Link>
-                {index < socialPlatforms.length - 1 && (
-                  <div className="border-t-2 border-gray-200 mr-[5px]" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </PopoverWithTrigger>
+        )
+      ) : (
+        <Drawer open={shareChatOpen} onOpenChange={setShareChatOpen}>
+          <DrawerContent
+            className="z-100! px-[10px] h-[96%]!"
+            overlayClassName="z-100 lg:hidden"
+          >
+            <PartnershipShareChat
+              setIsOpen={setShareChatOpen}
+              isContributor={isContributor}
+              affiliateLink={affiliateLink}
+              socialPlatforms={socialPlatforms}
+            />
+          </DrawerContent>
+        </Drawer>
+      )}
     </div>
   );
 }

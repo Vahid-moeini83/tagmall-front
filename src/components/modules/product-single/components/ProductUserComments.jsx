@@ -621,11 +621,8 @@ export default function ProductUserComments({
                                   >
                                     <HeartIcon
                                       size={20}
-                                      color={
-                                        likedMessages[msg.id]
-                                          ? "var(--error-color-medium)"
-                                          : "var(--gray-color-400)"
-                                      }
+                                      filled={likedMessages[msg.id]}
+                                      color="var(--gray-color-400)"
                                     />
                                   </button>
                                   <span
@@ -724,11 +721,8 @@ export default function ProductUserComments({
                                   >
                                     <HeartIcon
                                       size={20}
-                                      color={
-                                        likedMessages[msg.id]
-                                          ? "var(--error-color-medium)"
-                                          : "var(--gray-color-400)"
-                                      }
+                                      filled={likedMessages[msg.id]}
+                                      color="var(--gray-color-400)"
                                     />
                                   </button>
                                   <span

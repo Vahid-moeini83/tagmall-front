@@ -12,6 +12,7 @@ import {
   ShoppingBagIcon,
   StrokeShoppingBagIcon,
   UserIcon,
+  ListIcon,
 } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -60,6 +61,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
   const isLoginOpen = usePublicStore((state) => state.isLoginOpen);
   const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
   const cartItemsCount = usePublicStore((state) => state.cartItemsCount);
+  const toggleHomeProductsListOpen = usePublicStore(
+    (state) => state.toggleHomeProductsListOpen,
+  );
 
   // فیلتر کردن ایکن سرچ در دسکتاپ اگر صفحه دارای سرچ باکس باشد
   const filteredNavLinks = hasSearchBox
@@ -319,10 +323,18 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
       {/* Desktop: fixed sidebar on the right */}
       {isHomePage && (
         <div
-          className={`hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 px-6 xl:pr-10 flex-col justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
+          className={`hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 px-6 xl:pr-10 flex-col items-center justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
         >
+          <button
+            type="button"
+            onClick={toggleHomeProductsListOpen}
+            className="absolute top-8 left-1/2 -translate-x-1/2 w-[50px] h-[50px] bg-white rounded-lg flex items-center justify-center shrink-0 z-10 hover:opacity-90 transition-opacity cursor-pointer"
+            aria-label="لیست محصولات"
+          >
+            <ListIcon size={24} />
+          </button>
           <div
-            className={`flex flex-col items-center ${user?.avatar ? "gap-4" : "gap-2"}`}
+            className={`relative flex flex-col items-center ${user?.avatar ? "gap-4" : "gap-2"}`}
           >
             <div className="flex flex-col-reverse relative gap-2">
               {/* Animated background indicator */}

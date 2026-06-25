@@ -1,0 +1,120 @@
+"use client";
+
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { ReceiptIcon, VerifyIcon } from "@/icons";
+import { cn, formatRelativeTime } from "@/lib/client/utils";
+
+function formatOrderQuantityLine(quantity, productName) {
+  if (quantity === 1) {
+    return `تعداد یک ${productName}`;
+  }
+
+  return `تعداد ${quantity} عدد ${productName}`;
+}
+
+export default function SupportOrderCard({ order }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef(null);
+  const items = order.items || [];
+
+  const handleBulletClick = (index) => {
+    swiperRef.current?.slideTo(index);
+    setActiveIndex(index);
+  };
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-3 px-0.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="relative w-10 h-10 shrink-0 rounded-full overflow-hidden border border-gray-200">
+            <Image
+              src={order.store_avatar ?? "/assets/images/fallback/avatar.png"}
+              alt={order.store_name}
+              fill
+              sizes="40px"
+              className="object-cover"
+            />
+          </div>
+          <span className="font-bold text-sm text-gray-600 truncate">
+            {order.store_name}
+          </span>
+          <VerifyIcon size={20} className="shrink-0" />
+        </div>
+
+        <ReceiptIcon size={20} className="text-gray-600 shrink-0" />
+      </div>
+
+      <div className="bg-white rounded-2xl border-2 border-gray-100 p-[5px] w-full overflow-hidden">
+        <Swiper
+          dir="rtl"
+          nested
+          slidesPerView={1}
+          spaceBetween={0}
+          centeredSlides={false}
+          grabCursor={items.length > 1}
+          allowTouchMove={items.length > 1}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          className="w-full overflow-hidden"
+        >
+          {items.map((item) => (
+            <SwiperSlide key={item.id} className="w-full! overflow-hidden">
+              <div className="flex items-center gap-4 min-h-[88px]">
+                <div className="relative w-[88px] h-[88px] shrink-0 rounded-xl overflow-hidden bg-gray-50">
+                  <Image
+                    src={item.image ?? "/assets/images/fallback/no-photo.jpg"}
+                    alt={item.product_name}
+                    fill
+                    sizes="88px"
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="flex-1 min-w-0 text-right space-y-2">
+                  <p className="font-bold text-sm text-gray-600 line-clamp-1">
+                    {item.product_name}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    {formatOrderQuantityLine(item.quantity, item.product_name)}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    <span className="font-bold">وضعیت</span> {item.status}{" "}
+                    <span className="text-gray-400">
+                      ( به روزرسانی{" "}
+                      {formatRelativeTime(item.updated_at ?? order.created_at)}{" "}
+                      )
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {items.length > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-4">
+            {items.map((item, idx) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleBulletClick(idx)}
+                aria-label={`محصول ${idx + 1}`}
+                className={cn(
+                  "rounded-full transition-all cursor-pointer",
+                  activeIndex === idx
+                    ? "bg-primary h-2.5 w-6"
+                    : "bg-gray-300 h-2.5 w-2.5",
+                )}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

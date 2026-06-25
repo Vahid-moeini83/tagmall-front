@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ConversationIcon } from "@/icons";
 import {
   Accordion,
   AccordionItem,
@@ -45,12 +46,15 @@ export default function ProductReviews({ setShowComments, review }) {
                 نقد و بررسی برای این محصول ثبت نشده است
               </p>
             )}
-            <button
+            <div
               onClick={() => setShowComments(true)}
-              className="font-iransans lg:hidden fixed bottom-17 py-4 right-[10px] left-[10px] rounded-lg bg-white text-primary"
+              className=" lg:hidden fixed bottom-17 py-6 right-0 left-0 px-[10px] flex items-center justify-center"
             >
-              پرسش و پاسخ و نظرات کاربران
-            </button>
+              <button className="font-iransans w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center gap-2">
+                <ConversationIcon size={20} />
+                پرسش و پاسخ و دیدگاه کاربران
+              </button>
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

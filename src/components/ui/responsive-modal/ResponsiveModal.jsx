@@ -37,7 +37,9 @@ function ResponsiveModal({
       >
         <div className={`${isHintBox ? "pt-2" : ""}`}>
           {title && (
-            <h2 className="font-bold text-primary text-base lg:text-lg mt-1 mb-4">
+            <h2
+              className={`font-bold text-primary text-base lg:text-lg mt-1 mb-4 ${isHintBox ? "text-center" : ""}`}
+            >
               {title}
             </h2>
           )}
@@ -45,8 +47,9 @@ function ResponsiveModal({
         </div>
         {isHintBox && (
           <button
+            type="button"
             onClick={onClose}
-            className="text-primary text-base text-center mx-auto py-3"
+            className="w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center mt-4 mb-2"
           >
             متوجه شدم
           </button>
