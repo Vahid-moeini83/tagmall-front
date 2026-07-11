@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ArrowUpDownIcon, SupportIcon } from "@/icons";
+import { ChevronLeftIcon, SupportIcon } from "@/icons";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FilterOrdersDrawer, OrderStatusFilterDialog } from "..";
 import { getToken } from "@/lib/server/cookies";
@@ -20,16 +20,59 @@ import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import SupportOrderCard from "./SupportOrderCard";
 import SupportOrderDesktop from "./SupportOrderDesktop";
+import {
+  DEFAULT_ORDER_STATUS,
+  getOrderStatusLabel,
+} from "./OrderStatusFilterContent";
 
 const sortOptions = [
   { id: "pickup", label: "خرید حضوری" },
   { id: "shipping", label: "خرید آنلاین" },
 ];
 
-const statusOptions = [
-  { id: "delivered", label: "تحویل داده شده" },
-  { id: "sending", label: "در حال ارسال" },
-];
+const statusMatchers = {
+  processing: ["processing", "در حال پردازش"],
+  ready_to_ship: ["ready_to_ship", "ready_to_send", "آماده ارسال"],
+  ready_for_pickup: ["ready_for_pickup", "ready_for_delivery", "آماده تحویل"],
+  shipped: ["shipped", "sending", "in_transit", "ارسال شده", "در حال ارسال"],
+  delivered: ["delivered", "تحویل داده شده"],
+  returned: ["returned", "refunded", "مرجوع شده"],
+};
+
+function matchesOrderStatus(item, orderStatus) {
+  const slug = String(item.status_slug ?? item.status ?? "").toLowerCase();
+  const label = String(item.status ?? "");
+  const targets = statusMatchers[orderStatus] ?? [];
+
+  return targets.some(
+    (target) =>
+      slug === target.toLowerCase() ||
+      label === target ||
+      label.includes(target),
+  );
+}
+
+function matchesDateRange(createdAt, fromDate, toDate) {
+  if (!fromDate && !toDate) return true;
+  if (!createdAt) return true;
+
+  const orderDate = new Date(createdAt);
+  if (Number.isNaN(orderDate.getTime())) return true;
+
+  if (fromDate) {
+    const from = fromDate.toDate();
+    from.setHours(0, 0, 0, 0);
+    if (orderDate < from) return false;
+  }
+
+  if (toDate) {
+    const to = toDate.toDate();
+    to.setHours(23, 59, 59, 999);
+    if (orderDate > to) return false;
+  }
+
+  return true;
+}
 
 function mapOrdersFromApi(ordersList = []) {
   return ordersList.map((order) => {
@@ -67,9 +110,14 @@ function mapOrdersFromApi(ordersList = []) {
 function SupportOrders({ initialOrders }) {
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
-  const [expandedFilter, setExpandedFilter] = useState([]);
+  const [expandedFilter, setExpandedFilter] = useState([
+    "order-status",
+    "date-range",
+  ]);
   const [orderType, setOrderType] = useState(null);
-  const [orderStatus, setOrderStatus] = useState(null);
+  const [orderStatus, setOrderStatus] = useState(DEFAULT_ORDER_STATUS);
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const [orders, setOrders] = useState(() =>
     mapOrdersFromApi(initialOrders?.data ?? []),
   );
@@ -98,16 +146,17 @@ function SupportOrders({ initialOrders }) {
     );
   };
 
-  const getFilterLabel = () => {
-    if (!orderType) return "انتخاب کنید";
-    const option = sortOptions.find((o) => o.id === orderType);
-    return option?.label || "";
-  };
+  const getStatusLabel = () => getOrderStatusLabel(orderStatus);
 
-  const getStatusLabel = () => {
-    if (!orderStatus) return "انتخاب کنید";
-    const option = statusOptions.find((o) => o.id === orderStatus);
-    return option?.label || "";
+  const hasFiltersChanged = () =>
+    orderStatus !== DEFAULT_ORDER_STATUS ||
+    fromDate !== null ||
+    toDate !== null;
+
+  const handleResetFilters = () => {
+    setOrderStatus(DEFAULT_ORDER_STATUS);
+    setFromDate(null);
+    setToDate(null);
   };
 
   const filteredOrders = useMemo(() => {
@@ -115,32 +164,15 @@ function SupportOrders({ initialOrders }) {
       const matchesDeliveryType =
         !orderType || order.delivery_type === orderType;
 
-      if (!orderStatus) {
-        return matchesDeliveryType;
-      }
+      const matchesStatus = order.items.some((item) =>
+        matchesOrderStatus(item, orderStatus),
+      );
 
-      const matchesStatus = order.items.some((item) => {
-        const slug = item.status_slug ?? item.status;
+      const matchesDate = matchesDateRange(order.created_at, fromDate, toDate);
 
-        if (orderStatus === "delivered") {
-          return slug === "delivered" || item.status === "تحویل داده شده";
-        }
-
-        if (orderStatus === "sending") {
-          return (
-            slug === "shipped" ||
-            slug === "processing" ||
-            item.status === "در حال ارسال" ||
-            item.status === "در حال پردازش"
-          );
-        }
-
-        return true;
-      });
-
-      return matchesDeliveryType && matchesStatus;
+      return matchesDeliveryType && matchesStatus && matchesDate;
     });
-  }, [orders, orderType, orderStatus]);
+  }, [orders, orderType, orderStatus, fromDate, toDate]);
 
   const handleSupport = async () => {
     const token = await getToken();
@@ -277,16 +309,17 @@ function SupportOrders({ initialOrders }) {
               </div>
             </div>
 
-            <div
-              className="lg:hidden text-xs flex items-center gap-2 mt-6 mb-8 pr-2 cursor-pointer"
+            <button
+              type="button"
+              className="mb-8 mt-6 flex w-full cursor-pointer items-center justify-between px-2 lg:hidden"
               onClick={() => setIsFiltersDrawerOpen(true)}
             >
-              <ArrowUpDownIcon size={20} />
-              <span className="text-gray-600 text-sm font-extralight">
-                <span className="font-bold">اولویت نمایش</span>:{" "}
-                {getFilterLabel()}
+              <span className="text-primary">
+                <span className="font-bold">سفارشات</span>{" "}
+                <span className="font-extralight">{getStatusLabel()}</span>
               </span>
-            </div>
+              <ChevronLeftIcon size={16} className="shrink-0 text-primary" />
+            </button>
 
             <div className="space-y-6 lg:space-y-10 lg:mt-10">
               {isLoadingOrders && orders.length === 0 ? (
@@ -341,10 +374,14 @@ function SupportOrders({ initialOrders }) {
         onClose={() => setIsFiltersDrawerOpen(false)}
         expandedFilter={expandedFilter}
         onFilterToggle={handleFilterToggle}
-        orderType={orderType}
-        onOrderTypeChange={setOrderType}
         orderStatus={orderStatus}
         onStatusChange={setOrderStatus}
+        fromDate={fromDate}
+        onFromDateChange={setFromDate}
+        toDate={toDate}
+        onToDateChange={setToDate}
+        hasFiltersChanged={hasFiltersChanged}
+        onResetFilters={handleResetFilters}
       />
       <OrderStatusFilterDialog
         isOpen={isStatusDialogOpen}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { StrokeArrowLeftIcon, UserIcon } from "@/icons";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const ProfileAvatarContent = ({
   user,
@@ -11,6 +12,7 @@ const ProfileAvatarContent = ({
   onRemove,
 }) => {
   const hasImage = Boolean(user?.avatar);
+  const isDrawer = !useMediaQuery("(min-width: 1024px)");
 
   return (
     <div>
@@ -41,10 +43,12 @@ const ProfileAvatarContent = ({
       <div className="overflow-hidden">
         {!hasImage ? (
           <button
-            className={`w-full text-center py-4 flex items-center justify-center gap-2 transition-all ${
+            className={`w-full text-center flex items-center justify-center gap-2 py-2 px-4 border-2 ${
+              isDrawer ? "my-2 rounded-full" : "my-4 rounded-lg"
+            } ${
               isUpdating
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-primary cursor-pointer"
+                ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                : "text-primary border-primary cursor-pointer"
             }`}
             onClick={onAdd}
             disabled={isUpdating}
@@ -52,31 +56,29 @@ const ProfileAvatarContent = ({
             افزودن تصویر به حساب کاربری
           </button>
         ) : (
-          <>
+          <div className="flex items-center gap-2 my-2">
             <div
-              className={`text-base py-4 text-center ${
+              className={`flex-1 text-base text-center border-2 rounded-full py-2 px-4 ${
                 isUpdating
-                  ? "text-gray-400 cursor-not-allowed"
-                  : "text-primary cursor-pointer"
+                  ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                  : "text-primary border-primary cursor-pointer"
               }`}
               onClick={isUpdating ? undefined : onChange}
             >
-              {isUpdating ? "در حال آپلود..." : "تغییر تصویر حساب کاربری"}
+              {isUpdating ? "در حال آپلود..." : "تغییر تصویر"}
             </div>
 
-            <div className="w-full h-[2px] bg-gray-200 mr-13" />
-
             <div
-              className={`text-center text-base py-4 ${
+              className={`flex-1 text-center text-base ${
                 isUpdating
                   ? "text-gray-400 cursor-not-allowed"
                   : "text-error-medium cursor-pointer"
               }`}
               onClick={isUpdating ? undefined : onRemove}
             >
-              حذف تصویر حساب کاربری
+              حذف تصویر
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

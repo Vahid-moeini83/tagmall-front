@@ -38,10 +38,18 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
     <>
       {/* Main container */}
       <div className="flex flex-col h-screen">
+        <div className="lg:hidden flex items-center justify-center pt-4 pb-2">
+          <h3 className="font-iransans font-bold text-primary">
+            تجربه خرید از{" "}
+            <span className="font-iransans font-extralight">
+              {sellerData?.sellerName}
+            </span>
+          </h3>
+        </div>
         <div className="overflow-y-auto scroll-hidden">
           <div className="min-h-screen lg:py-[50px] lg:px-[140px] pb-46 lg:pb-[160px]">
             {/* Main content */}
-            <div className="flex flex-col gap-4 lg:gap-8">
+            <div className="flex flex-col gap-3 lg:gap-8">
               <div className="flex items-center justify-between lg:items-start lg:flex-col gap-1">
                 {/* Seller profile section */}
                 <div className="flex items-center gap-2">
@@ -63,9 +71,9 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
                   </div>
                 </div>
                 {/* Overall rating section */}
-                <div className="flex items-center gap-1">
-                  <span className="text-xs lg:text-sm text-gray-600/70">
-                    (آرا {sellerData.totalReviews})
+                <div className="flex items-center gap-1 ml-[5px]">
+                  <span className="text-sm text-gray-600">
+                    آرا {sellerData.totalReviews}
                   </span>
                   <div className="flex items-center gap-1">
                     <StarIcon size={20} className="text-yellow-600 mb-1" />
@@ -78,18 +86,18 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
               </div>
 
               {/* Rating distribution section - centered */}
-              <div className="max-w-[640px] mx-auto w-full lg:-translate-y-12">
+              <div className="max-w-[640px] mx-auto w-full border-b-4 border-gray-200 pb-[10px] lg:pb-0 lg:border-0 lg:-translate-y-12">
                 <RatingOverview
                   ratingDistribution={sellerData.ratingDistribution}
                 />
               </div>
 
               {/* Reviews section */}
-              <div className="flex flex-col gap-4 lg:gap-6 w-full mt-4 lg:mt-0">
+              <div className="flex flex-col gap-4 lg:gap-6 w-full lg:mt-0">
                 {sellerData.reviews.map((review) => (
                   <div
                     key={review.id}
-                    className="not-last:border-b-2 border-gray-200 pb-4 lg:pb-6"
+                    className="not-last:border-b-4 border-gray-200 pb-4 lg:pb-6"
                   >
                     <ReviewCard
                       key={review.id}

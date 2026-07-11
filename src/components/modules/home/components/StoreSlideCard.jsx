@@ -172,6 +172,7 @@ export default function StoreSlideCard({
                   <HorizontalProductSlider
                     products={specialProducts}
                     isSpecialSale={true}
+                    store={store}
                   />
                 </AccordionContent>
               </AccordionItem>
@@ -201,6 +202,7 @@ export default function StoreSlideCard({
                     <HorizontalProductSlider
                       products={nonSpecialProducts}
                       isSpecialSale={false}
+                      store={store}
                     />
                   </AccordionContent>
                 </AccordionItem>

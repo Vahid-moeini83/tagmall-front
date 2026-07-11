@@ -7,10 +7,17 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { NoteIcon, ReceiptIcon, SquarePlusIcon2 } from "@/icons";
 import { cn } from "@/lib/client/utils";
+import usePublicStore from "@/app/store/publicStore";
+import { buildReceiptDataFromStore } from "@/lib/client/receiptData";
 
-export default function HorizontalProductSlider({ products, isSpecialSale }) {
+export default function HorizontalProductSlider({
+  products,
+  isSpecialSale,
+  store,
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
+  const openReceiptDrawer = usePublicStore((s) => s.openReceiptDrawer);
 
   if (!products?.length) {
     return (
@@ -134,13 +141,16 @@ export default function HorizontalProductSlider({ products, isSpecialSale }) {
       )}
 
       {!isSpecialSale && (
-        <Link
-          href="#"
-          className="mt-3 mx-[50px] w-[calc(100%-100px)] py-2 text-primary rounded-full border-2 border-primary hover:bg-primary/5 transition text-center flex items-center justify-center gap-2"
+        <button
+          type="button"
+          onClick={() =>
+            openReceiptDrawer(buildReceiptDataFromStore(store, products))
+          }
+          className="mx-[50px] mt-3 flex w-[calc(100%-100px)] items-center justify-center gap-2 rounded-full border-2 border-primary py-2 text-center text-primary transition hover:bg-primary/5"
         >
           <ReceiptIcon size={20} />
           <span>رسید تحویل</span>
-        </Link>
+        </button>
       )}
     </div>
   );

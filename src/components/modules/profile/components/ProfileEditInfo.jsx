@@ -472,6 +472,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                 onChange={(e) => setNationalCode(e.target.value)}
                 disabled={isLoading}
                 readOnly
+                labelClassName={"text-primary"}
                 className="text-center text-gray-600 bg-gray-200 border-0!"
               />
               <CheckIcon
@@ -481,12 +482,12 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
             </div>
             <div className="flex items-start gap-4 pr-4">
               <HintIcon size={28} className="mt-2.5" />
-              <p className="text-gray-600 leading-12 text-justify">
+              <p className="text-gray-600 leading-12 text-justify font-iransans">
                 با{" "}
-                <Link href="#" className="text-primary font-bold">
+                <Link href="#" className="text-primary font-bold font-iransans">
                   احراز هویت
                 </Link>{" "}
-                نشست های فعال را مدیریت کنید و از خدمات کیف پول اعتباری بهره مند
+                نشست‌های فعال را مدیریت کنید و از خدمات کیف پول اعتباری بهره مند
                 شوید
               </p>
             </div>
@@ -503,7 +504,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               triggerClassName="lg:pt-0!"
               iconClassName="left-[18px]"
               customLabel={
-                <span className="text-primary font-bold">
+                <span className="text-primary font-bold font-iransans">
                   چگونه با شما در ارتباط باشیم؟
                 </span>
               }
@@ -519,7 +520,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               >
                 {isLoadingMobiles ? (
                   <MobilesSkeleton />
-                ) : phoneList.length > 0 ? (
+                ) : (
                   <CustomOptions
                     type="radio"
                     hasBorder={false}
@@ -528,7 +529,11 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                       setSelectedPhoneOption(value);
                       handleSetDefaultMobile(value);
                     }}
-                    bottomButtonText="دسترسی به شماره تماس دیگری دارید؟"
+                    bottomButtonText={
+                      phoneList.length > 0
+                        ? "به شماره دیگری دسترسی دارید؟"
+                        : "ثبت شماره تماس"
+                    }
                     buttonOnClick={() => setIsPhoneOpen(true)}
                     onItemClick={(item) => {
                       setSelectedPhoneForSessions(item.label);
@@ -536,19 +541,8 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                     }}
                     options={phoneList}
                     centerLabel={true}
+                    emptyText="هنوز شماره تماسی ثبت نکرده‌اید"
                   />
-                ) : (
-                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
-                    <p className="text-center text-gray-600 mb-6">
-                      هنوز شماره تماسی ثبت نکرده‌اید
-                    </p>
-                    <button
-                      onClick={() => setIsPhoneOpen(true)}
-                      className="w-full text-center text-primary"
-                    >
-                      ثبت شماره تماس
-                    </button>
-                  </div>
                 )}
               </CustomAccordion>
 
@@ -568,7 +562,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               >
                 {isLoadingEmails ? (
                   <EmailsSkeleton />
-                ) : emailList.length > 0 ? (
+                ) : (
                   <CustomOptions
                     type="radio"
                     value={selectedEmailOption}
@@ -576,26 +570,17 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                       setSelectedEmailOption(value);
                       handleSetDefaultEmail(value);
                     }}
-                    bottomButtonText="دسترسی به پست الکترونیک دیگری دارید؟"
+                    bottomButtonText={
+                      emailList.length > 0
+                        ? "دسترسی به پست الکترونیک دیگری دارید؟"
+                        : "ثبت پست الکترونیک"
+                    }
                     buttonOnClick={() => setIsEmailOpen(true)}
                     options={emailList}
                     centerLabel={true}
                     containerClassName="mb-[10px]"
+                    emptyText="هنوز پست الکترونیکی ثبت نکرده‌اید"
                   />
-                ) : (
-                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
-                    <p className="text-center text-gray-600 mb-6">
-                      هنوز پست الکترونیکی ثبت نکرده‌اید
-                    </p>
-                    <button
-                      onClick={() => setIsEmailOpen(true)}
-                      className="w-full text-center text-primary"
-                    >
-                      {emailList.length > 0
-                        ? " دسترسی به پست الکترونیک دیگری دارید؟"
-                        : "ثبت پست الکترونیک"}
-                    </button>
-                  </div>
                 )}
               </CustomAccordion>
             </CustomAccordion>
@@ -612,7 +597,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               triggerClassName="lg:pt-0!"
               iconClassName="left-[18px]"
               customLabel={
-                <span className="text-primary font-bold">
+                <span className="text-primary font-bold font-iransans">
                   سفارشات شما به کجا ارسال شود؟
                 </span>
               }
@@ -628,7 +613,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               >
                 {isLoadingAddresses ? (
                   <AddressesSkeleton />
-                ) : addressList.length > 0 ? (
+                ) : (
                   <CustomOptions
                     type="radio"
                     value={selectedAddressOption}
@@ -636,22 +621,15 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                       setSelectedAddressOption(value);
                       handleSetDefaultAddress(value);
                     }}
-                    bottomButtonText="سفارشات به آدرس دیگری ارسال شود؟"
+                    bottomButtonText={
+                      addressList.length > 0
+                        ? "سفارشات به آدرس دیگری ارسال شود؟"
+                        : "ثبت آدرس"
+                    }
                     buttonOnClick={() => setIsAddressOpen(true)}
                     options={addressList}
+                    emptyText="هنوز آدرسی ثبت نکرده‌اید"
                   />
-                ) : (
-                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
-                    <p className="text-center text-gray-600 mb-6">
-                      هنوز آدرسی ثبت نکرده‌اید
-                    </p>
-                    <button
-                      onClick={() => setIsAddressOpen(true)}
-                      className="w-full text-center text-primary"
-                    >
-                      ثبت آدرس
-                    </button>
-                  </div>
                 )}
               </CustomAccordion>
               <div className="flex items-start gap-2 pr-4 pb-3 pt-4">
@@ -679,7 +657,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               triggerClassName="lg:pt-0!"
               iconClassName="left-[18px]"
               customLabel={
-                <span className="text-primary font-bold">
+                <span className="text-primary font-bold font-iransans">
                   واریز به کدام حساب بانکی شما انجام شود؟
                 </span>
               }
@@ -697,7 +675,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               >
                 {isLoadingBankAccounts ? (
                   <BankAccountsSkeleton />
-                ) : bankList.length > 0 ? (
+                ) : (
                   <CustomOptions
                     type="radio"
                     value={selectedBankOption}
@@ -705,10 +683,15 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                       setSelectedBankOption(value);
                       handleSetDefaultBankAccount(value);
                     }}
-                    bottomButtonText="واریز به حساب دیگری انجام شود؟"
+                    bottomButtonText={
+                      bankList.length > 0
+                        ? "واریز به حساب دیگری انجام شود؟"
+                        : "ثبت حساب بانکی"
+                    }
                     buttonOnClick={() => setIsBankOpen(true)}
                     options={bankList}
                     containerClassName="pb-0!"
+                    emptyText="هنوز حساب بانکی ثبت نکرده‌اید"
                     renderLabel={(item) => {
                       const bankInfo = getBankBySheba(item.sheba);
                       const formattedSheba = formatSheba(item.sheba);
@@ -725,18 +708,6 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                       );
                     }}
                   />
-                ) : (
-                  <div className="mb-4 py-4 bg-gray-200 rounded-lg">
-                    <p className="text-center text-gray-600 mb-6">
-                      هنوز حساب بانکی ثبت نکرده‌اید
-                    </p>
-                    <button
-                      onClick={() => setIsBankOpen(true)}
-                      className="w-full text-center text-primary"
-                    >
-                      ثبت حساب بانکی
-                    </button>
-                  </div>
                 )}
               </CustomAccordion>
             </CustomAccordion>

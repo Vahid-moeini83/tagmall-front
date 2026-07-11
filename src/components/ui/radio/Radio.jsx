@@ -8,6 +8,7 @@ function Radio({
   label,
   hasBorder = true,
   className,
+  disabled = false,
   ...props
 }) {
   return (
@@ -22,19 +23,23 @@ function Radio({
         checked={checked}
         onChange={(e) => onChange?.(e.target.checked)}
         className="sr-only"
+        disabled={disabled}
         {...props}
       />
       <span
         className={cn(
-          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full transition-colors",
-          hasBorder ? "border-2" : "border-0",
-          checked ? "border-primary bg-white" : "border-gray-400 bg-white",
+          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full transition-colors bg-gray-200 border-0",
+          disabled && "opacity-50 cursor-not-allowed",
         )}
         aria-hidden
       >
         {checked && <span className="w-2.5 h-2.5 rounded-full bg-primary" />}
       </span>
-      {label && <span className="text-sm text-gray-600">{label}</span>}
+      {label && (
+        <span className={cn("text-sm text-gray-600", disabled && "opacity-50")}>
+          {label}
+        </span>
+      )}
     </label>
   );
 }

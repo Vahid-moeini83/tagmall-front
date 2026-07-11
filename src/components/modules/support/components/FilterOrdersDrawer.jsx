@@ -1,76 +1,75 @@
 "use client";
 
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerFooter } from "@/components/ui/drawer";
 import { ChevronDownIcon, ChevronUpIcon } from "@/icons";
-import { OrderStatusFilterContent, OrderTypeFilterContent } from "..";
+import OrderStatusFilterContent, {
+  getOrderStatusLabel,
+} from "./OrderStatusFilterContent";
+import OrderDateRangeFilterContent from "./OrderDateRangeFilterContent";
+
+const mobileFilters = [
+  { id: "order-status", label: "وضعیت سفارشات" },
+  { id: "date-range", label: "بازه زمانی" },
+];
 
 function FilterOrdersDrawer({
   isOpen,
   onClose,
   expandedFilter,
   onFilterToggle,
-  orderType,
-  onOrderTypeChange,
   orderStatus,
   onStatusChange,
+  fromDate,
+  onFromDateChange,
+  toDate,
+  onToDateChange,
+  hasFiltersChanged,
+  onResetFilters,
 }) {
-  const mobileFilters = [
-    { id: "order-type", label: "نوع سفارش" },
-    { id: "order-status", label: "وضعیت سفارش" },
-  ];
-
   const getFilterValue = (filterId) => {
-    if (filterId === "order-type") {
-      if (orderType === "in-person") return "خرید حضوری";
-      if (orderType === "online") return "خرید آنلاین";
-    }
-
     if (filterId === "order-status") {
-      const statusMap = {
-        sending: "در حال ارسال",
-        delivered: "تحویل شده",
-      };
-
-      return statusMap[orderStatus] || "";
+      return getOrderStatusLabel(orderStatus);
     }
 
     return "";
   };
 
   return (
-    <Drawer open={isOpen} onOpenChange={onClose}>
+    <Drawer
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <DrawerContent overlayClassName="lg:hidden">
-        {/* Header */}
-        <div className="px-[10px] pt-2">
-          <h3 className="text-primary text-base font-bold pb-2 cursor-pointer">
+        <div className="px-[10px] pt-4">
+          <h3 className="pb-2 text-center text-base font-bold text-primary">
             پیگیری سفارشات
           </h3>
         </div>
 
-        {/* Filters */}
         <div className="flex-1 overflow-y-auto px-[10px]">
           {mobileFilters.map((filter, index) => (
             <div
               key={filter.id}
-              className={`${
-                mobileFilters.length - 1 === index
-                  ? ""
-                  : "border-b-2 border-gray-200"
-              }`}
+              className={
+                mobileFilters.length - 1 === index ? "" : "border-b border-gray-200"
+              }
             >
               <button
+                type="button"
                 onClick={() => onFilterToggle(filter.id)}
-                className="relative flex items-center justify-between w-full py-4"
+                className="relative flex w-full items-center justify-between py-4"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-600 font-bold">
-                    {filter.label}:
-                  </span>
-
-                  {getFilterValue(filter.id) && (
-                    <span className="text-sm text-gray-600">
-                      {getFilterValue(filter.id)}
-                    </span>
+                <div className="flex items-center gap-1">
+                  <span className="font-bold text-gray-600">{filter.label}</span>
+                  {filter.id === "order-status" && getFilterValue(filter.id) && (
+                    <>
+                      <span className="text-gray-600">:</span>
+                      <span className="text-sm font-normal text-gray-600">
+                        {getFilterValue(filter.id)}
+                      </span>
+                    </>
                   )}
                 </div>
 
@@ -90,17 +89,19 @@ function FilterOrdersDrawer({
               >
                 {expandedFilter.includes(filter.id) && (
                   <div className="pb-3">
-                    {filter.id === "order-type" && (
-                      <OrderTypeFilterContent
-                        orderType={orderType}
-                        onChange={onOrderTypeChange}
-                      />
-                    )}
-
                     {filter.id === "order-status" && (
                       <OrderStatusFilterContent
                         orderStatus={orderStatus}
                         onChange={onStatusChange}
+                      />
+                    )}
+
+                    {filter.id === "date-range" && (
+                      <OrderDateRangeFilterContent
+                        fromDate={fromDate}
+                        onFromDateChange={onFromDateChange}
+                        toDate={toDate}
+                        onToDateChange={onToDateChange}
                       />
                     )}
                   </div>
@@ -110,10 +111,20 @@ function FilterOrdersDrawer({
           ))}
         </div>
 
-        {/* Footer */}
-        <button className="font-bold text-primary cursor-pointer pt-4 pb-18 bg-white">
-          جست و جوی سفارش
-        </button>
+        <DrawerFooter className="bg-white px-[10px] pt-4 pb-18">
+          <button
+            type="button"
+            onClick={onResetFilters}
+            disabled={!hasFiltersChanged()}
+            className={`w-full rounded-full border-2 py-2 text-center transition-colors ${
+              hasFiltersChanged()
+                ? "border-primary text-primary"
+                : "border-gray-400 text-gray-400"
+            }`}
+          >
+            حالت پیش فرض
+          </button>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

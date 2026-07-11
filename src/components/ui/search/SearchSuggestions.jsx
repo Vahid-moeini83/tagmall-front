@@ -99,7 +99,7 @@ function SearchSuggestions({
   );
 
   return (
-    <div className="flex-1 overflow-y-auto lg:py-4">
+    <div className="flex-1 overflow-y-auto lg:py-4 scroll-hidden">
       <h3 className="text-primary font-bold mb-5 text-sm lg:text-base lg:px-4">
         پیشنهادات جستجو
       </h3>
@@ -172,9 +172,9 @@ function SearchSuggestions({
 
                 {item.type === "category" && item.brands && (
                   <div
-                    className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top ${
+                    className={`flex flex-col gap-1 transition-all duration-300 ease-in-out origin-top overflow-y-auto overscroll-contain ${
                       expandedCategory === item.id
-                        ? "max-h-96 opacity-100 mt-1"
+                        ? "max-h-72 opacity-100 mt-1 pb-2"
                         : "max-h-0 opacity-0"
                     }`}
                   >

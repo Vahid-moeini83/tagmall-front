@@ -55,21 +55,21 @@ function ProfileWalletAmountContent({
   };
 
   return (
-    <div className="mt-2 lg:mt-0">
+    <div className="mt-4 lg:mt-0">
       {/* Input with back button */}
       <div className="relative">
         <Input
-          label="مبلغ:"
+          label={
+            type === "withdraw"
+              ? "درخواست وجه از کیف پول اعتباری:"
+              : "افزایش اعتبار کیف پول اعتباری:"
+          }
           type="text"
           value={amount}
           onChange={handleChange}
           disabled={isLoading}
           className={`text-center text-gray-600 bg-gray-200 ${error ? "" : "border-0!"}`}
-          placeholder={
-            type === "withdraw"
-              ? "چه مبلغی از کیف پول اعتباری به حساب شما واریز شود؟"
-              : "چه مبلغی به کیف پول اعتباری شما واریز شود؟"
-          }
+          placeholder={"مبلغ"}
           error={error}
         />
         {amount && (
@@ -98,10 +98,10 @@ function ProfileWalletAmountContent({
       <button
         onClick={handleSubmit}
         disabled={!isFormValid || isLoading}
-        className={`mb-4 mt-6 w-full text-base ${
+        className={`mb-4 mt-6 w-full text-base py-2 rounded-full border-2 ${
           !isFormValid || isLoading
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary cursor-pointer hover:opacity-80"
+            ? "text-gray-400 border-gray-400 cursor-not-allowed"
+            : "text-primary border-primary cursor-pointer hover:opacity-80"
         } transition-opacity`}
       >
         {type === "increase" ? "افزایش اعتبار" : "درخواست وجه"}

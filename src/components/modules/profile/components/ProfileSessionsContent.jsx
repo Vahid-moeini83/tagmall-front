@@ -10,6 +10,7 @@ import {
   formatISOToPersianTime,
 } from "@/lib/client/utils";
 import { SessionsSkeleton } from "@/components/ui/loading";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function ProfileSessionsContent({
   sessions,
@@ -22,6 +23,7 @@ function ProfileSessionsContent({
   setIsSessionsHintOpen,
 }) {
   const [selectAll, setSelectAll] = useState(false);
+  const isDrawer = !useMediaQuery("(min-width: 1024px)");
 
   // فیلتر نشست‌های فعال (is_current_session = false یعنی قابل حذف)
   const activeSessions = sessions.filter((s) => !s.is_current_session);
@@ -136,16 +138,24 @@ function ProfileSessionsContent({
       {/* دکمه حذف */}
       <button
         disabled={selectedSessions.length === 0 || isDeleting}
-        className={`text-center py-4 ${
-          selectedSessions.length > 0 && !isDeleting
-            ? "text-error-medium cursor-pointer"
-            : "text-gray-400 cursor-not-allowed"
-        }`}
+        className={
+          isDrawer
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+                selectedSessions.length > 0 && !isDeleting
+                  ? "text-error-medium border-error-medium cursor-pointer"
+                  : "text-gray-400 border-gray-200 cursor-not-allowed"
+              }`
+            : `text-center py-4 ${
+                selectedSessions.length > 0 && !isDeleting
+                  ? "text-error-medium cursor-pointer"
+                  : "text-gray-400 cursor-not-allowed"
+              }`
+        }
         onClick={onDeleteSessions}
       >
         {isDeleting
           ? "در حال حذف..."
-          : "دسترسی از نشست‌های فعال انتخاب شده مسدود شود؟"}
+          : "دسترسی نشست‌های فعال انتخاب شده مسدود شود"}
       </button>
     </div>
   );

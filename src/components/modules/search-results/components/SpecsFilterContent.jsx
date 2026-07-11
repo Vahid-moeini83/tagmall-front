@@ -89,9 +89,9 @@ function SpecsFilterContent({ selectedSpecs, onSpecToggle }) {
                 )}
               </div>
               {expandedSpecs.includes(spec.id) ? (
-                <ChevronUpIcon size={16} color="var(--color-gray-400)" />
+                <ChevronUpIcon size={16} className="text-gray-400 ml-1" />
               ) : (
-                <ChevronDownIcon size={16} color="var(--color-gray-400)" />
+                <ChevronDownIcon size={16} className="text-gray-400 ml-1" />
               )}
             </button>
 

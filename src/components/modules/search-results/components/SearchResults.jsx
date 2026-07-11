@@ -101,6 +101,7 @@ function SearchResults() {
     { id: "mostSold", label: "پرفروش‌ترین" },
     { id: "newest", label: "جدیدترین" },
     { id: "mostViewed", label: "پربازدیدترین" },
+    { id: "mostDiscounted", label: "بیشترین تخفیف" },
     { id: "cheapest", label: "ارزان ترین" },
     { id: "expensive", label: "گران ترین" },
   ];

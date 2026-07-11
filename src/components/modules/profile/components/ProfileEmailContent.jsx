@@ -6,10 +6,12 @@ import { useState } from "react";
 import { sendEmailOtp } from "@/lib/server/actions/profile";
 import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function ProfileEmailContent({ email, setReceivedOtp, setEmail, onNext }) {
   const [errors, setErrors] = useState({ email: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const isDrawer = !useMediaQuery("(min-width: 1024px)");
 
   const isFormValid = email && isValidEmail(email);
 
@@ -46,10 +48,10 @@ function ProfileEmailContent({ email, setReceivedOtp, setEmail, onNext }) {
   };
 
   return (
-    <div className="mt-2 lg:mt-0">
+    <div className="mt-4 lg:mt-0">
       {/* Input */}
       <Input
-        label="ایمیل:"
+        label="افزودن ایمیل به حساب کاربری:"
         id="profile_email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -62,11 +64,19 @@ function ProfileEmailContent({ email, setReceivedOtp, setEmail, onNext }) {
       <button
         onClick={handleSendOtp}
         disabled={!isFormValid || isLoading}
-        className={`mt-3 w-full pb-4 text-base ${
-          !isFormValid || isLoading
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary cursor-pointer"
-        }`}
+        className={
+          isDrawer
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+                !isFormValid || isLoading
+                  ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                  : "text-primary border-primary cursor-pointer"
+              }`
+            : `mt-3 w-full pb-4 text-base ${
+                !isFormValid || isLoading
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-primary cursor-pointer"
+              }`
+        }
       >
         ارسال کد تایید
       </button>

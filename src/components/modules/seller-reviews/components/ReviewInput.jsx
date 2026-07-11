@@ -20,9 +20,9 @@ export default function ReviewInput({ userAvatar, onSubmit }) {
   return (
     <div className="flex items-end gap-2 max-w-[500px] mx-auto w-full">
       {/* Review input box */}
-      <div className="flex-1 bg-gray-200 rounded-t-lg rounded-bl-lg px-2 lg:px-[10px] pt-2 lg:pt-[15px] pb-2 lg:pb-[12px] flex flex-col gap-5 lg:gap-[26px]">
+      <div className="flex-1 bg-gray-200 rounded-lg px-1 lg:px-[10px] pt-1 lg:pt-[15px] pb-2 lg:pb-[12px] flex flex-col gap-5 lg:gap-[26px]">
         {/* Stars */}
-        <div className="flex items-center justify-center gap-4 lg:gap-[30px]">
+        <div className="flex items-center justify-center gap-7 lg:gap-[30px] bg-white py-2 rounded-lg">
           {[1, 2, 3, 4, 5].map((star) => {
             const isActive = star <= (hoveredRating || rating);
             return (
@@ -57,18 +57,18 @@ export default function ReviewInput({ userAvatar, onSubmit }) {
         </div>
 
         {/* Review input field and submit button */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 px-1">
           <input
             type="text"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="نظر خود را به اشتراک بگذارید..."
-            className="font-iransans flex-1 bg-transparent border-none outline-none text-xs lg:text-sm text-gray-800 placeholder:text-gray-500"
+            className="font-iransans flex-1 bg-transparent border-none outline-none text-sm text-gray-800 placeholder:text-gray-400"
           />
           <button
             onClick={handleSubmit}
             disabled={rating === 0 || !comment.trim()}
-            className="font-iransans text-primary text-xs lg:text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="font-iransans text-primary text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             ارسال
           </button>

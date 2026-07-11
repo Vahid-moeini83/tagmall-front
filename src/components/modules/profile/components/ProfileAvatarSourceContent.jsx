@@ -44,25 +44,19 @@ function ProfileAvatarSourceContent({
         />
       </div>
 
-      <div className="">
+      <div className="my-2 space-y-[10px]">
         <div
-          className={`text-center text-base py-4 ${
-            isUpdating
-              ? "text-gray-400 cursor-not-allowed"
-              : "text-primary cursor-pointer"
+          className={`text-center text-gray-600 text-base border-2 border-gray-400 rounded-full py-2 px-4 ${
+            isUpdating ? "cursor-not-allowed" : "cursor-pointer"
           }`}
           onClick={isUpdating ? null : onCamera}
         >
-          تصویر گرفتن با گوشی موبایل
+          تصویر گرفتن با دوربین گوشی موبایل
         </div>
 
-        <div className="w-full h-[2px] bg-gray-200" />
-
         <div
-          className={`text-center text-base py-4 ${
-            isUpdating
-              ? "text-gray-400 cursor-not-allowed"
-              : "text-primary cursor-pointer"
+          className={`text-center text-gray-600 text-base border-2 border-gray-400 rounded-full py-2 px-4 ${
+            isUpdating ? "cursor-not-allowed" : "cursor-pointer"
           }`}
           onClick={isUpdating ? null : onGallery}
         >

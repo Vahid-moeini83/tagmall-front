@@ -69,7 +69,7 @@ function PriceRangeFilterContent({
   };
 
   return (
-    <div className="bg-gray-200 rounded-2xl overflow-hidden">
+    <div className="overflow-hidden rounded-xl bg-gray-200 pb-2">
       <div className="px-5 pt-5 pb-6">
         <Slider
           min={minPrice}
@@ -91,7 +91,7 @@ function PriceRangeFilterContent({
               }
               onBlur={validateAndSubmitMin}
               onKeyDown={(e) => e.key === "Enter" && validateAndSubmitMin()}
-              className="bg-transparent text-center outline-none w-28 text-sm"
+              className="w-28 bg-transparent text-center text-sm outline-none"
             />
           ) : (
             <button
@@ -118,7 +118,7 @@ function PriceRangeFilterContent({
               }
               onBlur={validateAndSubmitMax}
               onKeyDown={(e) => e.key === "Enter" && validateAndSubmitMax()}
-              className="bg-transparent text-center outline-none w-28 text-sm"
+              className="w-28 bg-transparent text-center text-sm outline-none"
             />
           ) : (
             <button

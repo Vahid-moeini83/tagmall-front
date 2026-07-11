@@ -16,11 +16,13 @@ import { getOrderById, getUserOrders } from "@/lib/server/actions/cart";
 import toast from "react-hot-toast";
 import { formatRelativeTime } from "@/lib/client/utils";
 import { OrderItemsSkeleton } from "@/components/ui/loading/cart";
+import usePublicStore from "@/app/store/publicStore";
 
 function OrderItems({ isMobile = false, orderId }) {
   const [noteDialogOpen, setNoteDialogOpen] = useState(false);
   const [orderData, setOrderData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const openReceiptDrawer = usePublicStore((s) => s.openReceiptDrawer);
 
   const fetch = async () => {
     setIsLoading(true);
@@ -51,6 +53,7 @@ function OrderItems({ isMobile = false, orderId }) {
         id: item.id,
         name: item.product_name,
         img: item.image,
+        quantityValue: item.quantity ?? 1,
         quantity: item.quantity === 1 ? "یک عدد" : `${item.quantity} عدد`,
         seller: {
           name: item.store_name,
@@ -62,6 +65,29 @@ function OrderItems({ isMobile = false, orderId }) {
           : "نامشخص",
       };
     }) || [];
+
+  const handleOpenReceipt = () => {
+    openReceiptDrawer({
+      orderId: orderData?.id ?? orderId ?? null,
+      status: orderItems[0]?.status ?? "آماده تحویل",
+      lastUpdate: orderItems[0]?.lastUpdate ?? "نامشخص",
+      itemsCount: orderItems.length,
+      seller: {
+        sellerName: orderItems[0]?.seller?.name ?? "فروشگاه",
+        sellerAvatar:
+          orderItems[0]?.seller?.profileImage ||
+          "/assets/images/fallback/avatar.png",
+      },
+      items: orderItems.map((item) => ({
+        id: String(item.id),
+        product_name: item.name,
+        quantity: item.quantityValue ?? 1,
+        image: item.img || "/assets/images/fallback/no-photo.jpg",
+        status: item.status,
+        updated_at: orderData?.created_at ?? new Date().toISOString(),
+      })),
+    });
+  };
 
   return (
     <>
@@ -135,10 +161,14 @@ function OrderItems({ isMobile = false, orderId }) {
                                 <p className="font-bold text-gray-600 line-clamp-1 text-xs mb-0!">
                                   {product.name}
                                 </p>
-                                <ReceiptIcon
-                                  size={20}
+                                <button
+                                  type="button"
+                                  onClick={handleOpenReceipt}
                                   className="cursor-pointer ml-4"
-                                />
+                                  aria-label="نمایش رسید تحویل"
+                                >
+                                  <ReceiptIcon size={20} />
+                                </button>
                               </div>
                               <div className="flex items-center gap-1 text-gray-600 text-xs">
                                 <span className="font-bold">تعداد</span>
@@ -196,10 +226,14 @@ function OrderItems({ isMobile = false, orderId }) {
                                 <p className="font-bold text-gray-600 line-clamp-1 mb-0!">
                                   {product.name}
                                 </p>
-                                <ReceiptIcon
-                                  size={20}
+                                <button
+                                  type="button"
+                                  onClick={handleOpenReceipt}
                                   className="cursor-pointer"
-                                />
+                                  aria-label="نمایش رسید تحویل"
+                                >
+                                  <ReceiptIcon size={20} />
+                                </button>
                               </div>
                               <div className="flex items-center gap-1 text-gray-600">
                                 <span className="font-bold">تعداد</span>

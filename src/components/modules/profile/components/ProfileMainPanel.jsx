@@ -78,54 +78,40 @@ function ProfileMainPanel({
             onClick={() => setIsWalletOpen(true)}
             className="relative w-full lg:w-ful lg:mx-auto mb-5 cursor-pointer"
           >
+            <div className="relative flex flex-col gap-10 pt-6 pb-3 px-3 bg-primary rounded-lg h-full">
+              <div className="flex items-center justify-center">
+                <Image
+                  src="/assets/images/logo/wallet-logo.svg"
+                  width={126}
+                  height={48}
+                  alt="لوگو"
+                />
+              </div>
+              {!isLoading ? (
+                <p className="font-extralight text-center lg:text-base text-white">
+                  <span className="font-bold">موجودی: </span>
+                  {formatPrice(walletAmount)} تومان
+                </p>
+              ) : (
+                <Skeleton className="w-32 h-6 rounded-lg mx-auto" />
+              )}
+            </div>
             <Image
               src="/assets/images/wallet-bg.svg"
               fill
               alt="wallet background"
               className="object-cover rounded-lg"
             />
-            <div className="relative flex flex-col gap-[56px] p-3 bg-[#2C8DF8]/70  rounded-lg h-full">
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-semibold text-white">
-                  کیف پول اعتباری
-                </span>
-                <Image
-                  src="/assets/images/logo/gray-logo.svg"
-                  width={32}
-                  height={32}
-                  alt="لوگو"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                {!isLoading ? (
-                  <span className="text-sm lg:text-base text-white">
-                    <span className="font-semibold text-xl">
-                      {formatPrice(walletAmount)}
-                    </span>{" "}
-                    تومان
-                  </span>
-                ) : (
-                  <Skeleton className="w-24 h-6 rounded-sm" />
-                )}
-                {/* <button
-                  onClick={() => setIsWalletOpen(true)}
-                  className="bg-white text-primary flex items-center gap-2 h-9 pl-1 pr-2 rounded-md hover:opacity-90 transition-opacity cursor-pointer"
-                >
-                  <PlusIcon size={14} className="text-primary" />
-                  افزایش موجودی
-                </button> */}
-              </div>
-            </div>
           </div>
           {/* Seller panel section */}
-          <div className="pb-7">
-            <div
-              onClick={handleClickSellerPanel}
-              className="flex items-center justify-between mb-2"
-            >
+          <div
+            onClick={handleClickSellerPanel}
+            className="border-2 border-gray-200 rounded-lg pt-3 mb-[10px] cursor-pointer"
+          >
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3 lg:gap-4 mr-4">
                 <StoreIcon size={20} />
-                <span className="text-gray-600 font-semibold cursor-pointer">
+                <span className="text-gray-600 font-semibold">
                   پنل فروشندگان
                 </span>
               </div>
@@ -139,18 +125,18 @@ function ProfileMainPanel({
             </p>
           </div>
           {/* Partnership section */}
-          <div className="border-t-2 border-gray-200 pt-3">
-            <div
-              onClick={() => setIsOpen(true)}
-              className="flex items-center justify-between mb-2"
-            >
+          <div
+            onClick={() => setIsOpen(true)}
+            className="border-2 border-gray-200 rounded-lg pt-3 cursor-pointer"
+          >
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3 lg:gap-4 mr-4">
                 <ShareIcon size={20} className="text-gray-800" />
-                <span className="text-gray-600 font-semibold cursor-pointer">
+                <span className="text-gray-600 font-semibold">
                   مشارکت در فروش
                 </span>
               </div>
-              <button className="hover:opacity-80 transition-opacity ml-4">
+              <button className="hover:opacity-80 transition-opacity ml-5">
                 <ChevronLeftIcon size={20} />
               </button>
             </div>
@@ -164,7 +150,7 @@ function ProfileMainPanel({
         <div className="mt-2 text-center">
           <button
             onClick={() => setIsEditingProfile(true)}
-            className="text-primary hover:opacity-80 transition-opacity cursor-pointer"
+            className="text-primary border-2 border-primary rounded-full w-full px-4 py-2 hover:opacity-80 transition-opacity cursor-pointer"
           >
             مشخصات کاربری
           </button>

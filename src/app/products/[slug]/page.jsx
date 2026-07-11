@@ -18,8 +18,6 @@ export default async function ProductPage({ params }) {
       getProductComments(productId, token),
     ]);
 
-  console.log("Product: ", productRes);
-
   return (
     <ProductSingle
       product={productRes?.data}

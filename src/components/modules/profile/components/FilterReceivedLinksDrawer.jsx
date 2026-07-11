@@ -51,7 +51,7 @@ function FilterReceivedLinksDrawer({
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent overlayClassName="lg:hidden z-100!" className="z-100!">
         {/* Header */}
-        <div className="relative flex items-center justify-between bg-white rounded-t-2xl px-[10px] py-2">
+        <div className="relative flex items-center justify-center lg:justify-start bg-white rounded-t-2xl px-[10px] pt-4 pb-2">
           <p className="text-center text-base font-bold text-primary">
             لینک های دریافت شده
           </p>
@@ -59,7 +59,7 @@ function FilterReceivedLinksDrawer({
             onClick={() => setShowAvailable(!showAvailable)}
             active={showAvailable}
             size={20}
-            className="cursor-pointer ml-[10px]"
+            className="absolute left-5 cursor-pointer"
           />
         </div>
 

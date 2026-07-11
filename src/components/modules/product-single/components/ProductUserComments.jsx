@@ -513,10 +513,15 @@ export default function ProductUserComments({
                 hasOverflow ? "overflow-y-auto" : ""
               }  lg:overflow-x-auto`}
             >
+              <div className="lg:hidden flex items-center justify-center mb-2">
+                <h3 className="font-iransans font-bold text-primary">
+                  پرسش و پاسخ و دیدگاه کاربران
+                </h3>
+              </div>
               {/* Guide Box */}
               <div className="flex gap-[6px] shrink-0 mb-12">
-                <div className="flex flex-col justify-between h-auto">
-                  <div className="flex items-end gap-2">
+                <div className="flex flex-col justify-between h-auto ">
+                  <div className="flex items-end gap-2 px-[10px]">
                     <div className="border-2 border-gray-200 lg:border-primary/20 rounded-t-lg rounded-br-lg px-2 py-[2px] max-w-[175px]">
                       <p className="text-xs font-iransans">
                         <span className="font-bold">راهنما:</span> سوالات خود را

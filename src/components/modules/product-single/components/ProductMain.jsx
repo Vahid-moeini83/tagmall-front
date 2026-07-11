@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   VerifyIcon,
@@ -52,8 +52,13 @@ export default function ProductMain({ product }) {
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const [showOrderAccessoriesDrawer, setShowOrderAccessoriesDrawer] =
     useState(false);
+  const orderCardRef = useRef(null);
+  const [orderCardHeight, setOrderCardHeight] = useState(0);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const hasMobileFeaturedSale =
+    product?.is_featured_sale || product?.discount_percent;
+  const MOBILE_VIEWPORT_CHROME = 124;
 
   // Get store actions
   const setProductAttribute = usePublicStore((s) => s.setProductAttribute);
@@ -360,13 +365,53 @@ export default function ProductMain({ product }) {
     }
   }, [selectedVariantId]);
 
+  useEffect(() => {
+    if (isDesktop || !orderCardRef.current) return;
+
+    const updateOrderCardHeight = () => {
+      setOrderCardHeight(orderCardRef.current?.offsetHeight ?? 0);
+    };
+
+    updateOrderCardHeight();
+
+    const resizeObserver = new ResizeObserver(updateOrderCardHeight);
+    resizeObserver.observe(orderCardRef.current);
+
+    return () => resizeObserver.disconnect();
+  }, [
+    isDesktop,
+    hasMobileFeaturedSale,
+    timeRemaining,
+    isAddingToCart,
+    isAvailable,
+  ]);
+
+  const mobileHeroMinHeight = !isDesktop
+    ? orderCardHeight
+      ? `calc(100svh - ${MOBILE_VIEWPORT_CHROME + orderCardHeight}px)`
+      : "calc(100svh - 15rem)"
+    : undefined;
+
+  const mobileContentPaddingBottom =
+    !isDesktop && orderCardHeight ? orderCardHeight + 72 : undefined;
+
   return (
-    <div className="lg:bg-white lg:rounded-lg pb-64 lg:pb-0 lg:py-[50px] lg:px-[100px]">
+    <div
+      className="lg:bg-white lg:rounded-lg pb-64 lg:pb-0 lg:py-[50px] lg:px-[100px]"
+      style={
+        mobileContentPaddingBottom
+          ? { paddingBottom: mobileContentPaddingBottom }
+          : undefined
+      }
+    >
       <div className="flex flex-col lg:flex-row lg:gap-8">
         {/* Seller details and Images Section */}
-        <div className="lg:w-1/2 border-b-2 border-white lg:border-0 lg:px-0">
+        <div
+          className="lg:w-1/2 border-b-2 border-white lg:border-0 lg:px-0 flex flex-col lg:block"
+          style={mobileHeroMinHeight ? { minHeight: mobileHeroMinHeight } : undefined}
+        >
           {/* Seller profile and rating */}
-          <div className="flex items-start justify-between px-[10px]">
+          <div className="flex items-start justify-between px-[10px] shrink-0">
             <div className="flex items-start flex-col gap-1 lg:mb-6">
               {/* Seller profile section */}
               <div className="flex items-center gap-2">
@@ -410,25 +455,24 @@ export default function ProductMain({ product }) {
           </div>
 
           {/* Product Image Slider */}
-          <div className="-translate-y-10 lg:-translate-y-20">
+          <div className="-translate-y-4 lg:-translate-y-20 shrink-0">
             <ProductImageSlider
               gallery={product?.gallery}
-              dotCLassName="bg-gray-200!"
+              dotBgColor="bg-gray-200"
+              mobileFillHeight={!isDesktop}
             />
           </div>
 
-          {/* Mobile only: Update text and divider */}
-          <div className="lg:hidden px-[10px] mb-4 -translate-y-11">
-            {/* Update text with 12px gap from divider */}
-            <p className="text-gray-400 text-center font-extralight">
-              <span className="font-bold">بروزرسانی</span> 1 دقیقه پیش
-            </p>
-          </div>
+          {/* Spacer fills remaining hero height above order card */}
+          <div className="flex-1 min-h-0 lg:hidden" aria-hidden="true" />
         </div>
 
         {/* Details Section */}
         <div className="lg:w-1/2 lg:space-y-4">
-          <div className="fixed right-[10px] left-[10px] bottom-18 rounded-lg bg-white lg:bg-none lg:static z-10">
+          <div
+            ref={orderCardRef}
+            className="fixed right-[10px] left-[10px] bottom-18 rounded-lg bg-white lg:bg-none lg:static z-10"
+          >
             <div className="bg-gray-200 lg:bg-[unset] rounded-lg p-[10px] pt-3 lg:pr-0 lg:pt-4">
               {/* Special Sale & Timer */}
               {product?.is_featured_sale || product?.discount_percent ? (
@@ -494,7 +538,7 @@ export default function ProductMain({ product }) {
             </div>
           </div>
 
-          <div className="lg:space-y-4 -translate-y-10 lg:translate-y-0">
+          <div className="lg:space-y-4">
             {/* Dynamic Attributes Accordions */}
             {attributes.map((attribute, attrIndex) => {
               const selectedItem = getSelectedAttributeItem(attribute.id);

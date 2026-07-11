@@ -23,6 +23,7 @@ function ProfilePhoneOtpContent({
   const [isVerifying, setIsVerifying] = useState(false);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isDrawer = !isDesktop;
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -85,7 +86,7 @@ function ProfilePhoneOtpContent({
   };
 
   return (
-    <div className="mt-2 lg:mt-0">
+    <div className="mt-4 lg:mt-0">
       {/* Otp Input */}
       <OtpInput
         value={otp}
@@ -116,9 +117,19 @@ function ProfilePhoneOtpContent({
       <button
         disabled={!isResendActive}
         onClick={handleResendOtp}
-        className={`mt-6 pb-4 w-full cursor-pointer ${
-          isResendActive ? "text-primary" : "text-gray-400 cursor-not-allowed"
-        }`}
+        className={
+          isDrawer
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+                isResendActive
+                  ? "text-primary border-primary cursor-pointer"
+                  : "text-gray-400 border-gray-200 cursor-not-allowed"
+              }`
+            : `mt-6 pb-4 w-full cursor-pointer ${
+                isResendActive
+                  ? "text-primary"
+                  : "text-gray-400 cursor-not-allowed"
+              }`
+        }
       >
         {isResendActive ? (
           "ارسال مجدد کد تایید"

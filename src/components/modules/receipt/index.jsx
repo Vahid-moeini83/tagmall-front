@@ -1,4 +1,9 @@
-export { default as ReceiptDelivery } from "./components/ReceiptDelivery";
+export { default as ReceiptDelivery } from "./components/ReceiptDeliveryContent";
+export { default as ReceiptDeliveryShell } from "./components/ReceiptDeliveryShell";
+export { default as ReceiptDeliveryContent } from "./components/ReceiptDeliveryContent";
+export { default as ReceiptDeliveryHeader } from "./components/ReceiptDeliveryHeader";
+export { default as ReceiptSellerHeader } from "./components/ReceiptSellerHeader";
+export { default as ReceiptProductList } from "./components/ReceiptProductList";
 export { default as ReceiptStepOne } from "./components/ReceiptStepOne";
 export { default as ReceiptStepTwo } from "./components/ReceiptStepTwo";
 export { default as ReceiptStepThree } from "./components/ReceiptStepThree";

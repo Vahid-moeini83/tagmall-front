@@ -6,6 +6,8 @@ import MainNavigation from "@/components/layout/navigation-menu/MainNavigation";
 import CartItems from "./CartItems";
 import OrderSummary from "./OrderSummary";
 import OrderItems from "./OrderItems";
+import CartReceiverStepMobile from "./CartReceiverStepMobile";
+import CartPaymentStepMobile from "./CartPaymentStepMobile";
 import Image from "next/image";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { getCart, getCartInvoice } from "@/lib/server/actions/cart";
@@ -103,31 +105,53 @@ function CartPageContent({ initialCartData }) {
     }
   }, [initialCartData, setCartItemsCount]);
 
+  const invoice = invoiceData?.data?.invoice || {};
+  const address = invoiceData?.data?.address || {};
+  const user = invoiceData?.data?.user || {};
+  const wallet = invoiceData?.data?.wallet || {};
+  const receiverInfo = {
+    fullName: user.full_name || "نامشخص",
+    phone: user.mobile || "نامشخص",
+    address: address.address || "آدرسی ثبت نشده است",
+    postalCode: address.postal_code || "نامشخص",
+    city: address.city || "",
+    province: address.province || "",
+  };
+  const billSummary = {
+    orders: invoice.subtotal || 0,
+    shipping: invoice.shipping || 0,
+    vat: invoice.vat || 0,
+    discount: invoice.discount || 0,
+    total: invoice.total || 0,
+  };
+
   return (
     <>
       {/* Mobile Layout */}
       <div className="flex lg:hidden h-screen bg-white flex-col">
         {/* Main Content */}
-        <div className="px-[10px] pt-20 pb-40">
+        <div className="px-[10px] pt-20 pb-52">
           {/* Steps */}
           <div className="fixed top-0 right-0 left-0 bg-white py-4 px-[10px] flex items-center justify-center z-50">
             <div
               onClick={handlePreviousStep}
-              className={`rounded-md w-25 h-10 flex flex-1 items-center justify-center bg-gray-200 ${currentStep === 1 ? "text-primary" : currentStep > 1 ? (currentStep === 3 ? "text-gray-400" : "text-gray-600") : "text-gray-400"}`}
+              className={`rounded-2xl w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${
+                currentStep === 1 ? "text-primary" : "text-gray-600"
+              }`}
             >
               سبد خرید
             </div>
             <div className="w-7 h-[3px] bg-gray-200" />
             <div
-              className={`rounded-md w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${currentStep === 2 ? "text-primary" : "text-gray-400"}`}
+              className={`rounded-2xl w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${currentStep === 2 ? "text-primary" : "text-gray-400"}`}
             >
-              صورت حساب
+              تحویل گیرنده
             </div>
             <div className="w-7 h-[3px] bg-gray-200" />
             <div
-              className={`rounded-md w-25 h-10 flex flex-1  items-center justify-center bg-gray-200  ${currentStep === 3 ? "text-primary" : "text-gray-400"}`}
+              className={`rounded-2xl w-25 h-10 flex flex-1  items-center justify-center bg-gray-200  ${currentStep === 3 ? "text-primary" : "text-gray-400"}`}
             >
-              سفارشات
+              پرداخت
             </div>
           </div>
 
@@ -143,19 +167,24 @@ function CartPageContent({ initialCartData }) {
           )}
 
           {currentStep === 2 && (
-            <OrderSummary
-              isOrderItemsOpen={isOrderItemsOpen}
-              setIsOrderItemsOpen={setIsOrderItemsOpen}
-              handleNextStep={handleNextStep}
-              isMobile={true}
-              invoiceData={invoiceData}
-              onPaymentSuccess={() => setCurrentStep(3)}
-              setOrderId={setOrderId}
+            <CartReceiverStepMobile
+              receiverInfo={receiverInfo}
+              billSummary={billSummary}
+              onConfirm={() => setCurrentStep(3)}
+              onEdit={() => setCurrentStep(1)}
             />
           )}
 
           {currentStep === 3 && (
-            <OrderItems isMobile={true} orderId={orderId} />
+            <CartPaymentStepMobile
+              walletBalance={wallet.balance || 0}
+              isWalletSufficient={(wallet.balance || 0) >= (invoice.total || 0)}
+              billSummary={billSummary}
+              totalAmount={invoice.total || 0}
+              addressId={address.id}
+              onPaymentSuccess={() => setCurrentStep(3)}
+              setOrderId={setOrderId}
+            />
           )}
         </div>
 

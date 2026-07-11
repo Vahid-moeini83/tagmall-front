@@ -8,6 +8,7 @@ import {
   MinusIcon,
   PlusIcon,
   SquarePlusIcon2,
+  HintIcon,
 } from "@/icons";
 import {
   Accordion,
@@ -25,6 +26,8 @@ import {
 } from "@/lib/server/actions/cart";
 import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
+import CartMobileFooter from "./CartMobileFooter";
+import ProductOrderAccessoriesDrawer from "@/components/modules/product-single/components/ProductOrderAccessoriesDrawer";
 
 function CartItems({
   handleNextStep,
@@ -39,6 +42,8 @@ function CartItems({
   const [localQuantities, setLocalQuantities] = useState({});
   const [pendingChanges, setPendingChanges] = useState({});
   const [deletedItems, setDeletedItems] = useState(new Set());
+  const [accessoriesOpen, setAccessoriesOpen] = useState(false);
+  const [accessoriesProductName, setAccessoriesProductName] = useState("");
 
   // فیلتر کردن آیتم‌های حذف شده از cartData
   const items = Array.isArray(cartData?.data)
@@ -76,6 +81,24 @@ function CartItems({
 
   const localSummary =
     Object.keys(localQuantities).length > 0 ? calculateLocalTotal() : summary;
+
+  const billSummary = {
+    orders:
+      summary.subtotal ?? summary.items_total ?? localSummary.subtotal ?? 0,
+    shipping:
+      summary.shipping_total ??
+      summary.shipping ??
+      localSummary.shippingTotal ??
+      0,
+    vat: summary.vat ?? summary.tax ?? summary.vat_amount ?? 0,
+    discount: summary.discount ?? summary.discount_amount ?? 0,
+    total: summary.total ?? localSummary.total ?? 0,
+  };
+
+  const handleOpenAccessories = (productName) => {
+    setAccessoriesProductName(productName);
+    setAccessoriesOpen(true);
+  };
 
   const handleQuantityChange = (itemId, currentQuantity, action) => {
     const current = localQuantities[itemId] ?? currentQuantity;
@@ -240,7 +263,7 @@ function CartItems({
                 سبد خرید شما خالی است
               </div>
             ) : (
-              <div className={isMobile ? "space-y-4" : "space-y-10"}>
+              <div className={isMobile ? "space-y-2" : "space-y-10"}>
                 {items.map((item, index) => {
                   const product = item.product || {};
                   const seller = item.seller || {};
@@ -250,36 +273,40 @@ function CartItems({
                   return (
                     <div
                       key={item.id}
-                      className={`${isMobile ? "pb-4" : "pb-8"} ${items.length - 1 === index ? "" : "border-b-2 border-gray-100"}`}
+                      className={`${isMobile ? "pb-4 not-last:border-b-4 border-gray-200" : "pb-8 not-last:border-b-2 border-gray-200"}`}
                     >
                       {isMobile ? (
-                        <div className="flex flex-col gap-1">
-                          {/* Seller and Timer */}
-                          <div className="flex items-center justify-between pb-3">
-                            <div className="flex items-center gap-2 mr-1">
+                        <div className="flex flex-col gap-2">
+                          {/* Seller Header */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
                               <Image
                                 src={
                                   seller.avatar ||
                                   "/assets/images/fallback/avatar.png"
                                 }
-                                width={40}
-                                height={40}
+                                width={50}
+                                height={50}
                                 alt="seller"
-                                className="rounded-md"
+                                className="rounded-lg object-cover"
                               />
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-sm font-bold text-gray-600">
                                   {seller.name || store.name}
                                 </span>
-                                <VerifyIcon size={20} />
+                                <VerifyIcon size={18} />
                               </div>
                             </div>
+                            {index === 0 && (
+                              <span className="text-error-medium font-bold tabular-nums">
+                                ۰۰:۰۰:۰۰
+                              </span>
+                            )}
                           </div>
 
-                          {/* Product Row */}
-                          <div className="flex gap-3">
-                            {/* Image + Compare Icon */}
-                            <div className="flex flex-col justify-between items-center">
+                          {/* Product Card */}
+                          <div className="border-2 border-gray-200 rounded-xl p-[5px] space-y-3">
+                            <div className="flex items-start gap-3">
                               <div className="relative w-[50px] h-[50px] rounded-lg overflow-hidden shrink-0">
                                 <Image
                                   src={
@@ -291,117 +318,96 @@ function CartItems({
                                   className="object-cover"
                                 />
                               </div>
-                              <SquarePlusIcon2
-                                size={20}
-                                className="text-primary mb-2"
-                              />
-                            </div>
 
-                            {/* Content */}
-                            <div className="flex-1 flex flex-col gap-3">
-                              <div className="flex justify-between mt-4">
-                                {/* Product Name */}
-                                <p className="font-bold text-gray-600 line-clamp-2 text-xs leading-5">
-                                  {product.name}
+                              <div className="flex-1 min-w-0 space-y-2">
+                                <div className="flex items-start justify-between gap-2">
+                                  <p className="font-bold text-gray-600 text-xs leading-6 line-clamp-1">
+                                    {product.name}
+                                  </p>
+                                  {item.notes && item.notes.length > 0 && (
+                                    <NoteIcon
+                                      size={18}
+                                      color="#000000"
+                                      className="cursor-pointer shrink-0"
+                                      onClick={() => handleShowNotes(item.id)}
+                                    />
+                                  )}
+                                </div>
+                                <p className="text-xs text-gray-600">
+                                  <span className="font-bold">قیمت </span>
+                                  {formatPrice(item.unit_price)} تومان
                                 </p>
-                                {item.notes && item.notes.length > 0 && (
-                                  <NoteIcon
+                              </div>
+
+                              <div
+                                className="flex items-center gap-1 shrink-0 pt-4 pl-2"
+                                dir="ltr"
+                              >
+                                <PlusIcon
+                                  size={20}
+                                  onClick={() =>
+                                    !isUpdating[item.id] &&
+                                    handleQuantityChange(
+                                      item.id,
+                                      item.quantity,
+                                      "increase",
+                                    )
+                                  }
+                                  className={`text-primary cursor-pointer ${isUpdating[item.id] ? "opacity-50" : ""}`}
+                                />
+                                <span className="text-gray-600 min-w-[20px] text-center select-none text-sm font-bold">
+                                  {localQuantities[item.id] ?? item.quantity}
+                                </span>
+                                {isUpdating[item.id] &&
+                                (localQuantities[item.id] ?? item.quantity) ===
+                                  1 ? (
+                                  <SpinnerLoading
                                     size={20}
-                                    color="#000000"
-                                    className="cursor-pointer ml-[10px]"
-                                    onClick={() => handleShowNotes(item.id)}
+                                    className="border-error-medium"
+                                  />
+                                ) : (
+                                  <MinusIcon
+                                    size={20}
+                                    onClick={() =>
+                                      !isUpdating[item.id] &&
+                                      handleQuantityChange(
+                                        item.id,
+                                        item.quantity,
+                                        "decrease",
+                                      )
+                                    }
+                                    className={`cursor-pointer ${
+                                      (localQuantities[item.id] ??
+                                        item.quantity) === 1
+                                        ? "text-error-medium"
+                                        : "text-primary"
+                                    } ${isUpdating[item.id] ? "opacity-50" : ""}`}
                                   />
                                 )}
                               </div>
-
-                              {/* Price + Controls Row */}
-                              <div className="flex items-center justify-between gap-2">
-                                {/* Price & Shipping */}
-                                <div className="flex flex-col gap-1">
-                                  <div className="flex items-center gap-1">
-                                    <span className="text-xs font-bold text-gray-600">
-                                      قیمت:
-                                    </span>
-                                    <span className="text-xs text-gray-600">
-                                      {formatPrice(item.unit_price)} تومان
-                                    </span>
-                                  </div>
-                                  {isOnline && item.shipping_cost > 0 && (
-                                    <div className="flex items-center gap-1">
-                                      <span className="text-xs font-bold text-gray-600">
-                                        هزینه ارسال:
-                                      </span>
-                                      <span className="text-xs font-bold text-gray-600">
-                                        {formatPrice(item.shipping_cost)} تومان
-                                      </span>
-                                    </div>
-                                  )}
-                                  {!isOnline && (
-                                    <span className="text-xs font-bold text-gray-600">
-                                      (خرید حضوری)
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Accessories + Actions */}
-                              <div className="flex items-center justify-between mt-1 gap-3">
-                                <div className="flex items-center gap-1 cursor-pointer">
-                                  <span className="text-primary font-bold text-xs">
-                                    لوازم جانبی و قطعات مرتبط
-                                  </span>
-                                </div>
-
-                                <div className="flex items-center gap-2 shrink-0">
-                                  <div className="flex items-center gap-1 border-2 border-gray-200 rounded-md px-2 py-1.5">
-                                    {isUpdating[item.id] &&
-                                    (localQuantities[item.id] ??
-                                      item.quantity) === 1 ? (
-                                      <SpinnerLoading
-                                        size={20}
-                                        className="border-error-medium"
-                                      />
-                                    ) : (
-                                      <MinusIcon
-                                        size={20}
-                                        onClick={() =>
-                                          !isUpdating[item.id] &&
-                                          handleQuantityChange(
-                                            item.id,
-                                            item.quantity,
-                                            "decrease",
-                                          )
-                                        }
-                                        className={`cursor-pointer ${
-                                          (localQuantities[item.id] ??
-                                            item.quantity) === 1
-                                            ? "text-error-medium"
-                                            : "text-gray-800"
-                                        } ${isUpdating[item.id] ? "opacity-50" : ""}`}
-                                      />
-                                    )}
-
-                                    <span className="text-gray-600 min-w-[24px] text-center select-none text-sm">
-                                      {localQuantities[item.id] ??
-                                        item.quantity}
-                                    </span>
-
-                                    <PlusIcon
-                                      size={20}
-                                      onClick={() =>
-                                        !isUpdating[item.id] &&
-                                        handleQuantityChange(
-                                          item.id,
-                                          item.quantity,
-                                          "increase",
-                                        )
-                                      }
-                                      className={`text-primary cursor-pointer`}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
                             </div>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleOpenAccessories(product.name)
+                              }
+                              className="relative w-full border-2 border-primary rounded-xl py-2.5 flex items-center justify-center gap-2 text-primary font-bold text-sm cursor-pointer"
+                            >
+                              <SquarePlusIcon2
+                                size={20}
+                                className="text-primary absolute right-2"
+                              />
+                              <span>لوازم جانبی مرتبط</span>
+                            </button>
+                          </div>
+
+                          {/* Delivery Info */}
+                          <div className="flex items-center gap-2 pr-4 mt-3">
+                            <HintIcon size={20} className="shrink-0" />
+                            <span className="text-xs text-gray-600">
+                              با مراجعه به فروشگاه سفارش تحویل شما می شود.
+                            </span>
                           </div>
                         </div>
                       ) : (
@@ -439,7 +445,7 @@ function CartItems({
                                     {seller.name || store.name}
                                   </span>
                                   <VerifyIcon size={20} />
-                                 </div>
+                                </div>
                               </div>
                             </div>
 
@@ -554,8 +560,8 @@ function CartItems({
                 })}
               </div>
             )}
-            {items.length > 0 && (
-              <div className="fixed bg-white right-0 left-0 bottom-18 py-4 lg:static flex items-center justify-center lg:justify-end lg:pl-[140px] lg:mt-4">
+            {items.length > 0 && !isMobile && (
+              <div className="lg:static flex items-center justify-center lg:justify-end lg:pl-[140px] lg:mt-4">
                 <button
                   onClick={handleConfirmCart}
                   className="lg:text-xl text-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
@@ -578,6 +584,23 @@ function CartItems({
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+
+      {isMobile && items.length > 0 && (
+        <CartMobileFooter
+          billSummary={billSummary}
+          onSubmit={handleConfirmCart}
+          isSubmitting={isSubmitting}
+          disabled={items.length === 0}
+        />
+      )}
+
+      {isMobile && (
+        <ProductOrderAccessoriesDrawer
+          open={accessoriesOpen}
+          onOpenChange={setAccessoriesOpen}
+          productName={accessoriesProductName}
+        />
+      )}
 
       <ResponsiveModal
         isHintBox

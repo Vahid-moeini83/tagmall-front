@@ -275,7 +275,7 @@ function SearchHistory() {
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto lg:py-4">
+      <div className="flex-1 overflow-y-auto lg:py-4 scroll-hidden">
         <div className="flex items-center justify-between mb-5 pl-[6px] lg:pr-4">
           <h3 className="text-primary font-bold text-sm lg:text-base">
             تاریخچه جست و جو و بازدیدهای اخیر
@@ -421,7 +421,7 @@ function SearchHistory() {
       </div>
 
       {!expandedCategory && (
-        <div className="py-4 px-[10px]">
+        <div className="py-4 lg:px-[10px]">
           {isGlobalDeleteMode ? (
             <ConfirmCancelButtons
               onConfirm={handleConfirmDeletes}

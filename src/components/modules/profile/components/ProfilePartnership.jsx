@@ -117,16 +117,16 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-between h-full pt-2 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
+    <div className="flex flex-col justify-between h-full pt-4 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
       {/* Header section */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="relative flex items-center justify-center lg:justify-start mb-8">
         <h3 className="font-bold text-primary text-base lg:text-xl">
           مشارکت در فروش
         </h3>
         <HintIcon
           onClick={() => setIsHintBoxOpen(true)}
           size={20}
-          className="cursor-pointer ml-4 lg:ml-0"
+          className="absolute left-0 cursor-pointer ml-4 lg:ml-0"
         />
       </div>
 
@@ -146,7 +146,7 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
             </button>
           ))}
         </div>
-        <button className="text-primary cursor-pointer">
+        <button className="text-primary border-2 border-primary rounded-full px-4 py-2 lg:border-0 lg:px-0 lg:py-0 cursor-pointer">
           کالای خاصی در نظر دارید؟
         </button>
       </div>
@@ -168,15 +168,15 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
         className="flex-1 overflow-y-auto scroll-hidden"
       >
         {/* Slogan */}
-        <p className="lg:hidden font-iransans font-bold text-gray-600 text-center mb-5 lg:mb-6">
+        <p className="lg:hidden font-iransans text-gray-600 text-center mb-6">
           با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
         </p>
         {/* Products list */}
-        <div className="space-y-4 lg:space-y-8 pb-4">
+        <div className="space-y-3 lg:space-y-8 pb-4">
           {mockProducts.map((product) => (
             <div
               key={product.id}
-              className="flex items-start gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 pb-0 lg:pb-8"
+              className="flex items-start gap-2 border-2 border-gray-200 rounded-lg py-[10px] lg:border-0 lg:py-0 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 pb-0 lg:pb-8"
             >
               {/* Product image */}
               <div className="flex justify-center items-center">
@@ -194,7 +194,7 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
                 <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
                   {product.name}
                 </p>
-                <div className="flex items-center gap-1 text-gray-600 text-xs lg:text-base">
+                <div className="font-extralight flex items-center gap-1 text-gray-600 text-xs lg:text-base">
                   <span className="font-bold">سود مشارکت در فروش</span> 1 درصد
                   به ازای فروش هر کالا
                 </div>
@@ -211,13 +211,13 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
           className="hidden lg:block absolute bottom-16 right-16 cursor-pointer rotate-180"
           onClick={handleGoBack}
         />
-        <div className="flex flex-col items-center gap-4">
+        <div className="w-full flex flex-col items-center gap-4">
           <span className="hidden lg:block font-iransans font-semibold text-gray-600 text-center">
             با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
           </span>
           <button
             onClick={() => setActiveSection("links")}
-            className="text-primary hover:opacity-80 transition-opacity"
+            className="w-full lg:w-auto text-primary border-2 border-primary rounded-full px-4 py-2 hover:opacity-80 transition-opacity cursor-pointer"
           >
             لینک های دریافت شده
           </button>

@@ -191,7 +191,7 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
   function handleSearchClick(e) {
     e.preventDefault();
     setIsProfileOpen(false);
-    setSearchBoxOpen(true);
+    setSearchBoxOpen(!searchBoxOpen);
   }
 
   function handleOtherButtonClick(e) {

@@ -3,6 +3,7 @@ export { default as SupportChats } from "./components/SupportChats";
 export { default as SupportSingleChat } from "./components/SupportSingleChat";
 export { default as SupportOrders } from "./components/SupportOrders";
 export { default as FilterOrdersDrawer } from "./components/FilterOrdersDrawer";
+export { default as OrderDateRangeFilterContent } from "./components/OrderDateRangeFilterContent";
 export { default as OrderTypeFilterContent } from "./components/OrderTypeFilterContent";
 export { default as OrderStatusFilterContent } from "./components/OrderStatusFilterContent";
 export { default as OrderStatusFilterDialog } from "./components/OrderStatusFilterDialog";

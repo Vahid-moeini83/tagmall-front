@@ -8,10 +8,10 @@ function ProfileWalletTypeContent({ onSelectType }) {
   const [isHintOpen, setIsHintOpen] = useState(false);
 
   return (
-    <div className="mt-2 lg:mt-0">
+    <div className="mt-4 lg:mt-0">
       {/* Title with hint icon */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-gray-800 text-lg font-bold">کیف پول اعتباری</span>
+        <span className="text-primary text-lg font-bold">کیف پول اعتباری</span>
         <HintIcon
           size={20}
           className="ml-4 cursor-pointer"
@@ -20,19 +20,17 @@ function ProfileWalletTypeContent({ onSelectType }) {
       </div>
 
       {/* Two options */}
-      <div className="overflow-hidden">
+      <div className="overflow-hidden space-y-[10px]">
         <button
           onClick={() => onSelectType("increase")}
-          className="text-primary text-base py-4 text-center cursor-pointer w-full"
+          className="text-gray-600 border-2 border-gray-200 rounded-full px-4 py-2.5 text-base text-center cursor-pointer w-full"
         >
           افزایش اعتبار
         </button>
 
-        <div className="w-full h-[2px] bg-gray-200" />
-
         <button
           onClick={() => onSelectType("withdraw")}
-          className="text-primary text-base py-4 text-center cursor-pointer w-full"
+          className="text-gray-600 border-2 border-gray-200 rounded-full px-4 py-2.5 text-base text-center cursor-pointer w-full"
         >
           درخواست وجه
         </button>

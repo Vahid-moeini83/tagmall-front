@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { HintIcon } from "@/icons";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isDrawer = !useMediaQuery("(min-width: 1024px)");
 
   const isFormValid =
     address.trim() && postalCode.trim() && postalCode.length === 10;
@@ -19,7 +21,7 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
   };
 
   return (
-    <div className="mt-2 lg:mt-0">
+    <div className="mt-4 lg:mt-0">
       <div className="flex flex-col gap-3">
         <span className="text-gray-800 text-base">آدرس:</span>
         <div className="rounded-lg bg-gray-200 overflow-hidden">
@@ -55,11 +57,19 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
       <button
         onClick={handleSubmit}
         disabled={!isFormValid || isLoading}
-        className={`w-full mt-7 pb-4 text-base ${
-          !isFormValid || isLoading
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary cursor-pointer"
-        }`}
+        className={
+          isDrawer
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+                !isFormValid || isLoading
+                  ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                  : "text-primary border-primary cursor-pointer"
+              }`
+            : `w-full mt-7 pb-4 text-base ${
+                !isFormValid || isLoading
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-primary cursor-pointer"
+              }`
+        }
       >
         {activeAddressAuth ? "احراز کد پستی" : "افزودن موقعیت"}
       </button>

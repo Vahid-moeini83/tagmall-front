@@ -3,8 +3,9 @@
 import { Radio } from "@/components/ui/radio";
 
 const sortOptions = [
-  { id: "newest", label: "جدیدترین" },
+  { id: "newest", label: "جدیدترین (حالت پیش فرض)" },
   { id: "mostViewed", label: "پربازدیدترین" },
+  { id: "mostDiscounted", label: "بیشترین تخفیف" },
   { id: "cheapest", label: "ارزان ترین" },
   { id: "expensive", label: "گران ترین" },
 ];

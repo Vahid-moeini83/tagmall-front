@@ -45,7 +45,7 @@ function Input({
         <label
           htmlFor={id}
           className={cn(
-            "text-lg text-gray-800 font-bold",
+            "text-base text-gray-600 font-bold",
             error && "text-error-medium!",
             labelClassName,
           )}

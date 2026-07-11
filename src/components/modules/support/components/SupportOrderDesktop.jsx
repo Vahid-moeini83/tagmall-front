@@ -6,11 +6,34 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { ReceiptIcon, VerifyIcon } from "@/icons";
 import { cn, formatRelativeTime } from "@/lib/client/utils";
+import usePublicStore from "@/app/store/publicStore";
 
 export default function SupportOrderDesktop({ order }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
   const items = order.items || [];
+  const openReceiptDrawer = usePublicStore((s) => s.openReceiptDrawer);
+
+  const handleOpenReceipt = () => {
+    openReceiptDrawer({
+      orderId: order.order_id ?? order.id ?? null,
+      status: order.items?.[0]?.status ?? "آماده تحویل",
+      lastUpdate: formatRelativeTime(order.created_at),
+      itemsCount: items.length,
+      seller: {
+        sellerName: order.store_name ?? "فروشگاه",
+        sellerAvatar: order.store_avatar ?? "/assets/images/fallback/avatar.png",
+      },
+      items: items.map((item) => ({
+        id: String(item.id),
+        product_name: item.product_name,
+        quantity: item.quantity ?? 1,
+        image: item.image ?? "/assets/images/fallback/no-photo.jpg",
+        status: item.status ?? "آماده تحویل",
+        updated_at: item.updated_at ?? order.created_at,
+      })),
+    });
+  };
 
   const handleBulletClick = (index) => {
     swiperRef.current?.slideTo(index);
@@ -70,7 +93,14 @@ export default function SupportOrderDesktop({ order }) {
                       <VerifyIcon size={20} />
                     </div>
                   </div>
-                  <ReceiptIcon size={20} className="cursor-pointer" />
+                  <button
+                    type="button"
+                    onClick={handleOpenReceipt}
+                    className="cursor-pointer"
+                    aria-label="نمایش رسید تحویل"
+                  >
+                    <ReceiptIcon size={20} />
+                  </button>
                 </div>
 
                 <div className="w-full space-y-4">

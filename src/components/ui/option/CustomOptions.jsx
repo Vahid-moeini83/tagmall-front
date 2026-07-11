@@ -15,6 +15,7 @@ const CustomOptions = ({
   searchPlaceholder = "",
   bottomButtonText,
   buttonOnClick,
+  emptyText,
   containerClassName,
   onItemClick,
   renderLabel,
@@ -22,6 +23,8 @@ const CustomOptions = ({
   newItemId,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const isEmpty = options.length === 0;
 
   const filteredOptions = searchable
     ? options.filter((item) => item.label?.includes(searchQuery))
@@ -43,7 +46,7 @@ const CustomOptions = ({
       className={`bg-gray-200 rounded-lg overflow-hidden ${containerClassName}`}
     >
       {/* Search */}
-      {searchable && (
+      {searchable && !isEmpty && (
         <div className="relative px-2.5 py-3 border-b-2 border-white">
           <input
             type="text"
@@ -60,8 +63,18 @@ const CustomOptions = ({
         </div>
       )}
 
+      {/* Empty state */}
+      {isEmpty && emptyText && (
+        <p
+          className={`text-center text-gray-600 pt-4 px-4 ${bottomButtonText ? "mb-4" : ""}`}
+        >
+          {emptyText}
+        </p>
+      )}
+
       {/* Options */}
-      {filteredOptions.map((item, index) => (
+      {!isEmpty &&
+        filteredOptions.map((item, index) => (
         <div key={item.id}>
           <div className="flex items-start gap-[20px] p-4 relative">
             {type === "radio" ? (
@@ -124,14 +137,14 @@ const CustomOptions = ({
             <div className="w-full h-px border border-white mr-15" />
           )}
         </div>
-      ))}
+        ))}
 
       {/* Bottom Button */}
       {bottomButtonText && (
-        <div className="py-4">
+        <div className="pb-2 px-[5px]">
           <button
             onClick={buttonOnClick}
-            className="text-primary text-center w-full"
+            className="text-primary text-center w-full bg-white rounded-lg py-[10px]"
           >
             {bottomButtonText}
           </button>

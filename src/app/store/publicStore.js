@@ -95,6 +95,15 @@ const usePublicStore = create((set, get) => ({
   toggleHomeProductsListOpen() {
     set((state) => ({ homeProductsListOpen: !state.homeProductsListOpen }));
   },
+
+  receiptDrawerOpen: false,
+  receiptData: null,
+  openReceiptDrawer(data = null) {
+    set({ receiptDrawerOpen: true, receiptData: data });
+  },
+  closeReceiptDrawer() {
+    set({ receiptDrawerOpen: false, receiptData: null });
+  },
 }));
 
 export default usePublicStore;

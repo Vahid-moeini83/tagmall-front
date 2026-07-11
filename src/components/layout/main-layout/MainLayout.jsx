@@ -3,6 +3,7 @@
 import { SearchBox } from "@/components/ui/search";
 import usePublicStore from "@/app/store/publicStore";
 import MainNavigation from "../navigation-menu";
+import { ReceiptDeliveryShell } from "@/components/modules/receipt";
 
 function MainLayout({ children }) {
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
@@ -20,6 +21,7 @@ function MainLayout({ children }) {
         onClose={() => setSearchBoxOpen(false)}
         isHomePage={true}
       />
+      <ReceiptDeliveryShell />
     </div>
   );
 }

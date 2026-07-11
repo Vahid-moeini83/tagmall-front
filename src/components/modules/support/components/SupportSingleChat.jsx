@@ -497,7 +497,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
 
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
-        <div className="flex items-center justify-between border-b-2 border-gray-200 lg:border-0 pb-4 lg:pb-2">
+        <div className="flex items-center justify-center lg:justify-between border-b-2 border-gray-200 lg:border-0 pb-4 lg:pb-2">
           <div className="flex items-center gap-1">
             <div className="hidden lg:flex items-center justify-center w-10 h-10 rounded-[14px] border-2 border-gray-200">
               <SupportIcon size={20} />
@@ -507,8 +507,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                 ? "واحد پشتیبانی"
                 : `${conversation?.other_user?.name} ${conversation?.other_user?.family}`}
             </span>
-            <span className="inline lg:hidden font-iransans font-semibold! text-primary text-lg">
-              ارسال پیام به{" "}
+            <span className="inline lg:hidden font-iransans font-bold mx-auto text-primary text-lg">
               {conversation?.isSupport
                 ? "واحد پشتیبانی"
                 : `${conversation?.other_user?.name} ${conversation?.other_user?.family}`}
@@ -538,7 +537,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
               )}
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col pt-3">
               <div className="flex w-full justify-end">
                 <div className="flex items-end gap-2 max-w-[80%] lg:max-w-[40%] flex-row-reverse">
                   <div className="flex items-center gap-2">

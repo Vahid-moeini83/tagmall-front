@@ -2,17 +2,28 @@
 
 import { Radio } from "@/components/ui/radio";
 
-const statusOptions = [
-  { id: "sending", label: "در حال ارسال" },
-  { id: "delivered", label: "تحویل شده" },
+export const orderStatusOptions = [
+  { id: "processing", label: "در حال پردازش" },
+  { id: "ready_to_ship", label: "آماده ارسال" },
+  { id: "ready_for_pickup", label: "آماده تحویل" },
+  { id: "shipped", label: "ارسال شده" },
+  { id: "delivered", label: "تحویل داده شده" },
+  { id: "returned", label: "مرجوع شده" },
 ];
+
+export const DEFAULT_ORDER_STATUS = "ready_for_pickup";
+
+export function getOrderStatusLabel(statusId) {
+  const option = orderStatusOptions.find((item) => item.id === statusId);
+  return option?.label ?? orderStatusOptions[0]?.label ?? "";
+}
 
 function OrderStatusFilterContent({ orderStatus, onChange }) {
   return (
-    <div className="flex flex-col pr-[10px]">
-      {statusOptions.map((option, index) => (
-        <>
-          <div key={option.id} className="py-3">
+    <div className="flex flex-col">
+      {orderStatusOptions.map((option, index) => (
+        <div key={option.id}>
+          <div className="py-3 pr-[10px]">
             <Radio
               checked={orderStatus === option.id}
               onChange={() => onChange(option.id)}
@@ -20,10 +31,10 @@ function OrderStatusFilterContent({ orderStatus, onChange }) {
             />
           </div>
 
-          {statusOptions.length - 1 > index && (
-            <div className="w-full h-[2px] mr-8 bg-gray-200" />
+          {orderStatusOptions.length - 1 > index && (
+            <div className="h-px bg-gray-200 mr-8" />
           )}
-        </>
+        </div>
       ))}
     </div>
   );

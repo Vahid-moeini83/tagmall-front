@@ -64,7 +64,7 @@ export default function MessageContextMenu({
         left: `${menuPosition.left}px`,
         zIndex: 999,
       }}
-      className={`bg-white text-gray-800 border-0 rounded-md ${position === "right" ? "rounded-tr-none" : "rounded-tl-none"} shadow-xl min-w-[150px] overflow-hidden p-1 transition-opacity duration-200 ${
+      className={`bg-white text-gray-800 border-0 rounded-md ${position === "right" ? "rounded-tr-none" : "rounded-tl-none"} shadow-xl min-w-[150px] overflow-hidden transition-opacity duration-200 ${
         isReady ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -76,7 +76,7 @@ export default function MessageContextMenu({
             onReply();
             onClose();
           }}
-          className="relative text-center text-xs lg:text-base text-gray-700 px-2 py-3 lg:py-2 cursor-pointer hover:bg-gray-100 rounded-sm transition-colors select-none"
+          className="relative text-center text-sm lg:text-base text-gray-700 px-2 py-3 lg:py-2 cursor-pointer hover:bg-gray-100 transition-colors select-none border-b-2 border-gray-200"
         >
           <ReplyIcon size={20} className="absolute top-1/2 -translate-y-1/2" />
           <span className="mr-2">پاسخ</span>
@@ -91,7 +91,7 @@ export default function MessageContextMenu({
             onDelete();
             // منو را بعد از حذف نمی‌بندیم، چون می‌خواهیم لودینگ را نشان دهیم
           }}
-          className={`relative text-center text-xs lg:text-base text-error-medium px-2 py-3 lg:py-2 rounded-sm transition-colors select-none ${
+          className={`relative text-center text-sm lg:text-base text-error-medium px-2 py-3 lg:py-2 transition-colors select-none border-b-2 border-gray-200 ${
             isDeleting
               ? "cursor-not-allowed opacity-70"
               : "cursor-pointer hover:bg-error-light"
@@ -118,7 +118,7 @@ export default function MessageContextMenu({
             onReport();
             onClose();
           }}
-          className="relative text-center text-xs lg:text-base text-error-medium px-2 py-3 lg:py-2 cursor-pointer hover:bg-error-light rounded-sm transition-colors select-none"
+          className="relative text-center text-sm lg:text-base text-error-medium px-2 py-3 lg:py-2 cursor-pointer hover:bg-error-light transition-colors select-none"
         >
           <HintIcon size={20} className="absolute top-1/2 -translate-y-1/2" />
           <span className="mr-2">گزارش</span>

@@ -128,13 +128,16 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-between h-full pt-2 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
+    <div className="flex flex-col justify-between h-full pt-4 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
       {/* Header section */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="relative flex items-center justify-center lg:justify-start mb-6 lg:mb-8">
         <h3 className="font-bold text-primary text-base lg:text-xl">
           لینک های دریافت شده
         </h3>
-        <HintIcon size={20} className="cursor-pointer ml-4 lg:ml-0" />
+        <HintIcon
+          size={20}
+          className="absolute left-0 cursor-pointer ml-4 lg:ml-0"
+        />
       </div>
 
       {/* Filter section (Desktop) */}
@@ -163,14 +166,14 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
         >
           بازه زمانی
         </button>
-        <span className="text-primary cursor-pointer">
+        <span className="text-primary border-2 border-primary rounded-full px-4 py-2 lg:border-0 lg:px-0 lg:py-0 cursor-pointer">
           کالای خاصی در نظر دارید؟
         </span>
       </div>
 
       {/* Filter button in mobile */}
       <div
-        className={`lg:hidden text-xs inline-flex items-center justify-start gap-2 mb-6 pr-4 transition-all duration-300 ${
+        className={`lg:hidden inline-flex items-center justify-start gap-2 mb-6 pr-4 transition-all duration-300 ${
           true ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
         }`}
       >
@@ -205,7 +208,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
           {mockProducts.map((product) => (
             <div
               key={product.id}
-              className="flex items-start lg:items-center gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 lg:pb-8"
+              className="flex items-start lg:items-center border-2 border-gray-200 rounded-lg lg:border-0 py-[10px] lg:py-0 gap-2 lg:grid lg:grid-cols-2 lg:border-b-2 lg:border-gray-200 lg:pb-8"
             >
               {/* Product image */}
               <div className="flex justify-center items-center">
@@ -252,7 +255,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
             <span className="text-primary">بازه زمانی مرجوع شدن سفارش</span> به
             کیف پول اعتباری شما واریز می‌شود
           </span>
-          <button className="text-primary text-center hover:opacity-80 transition-opacity">
+          <button className="w-full lg:w-auto text-primary text-center border-2 border-primary rounded-full px-4 py-2 cursor-pointer">
             سود مشارکت در فروش
           </button>
         </div>
