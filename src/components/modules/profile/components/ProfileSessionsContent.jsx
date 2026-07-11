@@ -79,9 +79,9 @@ function ProfileSessionsContent({
   }
 
   return (
-    <div className="flex flex-col gap-4 mt-3 lg:mt-0 select-none">
+    <div className="flex flex-col gap-3 mt-3 lg:mt-0 select-none">
       <div className="flex items-center justify-between">
-        <span>نشست های فعال:</span>
+        <span>مدیریت نشست های فعال:</span>
         <HintIcon
           size={20}
           className="cursor-pointer ml-4"
@@ -140,7 +140,7 @@ function ProfileSessionsContent({
         disabled={selectedSessions.length === 0 || isDeleting}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mb-2 text-base ${
                 selectedSessions.length > 0 && !isDeleting
                   ? "text-error-medium border-error-medium cursor-pointer"
                   : "text-gray-400 border-gray-200 cursor-not-allowed"

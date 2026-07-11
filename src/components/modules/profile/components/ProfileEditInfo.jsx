@@ -639,8 +639,12 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                   hasBorder={false}
                   className="bg-gray-200!"
                 />
-                <p className="text-justify">
-                  با احراز کد پستی با اطمینان از خدمات ما بهره مند شوید
+                <p className="font-iransans text-justify">
+                  با{" "}
+                  <span className="text-primary font-iransans font-bold">
+                    احراز کد پستی
+                  </span>{" "}
+                  با اطمینان از خدمات ما بهره مند شوید
                 </p>
               </div>
             </CustomAccordion>

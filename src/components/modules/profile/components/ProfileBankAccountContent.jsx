@@ -91,7 +91,7 @@ function ProfileBankAccountContent({ onSubmit }) {
         <span
           className={`text-base ${error ? "text-error-medium" : "text-gray-800"}`}
         >
-          شماره شبا:
+          افزودن شماره شبا:
         </span>
 
         <div className="relative">

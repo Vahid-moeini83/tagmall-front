@@ -133,7 +133,7 @@ function FilterReceivedLinksDrawer({
             </div>
           ))}
         </div>
-        <button className="text-primary cursor-pointer pt-4 pb-4 bg-white">
+        <button className="text-primary border-2 border-primary rounded-full px-4 py-2 lg:border-0 lg:px-0 lg:py-0 mx-[10px] cursor-pointer bg-white">
           کالای خاصی در نظر دارید؟
         </button>
       </DrawerContent>

@@ -86,7 +86,7 @@ function ProfileWalletAmountContent({
 
       {/* Hint for withdraw */}
       {type === "withdraw" && (
-        <div className="mt-4 mr-4 flex items-center gap-2">
+        <div className="mt-3 mr-4 flex items-center gap-2">
           <HintIcon size={20} />
           <span className="text-sm text-gray-600">
             موجودی شما {formatPrice(walletBalance)} تومان می‌باشد
@@ -98,7 +98,7 @@ function ProfileWalletAmountContent({
       <button
         onClick={handleSubmit}
         disabled={!isFormValid || isLoading}
-        className={`mb-4 mt-6 w-full text-base py-2 rounded-full border-2 ${
+        className={`mb-4 mt-3 w-full text-base py-2 rounded-full border-2 ${
           !isFormValid || isLoading
             ? "text-gray-400 border-gray-400 cursor-not-allowed"
             : "text-primary border-primary cursor-pointer hover:opacity-80"

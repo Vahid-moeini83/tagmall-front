@@ -257,6 +257,7 @@ export default function ProductMain({ product }) {
 
   const handleAddToCart = async () => {
     if (isAddingToCart) return;
+    console.log("CLICKED");
 
     if (!isAvailable) {
       toast.error("محصول موجود نیست");
@@ -408,7 +409,9 @@ export default function ProductMain({ product }) {
         {/* Seller details and Images Section */}
         <div
           className="lg:w-1/2 border-b-2 border-white lg:border-0 lg:px-0 flex flex-col lg:block"
-          style={mobileHeroMinHeight ? { minHeight: mobileHeroMinHeight } : undefined}
+          style={
+            mobileHeroMinHeight ? { minHeight: mobileHeroMinHeight } : undefined
+          }
         >
           {/* Seller profile and rating */}
           <div className="flex items-start justify-between px-[10px] shrink-0">
@@ -1172,7 +1175,8 @@ export default function ProductMain({ product }) {
                           {/* Price Box */}
                           <div className="border-2 border-gray-200 rounded-lg py-2 text-center">
                             <span className="text-gray-700 text-sm">
-                              از {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
+                              از{" "}
+                              {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
                               تومان
                             </span>
                           </div>
@@ -1181,15 +1185,16 @@ export default function ProductMain({ product }) {
                         <div className="border-2 border-gray-200 rounded-lg p-[10px]">
                           <div className="text-center mb-4">
                             <span className="text-gray-600 text-sm">
-                              <span className="font-bold">بروزرسانی</span> 1 دقیقه
-                              پیش
+                              <span className="font-bold">بروزرسانی</span> 1
+                              دقیقه پیش
                             </span>
                           </div>
 
                           {/* Price Box */}
                           <div className="border-2 border-gray-200 rounded-lg py-2 text-center">
                             <span className="text-gray-700 text-sm">
-                              از {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
+                              از{" "}
+                              {(100000 + index * 5000).toLocaleString("fa-IR")}{" "}
                               تومان
                             </span>
                           </div>

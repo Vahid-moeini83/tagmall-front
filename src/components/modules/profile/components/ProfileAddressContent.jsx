@@ -23,7 +23,9 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
   return (
     <div className="mt-4 lg:mt-0">
       <div className="flex flex-col gap-3">
-        <span className="text-gray-800 text-base">آدرس:</span>
+        <span className="text-gray-800 text-base">
+          افزودن آدرس به حساب کاربری:
+        </span>
         <div className="rounded-lg bg-gray-200 overflow-hidden">
           <textarea
             placeholder="آدرس"
@@ -59,7 +61,7 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
         disabled={!isFormValid || isLoading}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-2 mb-2 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 border-gray-200 cursor-not-allowed"
                   : "text-primary border-primary cursor-pointer"

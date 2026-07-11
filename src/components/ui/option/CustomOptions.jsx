@@ -75,68 +75,68 @@ const CustomOptions = ({
       {/* Options */}
       {!isEmpty &&
         filteredOptions.map((item, index) => (
-        <div key={item.id}>
-          <div className="flex items-start gap-[20px] p-4 relative">
-            {type === "radio" ? (
-              <Radio
-                checked={isChecked(item.id)}
-                onChange={() => handleChange(item.id)}
-                hasBorder={hasBorder}
-              />
-            ) : (
-              <Checkbox
-                checked={isChecked(item.id)}
-                onChange={() => handleChange(item.id)}
-                hasBorder={hasBorder}
-                className={
-                  item.isActive === false
-                    ? "bg-gray-400! cursor-not-allowed"
-                    : ""
-                }
-              />
-            )}
-
-            <div
-              className={`flex flex-col text-gray-600 flex-1 ${centerLabel ? "items-center" : ""} ${onItemClick ? "cursor-pointer" : ""}`}
-              onClick={() => onItemClick?.(item)}
-            >
-              {renderLabel ? (
-                renderLabel(item)
+          <div key={item.id}>
+            <div className="flex items-start gap-[20px] p-4 relative">
+              {type === "radio" ? (
+                <Radio
+                  checked={isChecked(item.id)}
+                  onChange={() => handleChange(item.id)}
+                  hasBorder={hasBorder}
+                />
               ) : (
-                <>
-                  <span className={`${centerLabel ? "pl-10!" : ""}`}>
-                    {item.label}
-                  </span>
+                <Checkbox
+                  checked={isChecked(item.id)}
+                  onChange={() => handleChange(item.id)}
+                  hasBorder={hasBorder}
+                  className={
+                    item.isActive === false
+                      ? "bg-gray-400! cursor-not-allowed"
+                      : ""
+                  }
+                />
+              )}
 
-                  {item.extra && (
-                    <div className="mt-6 flex flex-col gap-6 text-sm">
-                      {item.extra.map((ex, i) => (
-                        <p
-                          key={i}
-                          className={`font-light ${ex.className || "text-gray-600"}`}
-                        >
-                          {ex.label && (
-                            <span className="font-bold">{ex.label}:</span>
-                          )}{" "}
-                          {ex.value}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </>
+              <div
+                className={`flex flex-col text-gray-600 flex-1 ${centerLabel ? "items-center" : ""} ${onItemClick ? "cursor-pointer" : ""}`}
+                onClick={() => onItemClick?.(item)}
+              >
+                {renderLabel ? (
+                  renderLabel(item)
+                ) : (
+                  <>
+                    <span className={`${centerLabel ? "pl-10!" : ""}`}>
+                      {item.label}
+                    </span>
+
+                    {item.extra && (
+                      <div className="mt-6 flex flex-col gap-6 text-sm">
+                        {item.extra.map((ex, i) => (
+                          <p
+                            key={i}
+                            className={`font-light ${ex.className || "text-gray-600"}`}
+                          >
+                            {ex.label && (
+                              <span className="font-bold">{ex.label}:</span>
+                            )}{" "}
+                            {ex.value}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Red circle for new item */}
+              {item.id === newItemId && (
+                <span className="block absolute w-[5px] h-[5px] rounded-full bg-error-medium top-1/2 -translate-y-1/2 left-[18px]"></span>
               )}
             </div>
 
-            {/* Red circle for new item */}
-            {item.id === newItemId && (
-              <span className="block absolute w-[5px] h-[5px] rounded-full bg-error-medium top-1/2 -translate-y-1/2 left-[18px]"></span>
+            {index < filteredOptions.length - 1 && (
+              <div className="w-full h-px border border-white mr-15" />
             )}
           </div>
-
-          {index < filteredOptions.length - 1 && (
-            <div className="w-full h-px border border-white mr-15" />
-          )}
-        </div>
         ))}
 
       {/* Bottom Button */}

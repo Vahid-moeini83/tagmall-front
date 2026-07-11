@@ -29,14 +29,14 @@ function FilterPartnershipDrawer({
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent overlayClassName="lg:hidden z-100!" className="z-100!">
         {/* Header */}
-        <div className="relative bg-white px-[10px] pt-2">
-          <p className="text-right text-base font-bold text-primary">
+        <div className="relative bg-white px-[10px] pt-4">
+          <p className="text-center text-base font-bold text-primary">
             مشارکت در فروش
           </p>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto bg-white px-[10px] pt-2">
+        <div className="flex-1 overflow-y-auto bg-white px-[10px] pt-0">
           {mobileFilters.map((filter, index) => (
             <div
               key={filter.id}
@@ -97,7 +97,7 @@ function FilterPartnershipDrawer({
             </div>
           ))}
         </div>
-        <button className="text-primary cursor-pointer pt-4 pb-4 bg-white">
+        <button className="text-primary border-2 border-primary rounded-full px-4 py-2 lg:border-0 lg:px-0 lg:py-0 mx-[10px] cursor-pointer bg-white">
           کالای خاصی در نظر دارید؟
         </button>
       </DrawerContent>
