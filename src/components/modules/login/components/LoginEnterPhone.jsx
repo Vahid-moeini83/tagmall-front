@@ -87,6 +87,7 @@ function LoginEnterPhone({
       </div>
       {/* Submit button */}
       <button
+        type="button"
         onClick={handleConfirm}
         disabled={!phoneNumber || isLoading}
         className={`mt-7 mb-4 w-full font-bold ${

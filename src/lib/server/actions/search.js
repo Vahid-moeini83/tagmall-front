@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import http from "@/app/api/axiosInstance";
 
