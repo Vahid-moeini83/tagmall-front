@@ -295,7 +295,7 @@ function SearchHistory() {
                 }`}
               >
                 <div
-                  className={`flex items-center justify-between transition-all duration-300 ease-in-out group ${expandedCategory === item?.id ? "pb-3" : "py-4 pl-[10px] lg:pl-[6px] lg:pr-[10px]"}`}
+                  className={`flex items-center justify-between transition-all duration-300 ease-in-out group ${expandedCategory === item?.id ? "pb-3" : "py-4 pl-3 lg:pl-[6px] lg:pr-[10px]"}`}
                 >
                   <span
                     className={`text-gray-600 cursor-pointer hover:text-primary flex-1 text-sm lg:text-base transition-all duration-300 ${

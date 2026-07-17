@@ -20,10 +20,7 @@ import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import SupportOrderCard from "./SupportOrderCard";
 import SupportOrderDesktop from "./SupportOrderDesktop";
-import {
-  DEFAULT_ORDER_STATUS,
-  getOrderStatusLabel,
-} from "./OrderStatusFilterContent";
+import { getOrderStatusLabel } from "./OrderStatusFilterContent";
 
 const sortOptions = [
   { id: "pickup", label: "خرید حضوری" },
@@ -83,7 +80,7 @@ function mapOrdersFromApi(ordersList = []) {
       order_id: order.id ?? order.order_id,
       order_number: order.order_number,
       created_at: order.created_at,
-      store_name: firstItem.store_name ?? order.store_name ?? "فروشگاه",
+      store_name: firstItem.store_name ?? order.store_name ?? "نامشخص",
       store_avatar:
         firstItem.store_avatar ??
         order.store_avatar ??
@@ -92,13 +89,13 @@ function mapOrdersFromApi(ordersList = []) {
         firstItem.delivery_type ?? order.delivery_type ?? "shipping",
       items: items.map((item) => ({
         id: item.id,
-        product_name: item.product_name ?? item.product?.name ?? "محصول",
+        product_name: item.product_name ?? item.product?.name ?? "نامشخص",
         image:
           item.image ??
           item.product?.image ??
           "/assets/images/fallback/no-photo.jpg",
         quantity: item.quantity ?? 1,
-        status: item.status_label ?? item.status ?? "در حال بررسی",
+        status: item.status_label ?? item.status ?? "نامشخص",
         status_slug: item.status,
         updated_at: item.updated_at ?? order.created_at,
         delivery_type: item.delivery_type ?? item.delivery_method,
@@ -115,7 +112,7 @@ function SupportOrders({ initialOrders }) {
     "date-range",
   ]);
   const [orderType, setOrderType] = useState(null);
-  const [orderStatus, setOrderStatus] = useState(DEFAULT_ORDER_STATUS);
+  const [orderStatus, setOrderStatus] = useState(null);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [orders, setOrders] = useState(() =>
@@ -149,12 +146,10 @@ function SupportOrders({ initialOrders }) {
   const getStatusLabel = () => getOrderStatusLabel(orderStatus);
 
   const hasFiltersChanged = () =>
-    orderStatus !== DEFAULT_ORDER_STATUS ||
-    fromDate !== null ||
-    toDate !== null;
+    orderStatus !== null || fromDate !== null || toDate !== null;
 
   const handleResetFilters = () => {
-    setOrderStatus(DEFAULT_ORDER_STATUS);
+    setOrderStatus(null);
     setFromDate(null);
     setToDate(null);
   };
@@ -164,9 +159,9 @@ function SupportOrders({ initialOrders }) {
       const matchesDeliveryType =
         !orderType || order.delivery_type === orderType;
 
-      const matchesStatus = order.items.some((item) =>
-        matchesOrderStatus(item, orderStatus),
-      );
+      const matchesStatus =
+        !orderStatus ||
+        order.items.some((item) => matchesOrderStatus(item, orderStatus));
 
       const matchesDate = matchesDateRange(order.created_at, fromDate, toDate);
 
@@ -311,7 +306,7 @@ function SupportOrders({ initialOrders }) {
 
             <button
               type="button"
-              className="mb-8 mt-6 flex w-full cursor-pointer items-center justify-between px-2 lg:hidden"
+              className="mb-[10px] mt-4 flex w-full cursor-pointer items-center justify-between px-2 lg:hidden"
               onClick={() => setIsFiltersDrawerOpen(true)}
             >
               <span className="text-primary">
@@ -321,7 +316,7 @@ function SupportOrders({ initialOrders }) {
               <ChevronLeftIcon size={16} className="shrink-0 text-primary" />
             </button>
 
-            <div className="space-y-6 lg:space-y-10 lg:mt-10">
+            <div className="space-y-[5px] lg:space-y-10 lg:mt-10">
               {isLoadingOrders && orders.length === 0 ? (
                 <OrderItemsSkeleton isMobile={!isDesktop} />
               ) : filteredOrders.length === 0 ? (
@@ -337,10 +332,13 @@ function SupportOrders({ initialOrders }) {
                         ? lastOrderElementRef
                         : null
                     }
-                    className={`pb-1 lg:pb-8 lg:mx-4 xl:mx-8 ${filteredOrders.length - 1 === index ? "" : "lg:border-b-2 lg:border-gray-100"}`}
+                    className={`lg:pb-8 lg:mx-4 xl:mx-8 ${filteredOrders.length - 1 === index ? "" : "lg:border-b-2 lg:border-gray-100"}`}
                   >
                     <div className="lg:hidden">
-                      <SupportOrderCard order={order} />
+                      <SupportOrderCard
+                        order={order}
+                        isLast={filteredOrders.length - 1 === index}
+                      />
                     </div>
                     <div className="hidden lg:block">
                       <SupportOrderDesktop order={order} />

@@ -4,7 +4,7 @@ import { StrokeArrowLeftIcon } from "@/icons";
 import { useRef, useState } from "react";
 
 function OtpInput({
-  label = "کد تایید",
+  label,
   value,
   setValue,
   length = 5,
@@ -12,6 +12,7 @@ function OtpInput({
   disabled = false,
   onBack,
   className,
+  containerClassName,
 }) {
   const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -26,32 +27,30 @@ function OtpInput({
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        {/* Label */}
-        <label
-          htmlFor="otp"
-          className={`text-lg transition-colors ${
-            error ? "text-error-medium" : ""
-          }`}
-        >
-          {label}
-        </label>
-        {onBack ? (
-          <StrokeArrowLeftIcon className="ml-4" onClick={onBack} size={20} />
-        ) : null}
-      </div>
+    <div className={`flex flex-col gap-2 ${containerClassName ?? ""}`}>
+      {label && (
+        <div className="flex items-center justify-between">
+          {/* Label */}
+          <label
+            htmlFor="otp"
+            className={`text-base transition-colors text-gray-600 ${
+              error ? "text-error-medium" : ""
+            }`}
+          >
+            {label}
+          </label>
+          {onBack ? (
+            <StrokeArrowLeftIcon className="ml-4" onClick={onBack} size={20} />
+          ) : null}
+        </div>
+      )}
 
       {/* OtpInput box */}
       <div
         onClick={handleContainerClick}
-        className={`relative w-full h-12 rounded-md border-2 flex items-center justify-center transition-colors
+        className={`relative w-full h-12 rounded-lg bg-gray-200 flex items-center justify-center transition-colors
           ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-text"}
-          ${
-            error
-              ? "border-error-medium hover:border-error-medium"
-              : "border-gray-300 hover:border-gray-400 focus-within:border-primary"
-          } ${className}`}
+           ${className}`}
       >
         {/* Hidden input */}
         <input

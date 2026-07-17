@@ -17,6 +17,7 @@ const CustomOptions = ({
   buttonOnClick,
   emptyText,
   containerClassName,
+  classname,
   onItemClick,
   renderLabel,
   centerLabel = false,
@@ -81,7 +82,7 @@ const CustomOptions = ({
                 <Radio
                   checked={isChecked(item.id)}
                   onChange={() => handleChange(item.id)}
-                  hasBorder={hasBorder}
+                  radioClassname={classname}
                 />
               ) : (
                 <Checkbox
@@ -109,7 +110,7 @@ const CustomOptions = ({
                     </span>
 
                     {item.extra && (
-                      <div className="mt-6 flex flex-col gap-6 text-sm">
+                      <div className="mt-5 flex flex-col gap-6 text-sm">
                         {item.extra.map((ex, i) => (
                           <p
                             key={i}
@@ -141,7 +142,7 @@ const CustomOptions = ({
 
       {/* Bottom Button */}
       {bottomButtonText && (
-        <div className="pb-2 px-[5px]">
+        <div className="px-[5px] pb-[5px]">
           <button
             onClick={buttonOnClick}
             className="text-primary text-center w-full bg-white rounded-lg py-[10px]"

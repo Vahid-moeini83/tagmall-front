@@ -3,14 +3,8 @@
 import { useState } from "react";
 import { CustomAccordion } from "@/components/ui/accordion";
 import { HintIcon } from "@/icons";
-import CartMobileInvoice from "./CartMobileInvoice";
 
-function CartReceiverStepMobile({
-  receiverInfo,
-  billSummary,
-  onConfirm,
-  onEdit,
-}) {
+function CartReceiverStepMobile({ receiverInfo, onConfirm, onEdit }) {
   const [expandedMobileSections, setExpandedMobileSections] = useState([
     "receiver",
     "contact",
@@ -30,9 +24,11 @@ function CartReceiverStepMobile({
           id="receiver"
           expandedItems={expandedMobileSections}
           onToggle={toggleMobileAccordion}
-          customLabel={<span className="font-bold text-gray-600">تحویل گیرنده:</span>}
+          customLabel={
+            <span className="font-bold text-gray-600">تحویل گیرنده:</span>
+          }
           triggerClassName="py-2"
-          iconClassName="left-0"
+          iconClassName="left-5!"
           containerClassName="border-b-4 border-gray-200 pb-2"
         >
           <div className="bg-gray-100 rounded-2xl py-3 text-center text-gray-600">
@@ -44,9 +40,11 @@ function CartReceiverStepMobile({
           id="contact"
           expandedItems={expandedMobileSections}
           onToggle={toggleMobileAccordion}
-          customLabel={<span className="font-bold text-gray-600">راه ارتباطی:</span>}
+          customLabel={
+            <span className="font-bold text-gray-600">راه ارتباطی:</span>
+          }
           triggerClassName="py-2"
-          iconClassName="left-0"
+          iconClassName="left-5!"
           containerClassName="border-b-4 border-gray-200 pb-2"
         >
           <div className="bg-gray-200 rounded-2xl py-3 text-center text-gray-600">
@@ -60,8 +58,7 @@ function CartReceiverStepMobile({
           onToggle={toggleMobileAccordion}
           customLabel={<span className="font-bold text-gray-600">آدرس:</span>}
           triggerClassName="py-2"
-          iconClassName="left-0"
-          containerClassName="border-b-4 border-gray-200 pb-2"
+          iconClassName="left-5!"
         >
           <div className="bg-gray-200 rounded-2xl p-[10px] text-gray-600 leading-8 text-center">
             <p>
@@ -73,14 +70,12 @@ function CartReceiverStepMobile({
         </CustomAccordion>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 text-gray-600 text-base">
+      <div className="mt-4 mr-4 flex items-center gap-5 text-gray-600">
         <HintIcon size={22} className="text-gray-800 shrink-0" />
         <p>سفارشاتی که توسط فروشنده ارسال می شود.</p>
       </div>
 
       <div className="fixed right-0 left-0 bottom-18 z-40 bg-white px-[10px] py-4 space-y-3">
-        <CartMobileInvoice billSummary={billSummary} />
-
         <div className="flex items-center justify-center gap-6">
           <button
             type="button"
@@ -103,4 +98,3 @@ function CartReceiverStepMobile({
 }
 
 export default CartReceiverStepMobile;
-

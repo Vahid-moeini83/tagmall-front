@@ -8,13 +8,13 @@ function ProfileWalletTypeContent({ onSelectType }) {
   const [isHintOpen, setIsHintOpen] = useState(false);
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
       {/* Title with hint icon */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="relative flex items-center justify-center mb-4">
         <span className="text-primary text-lg font-bold">کیف پول اعتباری</span>
         <HintIcon
           size={20}
-          className="ml-4 cursor-pointer"
+          className="absolute left-0 cursor-pointer ml-4"
           onClick={() => setIsHintOpen(true)}
         />
       </div>

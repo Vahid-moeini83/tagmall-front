@@ -16,7 +16,7 @@ function formatOrderQuantityLine(quantity, productName) {
   return `تعداد ${quantity} عدد ${productName}`;
 }
 
-export default function SupportOrderCard({ order }) {
+export default function SupportOrderCard({ order, isLast = false }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
   const items = order.items || [];
@@ -25,19 +25,20 @@ export default function SupportOrderCard({ order }) {
   const handleOpenReceipt = () => {
     openReceiptDrawer({
       orderId: order.order_id ?? order.id ?? null,
-      status: order.items?.[0]?.status ?? "آماده تحویل",
+      status: order.items?.[0]?.status ?? "نامشخص",
       lastUpdate: formatRelativeTime(order.created_at),
       itemsCount: items.length,
       seller: {
-        sellerName: order.store_name ?? "فروشگاه",
-        sellerAvatar: order.store_avatar ?? "/assets/images/fallback/avatar.png",
+        sellerName: order.store_name ?? "نامشخص",
+        sellerAvatar:
+          order.store_avatar ?? "/assets/images/fallback/avatar.png",
       },
       items: items.map((item) => ({
         id: String(item.id),
         product_name: item.product_name,
         quantity: item.quantity ?? 1,
         image: item.image ?? "/assets/images/fallback/no-photo.jpg",
-        status: item.status ?? "آماده تحویل",
+        status: item.status ?? "نامشخص",
         updated_at: item.updated_at ?? order.created_at,
       })),
     });
@@ -49,15 +50,16 @@ export default function SupportOrderCard({ order }) {
   };
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between mb-3 px-0.5">
+    <div
+      className={`w-full pb-[10px] ${isLast ? "" : "border-b-4 border-gray-200"}`}
+    >
+      <div className="flex items-center justify-between mb-[5px] px-0.5">
         <div className="flex items-center gap-2 min-w-0">
-          <div className="relative w-10 h-10 shrink-0 rounded-full overflow-hidden border border-gray-200">
+          <div className="relative w-[50px] h-[50px] shrink-0 rounded-lg overflow-hidden border border-gray-200">
             <Image
               src={order.store_avatar ?? "/assets/images/fallback/avatar.png"}
               alt={order.store_name}
               fill
-              sizes="40px"
               className="object-cover"
             />
           </div>
@@ -73,7 +75,7 @@ export default function SupportOrderCard({ order }) {
           className="cursor-pointer"
           aria-label="نمایش رسید تحویل"
         >
-          <ReceiptIcon size={20} className="text-gray-600 shrink-0" />
+          <ReceiptIcon size={20} className="shrink-0 ml-1" />
         </button>
       </div>
 
@@ -94,19 +96,18 @@ export default function SupportOrderCard({ order }) {
         >
           {items.map((item) => (
             <SwiperSlide key={item.id} className="w-full! overflow-hidden">
-              <div className="flex items-center gap-4 min-h-[88px]">
-                <div className="relative w-[88px] h-[88px] shrink-0 rounded-xl overflow-hidden bg-gray-50">
+              <div className="flex items-center gap-4">
+                <div className="relative w-[100px] h-[100px] shrink-0 rounded-xl overflow-hidden bg-gray-50">
                   <Image
                     src={item.image ?? "/assets/images/fallback/no-photo.jpg"}
                     alt={item.product_name}
                     fill
-                    sizes="88px"
                     className="object-cover"
                   />
                 </div>
 
                 <div className="flex-1 min-w-0 text-right space-y-2">
-                  <p className="font-bold text-sm text-gray-600 line-clamp-1">
+                  <p className="font-bold text-xs text-gray-600 line-clamp-1">
                     {item.product_name}
                   </p>
                   <p className="text-xs text-gray-600">

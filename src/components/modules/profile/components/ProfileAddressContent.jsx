@@ -21,9 +21,9 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
   };
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
       <div className="flex flex-col gap-3">
-        <span className="text-gray-800 text-base">
+        <span className="text-base text-gray-600 font-bold">
           افزودن آدرس به حساب کاربری:
         </span>
         <div className="rounded-lg bg-gray-200 overflow-hidden">
@@ -49,8 +49,8 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
 
       {/* Hint text */}
       {activeAddressAuth && (
-        <div className="flex items-center gap-2 text-gray-600 mt-4 mr-4">
-          <HintIcon size={20} />
+        <div className="flex items-center gap-5 text-gray-600 mt-4 mb-3.5 mr-4">
+          <HintIcon size={20} className="shrink-0" />
           احراز کد پستی توسط اداره پست انجام می‌شود
         </div>
       )}
@@ -61,12 +61,12 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
         disabled={!isFormValid || isLoading}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-2 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-1.5 mb-3 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 border-gray-200 cursor-not-allowed"
                   : "text-primary border-primary cursor-pointer"
               }`
-            : `w-full mt-7 pb-4 text-base ${
+            : `w-full mt-6 py-3 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 cursor-not-allowed"
                   : "text-primary cursor-pointer"

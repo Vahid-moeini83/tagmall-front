@@ -136,8 +136,8 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
           />
         </div>
         {/* Title */}
-        <h1 className="font-iransans font-bold text-primary text-lg mt-9">
-          با ما همراه باشید :)
+        <h1 className="font-bold text-primary text-base mt-9">
+          ایجاد حساب کاربری:
         </h1>
         {/* Main content */}
         <div className="bg-gray-200 rounded-lg overflow-hidden mt-4">
@@ -210,13 +210,13 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
       <button
         disabled={isConfirming || !isFormValid}
         onClick={handleConfirm}
-        className={`w-full mt-6 mb-4 font-bold ${
+        className={`font-bold font-iransans w-full mt-6 mb-2 border-2 py-2 rounded-full ${
           isConfirming || !isFormValid
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary cursor-pointer"
+            ? "text-gray-400 border-gray-400 cursor-not-allowed"
+            : "text-primary border-primary cursor-pointer"
         }`}
       >
-        ایجاد حساب کاربری
+        بهره مندی از خدمات ما :)
       </button>
     </div>
   );

@@ -86,10 +86,10 @@ function ProfileBankAccountContent({ onSubmit }) {
   const totalLength = 24;
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
       <div className="flex flex-col gap-3">
         <span
-          className={`text-base ${error ? "text-error-medium" : "text-gray-800"}`}
+          className={`text-base font-bold ${error ? "text-error-medium" : "text-gray-600"}`}
         >
           افزودن شماره شبا:
         </span>
@@ -186,8 +186,8 @@ function ProfileBankAccountContent({ onSubmit }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mt-4 mr-4">
-        <HintIcon size={20} />
+      <div className="flex items-center gap-5 mt-4 mr-4">
+        <HintIcon size={20} className="shrink-0" />
         <p className="text-gray-600">شماره شبا باید به نام شما باشد</p>
       </div>
 
@@ -196,12 +196,12 @@ function ProfileBankAccountContent({ onSubmit }) {
         disabled={!isFormValid || isLoading}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-5 mb-3 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 border-gray-200 cursor-not-allowed"
                   : "text-primary border-primary cursor-pointer"
               }`
-            : `w-full mt-7 pb-4 text-base ${
+            : `w-full mt-6 py-3 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 cursor-not-allowed"
                   : "text-primary cursor-pointer"

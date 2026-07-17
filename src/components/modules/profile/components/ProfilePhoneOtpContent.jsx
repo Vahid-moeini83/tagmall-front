@@ -86,13 +86,22 @@ function ProfilePhoneOtpContent({
   };
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
+      {/* Label (desktop only — mobile label is rendered inside OtpInput alongside back button) */}
+      {isDesktop && (
+        <label className="text-base text-gray-600 font-bold mb-3 block">
+          افزودن شماره تماس به حساب کاربری:
+        </label>
+      )}
+
       {/* Otp Input */}
       <OtpInput
         value={otp}
         setValue={setOtp}
-        onBack={!isDesktop && onBack}
+        label={!isDesktop ? "افزودن شماره تماس به حساب کاربری:" : undefined}
+        onBack={!isDesktop ? onBack : undefined}
         className="bg-gray-200! border-0!"
+        containerClassName="gap-3"
         disabled={isVerifying}
       />
 
@@ -106,7 +115,7 @@ function ProfilePhoneOtpContent({
       )}
 
       {/* Hint */}
-      <div className="mt-4 flex items-center gap-2 mr-4">
+      <div className="mt-4 mr-4 flex items-center gap-5">
         <HintIcon size={20} />
         <p className="text-gray-600">
           کد تایید به {phone} ارسال {isResendActive ? "می‌شود" : "شده است"}
@@ -119,14 +128,14 @@ function ProfilePhoneOtpContent({
         onClick={handleResendOtp}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-5 mb-3 text-base ${
                 isResendActive
                   ? "text-primary border-primary cursor-pointer"
                   : "text-gray-400 border-gray-200 cursor-not-allowed"
               }`
-            : `mt-6 pb-4 w-full cursor-pointer ${
+            : `mt-6 w-full py-3 text-base ${
                 isResendActive
-                  ? "text-primary"
+                  ? "text-primary cursor-pointer"
                   : "text-gray-400 cursor-not-allowed"
               }`
         }

@@ -29,7 +29,7 @@ function FilterPartnershipDrawer({
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent overlayClassName="lg:hidden z-100!" className="z-100!">
         {/* Header */}
-        <div className="relative bg-white px-[10px] pt-4">
+        <div className="relative bg-white px-[10px] pt-3">
           <p className="text-center text-base font-bold text-primary">
             مشارکت در فروش
           </p>
@@ -48,14 +48,14 @@ function FilterPartnershipDrawer({
             >
               <button
                 onClick={() => onFilterToggle(filter.id)}
-                className={`relative flex items-center justify-between w-full py-4`}
+                className={`relative flex items-center justify-between w-full py-6`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <span className="text-gray-600 font-bold">
                     {filter.label}:
                   </span>
                   {getFilterValue(filter.id) && (
-                    <span className="text-sm text-gray-600">
+                    <span className="font-extralight text-sm text-gray-600">
                       {getFilterValue(filter.id)}
                     </span>
                   )}
@@ -64,13 +64,13 @@ function FilterPartnershipDrawer({
                   <ChevronUpIcon
                     size={20}
                     color="var(--color-gray-800)"
-                    className="absolute left-[14px]"
+                    className="absolute left-5"
                   />
                 ) : (
                   <ChevronDownIcon
                     size={20}
                     color="var(--color-gray-800)"
-                    className="absolute left-[14px]"
+                    className="absolute left-5"
                   />
                 )}
               </button>
@@ -84,7 +84,7 @@ function FilterPartnershipDrawer({
                 }`}
               >
                 {expandedFilter.includes(filter.id) && (
-                  <div className="pb-3">
+                  <div className="pb-2">
                     {filter.id === "suggestions" && (
                       <PartnershipFilterContent
                         selectedFilter={selectedFilter}

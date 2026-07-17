@@ -9,34 +9,43 @@ export default function MessageContextMenu({
   isOpen,
   onReply,
   onDelete,
+  onEdit,
   onReport,
   onClose,
-  position = "right", // "right" or "left"
-  triggerRef, // ref to the element that triggered the menu
-  isDeleting = false, // آیا در حال حذف است
-  deleteLoadingComponent, // کامپوننت لودینگ برای حذف
+  position = "right",
+  triggerRef,
+  isDeleting = false,
+  deleteLoadingComponent,
 }) {
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const [isReady, setIsReady] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen && triggerRef?.current) {
+    if (!isOpen) {
+      setIsReady(false);
+      return;
+    }
+
+    // رندر منو بدون visibility تا بتونیم سایز واقعیش رو بگیریم
+    requestAnimationFrame(() => {
+      if (!triggerRef?.current || !menuRef.current) return;
+
       const triggerRect = triggerRef.current.getBoundingClientRect();
-      const menuHeight = 150; // تقریبی ارتفاع منو
-      const menuWidth = 150;
+      const menuWidth = menuRef.current.offsetWidth;
+      const menuHeight = menuRef.current.offsetHeight;
       const isMobile = window.innerWidth < 1024;
 
-      let top = triggerRect.bottom + (isMobile ? -20 : 5);
+      let top = triggerRect.bottom + (isMobile ? -23 : 5);
       let left =
         position === "right" ? triggerRect.right - menuWidth : triggerRect.left;
 
-      // بررسی اینکه آیا منو از پایین صفحه خارج می‌شود
+      // بررسی خروج از پایین صفحه
       if (top + menuHeight > window.innerHeight) {
         top = triggerRect.top - menuHeight - (isMobile ? -20 : 5);
       }
 
-      // بررسی اینکه آیا منو از راست یا چپ صفحه خارج می‌شود
+      // بررسی خروج از راست یا چپ صفحه
       if (left < 0) {
         left = 10;
       } else if (left + menuWidth > window.innerWidth) {
@@ -44,13 +53,8 @@ export default function MessageContextMenu({
       }
 
       setMenuPosition({ top, left });
-      // کمی تاخیر برای اینکه موقعیت اول set شود، بعد انیمیشن شروع شود
-      requestAnimationFrame(() => {
-        setIsReady(true);
-      });
-    } else {
-      setIsReady(false);
-    }
+      setIsReady(true);
+    });
   }, [isOpen, triggerRef, position]);
 
   if (!isOpen) return null;
@@ -63,10 +67,9 @@ export default function MessageContextMenu({
         top: `${menuPosition.top}px`,
         left: `${menuPosition.left}px`,
         zIndex: 999,
+        visibility: isReady ? "visible" : "hidden",
       }}
-      className={`bg-white text-gray-800 border-0 rounded-md ${position === "right" ? "rounded-tr-none" : "rounded-tl-none"} shadow-xl min-w-[150px] overflow-hidden transition-opacity duration-200 ${
-        isReady ? "opacity-100" : "opacity-0"
-      }`}
+      className="bg-white border-0 rounded-lg shadow-xl min-w-[100px] overflow-hidden transition-opacity duration-200 opacity-100"
     >
       {onReply && (
         <div
@@ -76,10 +79,22 @@ export default function MessageContextMenu({
             onReply();
             onClose();
           }}
-          className="relative text-center text-sm lg:text-base text-gray-700 px-2 py-3 lg:py-2 cursor-pointer hover:bg-gray-100 transition-colors select-none border-b-2 border-gray-200"
+          className="font-iransans relative text-center text-sm lg:text-base text-primary px-2 py-3 lg:py-2 cursor-pointer hover:bg-gray-100 transition-colors select-none border-b-2 border-gray-200"
         >
-          <ReplyIcon size={20} className="absolute top-1/2 -translate-y-1/2" />
-          <span className="mr-2">پاسخ</span>
+          پاسخ
+        </div>
+      )}
+
+      {onEdit && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+            onClose();
+          }}
+          className="font-iransans relative text-center text-sm lg:text-base text-primary px-2 py-3 lg:py-2 cursor-pointer hover:bg-gray-100 transition-colors select-none border-b-2 border-gray-200"
+        >
+          ویرایش
         </div>
       )}
 
@@ -91,23 +106,17 @@ export default function MessageContextMenu({
             onDelete();
             // منو را بعد از حذف نمی‌بندیم، چون می‌خواهیم لودینگ را نشان دهیم
           }}
-          className={`relative text-center text-sm lg:text-base text-error-medium px-2 py-3 lg:py-2 transition-colors select-none border-b-2 border-gray-200 ${
+          className={`relative flex items-center justify-center text-sm lg:text-base text-error-medium px-2 py-3 lg:py-2 transition-colors select-none border-b-2 border-gray-200 ${
             isDeleting
               ? "cursor-not-allowed opacity-70"
               : "cursor-pointer hover:bg-error-light"
           }`}
         >
-          <div className="absolute top-1/2 -translate-y-1/2">
-            {isDeleting && deleteLoadingComponent ? (
-              deleteLoadingComponent
-            ) : (
-              <Trash2Icon
-                size={20}
-                className="absolute top-1/2 -translate-y-1/2"
-              />
-            )}
-          </div>
-          <span className="mr-2">حذف</span>
+          {isDeleting && deleteLoadingComponent ? (
+            deleteLoadingComponent
+          ) : (
+            <span className="font-iransans">حذف</span>
+          )}
         </div>
       )}
 
@@ -118,10 +127,9 @@ export default function MessageContextMenu({
             onReport();
             onClose();
           }}
-          className="relative text-center text-sm lg:text-base text-error-medium px-2 py-3 lg:py-2 cursor-pointer hover:bg-error-light transition-colors select-none"
+          className="font-iransans relative text-center text-sm lg:text-base text-error-medium px-2 py-3 lg:py-2 cursor-pointer hover:bg-error-light transition-colors select-none"
         >
-          <HintIcon size={20} className="absolute top-1/2 -translate-y-1/2" />
-          <span className="mr-2">گزارش</span>
+          گزارش
         </div>
       )}
     </div>

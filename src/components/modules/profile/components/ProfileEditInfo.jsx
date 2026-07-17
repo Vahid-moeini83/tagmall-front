@@ -462,7 +462,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
         {/* Scrollable content */}
         <div>
           {/* Section 1: National code */}
-          <div className="py-3 px-[10px] lg:px-[50px] lg:pb-[50px]">
+          <div className="pt-3 px-[10px] lg:px-[50px] lg:pb-[50px]">
             <div className="relative">
               <Input
                 label="شناسه ملی:"
@@ -480,9 +480,9 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                 size={16}
               />
             </div>
-            <div className="flex items-start gap-4 pr-4">
+            <div className="flex items-start gap-5 pr-4">
               <HintIcon size={28} className="mt-2.5" />
-              <p className="text-gray-600 leading-12 text-justify font-iransans">
+              <p className="leading-12 text-justify font-iransans">
                 با{" "}
                 <Link href="#" className="text-primary font-bold font-iransans">
                   احراز هویت
@@ -523,6 +523,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                 ) : (
                   <CustomOptions
                     type="radio"
+                    classname="bg-white"
                     hasBorder={false}
                     value={selectedPhoneOption}
                     onChange={(value) => {
@@ -565,6 +566,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                 ) : (
                   <CustomOptions
                     type="radio"
+                    classname={"bg-white"}
                     value={selectedEmailOption}
                     onChange={(value) => {
                       setSelectedEmailOption(value);
@@ -616,6 +618,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                 ) : (
                   <CustomOptions
                     type="radio"
+                    classname={"bg-white"}
                     value={selectedAddressOption}
                     onChange={(value) => {
                       setSelectedAddressOption(value);
@@ -632,19 +635,15 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                   />
                 )}
               </CustomAccordion>
-              <div className="flex items-start gap-2 pr-4 pb-3 pt-4">
+              <div className="flex items-start gap-5 pr-4 pb-3 pt-4">
                 <Checkbox
                   checked={activeAddressAuth}
                   onChange={() => setAddressActiveAuth(!activeAddressAuth)}
                   hasBorder={false}
                   className="bg-gray-200!"
                 />
-                <p className="font-iransans text-justify">
-                  با{" "}
-                  <span className="text-primary font-iransans font-bold">
-                    احراز کد پستی
-                  </span>{" "}
-                  با اطمینان از خدمات ما بهره مند شوید
+                <p className="font-iransans text-gray-600 text-justify">
+                  با احراز کد پستی با اطمینان از خدمات ما بهره مند شوید
                 </p>
               </div>
             </CustomAccordion>
@@ -682,6 +681,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                 ) : (
                   <CustomOptions
                     type="radio"
+                    classname={"bg-white"}
                     value={selectedBankOption}
                     onChange={(value) => {
                       setSelectedBankOption(value);

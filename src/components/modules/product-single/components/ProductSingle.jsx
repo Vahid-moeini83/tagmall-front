@@ -249,7 +249,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
       {!isDesktop && (
         <Drawer open={true} onOpenChange={() => router.back()}>
           <DrawerContent className="z-100! h-[96%]!" overlayClassName="z-100">
-            <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-4 mb-4 px-[10px]">
+            <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-3 mb-1 px-[10px]">
               {product?.name}
             </h2>
             <div className="flex flex-col h-full">
@@ -263,17 +263,17 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                     <Tabs defaultValue="specs" className="px-[10px]">
                       <TabsList
                         dir="rtl"
-                        className="fixed left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mt-2 mx-auto!"
+                        className="fixed left-[10px]! right-[10px]! bg-gray-200 rounded-xl! max-w-[540px] flex items-center gap-1 h-14! mx-auto!"
                       >
                         <TabsTrigger
                           value="specs"
-                          className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                          className="data-[state=active]:bg-white rounded-xl! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
                         >
                           مشخصات
                         </TabsTrigger>
                         <TabsTrigger
                           value="reviews"
-                          className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                          className="data-[state=active]:bg-white rounded-xl! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
                         >
                           نقد و بررسی
                         </TabsTrigger>

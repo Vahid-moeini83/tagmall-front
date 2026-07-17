@@ -48,16 +48,18 @@ function ProfileEmailContent({ email, setReceivedOtp, setEmail, onNext }) {
   };
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
       {/* Input */}
       <Input
-        label="افزودن ایمیل به حساب کاربری:"
+        label="افزودن پست الکترونیک به حساب کاربری:"
         id="profile_email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         disabled={isLoading}
         className={`text-center text-gray-600 bg-gray-200 ${errors.email ? "" : "border-0!"}`}
         error={errors.email}
+        containerClassName="gap-3"
+        placeholder="پست الکترونیک"
       />
 
       {/* Button */}
@@ -66,12 +68,12 @@ function ProfileEmailContent({ email, setReceivedOtp, setEmail, onNext }) {
         disabled={!isFormValid || isLoading}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-1.5 mb-3 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 border-gray-200 cursor-not-allowed"
                   : "text-primary border-primary cursor-pointer"
               }`
-            : `mt-3 w-full pb-4 text-base ${
+            : `mt-6 w-full py-3 text-base ${
                 !isFormValid || isLoading
                   ? "text-gray-400 cursor-not-allowed"
                   : "text-primary cursor-pointer"

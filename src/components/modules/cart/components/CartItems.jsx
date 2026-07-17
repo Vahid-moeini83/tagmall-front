@@ -403,7 +403,7 @@ function CartItems({
                           </div>
 
                           {/* Delivery Info */}
-                          <div className="flex items-center gap-2 pr-4 mt-3">
+                          <div className="flex items-center gap-5 pr-4 mt-3">
                             <HintIcon size={20} className="shrink-0" />
                             <span className="text-xs text-gray-600">
                               با مراجعه به فروشگاه سفارش تحویل شما می شود.

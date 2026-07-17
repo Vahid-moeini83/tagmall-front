@@ -86,19 +86,28 @@ function ProfileEmailOtpContent({
   };
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
+      {/* Label (desktop only) */}
+      {isDesktop && (
+        <label className="text-base text-gray-600 font-bold mb-3 block">
+          افزودن ایمیل به حساب کاربری:
+        </label>
+      )}
+
       {/* Otp Input */}
       <OtpInput
         value={otp}
         setValue={setOtp}
-        onBack={!isDesktop && onBack}
-        className="bg-gray-200! border-0! mt-1"
+        label={!isDesktop ? "افزودن ایمیل به حساب کاربری:" : undefined}
+        onBack={!isDesktop ? onBack : undefined}
+        className="bg-gray-200! border-0!"
+        containerClassName="gap-3"
         disabled={isVerifying}
       />
 
       {/* Hint */}
-      <div className="mt-4 flex items-start gap-2 mr-4">
-        <HintIcon size={20} />
+      <div className="mt-4 mr-4 flex items-start gap-5">
+        <HintIcon size={20} className="shrink-0" />
         <p className="text-gray-600">
           کد تایید به {email} ارسال {isResendActive ? "می‌شود" : "شده است"} (
           {receivedOtp})
@@ -111,14 +120,14 @@ function ProfileEmailOtpContent({
         onClick={handleResendOtp}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-5 mb-3 text-base ${
                 isResendActive
                   ? "text-primary border-primary cursor-pointer"
                   : "text-gray-400 border-gray-200 cursor-not-allowed"
               }`
-            : `mt-6 pb-4 w-full cursor-pointer text-base ${
+            : `mt-6 w-full py-3 text-base ${
                 isResendActive
-                  ? "text-primary"
+                  ? "text-primary cursor-pointer"
                   : "text-gray-400 cursor-not-allowed"
               }`
         }

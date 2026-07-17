@@ -129,8 +129,8 @@ function LoginOtp({
         </div>
         {/* Title */}
         <div className="flex items-center justify-between mt-9">
-          <h1 className="font-bold text-primary text-lg">
-            ورود به حساب کاربری
+          <h1 className="font-bold text-primary text-base">
+            ورود به حساب کاربری {`(${receivedOtp})`}
           </h1>
           <StrokeArrowLeftIcon
             size={20}
@@ -139,19 +139,19 @@ function LoginOtp({
           />
         </div>
         {/* Main content */}
-        <div className="mt-7">
+        <div className="mt-4">
           <OtpInput
-            label={`کد تایید (${receivedOtp})`}
+            // label={`کد تایید (${receivedOtp})`}
             value={otp}
             setValue={setOtp}
             error={error}
             disabled={isLoading}
           />
 
-          <div className="flex items-center gap-2 mt-4 mr-4">
+          <div className="flex items-center gap-5 mt-4 mr-4">
             <HintIcon size={20} />
             <p className="text-gray-600">
-              کد تایید به شماره 09158427785 ارسال{" "}
+              کد تایید به شماره شما پیامک{" "}
               {isResendActive ? "می‌شود" : "شده است"}
             </p>
           </div>
@@ -161,10 +161,10 @@ function LoginOtp({
       <button
         onClick={handleResend}
         disabled={!isResendActive}
-        className={`w-full mt-6 mb-4 rounded-md transition-all duration-300 font-bold ${
+        className={`w-full mt-6 mb-2 rounded-full border-2 py-2 transition-all duration-300 font-bold ${
           isResendActive
-            ? "text-primary cursor-pointer"
-            : "text-gray-400 cursor-not-allowed"
+            ? "text-primary border-primary cursor-pointer"
+            : "text-gray-400 border-gray-400 cursor-not-allowed"
         }`}
       >
         {isResendActive ? (

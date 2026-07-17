@@ -28,9 +28,9 @@ const SHOP_IMAGES = [
   "/assets/images/home/sampleMap.jpg",
 ];
 
-const SNAP_CLOSED_DEFAULT_HEIGHT = 306;
-const SNAP_CLOSED_SELLER_DETAILS_HEIGHT = 380;
-const SNAP_CLOSED_WITH_SEARCH_HEIGHT = 320;
+const SNAP_CLOSED_DEFAULT_HEIGHT = 330;
+const SNAP_CLOSED_SELLER_DETAILS_HEIGHT = 430;
+const SNAP_CLOSED_WITH_SEARCH_HEIGHT = 375;
 const SNAP_OPEN_MAX_RATIO = 0.96;
 const SNAP_FALLBACK_VIEWPORT_HEIGHT = 812;
 const MOBILE_DRAWER_BOTTOM_OFFSET_PX = 120;
@@ -54,7 +54,7 @@ function getDrawerSnapPoints(withSearch = false, showSellerDetails = false) {
 
 // Chrome subtracted from closed snap height to fit exactly one vertical slide
 const DRAWER_HANDLE_CHROME_PX = 40;
-const DRAWER_INNER_BOTTOM_PADDING_PX = 16;
+const DRAWER_INNER_BOTTOM_PADDING_PX = 80;
 const DRAWER_SEARCH_BLOCK_PX = 52;
 
 function getClosedVerticalSliderHeightPx(
@@ -193,20 +193,31 @@ function SellerHorizontalSlider({
       </Swiper>
       {products.length > 1 && (
         <div className="absolute left-1/2 -translate-x-1/2 bottom-[10px] z-10 flex justify-center gap-2 pointer-events-none">
-          {products.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => swiperRef.current?.slideTo(idx)}
-              className={cn(
-                "w-2.5 h-2.5 rounded-full transition-all cursor-pointer pointer-events-auto",
-                currentSlide === idx
-                  ? "bg-primary w-6"
-                  : "bg-gray-400 hover:bg-gray-400",
-              )}
-              aria-label={`اسلاید ${idx + 1}`}
-            />
-          ))}
+          {(() => {
+            const total = products.length;
+            const MAX = 4;
+            // پنجره ۴تایی حول اسلاید فعلی
+            let start = Math.max(0, currentSlide - Math.floor(MAX / 2));
+            const end = Math.min(total, start + MAX);
+            start = Math.max(0, end - MAX);
+            return Array.from({ length: end - start }, (_, i) => {
+              const idx = start + i;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => swiperRef.current?.slideTo(idx)}
+                  className={cn(
+                    "w-2.5 h-2.5 rounded-full transition-all cursor-pointer pointer-events-auto",
+                    currentSlide === idx
+                      ? "bg-primary w-6"
+                      : "bg-gray-400 hover:bg-gray-400",
+                  )}
+                  aria-label={`اسلاید ${idx + 1}`}
+                />
+              );
+            });
+          })()}
         </div>
       )}
     </div>
@@ -234,11 +245,10 @@ export default function ProductsDrawer({
   });
 
   const drawerContentRef = useRef(null);
-  const [viewportHeight, setViewportHeight] = useState(
-    () =>
-      typeof window !== "undefined" && window.innerHeight > 0
-        ? window.innerHeight
-        : SNAP_FALLBACK_VIEWPORT_HEIGHT,
+  const [viewportHeight, setViewportHeight] = useState(() =>
+    typeof window !== "undefined" && window.innerHeight > 0
+      ? window.innerHeight
+      : SNAP_FALLBACK_VIEWPORT_HEIGHT,
   );
 
   const [snapPoints, setSnapPoints] = useState(() =>
@@ -263,18 +273,14 @@ export default function ProductsDrawer({
     const allProducts = [];
     storeProducts.forEach((store) => {
       store.products.forEach((product) => {
-        if (filterMode === "special" && product.isSpecialSale) {
-          allProducts.push(product);
-        } else if (filterMode === "visit" && product.orderHistory) {
-          allProducts.push(product);
-        } else if (filterMode === "all") {
+        if (product.isSpecialSale) {
           allProducts.push(product);
         }
       });
     });
 
     return allProducts;
-  }, [storeProducts, filterMode]);
+  }, [storeProducts]);
 
   const closedStateProductsBySeller = useMemo(() => {
     const result = closedStateProducts.reduce((acc, product) => {
@@ -592,13 +598,13 @@ export default function ProductsDrawer({
             "data-[vaul-drawer-direction=bottom]:w-full data-[vaul-drawer-direction=bottom]:max-w-[640px]",
           )}
           overlayClassName="lg:hidden"
-          dragHandleClassName="pb-3!"
-          dragHandleLineClassName="bg-white!"
+          dragHandleClassName="pb-1!"
+          dragHandleLineClassName="bg-gray-800!"
         >
           <div
             ref={drawerContentRef}
             className={cn(
-              "rounded-t-xl flex flex-col flex-1 min-h-0 overflow-hidden pb-4 px-4 transition-[background-color,backdrop-filter]",
+              "rounded-t-xl flex flex-col flex-1 min-h-0 overflow-hidden pb-20 px-4 transition-[background-color,backdrop-filter]",
               homeFilterPopoverOpen ? "bg-gray-200/60 backdrop-blur-md" : "",
             )}
             data-vaul-no-drag
@@ -715,7 +721,7 @@ export default function ProductsDrawer({
                         activeSellerPurchasedProducts.length > 0 && (
                           <div className="relative shrink-0 w-full flex flex-col gap-2">
                             {!showSearchResultBox && (
-                              <span className="text-center pt-1 text-gray-600">
+                              <span className="text-center text-base pt-3 text-gray-600">
                                 فروش ویژه و سفارشات آماده تحویل
                               </span>
                             )}
@@ -800,53 +806,55 @@ export default function ProductsDrawer({
                     grabCursor
                     className="h-full w-full overflow-hidden"
                     onSwiper={(swiper) => {
-                    verticalSwiperRef.current = swiper;
-                    setCurrentVerticalSlide(swiper.realIndex);
+                      verticalSwiperRef.current = swiper;
+                      setCurrentVerticalSlide(swiper.realIndex);
 
-                    if (activeSellerId) {
-                      const storeIds = Object.keys(closedStateProductsBySeller);
-                      const idx = storeIds.findIndex(
-                        (id) => id === String(activeSellerId),
-                      );
-                      if (idx >= 0) {
-                        swiper.slideTo(idx, 0);
-                        return;
+                      if (activeSellerId) {
+                        const storeIds = Object.keys(
+                          closedStateProductsBySeller,
+                        );
+                        const idx = storeIds.findIndex(
+                          (id) => id === String(activeSellerId),
+                        );
+                        if (idx >= 0) {
+                          swiper.slideTo(idx, 0);
+                          return;
+                        }
                       }
-                    }
 
-                    const storeIds = Object.keys(closedStateProductsBySeller);
-                    const firstStoreId = storeIds[0];
-                    const firstProducts =
-                      closedStateProductsBySeller[firstStoreId];
-                    if (firstProducts?.length > 0) {
-                      onProductChange?.(firstProducts[0]);
-                    }
-                  }}
-                  onSlideChange={(swiper) => {
-                    handleVerticalSlideChange(swiper);
-                    requestAnimationFrame(() => {
-                      swiper.update();
-                    });
-                  }}
-                >
-                  {Object.entries(closedStateProductsBySeller).map(
-                    ([storeId, products], index) => (
-                      <SwiperSlide
-                        key={storeId}
-                        className="flex flex-col h-full! w-full overflow-hidden"
-                      >
-                        <SellerHorizontalSlider
-                          products={products}
-                          variant={closedStateVariant}
-                          onSellerClick={handleSellerClick}
-                          isListMode={isListMode}
-                          setIsReviewsModalOpen={setIsReviewsModalOpen}
-                          isActive={index === currentVerticalSlide}
-                          nested
-                        />
-                      </SwiperSlide>
-                    ),
-                  )}
+                      const storeIds = Object.keys(closedStateProductsBySeller);
+                      const firstStoreId = storeIds[0];
+                      const firstProducts =
+                        closedStateProductsBySeller[firstStoreId];
+                      if (firstProducts?.length > 0) {
+                        onProductChange?.(firstProducts[0]);
+                      }
+                    }}
+                    onSlideChange={(swiper) => {
+                      handleVerticalSlideChange(swiper);
+                      requestAnimationFrame(() => {
+                        swiper.update();
+                      });
+                    }}
+                  >
+                    {Object.entries(closedStateProductsBySeller).map(
+                      ([storeId, products], index) => (
+                        <SwiperSlide
+                          key={storeId}
+                          className="flex flex-col h-full! w-full overflow-hidden"
+                        >
+                          <SellerHorizontalSlider
+                            products={products}
+                            variant={closedStateVariant}
+                            onSellerClick={handleSellerClick}
+                            isListMode={isListMode}
+                            setIsReviewsModalOpen={setIsReviewsModalOpen}
+                            isActive={index === currentVerticalSlide}
+                            nested
+                          />
+                        </SwiperSlide>
+                      ),
+                    )}
                   </Swiper>
                 </div>
               )}

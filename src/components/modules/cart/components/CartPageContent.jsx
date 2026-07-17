@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { SearchInput } from "@/components/ui/search";
+import { SearchInput, SearchBox } from "@/components/ui/search";
 import MainNavigation from "@/components/layout/navigation-menu/MainNavigation";
 import CartItems from "./CartItems";
 import OrderSummary from "./OrderSummary";
@@ -14,6 +14,7 @@ import { getCart, getCartInvoice } from "@/lib/server/actions/cart";
 import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
 import usePublicStore from "@/app/store/publicStore";
+import { useRouter } from "next/navigation";
 
 function CartPageContent({ initialCartData }) {
   const [isOrderItemsOpen, setIsOrderItemsOpen] = useState(false);
@@ -27,10 +28,14 @@ function CartPageContent({ initialCartData }) {
   const [orderId, setOrderId] = useState(null);
 
   const setCartItemsCount = usePublicStore((s) => s.setCartItemsCount);
+  const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
+  const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
 
   const orderSummaryRef = useRef(null);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  const router = useRouter();
 
   // Fetch cart data
   const fetchCart = async () => {
@@ -92,6 +97,10 @@ function CartPageContent({ initialCartData }) {
     setIsPaid(true);
   };
 
+  const handleSuccessPayment = () => {
+    router.push("/");
+  };
+
   const handlePreviousStep = () => {
     if (currentStep === 2) {
       setCurrentStep(1);
@@ -127,12 +136,18 @@ function CartPageContent({ initialCartData }) {
 
   return (
     <>
+      <SearchBox
+        isOpen={searchBoxOpen}
+        onClose={() => setSearchBoxOpen(false)}
+        isHomePage={false}
+      />
+
       {/* Mobile Layout */}
       <div className="flex lg:hidden h-screen bg-white flex-col">
         {/* Main Content */}
-        <div className="px-[10px] pt-20 pb-52">
+        <div className="px-[10px] pt-25 pb-52">
           {/* Steps */}
-          <div className="fixed top-0 right-0 left-0 bg-white py-4 px-[10px] flex items-center justify-center z-50">
+          <div className="fixed top-0 right-0 left-0 bg-white py-[30px] px-[10px] flex items-center justify-center z-50">
             <div
               onClick={handlePreviousStep}
               className={`rounded-2xl w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${
@@ -143,7 +158,7 @@ function CartPageContent({ initialCartData }) {
             </div>
             <div className="w-7 h-[3px] bg-gray-200" />
             <div
-              className={`rounded-2xl w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${currentStep === 2 ? "text-primary" : "text-gray-400"}`}
+              className={`rounded-2xl w-25 h-10 flex flex-1  items-center justify-center bg-gray-200 ${currentStep === 2 ? "text-primary" : currentStep > 2 ? "text-gray-600" : "text-gray-400"}`}
             >
               تحویل گیرنده
             </div>
@@ -169,7 +184,6 @@ function CartPageContent({ initialCartData }) {
           {currentStep === 2 && (
             <CartReceiverStepMobile
               receiverInfo={receiverInfo}
-              billSummary={billSummary}
               onConfirm={() => setCurrentStep(3)}
               onEdit={() => setCurrentStep(1)}
             />
@@ -182,7 +196,7 @@ function CartPageContent({ initialCartData }) {
               billSummary={billSummary}
               totalAmount={invoice.total || 0}
               addressId={address.id}
-              onPaymentSuccess={() => setCurrentStep(3)}
+              onPaymentSuccess={handleSuccessPayment}
               setOrderId={setOrderId}
             />
           )}

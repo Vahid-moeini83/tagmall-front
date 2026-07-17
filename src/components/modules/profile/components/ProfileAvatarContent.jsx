@@ -44,7 +44,7 @@ const ProfileAvatarContent = ({
         {!hasImage ? (
           <button
             className={`w-full text-center flex items-center justify-center gap-2 py-2 px-4 border-2 ${
-              isDrawer ? "my-2 rounded-full" : "my-4 rounded-lg"
+              isDrawer ? "mt-[5px] mb-3 rounded-full" : "my-4 rounded-lg"
             } ${
               isUpdating
                 ? "text-gray-400 border-gray-200 cursor-not-allowed"
@@ -56,7 +56,7 @@ const ProfileAvatarContent = ({
             افزودن تصویر به حساب کاربری
           </button>
         ) : (
-          <div className="flex items-center gap-2 my-2">
+          <div className="flex items-center gap-2 mt-[5px] mb-3">
             <div
               className={`flex-1 text-base text-center border-2 rounded-full py-2 px-4 ${
                 isUpdating

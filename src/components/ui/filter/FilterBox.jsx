@@ -26,14 +26,12 @@ const FilterBox = ({ icon, options, value, onChange }) => {
             onSelect={() => onChange(option.value)}
             className={cn(
               "text-right px-4 py-3 text-sm font-medium transition-colors duration-150 flex items-center justify-between group",
-              value === option.value
-                ? "bg-blue-50 text-primary"
-                : "text-gray-700 hover:bg-gray-50",
+              value === option.value ? "text-primary" : "text-gray-600",
             )}
           >
             <span>{option.label}</span>
             {value === option.value && (
-              <div className="w-2 h-2 rounded-full bg-blue-600" />
+              <div className="w-2 h-2 rounded-full bg-primary" />
             )}
           </DropdownMenuItem>
         ))}

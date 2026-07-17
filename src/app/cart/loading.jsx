@@ -18,18 +18,18 @@ function CartLoadingPage() {
     <>
       {/* Mobile Layout */}
       <div className="flex lg:hidden h-screen bg-white flex-col">
-        <div className="px-[10px] pt-20 pb-52">
+        <div className="px-[10px] pt-25 pb-52">
           {/* Steps */}
-          <div className="fixed top-0 right-0 left-0 bg-white py-4 px-[10px] flex items-center justify-center gap-1 z-50">
-            <div className="rounded-2xl h-10 flex flex-1 items-center justify-center bg-gray-200 text-primary text-sm font-bold">
+          <div className="fixed top-0 right-0 left-0 bg-white py-[30px] px-[10px] flex items-center justify-center z-50">
+            <div className="rounded-2xl w-25 h-10 flex flex-1 items-center justify-center bg-gray-200 text-primary">
               سبد خرید
             </div>
-            <div className="w-5 h-[2px] bg-gray-200 shrink-0" />
-            <div className="rounded-2xl h-10 flex flex-1 items-center justify-center text-gray-400 text-sm font-bold">
+            <div className="w-7 h-[3px] bg-gray-200 shrink-0" />
+            <div className="rounded-2xl w-25 h-10 flex flex-1 items-center justify-center bg-gray-200 text-gray-400">
               تحویل گیرنده
             </div>
-            <div className="w-5 h-[2px] bg-gray-200 shrink-0" />
-            <div className="rounded-2xl h-10 flex flex-1 items-center justify-center text-gray-400 text-sm font-bold">
+            <div className="w-7 h-[3px] bg-gray-200 shrink-0" />
+            <div className="rounded-2xl w-25 h-10 flex flex-1 items-center justify-center bg-gray-200 text-gray-400">
               پرداخت
             </div>
           </div>
@@ -39,16 +39,15 @@ function CartLoadingPage() {
 
         {/* Mobile footer skeleton */}
         <div className="fixed right-0 left-0 bottom-18 z-40 bg-white px-[10px] py-4 space-y-3">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 px-4 py-3">
+          <div className="bg-white rounded-xl border border-gray-200 px-4 py-3">
             <div className="relative flex w-full items-center justify-center">
               <ChevronDownIcon
                 size={20}
-                className="text-gray-800 shrink-0 absolute left-1.5"
+                className="text-gray-800 shrink-0 absolute left-2"
               />
-              <Skeleton className="h-4 w-40 rounded-full" />
+              <span>صورت حساب</span>
             </div>
           </div>
-          <Skeleton className="h-12 w-full rounded-xl" />
         </div>
 
         <MainNavigation isHomePage={false} />

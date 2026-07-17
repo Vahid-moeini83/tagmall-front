@@ -38,6 +38,13 @@ function SupportSingleChat({ setIsOpen, conversation }) {
   const [activeTriggerElement, setActiveTriggerElement] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletingMessageId, setDeletingMessageId] = useState(null);
+  const [isReported, setIsReported] = useState(false);
+  const [editMsg, setEditMsg] = useState(null); // پیامی که در حال ویرایش است
+  const [reportMsg, setReportMsg] = useState(null); // پیامی که گزارش داده می‌شه
+
+  const otherUserDisplayName = conversation?.isSupport
+    ? "واحد پشتیبانی"
+    : `${conversation?.other_user?.name} ${conversation?.other_user?.family}`;
 
   const stickyTimeoutRef = useRef(null);
   const lastMessageRef = useRef(null);
@@ -46,6 +53,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
   const fileInputRef = useRef(null);
   const menuRef = useRef(null);
   const triggerRefs = useRef({});
+  const textareaRef = useRef(null);
 
   const fetchMessages = async () => {
     const token = await getToken();
@@ -291,12 +299,22 @@ function SupportSingleChat({ setIsOpen, conversation }) {
   const isLastOfGroup = (messages, index) => {
     const current = messages[index];
     const next = messages[index + 1];
-    return !next || next.sender !== current.sender;
+    if (!next || next.sender !== current.sender) return true;
+    // اگه تاریخ پیام بعدی فرق داشت، این پیام آخر گروهه
+    if (formatDateLabel(current.date) !== formatDateLabel(next.date))
+      return true;
+    return false;
   };
 
   const isSameSenderAsPrev = (messages, index) => {
     if (index === 0) return false;
-    return messages[index].sender === messages[index - 1].sender;
+    const current = messages[index];
+    const prev = messages[index - 1];
+    if (current.sender !== prev.sender) return false;
+    // اگه تاریخ با پیام قبلی فرق داشت، گروه جدیده
+    if (formatDateLabel(current.date) !== formatDateLabel(prev.date))
+      return false;
+    return true;
   };
 
   const scrollToMessage = (id) => {
@@ -335,6 +353,12 @@ function SupportSingleChat({ setIsOpen, conversation }) {
     setContextMenuOpen(true);
     setActiveMessageId(msg.id);
     setActiveTriggerElement(triggerRefs.current[msg.id]);
+  };
+
+  const resetTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   };
 
   const handleCloseMenu = () => {
@@ -400,6 +424,15 @@ function SupportSingleChat({ setIsOpen, conversation }) {
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Sync textarea height when editMsg changes (pre-filled text)
+  useEffect(() => {
+    if (editMsg && textareaRef.current) {
+      const el = textareaRef.current;
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  }, [editMsg]);
 
   // For date scroll & auto-hide
   useEffect(() => {
@@ -497,7 +530,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
 
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
-        <div className="flex items-center justify-center lg:justify-between border-b-2 border-gray-200 lg:border-0 pb-4 lg:pb-2">
+        <div className="flex items-center justify-center lg:justify-between py-1 lg:pb-2">
           <div className="flex items-center gap-1">
             <div className="hidden lg:flex items-center justify-center w-10 h-10 rounded-[14px] border-2 border-gray-200">
               <SupportIcon size={20} />
@@ -525,16 +558,18 @@ function SupportSingleChat({ setIsOpen, conversation }) {
           <ChatSkeleton />
         ) : (
           <>
-            <div
-              className={`sticky top-1 z-20 flex justify-center pointer-events-none transition-opacity duration-500 ${
-                showSticky ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              {visibleDate && (
-                <div className="bg-white/80 backdrop-blur-sm shadow-sm border text-gray-600 text-xs px-4 py-1 rounded-full">
-                  {visibleDate}
-                </div>
-              )}
+            <div className="sticky top-1 z-20 h-0 overflow-visible">
+              <div
+                className={`flex justify-center pointer-events-none transition-opacity duration-500 ${
+                  showSticky ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                {visibleDate && (
+                  <div className="bg-white/80 backdrop-blur-sm shadow-sm border text-gray-600 text-xs px-4 py-1 rounded-full">
+                    {visibleDate}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col pt-3">
@@ -545,8 +580,8 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                       <SupportIcon size={20} />
                     </div>
                   </div>
-                  <div className="font-iransans text-justify px-4 py-2 rounded-lg text-xs lg:text-sm leading-10 w-full wrap-break-word text-gray-800 border-2 border-gray-200 rounded-bl-none">
-                    سلام با افتخار به شما خوش آمد میگویم. در سامانه پشتیبانی،
+                  <div className="font-iransans text-justify whitespace-break-spaces px-4 py-2 rounded-lg text-xs lg:text-sm leading-8 w-full wrap-break-word text-gray-800 border-2 border-gray-200 rounded-bl-none">
+                    سلام با افتخار به شما خوش آمد میگوییم. در سامانه پشتیبانی،
                     تمرکز ما ایجاد تجربه ای بی نظیر برای شماست؛ شما میتوانید از
                     این قسمت با ما در تعامل باشید و سوالات خود را مطرح کنید و
                     اطلاعات بیشتری در رابطه با محصولات و خدمات مختلف بدست آورید.
@@ -562,17 +597,17 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                 const last = isLastOfGroup(messages, index);
 
                 const bubbleClasses = `
-    font-iransans text-justify overflow-hidden rounded-lg text-xs lg:text-sm text-gray-800 
+    font-iransans text-justify overflow-hidden rounded-xl text-xs lg:text-sm text-gray-800 
     w-fit cursor-context-menu
     ${
       msg.sender === "user"
         ? last
-          ? "border-2 border-gray-400 rounded-br-none"
-          : "border-2 border-gray-400 "
+          ? "border-2 border-primary rounded-br-none"
+          : "border-2 border-primary"
         : last
           ? "border-2 border-gray-200 rounded-bl-none"
           : "border-2 border-gray-200"
-    }
+    } ${contextMenuOpen ? "bg-white" : ""}
   `;
 
                 return (
@@ -616,17 +651,33 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                             onContextMenu={(e) => handleOpenMenu(e, msg)}
                           >
                             <div className={bubbleClasses} data-bubble>
-                              {msg.replyTo && (
-                                <div
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    scrollToMessage(msg.replyTo.id);
-                                  }}
-                                  className="font-iransans border-r-4 border-gray-600 bg-gray-100 mt-1 mx-1.5 pr-2 pl-1 py-2.5 rounded-md text-xs text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap"
-                                >
-                                  {msg.replyTo.text}
-                                </div>
-                              )}
+                              {msg.replyTo &&
+                                (() => {
+                                  const repliedMsg = messages.find(
+                                    (m) => m.id === msg.replyTo.id,
+                                  );
+                                  const repliedIsUser =
+                                    repliedMsg?.sender === "user";
+                                  const alignClass = repliedIsUser
+                                    ? "ml-auto"
+                                    : "mr-auto";
+                                  const roundedClass = repliedIsUser
+                                    ? "rounded-br-none"
+                                    : "rounded-bl-none";
+                                  return (
+                                    <div
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        scrollToMessage(msg.replyTo.id);
+                                      }}
+                                      className={`border-2 border-gray-400 mt-1 mx-1.5 p-2 rounded-xl ${roundedClass} ${alignClass} max-w-[80%] cursor-pointer`}
+                                    >
+                                      <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
+                                        {msg.replyTo.text}
+                                      </p>
+                                    </div>
+                                  );
+                                })()}
                               {msg.type === "image" ? (
                                 <Image
                                   src={msg?.image}
@@ -660,13 +711,42 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                               activeTriggerElement && (
                                 <MessageContextMenu
                                   isOpen={true}
-                                  onReply={() => setReplyTo(msg)}
+                                  onReply={() => {
+                                    setReplyTo(msg);
+                                    setEditMsg(null);
+                                    setReportMsg(null);
+                                    setMessage("");
+                                    resetTextareaHeight();
+                                    handleCloseMenu();
+                                  }}
                                   onDelete={
                                     msg.sender === "user"
                                       ? () => handleDeleteMessage(msg.id)
                                       : undefined
                                   }
-                                  onReport={() => {}}
+                                  onEdit={
+                                    msg.sender === "user"
+                                      ? () => {
+                                          setEditMsg(msg);
+                                          setReplyTo(null);
+                                          setReportMsg(null);
+                                          setMessage(msg.text);
+                                          handleCloseMenu();
+                                        }
+                                      : undefined
+                                  }
+                                  onReport={
+                                    msg.sender !== "user"
+                                      ? () => {
+                                          setReportMsg(msg);
+                                          setReplyTo(null);
+                                          setEditMsg(null);
+                                          setMessage("");
+                                          resetTextareaHeight();
+                                          handleCloseMenu();
+                                        }
+                                      : undefined
+                                  }
                                   onClose={handleCloseMenu}
                                   position={
                                     msg.sender === "user" ? "right" : "left"
@@ -706,19 +786,21 @@ function SupportSingleChat({ setIsOpen, conversation }) {
       <div className="fixed right-0 left-0 bottom-0 flex items-end gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] pt-2 lg:pt-4 pb-6 lg:pb-12 bg-white">
         <div className="flex items-end gap-1 flex-1">
           <div className="flex flex-col gap-3 flex-1">
-            {showRecommended && (
-              <div className="space-y-5">
+            {/* پیام‌های آماده — فقط حالت نرمال */}
+            {!editMsg && !reportMsg && !replyTo && showRecommended && (
+              <div className="space-y-2">
                 {recommendedMessages.map((item) => (
                   <p
                     key={item.id}
                     onClick={() => handleRecommendedMessageClick(item)}
-                    className="font-iransans font-semibold text-primary text-center cursor-pointer text-xs lg:text-sm"
+                    className="font-iransans text-gray-600 text-center cursor-pointer text-sm lg:text-sm rounded-full p-2 w-full border-2 border-gray-200"
                   >
                     {item.question}
                   </p>
                 ))}
               </div>
             )}
+
             <div className="flex items-center justify-center gap-4 lg:gap-1">
               <StrokeArrowLeftIcon
                 size={20}
@@ -727,56 +809,176 @@ function SupportSingleChat({ setIsOpen, conversation }) {
               />
 
               <div
-                className={`relative rounded-t-md rounded-bl-md bg-gray-200 overflow-hidden w-full max-w-[540px] ${contextMenuOpen ? "z-999" : ""}`}
+                className={`relative w-full max-w-[540px] ${contextMenuOpen ? "z-999" : ""}`}
               >
-                {replyTo && (
-                  <div
-                    onClick={() => scrollToMessage(replyTo.id)}
-                    className=" bg-white border-r-4 border-gray-600 py-2.5 pl-1 pr-2 rounded-md mx-2 mt-1 flex items-center justify-between"
-                  >
-                    <span className="font-iransans text-gray-600 text-xs max-w-[81%] line-clamp-1">
-                      {replyTo.text}
+                {/* باکس ویرایش پیام */}
+                {editMsg && (
+                  <div className="flex items-center justify-center relative mb-3">
+                    <span className="font-iransans font-bold text-primary text-base">
+                      ویرایش پیام
                     </span>
+                    <button
+                      onClick={() => {
+                        setEditMsg(null);
+                        setMessage("");
+                        resetTextareaHeight();
+                      }}
+                      className="absolute left-3"
+                    >
+                      <CloseSquareIcon size={22} />
+                    </button>
+                  </div>
+                )}
 
-                    <button onClick={() => setReplyTo(null)}>
+                {/* باکس گزارش پیام */}
+                {reportMsg && (
+                  <div className="flex items-center justify-center relative mb-3">
+                    <span className="font-iransans font-bold text-error-medium text-base">
+                      گزارش گفت و گو با {otherUserDisplayName}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setReportMsg(null);
+                        setMessage("");
+                        resetTextareaHeight();
+                      }}
+                      className="absolute left-3"
+                    >
                       <CloseSquareIcon size={20} />
                     </button>
                   </div>
                 )}
-                <input
-                  type="text"
-                  placeholder="پیام ..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="font-iransans placeholder:text-gray-400 text-gray-600 h-14 lg:h-12 pr-2 pl-14 w-full outline-none select-all"
-                />
-                {message.length === 0 && (
-                  <>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
+
+                {/* باکس پاسخ */}
+                {replyTo && !editMsg && !reportMsg && (
+                  <div className="flex items-center justify-center relative mb-3">
+                    <span className="font-iransans font-bold text-primary text-base">
+                      پاسخ به {otherUserDisplayName}
+                    </span>
                     <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className={`absolute left-2 ${replyTo ? "bottom-4" : "bottom-1/2 translate-y-1/2"} cursor-pointer text-gray-500`}
+                      onClick={() => setReplyTo(null)}
+                      className="absolute left-3"
                     >
-                      <ScanLineIcon className="text-gray-800" />
+                      <CloseSquareIcon size={20} />
                     </button>
-                  </>
+                  </div>
                 )}
-                {message.trim().length > 0 && (
-                  <button
-                    onClick={() => handleSendMessage(message)}
-                    className={`absolute left-2 ${replyTo ? "bottom-4" : "bottom-1/2 translate-y-1/2"} font-iransans text-primary cursor-pointer`}
-                  >
-                    ارسال
-                  </button>
-                )}
+
+                {/* باکس مشترک (پیام + اینپوت) در حالت ویرایش/گزارش/پاسخ، یا فقط اینپوت در حالت عادی */}
+                {(() => {
+                  const activeMsg = editMsg || reportMsg || replyTo;
+                  const isReply = replyTo && !editMsg && !reportMsg;
+
+                  return (
+                    <div
+                      className={
+                        activeMsg
+                          ? "bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2"
+                          : ""
+                      }
+                    >
+                      {activeMsg && (
+                        <div
+                          onClick={
+                            isReply
+                              ? () => scrollToMessage(replyTo.id)
+                              : undefined
+                          }
+                          className={`border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] ${
+                            isReply ? "cursor-pointer" : ""
+                          } ${
+                            activeMsg.sender === "user"
+                              ? "ml-auto rounded-br-none"
+                              : "mr-auto rounded-bl-none"
+                          }`}
+                        >
+                          <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
+                            {activeMsg.text}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* input */}
+                      <div
+                        className={`flex items-end rounded-xl overflow-hidden ${
+                          activeMsg ? "bg-white" : "bg-gray-200"
+                        }`}
+                      >
+                        <textarea
+                          ref={textareaRef}
+                          placeholder={
+                            reportMsg
+                              ? "توضیحات ...."
+                              : editMsg
+                                ? "ویرایش ...."
+                                : replyTo
+                                  ? "پاسخ ...."
+                                  : "پیام ...."
+                          }
+                          value={message}
+                          rows={1}
+                          onChange={(e) => {
+                            setMessage(e.target.value);
+                            e.target.style.height = "auto";
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                              e.preventDefault();
+                              handleSendMessage(message);
+                              if (textareaRef.current) {
+                                textareaRef.current.style.height = "auto";
+                              }
+                            }
+                          }}
+                          className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none select-all bg-transparent resize-none overflow-hidden leading-6 text-right placeholder:text-center placeholder:pr-8 flex-1"
+                        />
+                        <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
+                          {message.length === 0 && !editMsg && !reportMsg && (
+                            <>
+                              <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                capture="environment"
+                                onChange={handleFileSelect}
+                                className="hidden"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                className="cursor-pointer pr-3"
+                              >
+                                <ScanLineIcon className="text-gray-800" />
+                              </button>
+                            </>
+                          )}
+                          {(message.trim().length > 0 ||
+                            editMsg ||
+                            reportMsg) && (
+                            <button
+                              disabled={message.trim().length === 0}
+                              onClick={() => {
+                                if (message.trim().length === 0) return;
+                                handleSendMessage(message);
+                                if (textareaRef.current) {
+                                  textareaRef.current.style.height = "auto";
+                                }
+                              }}
+                              className={`font-iransans transition-colors  ${
+                                message.trim().length > 0
+                                  ? "text-primary cursor-pointer"
+                                  : "text-gray-400 cursor-not-allowed"
+                              }`}
+                            >
+                              ارسال
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ import { ConversationIcon } from "@/icons";
 
 export default function ProductSpecifications({ setShowComments, specs }) {
   return (
-    <div className="lg:bg-white lg:rounded-t-lg py-20 lg:py-[50px] lg:px-[100px]">
+    <div className="lg:bg-white lg:rounded-t-lg pb-20 pt-18 lg:py-[50px] lg:px-[100px]">
       <Accordion type="single" collapsible defaultValue="specifications">
         <AccordionItem value="specifications">
           <AccordionTrigger className="hidden lg:flex text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline justify-between">
@@ -34,13 +34,13 @@ export default function ProductSpecifications({ setShowComments, specs }) {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-gray-600 mt-2">
+              <p className="text-center text-gray-600">
                 مشخصاتی برای این محصول ثبت نشده است
               </p>
             )}
             <div
               onClick={() => setShowComments(true)}
-              className=" lg:hidden fixed bottom-17 py-6 right-0 left-0 px-[10px] flex items-center justify-center"
+              className=" lg:hidden fixed bottom-17 right-0 left-0 p-[10px] flex items-center justify-center"
             >
               <button className="font-iransans w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center gap-2">
                 <ConversationIcon size={20} />

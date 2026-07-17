@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { SupportIcon, HeartIcon, CloseSquareIcon } from "@/icons";
+import { ScanLineIcon } from "lucide-react";
 import {
   Accordion,
   AccordionItem,
@@ -121,6 +122,7 @@ export default function ProductUserComments({
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [deletingMessageId, setDeletingMessageId] = useState(null);
+  const [reportMsgId, setReportMsgId] = useState(null);
 
   const setLoginOpen = usePublicStore((s) => s.setLoginOpen);
 
@@ -132,6 +134,7 @@ export default function ProductUserComments({
   const inputRef = useRef(null);
   const activeReplyInputRef = useRef(null);
   const messagesContainerRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Helper: Find message and its box by message ID
   const findMessageAndBox = (messageId) => {
@@ -274,7 +277,9 @@ export default function ProductUserComments({
   };
 
   const handleReport = (messageId) => {
-    // اینجا می‌توانید منطق گزارش را پیاده‌سازی کنید
+    handleCloseMenu();
+    setReportMsgId(messageId);
+    setActiveReplyId(null);
   };
 
   const handleSubmitComment = async (messageId = null) => {
@@ -503,7 +508,7 @@ export default function ProductUserComments({
         onValueChange={(value) => setIsOpen(value === "comments")}
       >
         <AccordionItem value="comments">
-          <AccordionTrigger className="hidden lg:flex justify-between text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline font-iransans">
+          <AccordionTrigger className="hidden lg:flex justify-between text-primary text-base lg:text-[20px] font-semibold hover:no-underline font-iransans">
             پرسش و پاسخ و دیدگاه کاربران
           </AccordionTrigger>
           <AccordionContent className="mt-4 flex flex-col h-screen lg:h-auto relative">
@@ -514,25 +519,35 @@ export default function ProductUserComments({
               }  lg:overflow-x-auto`}
             >
               <div className="lg:hidden flex items-center justify-center mb-2">
-                <h3 className="font-iransans font-bold text-primary">
+                <h3 className="font-iransans text-base font-bold text-primary">
                   پرسش و پاسخ و دیدگاه کاربران
                 </h3>
               </div>
               {/* Guide Box */}
-              <div className="flex gap-[6px] shrink-0 mb-12">
-                <div className="flex flex-col justify-between h-auto ">
+              <div className="flex justify-end lg:justify-normal1 gap-[6px] shrink-0 mb-12">
+                <div className="flex flex-col justify-between h-auto">
                   <div className="flex items-end gap-2 px-[10px]">
-                    <div className="border-2 border-gray-200 lg:border-primary/20 rounded-t-lg rounded-br-lg px-2 py-[2px] max-w-[175px]">
-                      <p className="text-xs font-iransans">
-                        <span className="font-bold">راهنما:</span> سوالات خود را
-                        در مورد محصول بپرسید
-                      </p>
-                      <p className="text-xs text-center text-gray-400 mt-2">
-                        1 مهر 1404
-                      </p>
-                    </div>
-                    <div className="border-2 border-gray-200 lg:border-gray-200 rounded-lg p-[10px]">
-                      <SupportIcon size={20} />
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-end gap-2">
+                        <div className="flex flex-col gap-1">
+                          <div className="border-2 border-gray-200 lg:border-primary/20 rounded-xl rounded-bl-none max-w-[175px]">
+                            <div className="flex flex-col gap-[6px] py-[5px] px-[10px]">
+                              <p className="font-iransans text-xs font-bold mb-1!">
+                                راهنما:
+                              </p>
+                              <p className="font-iransans text-xs">
+                                سوالات خود را در مورد محصول بپرسید
+                              </p>
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-400 text-center">
+                            1 مهر 1404
+                          </p>
+                        </div>
+                        <div className="border-2 border-gray-200 rounded-lg p-[10px] shrink-0 mb-4">
+                          <SupportIcon size={20} />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -604,21 +619,25 @@ export default function ProductUserComments({
                     >
                       {allMessages?.map((msg) => {
                         const isUserMsg = msg.isUserMessage;
+                        const bubbleClasses = [
+                          "font-iransans text-justify overflow-hidden rounded-xl text-xs text-gray-800",
+                          "w-fit cursor-context-menu",
+                          isUserMsg
+                            ? "border-2 border-primary rounded-br-none"
+                            : "border-2 border-gray-200 rounded-bl-none",
+                          contextMenuOpen && activeMessageId === msg.id
+                            ? "bg-white"
+                            : "",
+                        ].join(" ");
 
                         return (
                           <div key={msg.id} className="w-full">
-                            {/* Message */}
                             <div
-                              className={`flex items-center w-full ${
-                                isUserMsg ? "justify-start" : "justify-end"
-                              } ${
-                                isUserBox
-                                  ? "gap-3 lg:gap-[50px]"
-                                  : "gap-6 lg:gap-4"
-                              }`}
+                              className={`flex items-end w-full ${isUserMsg ? "justify-start" : "justify-end"} gap-2`}
                             >
+                              {/* like — non-user side */}
                               {!isUserMsg && (
-                                <div className="flex flex-col items-center gap-1">
+                                <div className="flex flex-col items-center gap-1 shrink-0 self-center">
                                   <button
                                     onClick={() =>
                                       toggleLike(msg.id, msg.apiId)
@@ -631,94 +650,92 @@ export default function ProductUserComments({
                                     />
                                   </button>
                                   <span
-                                    className={`text-xs ${
-                                      likedMessages[msg.id]
-                                        ? "text-error-medium"
-                                        : "text-gray-400"
-                                    }`}
+                                    className={`text-xs ${likedMessages[msg.id] ? "text-error-medium" : "text-gray-400"}`}
                                   >
                                     {msg.likes}
                                   </span>
                                 </div>
                               )}
-
+                              {/* avatar + bubble + date */}
                               <div
-                                className={`flex flex-col gap-[5px] ${
-                                  contextMenuOpen && activeMessageId === msg.id
-                                    ? "relative z-1000"
-                                    : ""
-                                }`}
+                                className={`flex items-end gap-2 ${isUserMsg ? "flex-row" : "flex-row-reverse"}`}
                               >
+                                <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center shrink-0 mb-4">
+                                  <SupportIcon size={20} />
+                                </div>
                                 <div
-                                  ref={(el) =>
-                                    (triggerRefs.current[msg.id] = el)
-                                  }
-                                  className={`relative border-2 ${
-                                    isUserMsg
-                                      ? "border-gray-400 bg-gray-200"
-                                      : isUserMsg
-                                        ? "border-gray-400 lg:border-gray-200"
-                                        : "border-gray-300"
-                                  } ${
-                                    !isUserMsg
-                                      ? "rounded-t-lg rounded-br-lg"
-                                      : "rounded-t-lg rounded-bl-lg"
-                                  } px-2 py-[2px] ${isUserBox ? "max-w-[175px]" : "max-w-[240px] lg:max-w-[175px]"} cursor-context-menu`}
-                                  onClick={(e) => handleOpenMenu(e, msg.id)}
-                                  onContextMenu={(e) =>
-                                    handleOpenMenu(e, msg.id)
-                                  }
+                                  className={`flex flex-col gap-1 ${contextMenuOpen && activeMessageId === msg.id ? "relative z-1000" : ""}`}
                                 >
-                                  {msg.replyTo && msg.replyToText && (
-                                    <div
-                                      className={`border-r-2 border-gray-600 py-1 px-2 mb-2 rounded-md ${isUserMsg ? "bg-white" : "bg-gray-100"}`}
-                                    >
-                                      <span className="text-xs text-gray-600 font-iransans line-clamp-1">
-                                        {msg.replyToText}
-                                      </span>
+                                  <div
+                                    ref={(el) =>
+                                      (triggerRefs.current[msg.id] = el)
+                                    }
+                                    className={`relative flex items-center gap-2 ${isUserMsg ? "flex-row" : "flex-row-reverse"} ${contextMenuOpen && activeMessageId === msg.id ? "z-999" : ""}`}
+                                    onClick={(e) => handleOpenMenu(e, msg.id)}
+                                    onContextMenu={(e) =>
+                                      handleOpenMenu(e, msg.id)
+                                    }
+                                  >
+                                    <div className={bubbleClasses}>
+                                      {msg.replyTo && msg.replyToText && (
+                                        <div
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            scrollToReplyTarget(msg.replyTo);
+                                          }}
+                                          className={`border-2 border-gray-400 mt-1 mx-1.5 p-2 rounded-xl mb-1 max-w-[80%] cursor-pointer ${isUserMsg ? "rounded-br-none ml-auto" : "rounded-bl-none mr-auto"}`}
+                                        >
+                                          <span className="text-xs text-gray-600 font-iransans line-clamp-1 overflow-hidden">
+                                            {msg.replyToText}
+                                          </span>
+                                        </div>
+                                      )}
+                                      <div className="flex flex-col gap-[6px] py-[5px] px-[10px]">
+                                        <p className="font-iransans text-xs font-bold mb-1!">
+                                          {msg.user}:
+                                        </p>
+                                        <p className="font-iransans text-xs">
+                                          {msg.message}
+                                        </p>
+                                      </div>
                                     </div>
-                                  )}
-                                  <p className="text-xs font-iransans">
-                                    <span className="font-bold">
-                                      {msg.user}:
-                                    </span>{" "}
-                                    {msg.message}
-                                  </p>
-                                  <p className="text-xs text-center text-gray-400 mt-2">
+                                  </div>
+                                  {/* date centered under bubble */}
+                                  <p className="text-xs text-gray-400 text-center">
                                     {msg.date}
                                   </p>
+                                  {contextMenuOpen &&
+                                    activeMessageId === msg.id && (
+                                      <MessageContextMenu
+                                        isOpen={true}
+                                        onReply={() => handleReply(msg.id)}
+                                        onDelete={
+                                          msg.isUserMessage
+                                            ? () => handleDelete(msg.id)
+                                            : undefined
+                                        }
+                                        onReport={() => handleReport(msg.id)}
+                                        onClose={handleCloseMenu}
+                                        position={isUserMsg ? "right" : "left"}
+                                        triggerRef={{
+                                          current: activeTriggerElement,
+                                        }}
+                                        isDeleting={
+                                          deletingMessageId === msg.id
+                                        }
+                                        deleteLoadingComponent={
+                                          <SpinnerLoading
+                                            size={20}
+                                            className="border-error-medium"
+                                          />
+                                        }
+                                      />
+                                    )}
                                 </div>
-
-                                {/* Context Menu for this message */}
-                                {contextMenuOpen &&
-                                  activeMessageId === msg.id && (
-                                    <MessageContextMenu
-                                      isOpen={true}
-                                      onReply={() => handleReply(msg.id)}
-                                      onDelete={
-                                        msg.isUserMessage
-                                          ? () => handleDelete(msg.id)
-                                          : undefined
-                                      }
-                                      onReport={() => handleReport(msg.id)}
-                                      onClose={handleCloseMenu}
-                                      position={isUserMsg ? "right" : "left"}
-                                      triggerRef={{
-                                        current: activeTriggerElement,
-                                      }}
-                                      isDeleting={deletingMessageId === msg.id}
-                                      deleteLoadingComponent={
-                                        <SpinnerLoading
-                                          size={20}
-                                          className="border-error-medium"
-                                        />
-                                      }
-                                    />
-                                  )}
                               </div>
-
+                              {/* like — user side */}
                               {isUserMsg && (
-                                <div className="flex flex-col items-center gap-1">
+                                <div className="flex flex-col items-center gap-1 shrink-0 self-center">
                                   <button
                                     onClick={() =>
                                       toggleLike(msg.id, msg.apiId)
@@ -731,11 +748,7 @@ export default function ProductUserComments({
                                     />
                                   </button>
                                   <span
-                                    className={`text-xs ${
-                                      likedMessages[msg.id]
-                                        ? "text-error-medium"
-                                        : "text-gray-400"
-                                    }`}
+                                    className={`text-xs ${likedMessages[msg.id] ? "text-error-medium" : "text-gray-400"}`}
                                   >
                                     {msg.likes}
                                   </span>
@@ -743,11 +756,11 @@ export default function ProductUserComments({
                               )}
                             </div>
 
-                            {/* Reply Input for this message - Desktop only, inside scrollable container */}
+                            {/* Reply Input for this message - Desktop only */}
                             {isDesktop &&
                               replyInputs[msg.id]?.show &&
                               activeReplyId === msg.id && (
-                                <div className="flex items-center justify-start gap-3 lg:gap-[50px] mt-2">
+                                <div className="flex items-center justify-start gap-3 mt-2">
                                   <div className="flex flex-col gap-2 items-center w-full max-w-[175px]">
                                     <div className="w-full bg-white rounded-lg p-2 border-2 border-gray-200">
                                       <div className="bg-gray-100 border-r-4 border-gray-600 py-1 px-2 rounded-md mb-2">
@@ -817,98 +830,157 @@ export default function ProductUserComments({
               })}
             </div>
 
-            {/* Reply Input Box - Fixed at bottom for mobile only */}
+            {/* Reply/Comment Input Box - Fixed at bottom for mobile only */}
             {!isDesktop && (
-              <div className="fixed bottom-4 right-[10px] left-[10px] z-30">
-                <div className="relative rounded-t-md rounded-bl-md bg-gray-200 overflow-hidden">
+              <div className="fixed right-0 left-0 bottom-0 flex items-end px-[10px] pt-2 pb-6 bg-white z-30">
+                <div className="flex flex-col gap-3 flex-1">
+                  {/* reply header */}
                   {activeReplyId && (
-                    <div
-                      onClick={() => scrollToReplyTarget(activeReplyId)}
-                      className="bg-white border-r-4 border-gray-600 py-2.5 pl-1 pr-2 rounded-md mx-2 mt-1 flex items-center justify-between cursor-pointer"
-                    >
-                      <span className="font-iransans text-gray-600 text-xs max-w-[80%] whitespace-nowrap overflow-hidden text-ellipsis">
-                        {(() => {
-                          const { message } = findMessageAndBox(activeReplyId);
-                          return message?.message || "";
-                        })()}
+                    <div className="flex items-center justify-center relative">
+                      <span className="font-iransans font-bold text-primary text-base">
+                        پاسخ به نظر
                       </span>
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCancelReply(activeReplyId);
-                        }}
+                        onClick={() => handleCancelReply(activeReplyId)}
+                        className="absolute left-3"
                       >
                         <CloseSquareIcon size={20} />
                       </button>
                     </div>
                   )}
-                  <input
-                    ref={activeReplyId ? activeReplyInputRef : inputRef}
-                    type="text"
-                    placeholder={
-                      activeReplyId ? "پاسخ ..." : "دیدگاه خود را ثبت کنید ..."
-                    }
-                    value={
-                      activeReplyId
-                        ? replyInputs[activeReplyId]?.text || ""
-                        : newComment
-                    }
-                    onChange={(e) =>
-                      activeReplyId
-                        ? handleReplyTextChange(activeReplyId, e.target.value)
-                        : setNewComment(e.target.value)
-                    }
-                    className="font-iransans placeholder:text-gray-400 text-gray-600 h-14 pr-2 pl-14 w-full outline-none bg-gray-200"
-                  />
-                  {activeReplyId ? (
-                    replyInputs[activeReplyId]?.text?.trim()?.length > 0 ? (
+                  {/* report header */}
+                  {reportMsgId && (
+                    <div className="flex items-center justify-center relative">
+                      <span className="font-iransans font-bold text-error-medium text-base">
+                        گزارش نظر
+                      </span>
                       <button
-                        onClick={() => handleSubmitComment(activeReplyId)}
-                        disabled={submitting}
-                        className="absolute left-2 bottom-4 font-iransans text-primary cursor-pointer disabled:opacity-50 flex items-center gap-1"
+                        onClick={() => setReportMsgId(null)}
+                        className="absolute left-3"
                       >
-                        {submitting ? (
-                          <>
-                            <SpinnerLoading
-                              size={16}
-                              className="border-primary"
-                            />
-                            ارسال...
-                          </>
-                        ) : (
-                          "ارسال"
-                        )}
+                        <CloseSquareIcon size={20} />
                       </button>
-                    ) : (
-                      <button
-                        onClick={() => handleCancelReply(activeReplyId)}
-                        disabled={submitting}
-                        className="absolute left-2 bottom-4 font-iransans text-gray-400 cursor-pointer disabled:opacity-50"
-                      >
-                        انصراف
-                      </button>
-                    )
-                  ) : (
-                    newComment.trim()?.length > 0 && (
-                      <button
-                        onClick={() => handleSubmitComment()}
-                        disabled={submitting}
-                        className="absolute left-2 bottom-1/2 translate-y-1/2 font-iransans text-primary cursor-pointer disabled:opacity-50 flex items-center gap-1"
-                      >
-                        {submitting ? (
-                          <>
-                            <SpinnerLoading
-                              size={16}
-                              className="border-primary"
-                            />
-                            ارسال...
-                          </>
-                        ) : (
-                          "ارسال"
-                        )}
-                      </button>
-                    )
+                    </div>
                   )}
+
+                  {/* input wrapper */}
+                  <div
+                    className={
+                      activeReplyId || reportMsgId
+                        ? "bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2"
+                        : ""
+                    }
+                  >
+                    {/* reply preview */}
+                    {activeReplyId && (
+                      <div
+                        onClick={() => scrollToReplyTarget(activeReplyId)}
+                        className="border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] mr-auto rounded-bl-none cursor-pointer"
+                      >
+                        <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
+                          {(() => {
+                            const { message: foundMsg } =
+                              findMessageAndBox(activeReplyId);
+                            return foundMsg?.message || "";
+                          })()}
+                        </p>
+                      </div>
+                    )}
+
+                    <div
+                      className={`flex items-end rounded-xl overflow-hidden ${
+                        activeReplyId || reportMsgId
+                          ? "bg-white"
+                          : "bg-gray-200"
+                      }`}
+                    >
+                      <textarea
+                        ref={activeReplyId ? activeReplyInputRef : inputRef}
+                        placeholder={
+                          reportMsgId
+                            ? "توضیحات ...."
+                            : activeReplyId
+                              ? "پاسخ ...."
+                              : "دیدگاه خود را ثبت کنید ..."
+                        }
+                        value={
+                          activeReplyId
+                            ? replyInputs[activeReplyId]?.text || ""
+                            : newComment
+                        }
+                        rows={1}
+                        onChange={(e) => {
+                          if (activeReplyId) {
+                            handleReplyTextChange(
+                              activeReplyId,
+                              e.target.value,
+                            );
+                          } else {
+                            setNewComment(e.target.value);
+                          }
+                          e.target.style.height = "auto";
+                          e.target.style.height = `${e.target.scrollHeight}px`;
+                        }}
+                        className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none bg-transparent resize-none overflow-hidden leading-6 text-right placeholder:text-center placeholder:pr-8 flex-1"
+                      />
+                      <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
+                        {!activeReplyId &&
+                          !reportMsgId &&
+                          newComment.trim().length === 0 && (
+                            <>
+                              <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                capture="environment"
+                                className="hidden"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                className="cursor-pointer pr-3"
+                              >
+                                <ScanLineIcon className="text-gray-800" />
+                              </button>
+                            </>
+                          )}
+                        {(activeReplyId ||
+                          reportMsgId ||
+                          newComment.trim().length > 0) && (
+                          <button
+                            disabled={
+                              (activeReplyId
+                                ? !replyInputs[activeReplyId]?.text?.trim()
+                                : !newComment.trim()) || submitting
+                            }
+                            onClick={() =>
+                              activeReplyId
+                                ? handleSubmitComment(activeReplyId)
+                                : handleSubmitComment()
+                            }
+                            className={`font-iransans transition-colors ${
+                              (
+                                activeReplyId
+                                  ? replyInputs[activeReplyId]?.text?.trim()
+                                  : newComment.trim()
+                              )
+                                ? "text-primary cursor-pointer"
+                                : "text-gray-400 cursor-not-allowed"
+                            }`}
+                          >
+                            {submitting ? (
+                              <SpinnerLoading
+                                size={16}
+                                className="border-primary"
+                              />
+                            ) : (
+                              "ارسال"
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

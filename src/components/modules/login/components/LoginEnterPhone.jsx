@@ -58,14 +58,14 @@ function LoginEnterPhone({
         </div>
         {/* Title */}
         <div className="mt-9">
-          <h1 className="font-bold text-primary text-lg">
+          <h1 className="font-bold text-primary text-base">
             ورود به حساب کاربری
           </h1>
         </div>
         {/* Main content */}
-        <div className="mt-7">
+        <div className="mt-4">
           <Input
-            label={"شماره تماس:"}
+            placeholder="شماره تماس"
             id="phone"
             numeric
             maxLength={11}
@@ -77,7 +77,7 @@ function LoginEnterPhone({
               errors.phone ? "" : "border-0!"
             }`}
           />
-          <div className="flex items-center gap-2 mt-4 mr-4">
+          <div className="flex items-center gap-5 mt-4 mr-4">
             <HintIcon size={20} />
             <span className="font-bold text-sm text-gray-600">
               کد تایید به شماره تماس شما ارسال می‌شود
@@ -90,13 +90,13 @@ function LoginEnterPhone({
         type="button"
         onClick={handleConfirm}
         disabled={!phoneNumber || isLoading}
-        className={`mt-7 mb-4 w-full font-bold ${
+        className={`mt-7 mb-2 w-full font-bold border-2 py-2 rounded-full ${
           !phoneNumber || isLoading
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary cursor-pointer"
+            ? "text-gray-400 border-gray-400 cursor-not-allowed"
+            : "text-primary border-primary cursor-pointer"
         }`}
       >
-        ارسال کد تایید
+        ارسال پیامکی کد تایید
       </button>
     </div>
   );

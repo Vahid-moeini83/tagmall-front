@@ -21,7 +21,7 @@ function Checkbox({
       />
       <span
         className={cn(
-          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded bg-white transition-colors",
+          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-[6px] bg-white transition-colors",
           hasBorder ? "border-2" : "border-none",
           checked
             ? "border-primary text-primary"
@@ -33,7 +33,7 @@ function Checkbox({
         <svg
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="w-5 h-5"
+          className="w-4 h-4"
           aria-hidden
         >
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />

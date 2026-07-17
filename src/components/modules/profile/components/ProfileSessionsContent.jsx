@@ -81,7 +81,7 @@ function ProfileSessionsContent({
   return (
     <div className="flex flex-col gap-3 mt-3 lg:mt-0 select-none">
       <div className="flex items-center justify-between">
-        <span>مدیریت نشست های فعال:</span>
+        <span className="text-gray-600 text-base">مدیریت نشست های فعال:</span>
         <HintIcon
           size={20}
           className="cursor-pointer ml-4"
@@ -113,7 +113,7 @@ function ProfileSessionsContent({
               {persianTime}
               {!item.isActive && (
                 <CheckIcon
-                  className="absolute top-1/2 -translate-y-1/2 left-[3px] text-success-medium"
+                  className="absolute top-1/2 -translate-y-1/2 left-[2px] text-success-medium"
                   size={20}
                 />
               )}
@@ -124,7 +124,7 @@ function ProfileSessionsContent({
 
       {/* انتخاب همه - فقط اگر بیش از 1 نشست فعال داشته باشیم */}
       {activeSessions.length > 1 && (
-        <div className="flex items-center pr-4 gap-2 text-gray-700 text-sm cursor-pointer">
+        <div className="flex items-center mt-1 mb-2 pr-4 gap-2 text-gray-700 text-sm cursor-pointer">
           <Checkbox
             checked={selectAll}
             hasBorder={false}
@@ -140,7 +140,7 @@ function ProfileSessionsContent({
         disabled={selectedSessions.length === 0 || isDeleting}
         className={
           isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mb-2 text-base ${
+            ? `w-full text-center border-2 rounded-full py-2 px-4 mb-4 text-base ${
                 selectedSessions.length > 0 && !isDeleting
                   ? "text-error-medium border-error-medium cursor-pointer"
                   : "text-gray-400 border-gray-200 cursor-not-allowed"

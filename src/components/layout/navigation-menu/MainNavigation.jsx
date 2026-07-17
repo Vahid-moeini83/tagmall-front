@@ -406,7 +406,7 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
             </Link>
           }
           triggerPosition="bottom-[calc(12px+env(safe-area-inset-bottom))] right-7 lg:hidden"
-          popoverClassName="bottom-20 left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-[608px] bg-white rounded-lg p-2 shadow-lg lg:hidden animate-slide-up-simple"
+          popoverClassName="bottom-20 left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-[608px] bg-white rounded-lg shadow-lg lg:hidden animate-slide-up-simple"
         >
           <span
             onClick={() => setFilterPopoverOpen(false)}

@@ -128,7 +128,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-between h-full pt-4 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
+    <div className="flex flex-col justify-between h-full pt-3 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
       {/* Header section */}
       <div className="relative flex items-center justify-center lg:justify-start mb-6 lg:mb-8">
         <h3 className="font-bold text-primary text-base lg:text-xl">
@@ -173,7 +173,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
 
       {/* Filter button in mobile */}
       <div
-        className={`lg:hidden inline-flex items-center justify-start gap-2 mb-6 pr-4 transition-all duration-300 ${
+        className={`lg:hidden inline-flex items-center justify-start gap-5 mb-6 pr-4 transition-all duration-300 ${
           true ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
         }`}
       >
@@ -182,7 +182,10 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
           className="cursor-pointer"
           onClick={() => setIsFiltersDrawerOpen(true)}
         >
-          ترتیب نمایش: {getFilterLabel()}
+          <p className="text-gray-600 font-bold">
+            ترتیب نمایش:{" "}
+            <span className="font-extralight">{getFilterLabel()}</span>
+          </p>
         </span>
       </div>
 
@@ -194,13 +197,13 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
         {/* Partnership button */}
         <button
           onClick={() => setActiveSection("partnership")}
-          className="relative lg:hidden w-full max-w-[480px] text-center border-2 border-gray-200 rounded-lg text-xs h-12 mb-3"
+          className="relative lg:hidden w-full max-w-[480px] text-center border-2 border-gray-200 rounded-lg h-10 mb-[10px]"
         >
           <SquarePlusIcon2
             size={20}
             className="absolute top-1/2 -translate-y-1/2 right-4"
           />
-          پیشنهادات مشارکت در فروش
+          <p className="text-sm text-gray-600">پیشنهادات مشارکت در فروش</p>
         </button>
 
         {/* Products list */}
@@ -222,7 +225,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
                 </div>
               </div>
               {/* Product Info */}
-              <div className="w-full space-y-4 lg:space-y-6">
+              <div className="w-full space-y-3 lg:space-y-6">
                 <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
                   {product.name}
                 </p>
@@ -230,7 +233,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
                   <span className="font-bold">سود مشارکت در فروش</span> 1 درصد به
                   ازای فروش هر کالا
                 </div> */}
-                <div className="text-gray-600 text-xs lg:text-base">
+                <div className="font-extralight text-gray-600 text-xs lg:text-base">
                   <span className="font-bold">وضعیت</span> موجود
                 </div>
                 <div className="text-gray-400 text-xs lg:text-base">
@@ -243,7 +246,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
       </div>
 
       {/* Footer section */}
-      <div className="fixed right-0 left-0 bottom-0 flex items-center gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] py-8 lg:pb-12 bg-white">
+      <div className="fixed right-0 left-0 bottom-0 flex items-center gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] pt-2 pb-7 lg:pb-12 bg-white">
         <StrokeArrowLeftIcon
           size={20}
           className="hidden lg:block absolute bottom-16 right-16 cursor-pointer rotate-180"

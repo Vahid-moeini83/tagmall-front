@@ -61,15 +61,15 @@ function CartPaymentStepMobile({
 
   return (
     <div className="pb-46">
-      <div className="space-y-6">
+      <div className="space-y-7">
         <h3 className="font-bold text-gray-600">شیوه پرداخت:</h3>
-        <div className="space-y-5">
+        <div className="space-y-4">
           <Radio
             name="payment"
             value="gateway"
             checked={paymentMethod === "gateway"}
             onChange={() => setPaymentMethod("gateway")}
-            className="gap-0 mr-2"
+            className="gap-5 mr-4"
             label={"درگاه بانکی"}
           />
 
@@ -80,14 +80,14 @@ function CartPaymentStepMobile({
             value="wallet"
             checked={paymentMethod === "wallet"}
             onChange={() => setPaymentMethod("wallet")}
-            className="gap-0 mr-2"
+            className="gap-5 mr-4"
             disabled={!isWalletSufficient}
             label={"کیف پول اعتباری"}
           />
         </div>
 
-        <div className="flex items-center gap-2 text-gray-600 text-base">
-          <HintIcon size={22} className="text-gray-800 shrink-0" />
+        <div className="flex items-center gap-5 text-gray-600 mr-4">
+          <HintIcon size={20} className="text-gray-800 shrink-0" />
           <span>موجودی کیف پول اعتباری {formatPrice(walletBalance)} تومان</span>
         </div>
       </div>
@@ -117,4 +117,3 @@ function CartPaymentStepMobile({
 }
 
 export default CartPaymentStepMobile;
-

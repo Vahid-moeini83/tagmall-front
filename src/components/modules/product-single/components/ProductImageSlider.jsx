@@ -44,12 +44,24 @@ export default function ProductImageSlider({
   }, [instanceRef, mobileFillHeight]);
 
   return (
-    <div ref={containerRef} className="w-full">
+    <div
+      ref={containerRef}
+      className={`w-full${mobileFillHeight ? " flex flex-col h-full" : ""}`}
+    >
       {/* Slider Container */}
-      <div ref={sliderRef} className="keen-slider">
+      <div
+        ref={sliderRef}
+        className={`keen-slider${mobileFillHeight ? " flex-1 min-h-0" : ""}`}
+      >
         {images.map((image, index) => (
           <div key={index} className="keen-slider__slide">
-            <div className="relative w-full h-[280px] lg:h-[480px]">
+            <div
+              className={
+                mobileFillHeight
+                  ? "relative w-full h-full min-h-[200px]"
+                  : "relative w-full h-[300px] lg:h-[480px]"
+              }
+            >
               <Image
                 src={image}
                 fill
@@ -63,8 +75,10 @@ export default function ProductImageSlider({
       </div>
 
       {/* Bullet Points + Update text (mobile footer) */}
-      <div className={mobileFillHeight ? "shrink-0 pt-2 pb-1" : ""}>
-        <div className="flex items-center justify-center gap-2 lg:gap-2 -translate-y-4">
+      <div className={mobileFillHeight ? "shrink-0 pt-1 pb-2" : ""}>
+        <div
+          className={`flex items-center justify-center gap-2 lg:gap-2 ${mobileFillHeight ? "" : "-translate-y-4"}`}
+        >
           {images.map((_, index) => (
             <button
               key={index}
@@ -80,7 +94,7 @@ export default function ProductImageSlider({
         </div>
 
         {mobileFillHeight && (
-          <p className="text-gray-400 text-center font-extralight mt-2 px-[10px]">
+          <p className="text-gray-400 text-center font-extralight mt-3 px-[10px]">
             <span className="font-bold">بروزرسانی</span> 1 دقیقه پیش
           </p>
         )}

@@ -14,8 +14,9 @@ export const orderStatusOptions = [
 export const DEFAULT_ORDER_STATUS = "ready_for_pickup";
 
 export function getOrderStatusLabel(statusId) {
+  if (!statusId) return "";
   const option = orderStatusOptions.find((item) => item.id === statusId);
-  return option?.label ?? orderStatusOptions[0]?.label ?? "";
+  return option?.label ?? "";
 }
 
 function OrderStatusFilterContent({ orderStatus, onChange }) {

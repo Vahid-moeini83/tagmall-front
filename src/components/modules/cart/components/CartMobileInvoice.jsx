@@ -16,7 +16,9 @@ function CartMobileInvoice({ billSummary, className = "" }) {
   } = billSummary || {};
 
   return (
-    <div className={`bg-white rounded-2xl p-[10px] ${className}`}>
+    <div
+      className={`bg-white rounded-xl p-[10px] ${isInvoiceOpen ? "border-2 border-gray-200" : ""} ${className}`}
+    >
       <button
         type="button"
         onClick={() => setIsInvoiceOpen((prev) => !prev)}
@@ -27,12 +29,12 @@ function CartMobileInvoice({ billSummary, className = "" }) {
         {isInvoiceOpen ? (
           <ChevronUpIcon
             size={20}
-            className="text-gray-800 shrink-0 absolute left-1.5"
+            className="text-gray-800 shrink-0 absolute left-[10px]"
           />
         ) : (
           <ChevronDownIcon
             size={20}
-            className="text-gray-800 shrink-0 absolute left-1.5"
+            className="text-gray-800 shrink-0 absolute left-[10px]"
           />
         )}
         <span className="font-extralight text-gray-600">

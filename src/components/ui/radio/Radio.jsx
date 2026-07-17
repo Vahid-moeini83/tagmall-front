@@ -9,6 +9,7 @@ function Radio({
   hasBorder = true,
   className,
   disabled = false,
+  radioClassname = "",
   ...props
 }) {
   return (
@@ -30,6 +31,7 @@ function Radio({
         className={cn(
           "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full transition-colors bg-gray-200 border-0",
           disabled && "opacity-50 cursor-not-allowed",
+          radioClassname,
         )}
         aria-hidden
       >

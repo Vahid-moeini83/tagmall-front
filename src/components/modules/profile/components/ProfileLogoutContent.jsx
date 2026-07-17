@@ -31,12 +31,9 @@ function ProfileLogoutContent({ user, isLoading, onLogout }) {
         </div>
       </div>
 
-      {/* 8px space */}
-      <div className="mt-2" />
-
       {/* Logout Action */}
       <div
-        className={`flex items-center gap-2 border-2 border-error-medium rounded-full py-2 px-4 justify-center text-error-medium text-base my-2 ${
+        className={`flex items-center gap-2 border-2 border-error-medium rounded-full py-2 px-4 justify-center text-error-medium text-base mt-[5px] mb-3 ${
           isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         }`}
         onClick={isLoading ? undefined : onLogout}

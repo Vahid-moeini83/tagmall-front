@@ -1,6 +1,6 @@
 "use client";
 
-import { NoteIcon, StarIcon, VerifyIcon } from "@/icons";
+import { NoteIcon, ReceiptIcon, StarIcon, VerifyIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
@@ -61,7 +61,7 @@ function ProductCardMobile({
             onClick={() => onSellerClick?.(product)}
             className={`flex items-center gap-2 min-w-0 ${isListMode ? "cursor-pointer" : ""}`}
           >
-            <div className="w-10 h-10 relative shrink-0 rounded-md overflow-hidden bg-white">
+            <div className="w-[50px] h-[50px] relative shrink-0 rounded-md overflow-hidden bg-white">
               <Image
                 src={
                   product.seller.profileImage ||
@@ -107,25 +107,23 @@ function ProductCardMobile({
         <Link
           href="/products/2"
           onClick={handleClick}
-          className="mt-2 bg-white rounded-md flex flex-col pt-[14px] pb-[10px] px-[10px] overflow-hidden gap-3"
+          className="bg-white rounded-lg flex flex-col p-[5px] pt-3 overflow-hidden gap-3"
         >
           {(isOrder || product.isSpecialSale) && (
-            <div className="flex items-center justify-between gap-2 min-h-5 shrink-0">
+            <div className="flex items-center justify-between px-[10px] gap-2 min-h-5 shrink-0">
               {isOrder ? (
                 <>
-                  <span className="text-primary text-xs sm:text-sm font-bold sm:pr-4">
+                  <span className="text-primary text-sm font-bold sm:pr-4">
                     سفارشات(خرید حضوری)
                   </span>
-                  <span className="text-gray-600 text-xs sm:text-sm">
-                    بروزرسانی اطلاعات (1 دقیقه پیش)
-                  </span>
+                  <ReceiptIcon size={20} />
                 </>
               ) : (
                 <>
                   <span className="text-error-medium text-sm font-bold sm:pr-4">
                     فروش ویژه
                   </span>
-                  <span className="text-error-medium text-sm font-bold tabular-nums">
+                  <span className="text-error-medium text-base font-bold tabular-nums">
                     ۰۰:۰۰:۰۰
                   </span>
                 </>
@@ -133,7 +131,7 @@ function ProductCardMobile({
             </div>
           )}
           <div className="flex flex-row gap-3">
-            <div className="relative w-16 h-20 shrink-0 rounded-md overflow-hidden bg-gray-100">
+            <div className="relative w-25 h-25 shrink-0 rounded-lg overflow-hidden bg-gray-100">
               <Image
                 src={product.img || "/assets/images/fallback/no-photo.jpg"}
                 fill
@@ -141,41 +139,40 @@ function ProductCardMobile({
                 className="object-cover"
               />
             </div>
-            <div className="flex-1 flex flex-col gap-1 text-start min-w-0">
+            <div className="flex-1 flex flex-col gap-3 text-start min-w-0">
               <div className="flex justify-between">
-                <p className="font-bold text-gray-800 text-sm line-clamp-2">
+                <p className="font-bold text-gray-600 text-sm line-clamp-1">
                   {product.name}
                 </p>
-                {isOrder ? (
-                  <NoteIcon size={20} className="cursor-pointer" />
-                ) : null}
               </div>
               <div className="flex flex-col gap-0.5">
                 {isOrder ? (
-                  <span className="font-semibold text-gray-800">
-                    {statusLabel}
-                  </span>
+                  <p className="font-bold text-sm text-gray-600">
+                    وضعیت <span className="font-extralight">{statusLabel}</span>
+                  </p>
                 ) : (
                   <>
                     {product.finalPrice > 0 ? (
                       <>
-                        <span className="font-bold text-gray-800">
+                        <span className="font-bold text-gray-600">
                           قیمت{" "}
-                          {product.formattedPrice ||
-                            Number(product.finalPrice).toLocaleString(
-                              "fa-IR",
-                            )}{" "}
-                          تومان
+                          <span className="font-extralight">
+                            {product.formattedPrice ||
+                              Number(product.finalPrice).toLocaleString(
+                                "fa-IR",
+                              )}{" "}
+                            تومان
+                          </span>
                         </span>
                         {product.discountPercent > 0 && (
-                          <span className="text-gray-500 line-through text-xs">
+                          <span className="text-gray-400 line-through text-xs">
                             {Number(product.price).toLocaleString("fa-IR")}{" "}
                             تومان
                           </span>
                         )}
                       </>
                     ) : (
-                      <span className="font-bold text-gray-800">
+                      <span className="font-bold text-gray-600">
                         قیمت نامشخص
                       </span>
                     )}

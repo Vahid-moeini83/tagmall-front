@@ -44,9 +44,9 @@ function ProfileAvatarSourceContent({
         />
       </div>
 
-      <div className="my-2 space-y-[10px]">
+      <div className="mt-[5px] mb-3 space-y-[10px]">
         <div
-          className={`text-center text-gray-600 text-base border-2 border-gray-400 rounded-full py-2 px-4 ${
+          className={`text-center text-gray-600 text-base border-2 border-gray-200 rounded-full py-2 px-4 ${
             isUpdating ? "cursor-not-allowed" : "cursor-pointer"
           }`}
           onClick={isUpdating ? null : onCamera}
@@ -55,7 +55,7 @@ function ProfileAvatarSourceContent({
         </div>
 
         <div
-          className={`text-center text-gray-600 text-base border-2 border-gray-400 rounded-full py-2 px-4 ${
+          className={`text-center text-gray-600 text-base border-2 border-gray-200 rounded-full py-2 px-4 ${
             isUpdating ? "cursor-not-allowed" : "cursor-pointer"
           }`}
           onClick={isUpdating ? null : onGallery}

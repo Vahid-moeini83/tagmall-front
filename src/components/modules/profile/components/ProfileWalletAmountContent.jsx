@@ -55,7 +55,7 @@ function ProfileWalletAmountContent({
   };
 
   return (
-    <div className="mt-4 lg:mt-0">
+    <div className="mt-3 lg:mt-0">
       {/* Input with back button */}
       <div className="relative">
         <Input
@@ -68,12 +68,13 @@ function ProfileWalletAmountContent({
           value={amount}
           onChange={handleChange}
           disabled={isLoading}
-          className={`text-center text-gray-600 bg-gray-200 ${error ? "" : "border-0!"}`}
+          className={`h-[50px] text-center text-gray-600 bg-gray-200 ${error ? "" : "border-0!"}`}
+          labelClassName={"mb-2"}
           placeholder={"مبلغ"}
           error={error}
         />
         {amount && (
-          <span className="absolute left-4 top-12 lg:top-12 text-gray-600 pointer-events-none">
+          <span className="absolute left-4 top-13.5 lg:top-12 text-gray-600 pointer-events-none">
             تومان
           </span>
         )}
@@ -86,7 +87,7 @@ function ProfileWalletAmountContent({
 
       {/* Hint for withdraw */}
       {type === "withdraw" && (
-        <div className="mt-3 mr-4 flex items-center gap-2">
+        <div className="mt-[15px] mb-3.5 mr-4 flex items-center gap-5">
           <HintIcon size={20} />
           <span className="text-sm text-gray-600">
             موجودی شما {formatPrice(walletBalance)} تومان می‌باشد
@@ -98,7 +99,7 @@ function ProfileWalletAmountContent({
       <button
         onClick={handleSubmit}
         disabled={!isFormValid || isLoading}
-        className={`mb-4 mt-3 w-full text-base py-2 rounded-full border-2 ${
+        className={`mb-4 mt-1.5 w-full text-base py-2 rounded-full border-2 ${
           !isFormValid || isLoading
             ? "text-gray-400 border-gray-400 cursor-not-allowed"
             : "text-primary border-primary cursor-pointer hover:opacity-80"

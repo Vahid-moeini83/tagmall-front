@@ -148,7 +148,7 @@ function SupportLoading() {
         <Tabs defaultValue="chats">
           <TabsList
             dir="rtl"
-            className="fixed top-[10px] left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
+            className="fixed top-6 left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
           >
             <TabsTrigger
               value="chats"
@@ -165,7 +165,7 @@ function SupportLoading() {
           </TabsList>
 
           {/* Chats Tab Skeleton */}
-          <div className="pt-[76px] pb-40">
+          <div className="pt-[90px] pb-40">
             <div className="flex flex-col gap-1 pr-1 mt-2">
               {/* Slider Skeleton - Mobile */}
               <div className="relative mt-2">

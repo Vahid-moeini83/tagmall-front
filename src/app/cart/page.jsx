@@ -7,8 +7,6 @@ async function CartPage() {
 
   const { cartRes, cartErr } = await getCart(token);
 
-  console.log("Cart: ", cartRes);
-
   return <CartPageContent initialCartData={cartRes} />;
 }
 

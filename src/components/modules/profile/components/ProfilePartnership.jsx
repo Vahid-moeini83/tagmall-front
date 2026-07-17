@@ -117,9 +117,9 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
   }, []);
 
   return (
-    <div className="flex flex-col justify-between h-full pt-4 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
+    <div className="flex flex-col justify-between h-full pt-3 pb-20 lg:pt-[50px] lg:pb-24 lg:px-[140px]">
       {/* Header section */}
-      <div className="relative flex items-center justify-center lg:justify-start mb-8">
+      <div className="relative flex items-center justify-center lg:justify-start mb-6 lg:mb-8">
         <h3 className="font-bold text-primary text-base lg:text-xl">
           مشارکت در فروش
         </h3>
@@ -132,13 +132,13 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
 
       {/* Filter section (Desktop) */}
       <div className="hidden lg:flex items-center gap-5 mb-8">
-        <span className="font-semibold text-gray-600">پیشنهادات:</span>
+        <span className="font-bold text-gray-600">پیشنهادات:</span>
         <div className="flex items-center gap-4 border-l border-gray-300 pl-[10px]">
           {partnershipOptions?.map((option) => (
             <button
               key={option.id}
               onClick={() => setSelectedFilter(option.id)}
-              className={`transition-colors ${
+              className={`font-extralight transition-colors ${
                 selectedFilter === option.id ? "text-primary" : "text-gray-600"
               }`}
             >
@@ -153,13 +153,15 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
 
       {/* Filter button in mobile */}
       <div
-        className={`lg:hidden text-xs flex items-center gap-2 mb-8 pr-4 cursor-pointer transition-all duration-300 ${
+        className={`lg:hidden text-sm flex items-center gap-5 mb-8 pr-4 cursor-pointer transition-all duration-300 ${
           true ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
         }`}
         onClick={() => setIsFiltersDrawerOpen(true)}
       >
         <ArrowUpDownIcon size={20} />
-        پیشنهادات: {getFilterLabel()}
+        <p className="text-gray-600 font-bold">
+          پیشنهادات: <span className="font-extralight">{getFilterLabel()}</span>
+        </p>
       </div>
 
       {/* Scrollable content area */}
@@ -168,8 +170,8 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
         className="flex-1 overflow-y-auto scroll-hidden"
       >
         {/* Slogan */}
-        <p className="lg:hidden font-iransans text-gray-600 text-center mb-6">
-          با مشارکت در فروش، ما قدرت خرید شما را بیش تر می کنیم
+        <p className="lg:hidden font-iransans text-gray-600 text-center mb-5">
+          با مشارکت در فروش ما قدرت خرید شما را بیش تر می کنیم
         </p>
         {/* Products list */}
         <div className="space-y-3 lg:space-y-8 pb-4">
@@ -190,7 +192,7 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
                 </div>
               </div>
               {/* Product Info */}
-              <div className="w-full space-y-2 lg:space-y-4">
+              <div className="w-full space-y-3 lg:space-y-4">
                 <p className="font-bold text-gray-600 text-xs lg:text-base line-clamp-1">
                   {product.name}
                 </p>
@@ -205,7 +207,7 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
       </div>
 
       {/* Footer section */}
-      <div className="fixed right-0 left-0 bottom-0 flex items-center justify-center gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] py-8 lg:pb-12 bg-white">
+      <div className="fixed right-0 left-0 bottom-0 flex items-center justify-center gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] pt-2 pb-7 lg:pb-12 bg-white">
         <StrokeArrowLeftIcon
           size={20}
           className="hidden lg:block absolute bottom-16 right-16 cursor-pointer rotate-180"

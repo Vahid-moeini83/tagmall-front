@@ -62,7 +62,7 @@ function Input({
         maxLength={maxLength}
         onChange={handleChange}
         className={cn(
-          "outline-none border-2 h-11 lg:h-12 rounded-md px-2 transition-colors duration-200",
+          "outline-none border-2 h-11 lg:h-12 rounded-lg px-2 transition-colors duration-200",
           error ? "border-error-medium" : "border-gray-300",
           disabled && "opacity-40",
           className,

@@ -39,6 +39,7 @@ import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import ProductOrderAccessoriesDrawer from "./ProductOrderAccessoriesDrawer";
 
 export default function ProductMain({ product }) {
+  console.log(product);
   const [selectedAttributes, setSelectedAttributes] = useState({});
   const [deliveryMethod, setDeliveryMethod] = useState("shipping");
   const [quantity, setQuantity] = useState(1);
@@ -58,7 +59,7 @@ export default function ProductMain({ product }) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const hasMobileFeaturedSale =
     product?.is_featured_sale || product?.discount_percent;
-  const MOBILE_VIEWPORT_CHROME = 124;
+  const MOBILE_VIEWPORT_CHROME = 180;
 
   // Get store actions
   const setProductAttribute = usePublicStore((s) => s.setProductAttribute);
@@ -164,8 +165,6 @@ export default function ProductMain({ product }) {
 
   const selectedInventory = getSelectedInventory();
 
-  console.log(selectedInventory);
-
   // Check qty
   const isAvailable = selectedInventory
     ? selectedInventory.available_qty > 0
@@ -242,7 +241,6 @@ export default function ProductMain({ product }) {
       await createConversation(token, bodyData);
 
     if (createConversationRes) {
-      console.log(createConversationRes);
       const conversationId = createConversationRes.data?.id;
 
       if (conversationId) {
@@ -257,7 +255,6 @@ export default function ProductMain({ product }) {
 
   const handleAddToCart = async () => {
     if (isAddingToCart) return;
-    console.log("CLICKED");
 
     if (!isAvailable) {
       toast.error("محصول موجود نیست");
@@ -393,24 +390,16 @@ export default function ProductMain({ product }) {
       : "calc(100svh - 15rem)"
     : undefined;
 
-  const mobileContentPaddingBottom =
-    !isDesktop && orderCardHeight ? orderCardHeight + 72 : undefined;
-
   return (
-    <div
-      className="lg:bg-white lg:rounded-lg pb-64 lg:pb-0 lg:py-[50px] lg:px-[100px]"
-      style={
-        mobileContentPaddingBottom
-          ? { paddingBottom: mobileContentPaddingBottom }
-          : undefined
-      }
-    >
+    <div className="lg:bg-white lg:rounded-lg pb-62 lg:pb-0 lg:py-[50px] lg:px-[100px]">
       <div className="flex flex-col lg:flex-row lg:gap-8">
         {/* Seller details and Images Section */}
         <div
           className="lg:w-1/2 border-b-2 border-white lg:border-0 lg:px-0 flex flex-col lg:block"
           style={
-            mobileHeroMinHeight ? { minHeight: mobileHeroMinHeight } : undefined
+            mobileHeroMinHeight
+              ? { minHeight: mobileHeroMinHeight, height: mobileHeroMinHeight }
+              : undefined
           }
         >
           {/* Seller profile and rating */}
@@ -437,16 +426,19 @@ export default function ProductMain({ product }) {
               </div>
 
               {/* Overall rating section */}
-              <div className="flex flex-col gap-1 lg:gap-0">
-                <div className="flex items-start gap-1">
-                  <span className="text-sm lg:text-base">
+              <div className="flex flex-col gap-1 lg:gap-0 pr-3">
+                <div className="flex items-center gap-1">
+                  <span className="text-base text-gray-600">
                     {sellerData.rating}
                     <span className="text-xs text-gray-400">/5</span>
                   </span>
-                  <StarIcon className="w-[10px] h-[10px] lg:w-[15px] lg:h-[15px] text-yellow-600" />
+                  <StarIcon className="w-[12px] h-[12px] lg:w-[15px] lg:h-[15px] text-yellow-600 mb-1" />
                 </div>
-                <span className="text-center text-xs lg:text-sm text-gray-400 pl-2 lg:pl-4">
-                  آرا {sellerData.totalReviews}
+                <span className="text-center font-bold text-gray-600 pl-2 lg:pl-4">
+                  آرا{" "}
+                  <span className="font-extralight">
+                    {sellerData.totalReviews}
+                  </span>
                 </span>
               </div>
             </div>
@@ -458,23 +450,20 @@ export default function ProductMain({ product }) {
           </div>
 
           {/* Product Image Slider */}
-          <div className="-translate-y-4 lg:-translate-y-20 shrink-0">
+          <div className="-translate-y-4 lg:-translate-y-20 flex-1 min-h-0">
             <ProductImageSlider
               gallery={product?.gallery}
               dotBgColor="bg-gray-200"
               mobileFillHeight={!isDesktop}
             />
           </div>
-
-          {/* Spacer fills remaining hero height above order card */}
-          <div className="flex-1 min-h-0 lg:hidden" aria-hidden="true" />
         </div>
 
         {/* Details Section */}
         <div className="lg:w-1/2 lg:space-y-4">
           <div
             ref={orderCardRef}
-            className="fixed right-[10px] left-[10px] bottom-18 rounded-lg bg-white lg:bg-none lg:static z-10"
+            className="fixed right-[10px] left-[10px] bottom-19 rounded-lg bg-white lg:bg-none lg:static z-10"
           >
             <div className="bg-gray-200 lg:bg-[unset] rounded-lg p-[10px] pt-3 lg:pr-0 lg:pt-4">
               {/* Special Sale & Timer */}
@@ -503,7 +492,7 @@ export default function ProductMain({ product }) {
                 <p className="hidden lg:block text-gray-600 text-lg">
                   {product?.name}
                 </p>
-                <p className="text-gray-600 text-xs lg:text-lg">
+                <p className="text-gray-600 lg:text-lg">
                   {currentPrice.toLocaleString("fa-IR")} تومان
                 </p>
                 {product?.discount_percent ? (
@@ -542,194 +531,266 @@ export default function ProductMain({ product }) {
           </div>
 
           <div className="lg:space-y-4">
-            {/* Dynamic Attributes Accordions */}
-            {attributes.map((attribute, attrIndex) => {
-              const selectedItem = getSelectedAttributeItem(attribute.id);
-              const isColorAttribute = attribute.attribute_type === "color";
-
-              return (
-                <div key={attribute.id}>
-                  <div className="px-[10px] lg:px-0 border-b-4 border-gray-200 lg:border-b-0">
-                    {/* Mobile: CustomAccordion */}
-                    <div className="lg:hidden">
-                      <CustomAccordion
-                        id={`attribute-${attribute.id}`}
-                        expandedItems={expanded}
-                        onToggle={toggleExpand}
-                        customLabel={
-                          <div>
-                            <span className="text-gray-600 font-bold">
-                              {attribute.attribute_name}:{" "}
-                            </span>
-                            <span
-                              className={`font-extralight ${selectedItem ? "text-gray-600" : "text-gray-400"}`}
-                            >
-                              {selectedItem
-                                ? selectedItem.value
-                                : `(${attribute.items?.length || 0} ${attribute.attribute_name})`}
-                            </span>
-                          </div>
-                        }
-                        iconClassName="left-[18px]"
-                      >
-                        <div className="space-y-0 mb-[10px]">
-                          {attribute.items?.map((item, index) => (
-                            <div key={item.id}>
-                              <button
-                                onClick={() => {
-                                  handleSelectAttribute(attribute.id, item);
-                                }}
-                                className={`w-full flex items-center justify-between cursor-pointer p-3 rounded-lg transition-colors ${
-                                  selectedItem?.id === item.id
-                                    ? "bg-gray-300"
-                                    : ""
-                                }`}
-                              >
-                                {/* Right side: Image and text */}
-                                <div className="flex items-center gap-3">
-                                  <Image
-                                    src={
-                                      item.image ||
-                                      "/assets/images/fallback/no-photo.jpg"
-                                    }
-                                    width={24}
-                                    height={36}
-                                    alt={item.value}
-                                    className="object-contain"
-                                  />
-                                  <div className="flex flex-col gap-3 items-start">
-                                    <span className="text-gray-600 text-xs font-extralight">
-                                      <span className="font-bold">
-                                        {attribute.attribute_name}
-                                      </span>{" "}
-                                      {item.value}
-                                    </span>
-                                    <span className="text-gray-600 text-xs font-extralight">
-                                      <span className="font-bold">از</span>{" "}
-                                      {(
-                                        parseInt(product?.base_price || 0) +
-                                        parseFloat(item.added_price || 0)
-                                      ).toLocaleString("fa-IR")}{" "}
-                                      تومان
-                                    </span>
-                                  </div>
-                                </div>
-
-                                {/* Left side: Color circle (only for color attributes) */}
-                                {isColorAttribute && item.meta?.hex && (
-                                  <div
-                                    className="w-5 h-5 rounded-full"
-                                    style={{ backgroundColor: item.meta.hex }}
-                                  />
-                                )}
-                              </button>
-                              {index < attribute.items.length - 1 &&
-                                selectedItem?.id !== item.id &&
-                                selectedItem?.id !==
-                                  attribute.items[index + 1]?.id && (
-                                  <div className="border-t-2 border-gray-200 mr-14" />
-                                )}
-                            </div>
-                          ))}
-                        </div>
-                      </CustomAccordion>
-                    </div>
-
-                    {/* Desktop: Original Accordion */}
-                    <div className="hidden lg:block">
-                      <Accordion type="single" collapsible>
-                        <AccordionItem value={`attribute-${attribute.id}`}>
-                          <AccordionTrigger className="text-gray-600 pl-[11px] justify-between hover:no-underline cursor-pointer">
-                            <div>
-                              <span className="font-bold text-gray-600 text-base">
-                                {attribute.attribute_name}:
-                              </span>{" "}
-                              <span
-                                className={`text-base ${selectedItem ? "" : "text-gray-400"}`}
-                              >
-                                {selectedItem
-                                  ? selectedItem.value
-                                  : `(${attribute.items?.length || 0} ${attribute.attribute_name})`}
-                              </span>
-                            </div>
-                          </AccordionTrigger>
-                          <AccordionContent className="mt-4">
-                            <div className="space-y-4">
-                              {attribute.items?.map((item, index) => (
-                                <div key={item.id}>
-                                  <button
-                                    onClick={() => {
-                                      handleSelectAttribute(attribute.id, item);
-                                    }}
-                                    className={`w-full flex items-start justify-between cursor-pointer p-3 rounded-lg transition-colors ${
-                                      selectedItem?.id === item.id
-                                        ? "bg-gray-200"
-                                        : ""
-                                    }`}
+            {/* Dynamic Attributes Accordions — wrapped in "تنوع کالا" */}
+            {attributes.length > 0 && (
+              <div>
+                {/* Mobile: CustomAccordion wrapper */}
+                <div className="lg:hidden border-b-4 border-gray-200 px-[10px]">
+                  <CustomAccordion
+                    id="variety"
+                    expandedItems={expanded}
+                    onToggle={toggleExpand}
+                    customLabel={
+                      <div>
+                        <span className="text-primary text-base font-bold">
+                          تنوع کالا:
+                        </span>
+                      </div>
+                    }
+                    iconClassName="left-[18px]"
+                  >
+                    {attributes.map((attribute, attrIndex) => {
+                      const selectedItem = getSelectedAttributeItem(
+                        attribute.id,
+                      );
+                      const isColorAttribute = attribute.id === 3;
+                      const prevAttributeId =
+                        attrIndex > 0 ? attributes[attrIndex - 1]?.id : null;
+                      const isPrevOpen =
+                        prevAttributeId !== null &&
+                        expanded.includes(`attribute-${prevAttributeId}`);
+                      return (
+                        <div key={attribute.id}>
+                          <div
+                            className={`px-0 ${attrIndex < attributes.length - 1 ? "border-b-2 border-gray-200" : ""}`}
+                          >
+                            <CustomAccordion
+                              id={`attribute-${attribute.id}`}
+                              expandedItems={expanded}
+                              onToggle={toggleExpand}
+                              triggerClassName={isPrevOpen ? "pt-1" : ""}
+                              customLabel={
+                                <div>
+                                  <span className="text-gray-600 text-base font-bold">
+                                    {attribute.attribute_name}:{" "}
+                                  </span>
+                                  <span
+                                    className={`font-extralight ${selectedItem ? "text-gray-600" : "text-gray-400"}`}
                                   >
-                                    {/* Right side: Image and text */}
-                                    <div className="flex items-start gap-3">
-                                      <Image
-                                        src={
-                                          item.image ||
-                                          "/assets/images/fallback/no-photo.jpg"
-                                        }
-                                        width={24}
-                                        height={36}
-                                        alt={item.value}
-                                        className="object-contain"
-                                      />
-                                      <div className="flex flex-col gap-[24px] items-start">
-                                        <span className="text-gray-600 text-base">
-                                          <span className="font-bold">
-                                            {attribute.attribute_name}
-                                          </span>{" "}
-                                          {item.value}
-                                        </span>
-                                        <span className="text-gray-600 text-base">
-                                          <span className="font-bold">از</span>{" "}
-                                          {(
-                                            parseFloat(
-                                              product?.base_price || 0,
-                                            ) +
-                                            parseFloat(item.added_price || 0)
-                                          ).toLocaleString("fa-IR")}{" "}
-                                          تومان
+                                    {selectedItem
+                                      ? selectedItem.value
+                                      : `(${attribute.items?.length || 0} ${attribute.attribute_name})`}
+                                  </span>
+                                </div>
+                              }
+                              iconClassName="left-[18px]"
+                            >
+                              <div className="space-y-0 mb-[10px]">
+                                {attribute.items?.map((item, index) => (
+                                  <div key={item.id}>
+                                    <button
+                                      onClick={() => {
+                                        handleSelectAttribute(
+                                          attribute.id,
+                                          item,
+                                        );
+                                      }}
+                                      className={`w-full flex items-center justify-between cursor-pointer px-[5px] py-[6px] rounded-lg transition-colors ${
+                                        selectedItem?.id === item.id
+                                          ? "bg-gray-200"
+                                          : ""
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-[5px]">
+                                        <Image
+                                          src={
+                                            item.image ||
+                                            "/assets/images/fallback/no-photo.jpg"
+                                          }
+                                          width={40}
+                                          height={40}
+                                          alt={item.value}
+                                          className="object-contain"
+                                        />
+                                        <div className="flex flex-col gap-1 items-start">
+                                          <span className="text-gray-600 text-xs font-extralight">
+                                            <span className="font-bold">
+                                              {attribute.attribute_name}
+                                            </span>{" "}
+                                            {item.value}
+                                          </span>
+                                          <span className="text-gray-600 text-xs font-extralight">
+                                            <span className="font-bold">
+                                              از
+                                            </span>{" "}
+                                            {(
+                                              parseInt(
+                                                product?.base_price || 0,
+                                              ) +
+                                              parseFloat(item.added_price || 0)
+                                            ).toLocaleString("fa-IR")}{" "}
+                                            تومان
+                                          </span>
+                                        </div>
+                                      </div>
+                                      {isColorAttribute && item.meta?.hex && (
+                                        <div
+                                          className="w-5 h-5 rounded-full"
+                                          style={{
+                                            backgroundColor: item.meta.hex,
+                                          }}
+                                        />
+                                      )}
+                                    </button>
+                                    {index < attribute.items.length - 1 &&
+                                      selectedItem?.id !== item.id &&
+                                      selectedItem?.id !==
+                                        attribute.items[index + 1]?.id && (
+                                        <div className="border-t-2 border-gray-200 mr-9" />
+                                      )}
+                                  </div>
+                                ))}
+                              </div>
+                            </CustomAccordion>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </CustomAccordion>
+                </div>
+
+                {/* Desktop: Accordion wrapper */}
+                <div className="hidden lg:block">
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="variety">
+                      <AccordionTrigger className="text-gray-600 pl-[11px] justify-between hover:no-underline cursor-pointer">
+                        <div>
+                          <span className="font-bold text-gray-600 text-base">
+                            تنوع کالا
+                          </span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="mt-4">
+                        <div className="space-y-4">
+                          {attributes.map((attribute, attrIndex) => {
+                            const selectedItem = getSelectedAttributeItem(
+                              attribute.id,
+                            );
+                            const isColorAttribute =
+                              attribute.attribute_type === "color";
+                            return (
+                              <div key={attribute.id}>
+                                {attrIndex > 0 && (
+                                  <div className="border-t-2 border-gray-200 mb-4" />
+                                )}
+                                <Accordion type="single" collapsible>
+                                  <AccordionItem
+                                    value={`attribute-${attribute.id}`}
+                                  >
+                                    <AccordionTrigger className="text-gray-600 pl-[11px] justify-between hover:no-underline cursor-pointer">
+                                      <div>
+                                        <span className="font-bold text-gray-600 text-base">
+                                          {attribute.attribute_name}:
+                                        </span>{" "}
+                                        <span
+                                          className={`text-base ${selectedItem ? "" : "text-gray-400"}`}
+                                        >
+                                          {selectedItem
+                                            ? selectedItem.value
+                                            : `(${attribute.items?.length || 0} ${attribute.attribute_name})`}
                                         </span>
                                       </div>
-                                    </div>
-
-                                    {/* Left side: Color circle (only for color attributes) */}
-                                    {isColorAttribute && item.meta?.hex && (
-                                      <div
-                                        className="w-5 h-5 rounded-full"
-                                        style={{
-                                          backgroundColor: item.meta.hex,
-                                        }}
-                                      />
-                                    )}
-                                  </button>
-                                  {index < attribute.items.length - 1 &&
-                                    selectedItem?.id !== item.id &&
-                                    selectedItem?.id !==
-                                      attribute.items[index + 1]?.id && (
-                                      <div className="border-t-2 border-gray-200 mr-14" />
-                                    )}
-                                </div>
-                              ))}
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    </div>
-                  </div>
-
-                  {attrIndex < attributes.length - 1 && (
-                    <div className="hidden lg:block lg:border-t-2 lg:border-gray-200 mt-4" />
-                  )}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="mt-4">
+                                      <div className="space-y-4">
+                                        {attribute.items?.map((item, index) => (
+                                          <div key={item.id}>
+                                            <button
+                                              onClick={() => {
+                                                handleSelectAttribute(
+                                                  attribute.id,
+                                                  item,
+                                                );
+                                              }}
+                                              className={`w-full flex items-start justify-between cursor-pointer p-3 rounded-lg transition-colors ${
+                                                selectedItem?.id === item.id
+                                                  ? "bg-gray-200"
+                                                  : ""
+                                              }`}
+                                            >
+                                              <div className="flex items-start gap-3">
+                                                <Image
+                                                  src={
+                                                    item.image ||
+                                                    "/assets/images/fallback/no-photo.jpg"
+                                                  }
+                                                  width={24}
+                                                  height={36}
+                                                  alt={item.value}
+                                                  className="object-contain"
+                                                />
+                                                <div className="flex flex-col gap-[24px] items-start">
+                                                  <span className="text-gray-600 text-base">
+                                                    <span className="font-bold">
+                                                      {attribute.attribute_name}
+                                                    </span>{" "}
+                                                    {item.value}
+                                                  </span>
+                                                  <span className="text-gray-600 text-base">
+                                                    <span className="font-bold">
+                                                      از
+                                                    </span>{" "}
+                                                    {(
+                                                      parseFloat(
+                                                        product?.base_price ||
+                                                          0,
+                                                      ) +
+                                                      parseFloat(
+                                                        item.added_price || 0,
+                                                      )
+                                                    ).toLocaleString(
+                                                      "fa-IR",
+                                                    )}{" "}
+                                                    تومان
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              {isColorAttribute &&
+                                                item.meta?.hex && (
+                                                  <div
+                                                    className="w-5 h-5 rounded-full"
+                                                    style={{
+                                                      backgroundColor:
+                                                        item.meta.hex,
+                                                    }}
+                                                  />
+                                                )}
+                                            </button>
+                                            {index <
+                                              attribute.items.length - 1 &&
+                                              selectedItem?.id !== item.id &&
+                                              selectedItem?.id !==
+                                                attribute.items[index + 1]
+                                                  ?.id && (
+                                                <div className="border-t-2 border-gray-200 mr-14" />
+                                              )}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </AccordionContent>
+                                  </AccordionItem>
+                                </Accordion>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                  <div className="border-t-2 border-gray-200 mt-4" />
                 </div>
-              );
-            })}
+              </div>
+            )}
 
             {/* Delivery Method Accordion */}
             <div className="lg:border-t-2 lg:border-gray-200 lg:pt-4 px-[10px] lg:px-0">
@@ -741,7 +802,7 @@ export default function ProductMain({ product }) {
                   onToggle={toggleExpand}
                   customLabel={
                     <div>
-                      <span className="text-primary font-bold">
+                      <span className="text-primary text-base font-bold">
                         روش تحویل سفارش:{" "}
                       </span>
                       <span className="text-primary font-extralight">
@@ -813,7 +874,7 @@ export default function ProductMain({ product }) {
 
                     {/* In-person pickup */}
                     {deliveryMethodsData.find((m) => m.type === "pickup") && (
-                      <div className="pr-2">
+                      <div className="pr-3.5">
                         <label
                           className={`flex items-start gap-3 ${!isDeliveryMethodSupported("pickup") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                         >
@@ -829,7 +890,7 @@ export default function ProductMain({ product }) {
                             disabled={!isDeliveryMethodSupported("pickup")}
                           />
                           <div className="flex flex-col gap-[20px] w-full mb-3 lg:mb-0">
-                            <span className="text-gray-600 text-xs">
+                            <span className="font-bold text-gray-600 text-sm">
                               {deliveryMethodsData.find(
                                 (m) => m.type === "pickup",
                               )?.name || "مراجعه به فروشگاه"}
@@ -840,13 +901,15 @@ export default function ProductMain({ product }) {
                     )}
                   </div>
                   {deliveryMethodsData.find((m) => m.type === "pickup") && (
-                    <div className="my-[10px] border-2 border-gray-200 lg:border-white p-[10px] rounded-lg">
+                    <div className="mb-[10px] mt-1 border-2 border-gray-200 lg:border-white rounded-lg">
                       {/* Top part - Trigger */}
                       <div
                         onClick={() => setAddressOpen(!addressOpen)}
-                        className="flex justify-between items-center cursor-pointer"
+                        className="flex justify-between items-center cursor-pointer px-[10px] pt-[10px]"
                       >
-                        <span className="text-gray-800 font-medium">آدرس:</span>
+                        <span className="text-gray-600 font-bold">
+                          آدرس فروشگاه:
+                        </span>
                       </div>
 
                       <div>
@@ -854,17 +917,14 @@ export default function ProductMain({ product }) {
                         <div className="mt-3"></div>
 
                         {/* Address text */}
-                        <p className="text-justify text-gray-600 leading-7">
+                        <p className="font-extralight text-justify text-gray-600 leading-7 px-[10px]">
                           {deliveryMethodsData.find((m) => m.type === "pickup")
-                            ?.meta?.city?.name || "آدرس فروشگاه"}
+                            ?.meta?.city?.name || "نامشخص"}
                         </p>
 
-                        {/* 12px space */}
-                        <div className="mt-3"></div>
-
                         {/* Centered button */}
-                        <div className="flex justify-center">
-                          <button className="flex items-center gap-2 text-primary">
+                        <div className="flex justify-center p-[5px]">
+                          <button className="flex items-center justify-center gap-4 text-primary border-2 border-primary rounded-full py-2 w-full">
                             <LocationIcon size={20} />
                             <span>موقعیت یابی فروشگاه</span>
                           </button>
@@ -893,7 +953,7 @@ export default function ProductMain({ product }) {
                         {deliveryMethodsData.find(
                           (m) => m.type === "shipping",
                         ) && (
-                          <div className="pr-2">
+                          <div className="pr-3.5">
                             <label
                               className={`flex items-start gap-3 ${!isDeliveryMethodSupported("shipping") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                             >
@@ -1030,7 +1090,9 @@ export default function ProductMain({ product }) {
             {/* Quantity Selector */}
             <div className="lg:border-t-2 lg:border-gray-200 lg:pt-4 px-[10px] lg:px-0">
               <div className="flex items-center justify-between py-3 lg:py-0">
-                <span className="text-primary font-bold">تعداد سفارش</span>
+                <span className="text-primary text-base font-bold">
+                  تعداد سفارش:
+                </span>
                 <div className="flex items-center gap-1 pl-3">
                   <MinusIcon
                     size={20}
@@ -1059,7 +1121,9 @@ export default function ProductMain({ product }) {
             >
               <div className="flex items-center gap-4">
                 <NoteIcon size={20} className="mr-4 lg:mr-0" />
-                <span className="text-primary font-bold">یادداشت</span>
+                <span className="text-primary text-base font-bold">
+                  یادداشت
+                </span>
               </div>
               <ChevronLeftIcon size={20} className="ml-4 lg:hidden" />
             </div>
@@ -1073,12 +1137,11 @@ export default function ProductMain({ product }) {
               className="lg:hidden my-3 flex items-center justify-between px-[10px]"
             >
               <div className="flex items-center gap-4">
-                <PanelIcon size={20} className="mr-4" />
-                <span className="text-primary font-bold">
+                <SquarePlusIcon2 size={20} className="mr-4" />
+                <span className="text-primary text-base font-bold">
                   لوازم جانبی و قطعات مرتبط
                 </span>
               </div>
-              <ChevronLeftIcon size={20} className="ml-4 lg:hidden" />
             </Link>
 
             {/* Order button */}

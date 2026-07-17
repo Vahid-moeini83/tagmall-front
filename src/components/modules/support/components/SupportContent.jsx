@@ -92,7 +92,7 @@ function SupportContent({ conversations, initialOrders }) {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList
             dir="rtl"
-            className="fixed top-[10px] left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
+            className="fixed top-6 left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
           >
             <TabsTrigger
               value="chats"
@@ -107,12 +107,12 @@ function SupportContent({ conversations, initialOrders }) {
               پیگیری سفارشات
             </TabsTrigger>
           </TabsList>
-          <TabsContent className="pt-[76px]" value="chats" dir="rtl">
+          <TabsContent className="pt-[90px]" value="chats" dir="rtl">
             <div className="overflow-y-auto">
               <SupportChats isMobile={true} conversations={conversations} />
             </div>
           </TabsContent>
-          <TabsContent className="pt-[76px] pb-[140px]" value="orders" dir="rtl">
+          <TabsContent className="pt-[90px] pb-[140px]" value="orders" dir="rtl">
             <SupportOrders initialOrders={initialOrders} />
           </TabsContent>
         </Tabs>
