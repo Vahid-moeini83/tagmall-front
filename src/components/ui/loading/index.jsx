@@ -7,4 +7,9 @@ export { AddressesSkeleton } from "./addresses";
 export { BankAccountsSkeleton } from "./bank-accounts";
 export { ChatSkeleton } from "./chat";
 export { OrderSummarySkeleton, OrderItemsSkeleton } from "./cart";
-export { HomeSliderSkeleton, HomeSliderEmptyState } from "./home";
+export {
+  HomeSliderSkeleton,
+  HomeSliderEmptyState,
+  DrawerProductCardSkeleton,
+  DrawerEmptyState,
+} from "./home";

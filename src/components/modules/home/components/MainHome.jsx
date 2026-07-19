@@ -539,7 +539,7 @@ export default function MainHome({ initialData }) {
           onOpenChange={() => setIsReviewsModalOpen(false)}
         >
           <DrawerContent
-            className="z-100! px-[10px] h-[96%]!"
+            className="z-100! h-[96%]!"
             overlayClassName="z-100 lg:hidden"
           >
             <SellerReviewsContent sellerData={mockSellerReviewsData} />

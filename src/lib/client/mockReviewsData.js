@@ -36,7 +36,7 @@ export const mockSellerReviewsData = {
         "محصول خوبی بود اما بسته‌بندی می‌توانست بهتر باشد. در کل راضی هستم.",
       productName: "هدفون بلوتوثی سونی WH-1000XM5",
       timeAgo: "5 ساعت پیش",
-      isUserReview: true,
+      isUserReview: false,
       sellerReply: null,
     },
   ],

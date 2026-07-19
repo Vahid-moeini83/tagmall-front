@@ -12,11 +12,11 @@ import { defaultReceiptData } from "@/lib/client/receiptData";
 
 function ReceiptDeliveryContent({ receiptData, onClose }) {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(1);
   const orderData = receiptData ?? defaultReceiptData;
 
   useEffect(() => {
-    setCurrentStep(3);
+    setCurrentStep(1);
   }, [receiptData?.orderId]);
 
   const handleSupport = () => {
@@ -49,7 +49,7 @@ function ReceiptDeliveryContent({ receiptData, onClose }) {
         <ReceiptProductList items={orderData.items} />
       </div>
 
-      <div className="shrink-0 border-t border-gray-100 bg-white px-[10px] pb-6 pt-4 lg:px-[140px] lg:pb-12">
+      <div className="bg-white px-[10px] pb-3 pt-4 lg:px-[140px] lg:pb-12">
         {renderStepFooter()}
       </div>
     </div>

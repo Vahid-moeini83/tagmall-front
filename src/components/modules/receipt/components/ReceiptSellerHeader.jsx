@@ -5,7 +5,7 @@ import { VerifyIcon } from "@/icons";
 
 function ReceiptSellerHeader({ seller, orderId }) {
   return (
-    <div className="mb-4 flex shrink-0 items-center justify-between gap-3 px-[10px] lg:px-[140px]">
+    <div className="mb-[5px] flex shrink-0 items-center justify-between gap-3 px-[10px] lg:px-[140px]">
       <div className="flex min-w-0 items-center gap-2">
         <div className="relative h-[50px] w-[50px] shrink-0 overflow-hidden rounded-lg border border-gray-200">
           <Image
@@ -16,7 +16,9 @@ function ReceiptSellerHeader({ seller, orderId }) {
             className="object-cover"
           />
         </div>
-        <span className="text-sm text-gray-600">{seller?.sellerName}</span>
+        <span className="text-sm text-gray-600 max-w-[120px] text-ellipsis whitespace-nowrap overflow-hidden">
+          {seller?.sellerName}
+        </span>
         <VerifyIcon size={20} className="shrink-0" />
       </div>
 

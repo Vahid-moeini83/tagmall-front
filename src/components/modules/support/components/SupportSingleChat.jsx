@@ -391,6 +391,30 @@ function SupportSingleChat({ setIsOpen, conversation }) {
     handleCloseMenu();
   };
 
+  // Report description only — not sent as a chat message (API later)
+  const handleSubmitReport = async () => {
+    if (!message.trim() || !reportMsg) return;
+
+    // TODO: connect report API with reportMsg.id + description
+    toast.success("گزارش با موفقیت ثبت شد");
+    setReportMsg(null);
+    setMessage("");
+    setIsReported(true);
+    resetTextareaHeight();
+  };
+
+  const handleComposerSubmit = () => {
+    if (message.trim().length === 0) return;
+
+    if (reportMsg) {
+      handleSubmitReport();
+      return;
+    }
+
+    handleSendMessage(message);
+    resetTextareaHeight();
+  };
+
   const lastUserMessageId = messages
     .filter((m) => m.sender === "user")
     .at(-1)?.id;
@@ -787,19 +811,23 @@ function SupportSingleChat({ setIsOpen, conversation }) {
         <div className="flex items-end gap-1 flex-1">
           <div className="flex flex-col gap-3 flex-1">
             {/* پیام‌های آماده — فقط حالت نرمال */}
-            {!editMsg && !reportMsg && !replyTo && showRecommended && (
-              <div className="space-y-2">
-                {recommendedMessages.map((item) => (
-                  <p
-                    key={item.id}
-                    onClick={() => handleRecommendedMessageClick(item)}
-                    className="font-iransans text-gray-600 text-center cursor-pointer text-sm lg:text-sm rounded-full p-2 w-full border-2 border-gray-200"
-                  >
-                    {item.question}
-                  </p>
-                ))}
-              </div>
-            )}
+            {!editMsg &&
+              !reportMsg &&
+              !replyTo &&
+              !isReported &&
+              showRecommended && (
+                <div className="space-y-2">
+                  {recommendedMessages.map((item) => (
+                    <p
+                      key={item.id}
+                      onClick={() => handleRecommendedMessageClick(item)}
+                      className="font-iransans text-gray-600 text-center cursor-pointer text-sm lg:text-sm rounded-full p-2 w-full border-2 border-gray-200"
+                    >
+                      {item.question}
+                    </p>
+                  ))}
+                </div>
+              )}
 
             <div className="flex items-center justify-center gap-4 lg:gap-1">
               <StrokeArrowLeftIcon
@@ -811,174 +839,180 @@ function SupportSingleChat({ setIsOpen, conversation }) {
               <div
                 className={`relative w-full max-w-[540px] ${contextMenuOpen ? "z-999" : ""}`}
               >
-                {/* باکس ویرایش پیام */}
-                {editMsg && (
-                  <div className="flex items-center justify-center relative mb-3">
-                    <span className="font-iransans font-bold text-primary text-base">
-                      ویرایش پیام
-                    </span>
-                    <button
-                      onClick={() => {
-                        setEditMsg(null);
-                        setMessage("");
-                        resetTextareaHeight();
-                      }}
-                      className="absolute left-3"
-                    >
-                      <CloseSquareIcon size={22} />
-                    </button>
+                {isReported ? (
+                  <div className="flex items-center justify-center py-3 lg:py-4">
+                    <p className="font-iransans font-bold text-error-medium text-sm lg:text-base text-center">
+                      گفت و گو با واحد پشتیبانی گزارش و مسدود شده است
+                    </p>
                   </div>
-                )}
-
-                {/* باکس گزارش پیام */}
-                {reportMsg && (
-                  <div className="flex items-center justify-center relative mb-3">
-                    <span className="font-iransans font-bold text-error-medium text-base">
-                      گزارش گفت و گو با {otherUserDisplayName}
-                    </span>
-                    <button
-                      onClick={() => {
-                        setReportMsg(null);
-                        setMessage("");
-                        resetTextareaHeight();
-                      }}
-                      className="absolute left-3"
-                    >
-                      <CloseSquareIcon size={20} />
-                    </button>
-                  </div>
-                )}
-
-                {/* باکس پاسخ */}
-                {replyTo && !editMsg && !reportMsg && (
-                  <div className="flex items-center justify-center relative mb-3">
-                    <span className="font-iransans font-bold text-primary text-base">
-                      پاسخ به {otherUserDisplayName}
-                    </span>
-                    <button
-                      onClick={() => setReplyTo(null)}
-                      className="absolute left-3"
-                    >
-                      <CloseSquareIcon size={20} />
-                    </button>
-                  </div>
-                )}
-
-                {/* باکس مشترک (پیام + اینپوت) در حالت ویرایش/گزارش/پاسخ، یا فقط اینپوت در حالت عادی */}
-                {(() => {
-                  const activeMsg = editMsg || reportMsg || replyTo;
-                  const isReply = replyTo && !editMsg && !reportMsg;
-
-                  return (
-                    <div
-                      className={
-                        activeMsg
-                          ? "bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2"
-                          : ""
-                      }
-                    >
-                      {activeMsg && (
-                        <div
-                          onClick={
-                            isReply
-                              ? () => scrollToMessage(replyTo.id)
-                              : undefined
-                          }
-                          className={`border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] ${
-                            isReply ? "cursor-pointer" : ""
-                          } ${
-                            activeMsg.sender === "user"
-                              ? "ml-auto rounded-br-none"
-                              : "mr-auto rounded-bl-none"
-                          }`}
+                ) : (
+                  <>
+                    {/* باکس ویرایش پیام */}
+                    {editMsg && (
+                      <div className="flex items-center justify-center relative mb-3">
+                        <span className="font-iransans font-bold text-primary text-base">
+                          ویرایش پیام
+                        </span>
+                        <button
+                          onClick={() => {
+                            setEditMsg(null);
+                            setMessage("");
+                            resetTextareaHeight();
+                          }}
+                          className="absolute left-3"
                         >
-                          <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
-                            {activeMsg.text}
-                          </p>
-                        </div>
-                      )}
+                          <CloseSquareIcon size={22} />
+                        </button>
+                      </div>
+                    )}
 
-                      {/* input */}
-                      <div
-                        className={`flex items-end rounded-xl overflow-hidden ${
-                          activeMsg ? "bg-white" : "bg-gray-200"
-                        }`}
-                      >
-                        <textarea
-                          ref={textareaRef}
-                          placeholder={
-                            reportMsg
-                              ? "توضیحات ...."
-                              : editMsg
-                                ? "ویرایش ...."
-                                : replyTo
-                                  ? "پاسخ ...."
-                                  : "پیام ...."
+                    {/* باکس گزارش پیام */}
+                    {reportMsg && (
+                      <div className="flex items-center justify-center relative mb-3">
+                        <span className="font-iransans font-bold text-error-medium text-base">
+                          گزارش گفت و گو با {otherUserDisplayName}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setReportMsg(null);
+                            setMessage("");
+                            resetTextareaHeight();
+                          }}
+                          className="absolute left-3"
+                        >
+                          <CloseSquareIcon size={20} />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* باکس پاسخ */}
+                    {replyTo && !editMsg && !reportMsg && (
+                      <div className="flex items-center justify-center relative mb-3">
+                        <span className="font-iransans font-bold text-primary text-base">
+                          پاسخ به {otherUserDisplayName}
+                        </span>
+                        <button
+                          onClick={() => setReplyTo(null)}
+                          className="absolute left-3"
+                        >
+                          <CloseSquareIcon size={20} />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* باکس مشترک (پیام + اینپوت) در حالت ویرایش/گزارش/پاسخ، یا فقط اینپوت در حالت عادی */}
+                    {(() => {
+                      const activeMsg = editMsg || reportMsg || replyTo;
+                      const isReply = replyTo && !editMsg && !reportMsg;
+
+                      return (
+                        <div
+                          className={
+                            activeMsg
+                              ? "bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2"
+                              : ""
                           }
-                          value={message}
-                          rows={1}
-                          onChange={(e) => {
-                            setMessage(e.target.value);
-                            e.target.style.height = "auto";
-                            e.target.style.height = `${e.target.scrollHeight}px`;
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && !e.shiftKey) {
-                              e.preventDefault();
-                              handleSendMessage(message);
-                              if (textareaRef.current) {
-                                textareaRef.current.style.height = "auto";
+                        >
+                          {activeMsg && (
+                            <div
+                              onClick={
+                                isReply
+                                  ? () => scrollToMessage(replyTo.id)
+                                  : undefined
                               }
-                            }
-                          }}
-                          className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none select-all bg-transparent resize-none overflow-hidden leading-6 text-right placeholder:text-center placeholder:pr-8 flex-1"
-                        />
-                        <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
-                          {message.length === 0 && !editMsg && !reportMsg && (
-                            <>
-                              <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                capture="environment"
-                                onChange={handleFileSelect}
-                                className="hidden"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => fileInputRef.current?.click()}
-                                className="cursor-pointer pr-3"
-                              >
-                                <ScanLineIcon className="text-gray-800" />
-                              </button>
-                            </>
-                          )}
-                          {(message.trim().length > 0 ||
-                            editMsg ||
-                            reportMsg) && (
-                            <button
-                              disabled={message.trim().length === 0}
-                              onClick={() => {
-                                if (message.trim().length === 0) return;
-                                handleSendMessage(message);
-                                if (textareaRef.current) {
-                                  textareaRef.current.style.height = "auto";
-                                }
-                              }}
-                              className={`font-iransans transition-colors  ${
-                                message.trim().length > 0
-                                  ? "text-primary cursor-pointer"
-                                  : "text-gray-400 cursor-not-allowed"
+                              className={`border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] ${
+                                isReply ? "cursor-pointer" : ""
+                              } ${
+                                activeMsg.sender === "user"
+                                  ? "ml-auto rounded-br-none"
+                                  : "mr-auto rounded-bl-none"
                               }`}
                             >
-                              ارسال
-                            </button>
+                              <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
+                                {activeMsg.text}
+                              </p>
+                            </div>
                           )}
+
+                          {/* input */}
+                          <div
+                            className={`flex items-end rounded-xl overflow-hidden ${
+                              activeMsg ? "bg-white" : "bg-gray-200"
+                            }`}
+                          >
+                            <textarea
+                              ref={textareaRef}
+                              placeholder={
+                                reportMsg
+                                  ? "توضیحات ...."
+                                  : editMsg
+                                    ? "ویرایش ...."
+                                    : replyTo
+                                      ? "پاسخ ...."
+                                      : "پیام ...."
+                              }
+                              value={message}
+                              rows={1}
+                              onChange={(e) => {
+                                setMessage(e.target.value);
+                                e.target.style.height = "auto";
+                                e.target.style.height = `${e.target.scrollHeight}px`;
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                  e.preventDefault();
+                                  handleComposerSubmit();
+                                }
+                              }}
+                              className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none select-all bg-transparent resize-none overflow-hidden leading-6 text-right placeholder:text-center placeholder:pr-8 flex-1"
+                            />
+                            <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
+                              {message.length === 0 &&
+                                !editMsg &&
+                                !reportMsg && (
+                                  <>
+                                    <input
+                                      ref={fileInputRef}
+                                      type="file"
+                                      accept="image/*"
+                                      capture="environment"
+                                      onChange={handleFileSelect}
+                                      className="hidden"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        fileInputRef.current?.click()
+                                      }
+                                      className="cursor-pointer pr-3"
+                                    >
+                                      <ScanLineIcon className="text-gray-800" />
+                                    </button>
+                                  </>
+                                )}
+                              {(message.trim().length > 0 ||
+                                editMsg ||
+                                reportMsg) && (
+                                <button
+                                  type="button"
+                                  disabled={message.trim().length === 0}
+                                  onClick={handleComposerSubmit}
+                                  className={`font-iransans transition-colors  ${
+                                    message.trim().length > 0
+                                      ? "text-primary cursor-pointer"
+                                      : "text-gray-400 cursor-not-allowed"
+                                  }`}
+                                >
+                                  ارسال
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })()}
+                      );
+                    })()}
+                  </>
+                )}
               </div>
             </div>
           </div>

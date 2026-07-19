@@ -306,7 +306,7 @@ function SupportOrders({ initialOrders }) {
 
             <button
               type="button"
-              className="mb-[10px] mt-4 flex w-full cursor-pointer items-center justify-between px-2 lg:hidden"
+              className="mb-[10px] mt-4 flex w-full cursor-pointer items-center justify-between px-[10px] lg:hidden"
               onClick={() => setIsFiltersDrawerOpen(true)}
             >
               <span className="text-primary">
@@ -318,9 +318,11 @@ function SupportOrders({ initialOrders }) {
 
             <div className="space-y-[5px] lg:space-y-10 lg:mt-10">
               {isLoadingOrders && orders.length === 0 ? (
-                <OrderItemsSkeleton isMobile={!isDesktop} />
+                <div className="px-[10px] lg:px-0">
+                  <OrderItemsSkeleton isMobile={!isDesktop} />
+                </div>
               ) : filteredOrders.length === 0 ? (
-                <div className="text-center py-10 text-gray-500">
+                <div className="text-center py-10 text-gray-500 px-[10px] lg:px-0">
                   سفارشی با این فیلترها یافت نشد
                 </div>
               ) : (

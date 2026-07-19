@@ -173,7 +173,7 @@ function SupportLoading() {
               </div>
 
               {/* Other Chats Skeleton */}
-              {[1, 2, 3].map((item) => (
+              {[1, 2, 3, 4, 5, 6].map((item) => (
                 <div key={item}>
                   <div className="flex items-start gap-[6px] pt-1 pb-1">
                     <div className="flex flex-col items-end gap-2 flex-1">
@@ -185,6 +185,15 @@ function SupportLoading() {
                   <div className="w-full h-[2px] bg-gray-200 mr-12" />
                 </div>
               ))}
+            </div>
+
+            <div className="fixed bottom-17 right-0 left-0 bg-white py-4 px-[10px]">
+              <button
+                type="button"
+                className="w-full text-primary cursor-pointer border-2 border-primary py-2 rounded-full"
+              >
+                پاک کردن پیام ها
+              </button>
             </div>
           </div>
         </Tabs>

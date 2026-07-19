@@ -613,13 +613,13 @@ export default function ProductMain({ product }) {
                                           className="object-contain"
                                         />
                                         <div className="flex flex-col gap-1 items-start">
-                                          <span className="text-gray-600 text-xs font-extralight">
+                                          <span className="text-gray-600 text-sm font-extralight">
                                             <span className="font-bold">
                                               {attribute.attribute_name}
                                             </span>{" "}
                                             {item.value}
                                           </span>
-                                          <span className="text-gray-600 text-xs font-extralight">
+                                          <span className="text-gray-600 text-sm font-extralight">
                                             <span className="font-bold">
                                               از
                                             </span>{" "}
@@ -635,7 +635,7 @@ export default function ProductMain({ product }) {
                                       </div>
                                       {isColorAttribute && item.meta?.hex && (
                                         <div
-                                          className="w-5 h-5 rounded-full"
+                                          className="w-5 h-5 rounded-full ml-2"
                                           style={{
                                             backgroundColor: item.meta.hex,
                                           }}
@@ -676,8 +676,7 @@ export default function ProductMain({ product }) {
                             const selectedItem = getSelectedAttributeItem(
                               attribute.id,
                             );
-                            const isColorAttribute =
-                              attribute.attribute_type === "color";
+                            const isColorAttribute = attribute.id === 3;
                             return (
                               <div key={attribute.id}>
                                 {attrIndex > 0 && (
@@ -1297,7 +1296,7 @@ export default function ProductMain({ product }) {
           onOpenChange={() => setIsReviewsModalOpen(false)}
         >
           <DrawerContent
-            className="z-100! px-[10px] h-[96%]!"
+            className="z-100! h-[96%]!"
             overlayClassName="z-100 lg:hidden"
           >
             <SellerReviewsContent sellerData={mockSellerReviewsData} />

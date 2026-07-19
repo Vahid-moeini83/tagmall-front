@@ -7,8 +7,8 @@ export default function ReceiptStepOne({ onNext }) {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
+    <div className="space-y-5">
+      <div className="flex items-center gap-5 mr-4">
         <Checkbox
           checked={isConfirmed}
           onChange={setIsConfirmed}

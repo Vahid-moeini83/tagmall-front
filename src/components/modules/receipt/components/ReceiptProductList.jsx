@@ -29,7 +29,7 @@ function ReceiptProductList({ items = [] }) {
                 src={item.image ?? "/assets/images/fallback/no-photo.jpg"}
                 alt={item.product_name}
                 fill
-                className="object-contain"
+                className="object-cover"
               />
             </div>
 

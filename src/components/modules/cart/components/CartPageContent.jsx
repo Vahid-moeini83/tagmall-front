@@ -145,7 +145,7 @@ function CartPageContent({ initialCartData }) {
       {/* Mobile Layout */}
       <div className="flex lg:hidden h-screen bg-white flex-col">
         {/* Main Content */}
-        <div className="px-[10px] pt-25 pb-52">
+        <div className="pt-25 pb-52">
           {/* Steps */}
           <div className="fixed top-0 right-0 left-0 bg-white py-[30px] px-[10px] flex items-center justify-center z-50">
             <div
@@ -190,15 +190,19 @@ function CartPageContent({ initialCartData }) {
           )}
 
           {currentStep === 3 && (
-            <CartPaymentStepMobile
-              walletBalance={wallet.balance || 0}
-              isWalletSufficient={(wallet.balance || 0) >= (invoice.total || 0)}
-              billSummary={billSummary}
-              totalAmount={invoice.total || 0}
-              addressId={address.id}
-              onPaymentSuccess={handleSuccessPayment}
-              setOrderId={setOrderId}
-            />
+            <div className="px-[10px]">
+              <CartPaymentStepMobile
+                walletBalance={wallet.balance || 0}
+                isWalletSufficient={
+                  (wallet.balance || 0) >= (invoice.total || 0)
+                }
+                billSummary={billSummary}
+                totalAmount={invoice.total || 0}
+                addressId={address.id}
+                onPaymentSuccess={handleSuccessPayment}
+                setOrderId={setOrderId}
+              />
+            </div>
           )}
         </div>
 

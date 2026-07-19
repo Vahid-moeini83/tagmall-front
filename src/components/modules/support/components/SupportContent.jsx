@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import MainNavigation from "@/components/layout/navigation-menu";
 import { SearchInput, SearchBox } from "@/components/ui/search";
 import { SupportChats, SupportOrders } from "..";
+import { ReceiptDeliveryShell } from "@/components/modules/receipt";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import usePublicStore from "@/app/store/publicStore";
@@ -36,6 +37,9 @@ function SupportContent({ conversations, initialOrders }) {
         onClose={() => setSearchBoxOpen(false)}
         isHomePage={false}
       />
+
+      {/* Receipt Delivery Shell */}
+      <ReceiptDeliveryShell />
 
       {/* Desktop Layout */}
       <div className="hidden lg:flex h-screen bg-gray-200 px-10 pt-[25px] pb-[5px] flex-col">
@@ -88,7 +92,7 @@ function SupportContent({ conversations, initialOrders }) {
       </div>
 
       {/* Mobile layout */}
-      <div className="lg:hidden px-[10px]">
+      <div className="lg:hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList
             dir="rtl"
@@ -107,12 +111,16 @@ function SupportContent({ conversations, initialOrders }) {
               پیگیری سفارشات
             </TabsTrigger>
           </TabsList>
-          <TabsContent className="pt-[90px]" value="chats" dir="rtl">
+          <TabsContent className="pt-[90px] px-[10px]" value="chats" dir="rtl">
             <div className="overflow-y-auto">
               <SupportChats isMobile={true} conversations={conversations} />
             </div>
           </TabsContent>
-          <TabsContent className="pt-[90px] pb-[140px]" value="orders" dir="rtl">
+          <TabsContent
+            className="pt-[90px] pb-[140px]"
+            value="orders"
+            dir="rtl"
+          >
             <SupportOrders initialOrders={initialOrders} />
           </TabsContent>
         </Tabs>

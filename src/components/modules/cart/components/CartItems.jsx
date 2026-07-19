@@ -259,7 +259,7 @@ function CartItems({
           )}
           <AccordionContent className="lg:mt-4 ">
             {items.length === 0 ? (
-              <div className="text-center text-gray-400 py-10">
+              <div className="text-center text-gray-400 py-10 px-[10px] lg:px-0">
                 سبد خرید شما خالی است
               </div>
             ) : (
@@ -273,8 +273,17 @@ function CartItems({
                   return (
                     <div
                       key={item.id}
-                      className={`${isMobile ? "pb-4 not-last:border-b-4 border-gray-200" : "pb-8 not-last:border-b-2 border-gray-200"}`}
+                      className={`${
+                        isMobile
+                          ? "not-last:border-b-4 border-gray-200"
+                          : "pb-8 not-last:border-b-2 border-gray-200"
+                      }`}
                     >
+                      <div
+                        className={
+                          isMobile ? "px-[10px] pb-4" : undefined
+                        }
+                      >
                       {isMobile ? (
                         <div className="flex flex-col gap-2">
                           {/* Seller Header */}
@@ -555,6 +564,7 @@ function CartItems({
                           </div>
                         </div>
                       )}
+                      </div>
                     </div>
                   );
                 })}

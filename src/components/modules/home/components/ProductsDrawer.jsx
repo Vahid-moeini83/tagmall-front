@@ -17,7 +17,10 @@ import { cn } from "@/lib/client/utils";
 import ProductCardMobile from "./ProductCardMobile";
 import usePublicStore from "@/app/store/publicStore";
 import { SearchResultBox } from "@/components/ui/search";
-import { Skeleton } from "@/components/ui/loading";
+import {
+  DrawerProductCardSkeleton,
+  DrawerEmptyState,
+} from "@/components/ui/loading";
 import { getToken } from "@/lib/server/cookies";
 import { createConversation } from "@/lib/server/actions/support";
 import toast from "react-hot-toast";
@@ -28,7 +31,7 @@ const SHOP_IMAGES = [
   "/assets/images/home/sampleMap.jpg",
 ];
 
-const SNAP_CLOSED_DEFAULT_HEIGHT = 330;
+const SNAP_CLOSED_DEFAULT_HEIGHT = 320;
 const SNAP_CLOSED_SELLER_DETAILS_HEIGHT = 430;
 const SNAP_CLOSED_WITH_SEARCH_HEIGHT = 375;
 const SNAP_OPEN_MAX_RATIO = 0.96;
@@ -54,7 +57,7 @@ function getDrawerSnapPoints(withSearch = false, showSellerDetails = false) {
 
 // Chrome subtracted from closed snap height to fit exactly one vertical slide
 const DRAWER_HANDLE_CHROME_PX = 40;
-const DRAWER_INNER_BOTTOM_PADDING_PX = 80;
+const DRAWER_INNER_BOTTOM_PADDING_PX = 8;
 const DRAWER_SEARCH_BLOCK_PX = 52;
 
 function getClosedVerticalSliderHeightPx(
@@ -78,58 +81,6 @@ function getClosedVerticalSliderHeightPx(
 }
 
 // Matches ProductCardMobile layout inside the closed drawer
-function DrawerProductCardSkeleton() {
-  return (
-    <div className="rounded-lg shrink-0 w-full select-none">
-      <div className="w-full flex items-center justify-between gap-2 pb-1.5 px-1">
-        <div className="flex items-center gap-2 min-w-0">
-          <Skeleton className="w-10 h-10 rounded-md shrink-0" />
-          <Skeleton className="w-28 h-4" />
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <Skeleton className="w-14 h-3" />
-          <Skeleton className="w-10 h-3" />
-        </div>
-      </div>
-      <div className="mt-2 bg-white rounded-md flex flex-col pt-[14px] pb-[10px] px-[10px] gap-3">
-        <div className="flex items-center justify-between gap-2">
-          <Skeleton className="w-20 h-4" />
-          <Skeleton className="w-16 h-4" />
-        </div>
-        <div className="flex flex-row gap-3">
-          <Skeleton className="w-16 h-20 rounded-md shrink-0" />
-          <div className="flex-1 flex flex-col gap-2 min-w-0">
-            <Skeleton className="w-full h-4" />
-            <Skeleton className="w-24 h-3" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DrawerEmptyState({ isListMode = false }) {
-  return (
-    <div
-      className={cn(
-        "flex flex-col items-center justify-center text-center select-none w-full",
-        isListMode ? "py-8 px-2" : "py-2 px-1",
-      )}
-    >
-      <div className="bg-white rounded-lg flex flex-col items-center gap-2 w-full p-4 shadow-sm">
-        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
-          <LocationIcon size={22} />
-        </div>
-        <p className="font-bold text-gray-700 text-sm">
-          فروشگاهی در این ناحیه یافت نشد
-        </p>
-        <p className="text-xs text-gray-500 leading-relaxed">
-          نقشه را جابه‌جا کنید تا فروشگاه‌های اطراف را ببینید
-        </p>
-      </div>
-    </div>
-  );
-}
 
 function DrawerSliderPlaceholder({ isLoading, isListMode = false }) {
   return (
@@ -604,7 +555,7 @@ export default function ProductsDrawer({
           <div
             ref={drawerContentRef}
             className={cn(
-              "rounded-t-xl flex flex-col flex-1 min-h-0 overflow-hidden pb-20 px-4 transition-[background-color,backdrop-filter]",
+              "rounded-t-xl flex flex-col flex-1 min-h-0 overflow-hidden pb-2 px-[10px] transition-[background-color,backdrop-filter]",
               homeFilterPopoverOpen ? "bg-gray-200/60 backdrop-blur-md" : "",
             )}
             data-vaul-no-drag
@@ -791,7 +742,12 @@ export default function ProductsDrawer({
                   )}
                 </div>
               ) : showSliderPlaceholder ? (
-                <DrawerSliderPlaceholder isLoading={isStoresLoading} />
+                <div
+                  className="w-full shrink-0 overflow-hidden"
+                  style={{ height: closedVerticalSliderHeightPx }}
+                >
+                  <DrawerSliderPlaceholder isLoading={isStoresLoading} />
+                </div>
               ) : (
                 <div
                   className="w-full shrink-0 overflow-hidden"
