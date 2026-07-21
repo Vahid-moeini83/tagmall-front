@@ -7,6 +7,7 @@ import { Drawer, DrawerContent } from "@/components/ui/drawer";
 function ResponsiveModal({
   isOpen,
   onClose,
+  onBack,
   children,
   title,
   isHintBox = false,
@@ -19,6 +20,7 @@ function ResponsiveModal({
       <DialogWrapper
         isOpen={isOpen}
         onClose={onClose}
+        onBack={onBack}
         title={title}
         className={nested ? "z-300!" : undefined}
         overlayClassName={nested ? "z-250!" : undefined}

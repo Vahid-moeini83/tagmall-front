@@ -54,8 +54,10 @@ function ProfilePhoneContent({ phone, setReceivedOtp, setPhone, onNext }) {
       {/* Input */}
       <Input
         label="افزودن شماره تماس به حساب کاربری:"
-        type="number"
+        type="text"
+        inputMode="numeric"
         id="profile_phone"
+        numeric
         value={phone}
         maxLength={11}
         onChange={(e) => setPhone(e.target.value)}

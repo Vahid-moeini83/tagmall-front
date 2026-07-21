@@ -20,8 +20,7 @@ function ProfileWalletContent({ setIsOpen }) {
   };
 
   const handleChange = (e) => {
-    // Just keep numbers
-    const rawValue = e.target.value.replace(/[^\d۰-۹]/g, "");
+    const rawValue = toEnglishNumber(e.target.value).replace(/[^0-9]/g, "");
 
     if (rawValue === "") {
       setAmount("");

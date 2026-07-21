@@ -33,6 +33,7 @@ function SearchSuggestions({
     (s) => s.setShowSearchResultBox,
   );
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
+  const setSearchValue = usePublicStore((s) => s.setSearchValue);
 
   // Generate search identifier on mount
   useEffect(() => {
@@ -48,50 +49,37 @@ function SearchSuggestions({
     setSearchBoxOpen(false);
   };
 
-  const handleItemClick = async (item) => {
-    // Get token and userSearchId
-    const token = await getToken();
-    const userSearchId = getUserSearchId();
+  const saveSearchHistory = (historyData) => {
+    // Fire-and-forget so navigation is not blocked
+    void (async () => {
+      const token = await getToken();
+      const userSearchId = getUserSearchId();
+      await addToSearchHistory(historyData, token, userSearchId);
+    })();
+  };
 
-    // Prepare data for API
-    const historyData = {
+  const handleItemClick = (item) => {
+    setSearchValue(item.name);
+    setSearchBoxOpen(false);
+
+    saveSearchHistory({
       keyword: searchQuery,
       search_identifier: searchIdentifier,
       category_ids: item.type === "category" ? { [item.id]: [] } : {},
       product_ids: item.type === "product" ? [item.id] : [],
-    };
-
-    // Add item to history API
-    const { addToSearchHistoryRes, addToSearchHistoryErr } =
-      await addToSearchHistory(historyData, token, userSearchId);
-
-    if (addToSearchHistoryRes) {
-      console.log("Add to history res: ", addToSearchHistoryRes);
-    } else if (addToSearchHistoryErr) {
-      console.log("Add to history err: ", addToSearchHistoryErr);
-    }
-
-    setSearchBoxOpen(false);
+    });
   };
 
-  const handleBrandClick = async (brand, categoryId) => {
-    // Get token and userSearchId
-    const token = await getToken();
-    const userSearchId = getUserSearchId();
+  const handleBrandClick = (brand, categoryId) => {
+    setSearchValue(brand.name);
+    setSearchBoxOpen(false);
 
-    // Prepare data for API
-    const historyData = {
+    saveSearchHistory({
       keyword: searchQuery,
       search_identifier: searchIdentifier,
       category_ids: { [categoryId]: [] },
       product_ids: [],
-    };
-
-    // Call API
-    await addToSearchHistory(historyData, token, userSearchId);
-
-    // Close search box
-    setSearchBoxOpen(false);
+    });
   };
 
   const filteredSuggestions = suggestions.filter((item) =>

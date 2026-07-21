@@ -15,7 +15,9 @@ import "swiper/css";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/client/utils";
-import ProductCardMobile from "./ProductCardMobile";
+import ProductCardMobile, {
+  ProductCardSellerHeader,
+} from "./ProductCardMobile";
 import usePublicStore from "@/app/store/publicStore";
 import { SearchResultBox } from "@/components/ui/search";
 import {
@@ -36,17 +38,41 @@ const SHOP_IMAGES = [
 const SNAP_CLOSED_DEFAULT_HEIGHT = 320;
 const SNAP_CLOSED_SELLER_DETAILS_HEIGHT = 340;
 const SNAP_CLOSED_WITH_SEARCH_HEIGHT = 375;
+const SNAP_CLOSED_SELLER_DETAILS_WITH_SEARCH_HEIGHT = 400;
+const SNAP_CLOSED_WITH_ORDERS_HEIGHT = 470;
+const SNAP_CLOSED_WITH_ORDERS_AND_SEARCH_HEIGHT = 525;
+const SNAP_CLOSED_LOADING_EXTRA_BOTTOM_PX = 5;
 const SNAP_OPEN_MAX_RATIO = 0.96;
 const SNAP_FALLBACK_VIEWPORT_HEIGHT = 812;
 const MOBILE_DRAWER_BOTTOM_OFFSET_PX = 120;
 const MOBILE_NAV_BOTTOM_OFFSET_CLASS = `data-[vaul-drawer-direction=bottom]:mb-[calc(${MOBILE_DRAWER_BOTTOM_OFFSET_PX}px+env(safe-area-inset-bottom))]!`;
 
-function getDrawerSnapPoints(withSearch = false, showSellerDetails = false) {
-  const closedDefault = showSellerDetails
-    ? SNAP_CLOSED_SELLER_DETAILS_HEIGHT
-    : withSearch
+function getDrawerSnapPoints(
+  withSearch = false,
+  showSellerDetails = false,
+  withOrders = false,
+  isLoading = false,
+) {
+  let closedDefault;
+
+  // Seller details and loading use their own compact heights — never dual-card height
+  if (showSellerDetails) {
+    closedDefault = withSearch
+      ? SNAP_CLOSED_SELLER_DETAILS_WITH_SEARCH_HEIGHT
+      : SNAP_CLOSED_SELLER_DETAILS_HEIGHT;
+  } else if (withOrders) {
+    closedDefault = withSearch
+      ? SNAP_CLOSED_WITH_ORDERS_AND_SEARCH_HEIGHT
+      : SNAP_CLOSED_WITH_ORDERS_HEIGHT;
+  } else {
+    closedDefault = withSearch
       ? SNAP_CLOSED_WITH_SEARCH_HEIGHT
       : SNAP_CLOSED_DEFAULT_HEIGHT;
+  }
+
+  if (isLoading && !showSellerDetails) {
+    closedDefault += SNAP_CLOSED_LOADING_EXTRA_BOTTOM_PX;
+  }
 
   const vh =
     typeof window !== "undefined" && window.innerHeight > 0
@@ -65,10 +91,15 @@ const DRAWER_SEARCH_BLOCK_PX = 52;
 function getClosedVerticalSliderHeightPx(
   withSearch = false,
   viewportHeight = SNAP_FALLBACK_VIEWPORT_HEIGHT,
+  withOrders = false,
 ) {
-  const closedDefault = withSearch
-    ? SNAP_CLOSED_WITH_SEARCH_HEIGHT
-    : SNAP_CLOSED_DEFAULT_HEIGHT;
+  const closedDefault = withOrders
+    ? withSearch
+      ? SNAP_CLOSED_WITH_ORDERS_AND_SEARCH_HEIGHT
+      : SNAP_CLOSED_WITH_ORDERS_HEIGHT
+    : withSearch
+      ? SNAP_CLOSED_WITH_SEARCH_HEIGHT
+      : SNAP_CLOSED_DEFAULT_HEIGHT;
 
   const closedHeight = Math.min(closedDefault, viewportHeight * 0.9);
   const searchOffset = withSearch ? DRAWER_SEARCH_BLOCK_PX : 0;
@@ -104,9 +135,13 @@ function SellerHorizontalSlider({
   setIsReviewsModalOpen,
   isActive,
   nested = false,
+  hideSellerHeader = false,
+  cardClassName,
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const swiperRef = useRef(null);
+  const sellerProduct = products?.[0];
+  const showHeader = !hideSellerHeader && products?.length > 1;
 
   useEffect(() => {
     if (isActive === false) return;
@@ -115,12 +150,37 @@ function SellerHorizontalSlider({
 
   if (!products || products.length === 0) return null;
 
+  if (products.length === 1) {
+    return (
+      <div className="relative w-full min-w-0">
+        <ProductCardMobile
+          product={products[0]}
+          variant={variant}
+          onSellerClick={onSellerClick}
+          isListMode={isListMode}
+          setIsReviewsModalOpen={setIsReviewsModalOpen}
+          hideSellerHeader={hideSellerHeader}
+          cardClassName={cardClassName}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full min-w-0">
+      {showHeader ? (
+        <ProductCardSellerHeader
+          product={sellerProduct}
+          onSellerClick={onSellerClick}
+          isListMode={isListMode}
+          setIsReviewsModalOpen={setIsReviewsModalOpen}
+        />
+      ) : null}
       <Swiper
         dir="rtl"
         nested={nested}
         slidesPerView={1}
+        spaceBetween={5}
         className="w-full overflow-hidden"
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
@@ -140,39 +200,101 @@ function SellerHorizontalSlider({
               onSellerClick={onSellerClick}
               isListMode={isListMode}
               setIsReviewsModalOpen={setIsReviewsModalOpen}
+              hideSellerHeader
+              cardClassName={cardClassName}
             />
           </SwiperSlide>
         ))}
       </Swiper>
-      {products.length > 1 && (
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-[10px] z-10 flex justify-center gap-2 pointer-events-none">
-          {(() => {
-            const total = products.length;
-            const MAX = 4;
-            // پنجره ۴تایی حول اسلاید فعلی
-            let start = Math.max(0, currentSlide - Math.floor(MAX / 2));
-            const end = Math.min(total, start + MAX);
-            start = Math.max(0, end - MAX);
-            return Array.from({ length: end - start }, (_, i) => {
-              const idx = start + i;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => swiperRef.current?.slideTo(idx)}
-                  className={cn(
-                    "w-2.5 h-2.5 rounded-full transition-all cursor-pointer pointer-events-auto",
-                    currentSlide === idx
-                      ? "bg-primary w-6"
-                      : "bg-gray-400 hover:bg-gray-400",
-                  )}
-                  aria-label={`اسلاید ${idx + 1}`}
-                />
-              );
-            });
-          })()}
-        </div>
-      )}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-[10px] z-10 flex justify-center gap-2 pointer-events-none">
+        {(() => {
+          const total = products.length;
+          const MAX = 4;
+          // پنجره ۴تایی حول اسلاید فعلی
+          let start = Math.max(0, currentSlide - Math.floor(MAX / 2));
+          const end = Math.min(total, start + MAX);
+          start = Math.max(0, end - MAX);
+          return Array.from({ length: end - start }, (_, i) => {
+            const idx = start + i;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => swiperRef.current?.slideTo(idx)}
+                className={cn(
+                  "w-2.5 h-2.5 rounded-full transition-all cursor-pointer pointer-events-auto",
+                  currentSlide === idx
+                    ? "bg-primary w-6"
+                    : "bg-gray-400 hover:bg-gray-400",
+                )}
+                aria-label={`اسلاید ${idx + 1}`}
+              />
+            );
+          });
+        })()}
+      </div>
+    </div>
+  );
+}
+
+function SellerStoreClosedSlide({
+  specialProducts,
+  orderProducts = [],
+  onSellerClick,
+  isListMode,
+  setIsReviewsModalOpen,
+  isActive,
+  nested = false,
+}) {
+  const hasOrders = orderProducts.length > 0;
+  const sellerProduct = specialProducts?.[0] || orderProducts[0];
+
+  if (!hasOrders) {
+    return (
+      <SellerHorizontalSlider
+        products={specialProducts}
+        variant="product"
+        onSellerClick={onSellerClick}
+        isListMode={isListMode}
+        setIsReviewsModalOpen={setIsReviewsModalOpen}
+        isActive={isActive}
+        nested={nested}
+      />
+    );
+  }
+
+  return (
+    <div className="relative w-full min-w-0">
+      <ProductCardSellerHeader
+        product={sellerProduct}
+        onSellerClick={onSellerClick}
+        isListMode={isListMode}
+        setIsReviewsModalOpen={setIsReviewsModalOpen}
+      />
+      <div className="flex flex-col gap-[5px]">
+        <SellerHorizontalSlider
+          products={specialProducts}
+          variant="product"
+          onSellerClick={onSellerClick}
+          isListMode={isListMode}
+          setIsReviewsModalOpen={setIsReviewsModalOpen}
+          isActive={isActive}
+          nested={nested}
+          hideSellerHeader
+          cardClassName="rounded-t-lg rounded-b-none"
+        />
+        <SellerHorizontalSlider
+          products={orderProducts}
+          variant="order"
+          onSellerClick={onSellerClick}
+          isListMode={isListMode}
+          setIsReviewsModalOpen={setIsReviewsModalOpen}
+          isActive={isActive}
+          nested={nested}
+          hideSellerHeader
+          cardClassName="rounded-b-lg rounded-t-none"
+        />
+      </div>
     </div>
   );
 }
@@ -273,8 +395,25 @@ export default function ProductsDrawer({
 
   const activeSellerPurchasedProducts = useMemo(() => {
     if (!activeSellerId) return [];
-    return purchasedProducts.filter((p) => p.storeId === activeSellerId);
+    return purchasedProducts.filter(
+      (p) => String(p.storeId) === String(activeSellerId),
+    );
   }, [purchasedProducts, activeSellerId]);
+
+  const purchasedProductsBySeller = useMemo(() => {
+    return purchasedProducts.reduce((acc, product) => {
+      const storeId = String(product.storeId);
+      if (!acc[storeId]) acc[storeId] = [];
+      acc[storeId].push(product);
+      return acc;
+    }, {});
+  }, [purchasedProducts]);
+
+  const hasAnyStoreWithOrders = useMemo(() => {
+    return Object.keys(closedStateProductsBySeller).some(
+      (storeId) => (purchasedProductsBySeller[storeId]?.length ?? 0) > 0,
+    );
+  }, [closedStateProductsBySeller, purchasedProductsBySeller]);
 
   const closedStateVariant = useMemo(() => {
     return closedStateProducts.some((p) => p.isSpecialSale)
@@ -288,9 +427,18 @@ export default function ProductsDrawer({
   const showSliderPlaceholder =
     isStoresLoading || !hasSliderStores || !hasClosedSliderStores;
 
+  // Dual-card taller closed height only while the product slider is visible
+  const useDualCardClosedHeight =
+    hasAnyStoreWithOrders && !showSellerDetails && !showSliderPlaceholder;
+
   const closedVerticalSliderHeightPx = useMemo(
-    () => getClosedVerticalSliderHeightPx(showSearchResultBox, viewportHeight),
-    [showSearchResultBox, viewportHeight],
+    () =>
+      getClosedVerticalSliderHeightPx(
+        showSearchResultBox,
+        viewportHeight,
+        useDualCardClosedHeight,
+      ),
+    [showSearchResultBox, viewportHeight, useDualCardClosedHeight],
   );
 
   const closedStateProductsBySellerRef = useRef(closedStateProductsBySeller);
@@ -421,13 +569,24 @@ export default function ProductsDrawer({
     closedStateProductsBySeller,
     closedVerticalSliderHeightPx,
     showSliderPlaceholder,
+    useDualCardClosedHeight,
   ]);
 
   useEffect(() => {
-    const points = getDrawerSnapPoints(showSearchResultBox, showSellerDetails);
+    const points = getDrawerSnapPoints(
+      showSearchResultBox,
+      showSellerDetails,
+      useDualCardClosedHeight,
+      showSliderPlaceholder,
+    );
     setSnapPoints(points);
     setActiveSnapPoint(points[0]);
-  }, [showSearchResultBox, showSellerDetails]);
+  }, [
+    showSearchResultBox,
+    showSellerDetails,
+    useDualCardClosedHeight,
+    showSliderPlaceholder,
+  ]);
 
   useEffect(() => {
     if (!verticalSwiperRef.current || showSliderPlaceholder) return;
@@ -694,7 +853,7 @@ export default function ProductsDrawer({
                             <Swiper
                               dir="rtl"
                               slidesPerView={1}
-                              spaceBetween={0}
+                              spaceBetween={10}
                               grabCursor
                               className="min-h-0 w-full"
                               onSwiper={(swiper) => {
@@ -773,7 +932,7 @@ export default function ProductsDrawer({
                     direction="vertical"
                     nested
                     slidesPerView={1}
-                    spaceBetween={0}
+                    spaceBetween={5}
                     grabCursor
                     className="h-full w-full overflow-hidden"
                     onSwiper={(swiper) => {
@@ -814,9 +973,11 @@ export default function ProductsDrawer({
                           key={storeId}
                           className="flex flex-col h-full! w-full overflow-hidden"
                         >
-                          <SellerHorizontalSlider
-                            products={products}
-                            variant={closedStateVariant}
+                          <SellerStoreClosedSlide
+                            specialProducts={products}
+                            orderProducts={
+                              purchasedProductsBySeller[storeId] || []
+                            }
                             onSellerClick={handleSellerClick}
                             isListMode={isListMode}
                             setIsReviewsModalOpen={setIsReviewsModalOpen}

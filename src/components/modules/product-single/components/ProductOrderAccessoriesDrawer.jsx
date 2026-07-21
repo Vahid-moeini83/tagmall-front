@@ -65,6 +65,7 @@ function ProductOrderAccessoriesDrawer({ open, onOpenChange, productName }) {
         {...filtersDrawerProps}
         overlayClassName="z-110 lg:hidden"
         drawerClassName="z-110!"
+        footerClassName="pb-[27px]"
       />
     </>
   );

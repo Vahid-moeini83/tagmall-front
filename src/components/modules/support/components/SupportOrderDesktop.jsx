@@ -46,7 +46,7 @@ export default function SupportOrderDesktop({ order }) {
         dir="rtl"
         nested
         slidesPerView={1}
-        spaceBetween={0}
+        spaceBetween={5}
         centeredSlides={false}
         grabCursor={items.length > 1}
         allowTouchMove={items.length > 1}

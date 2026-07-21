@@ -166,7 +166,13 @@ function MapComponent({
       const shiftedLatLng = map.unproject(shiftedPoint, targetZoom);
       map.flyTo(shiftedLatLng, targetZoom, { animate: true, duration: 1.0 });
     } else {
-      map.flyTo(targetLatLng, 15, { animate: true, duration: 1.0 });
+      const targetZoom = 15;
+      const targetPoint = map.project(targetLatLng, targetZoom);
+      // Shift center south so marker sits above the products drawer
+      const shiftY = map.getSize().y * 0.22;
+      const shiftedPoint = L.point(targetPoint.x, targetPoint.y + shiftY);
+      const shiftedLatLng = map.unproject(shiftedPoint, targetZoom);
+      map.flyTo(shiftedLatLng, targetZoom, { animate: true, duration: 1.0 });
     }
   };
 

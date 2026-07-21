@@ -22,7 +22,7 @@ function ProfileWalletAmountContent({
     (type === "increase" || numericAmount <= walletBalance);
 
   const handleChange = (e) => {
-    const rawValue = e.target.value.replace(/[^\d۰-۹]/g, "");
+    const rawValue = toEnglishNumber(e.target.value).replace(/[^0-9]/g, "");
 
     if (rawValue === "") {
       setAmount("");

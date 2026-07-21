@@ -33,6 +33,7 @@ function FiltersDrawer({
   onAvailableProductsToggle,
   overlayClassName = "lg:hidden",
   drawerClassName = "",
+  footerClassName = "pb-18",
 }) {
   return (
     <Drawer
@@ -43,7 +44,7 @@ function FiltersDrawer({
     >
       <DrawerContent
         overlayClassName={overlayClassName}
-        className={`data-[vaul-drawer-direction=bottom]:h-full! ${drawerClassName}`}
+        className={`data-[vaul-drawer-direction=bottom]:h-[96%]! data-[vaul-drawer-direction=bottom]:max-h-[96svh]! ${drawerClassName}`}
       >
         {/* Content */}
         <div className="relative bg-white rounded-t-2xl px-[10px] mt-4">
@@ -107,7 +108,7 @@ function FiltersDrawer({
                 }`}
               >
                 {expandedFilter.includes(filter.id) && (
-                  <div className="pb-3">
+                  <div>
                     {filter.id === "sort" && (
                       <SortFilterContent
                         sortBy={sortBy}
@@ -148,7 +149,7 @@ function FiltersDrawer({
         </div>
 
         {/* Reset Button */}
-        <DrawerFooter className="bg-white pt-4 pb-18">
+        <DrawerFooter className={`bg-white pt-4 ${footerClassName}`}>
           <button
             onClick={onResetFilters}
             disabled={!hasFiltersChanged()}

@@ -43,8 +43,13 @@ function SearchResultBox({ searchTerm = null, standalone = false }) {
         <span className="font-extralight">{searchResultData || "نامشخص"}</span>
       </div>
       <button
-        onClick={() => setShowSearchResultBox(false)}
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowSearchResultBox(false);
+        }}
         className="absolute left-4 top-1/2 -translate-y-1/2 text-left cursor-pointer hover:scale-110 transition-transform duration-200"
+        aria-label="حذف نتیجه جستجو"
       >
         <CloseSquareIcon size={20} />
       </button>

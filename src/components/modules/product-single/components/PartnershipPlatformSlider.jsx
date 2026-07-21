@@ -45,7 +45,7 @@ export default function PartnershipPlatformSlider({
         dir="rtl"
         nested
         slidesPerView={1}
-        spaceBetween={0}
+        spaceBetween={5}
         centeredSlides={false}
         grabCursor
         touchStartPreventDefault={false}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import ResponsiveModal from "@/components/ui/responsive-modal";
-import { ProfileSessionsContent } from "..";
+import { ProfileSessionsContent, ProfileSessionsOtpContent } from "..";
 import {
   getUserSessions,
   deleteMultipleSessions,
@@ -15,6 +15,8 @@ function ProfileSessions({ isOpen, setIsOpen, phone, setIsSessionsHintOpen }) {
   const [selectedSessions, setSelectedSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [step, setStep] = useState(1);
+  const [pendingDeleteIds, setPendingDeleteIds] = useState([]);
 
   const fetchSessions = async () => {
     if (!phone) return;
@@ -26,7 +28,6 @@ function ProfileSessions({ isOpen, setIsOpen, phone, setIsSessionsHintOpen }) {
       phone,
     );
     if (getSessionsRes) {
-      // استخراج sessions از ساختار تو در تو
       const allSessions = getSessionsRes.data.flatMap(
         (item) => item.sessions || [],
       );
@@ -47,41 +48,76 @@ function ProfileSessions({ isOpen, setIsOpen, phone, setIsSessionsHintOpen }) {
   const close = () => {
     setIsOpen(false);
     setSelectedSessions([]);
+    setStep(1);
+    setPendingDeleteIds([]);
+    setIsDeleting(false);
   };
 
-  const handleDeleteSessions = async () => {
-    if (selectedSessions.length === 0) return;
+  const backToSessions = () => {
+    setStep(1);
+    setPendingDeleteIds([]);
+    setIsDeleting(false);
+  };
+
+  // Only open OTP step — deletion happens after OTP is entered
+  const handleOpenDeleteOtp = () => {
+    if (selectedSessions.length === 0 || !phone) return;
+    setPendingDeleteIds(selectedSessions);
+    setStep(2);
+  };
+
+  const handleVerifyAndDelete = async ({ otp }) => {
+    if (pendingDeleteIds.length === 0) return false;
 
     setIsDeleting(true);
     const token = await getToken();
     const { deleteSessionsRes, deleteSessionsErr } =
       await deleteMultipleSessions(token, {
-        ids: selectedSessions,
+        ids: pendingDeleteIds,
+        otp,
       });
 
     if (deleteSessionsRes) {
+      toast.success("نشست‌های انتخاب شده با موفقیت مسدود شد");
       setSelectedSessions([]);
+      setPendingDeleteIds([]);
+      setStep(1);
       await fetchSessions();
-    } else {
-      const errorMessage =
-        deleteSessionsErr?.response?.data?.message || "خطا در حذف نشست‌ها";
-      toast.error(errorMessage);
+      setIsDeleting(false);
+      return true;
     }
+
+    const errorMessage =
+      deleteSessionsErr?.response?.data?.message || "خطا در حذف نشست‌ها";
+    toast.error(errorMessage);
     setIsDeleting(false);
+    return false;
   };
 
   return (
-    <ResponsiveModal isOpen={isOpen} onClose={close}>
-      <ProfileSessionsContent
-        sessions={sessions}
-        phone={phone}
-        selectedSessions={selectedSessions}
-        setSelectedSessions={setSelectedSessions}
-        onDeleteSessions={handleDeleteSessions}
-        isLoading={isLoading}
-        isDeleting={isDeleting}
-        setIsSessionsHintOpen={setIsSessionsHintOpen}
-      />
+    <ResponsiveModal
+      isOpen={isOpen}
+      onClose={close}
+      onBack={step === 2 ? backToSessions : undefined}
+    >
+      {step === 1 ? (
+        <ProfileSessionsContent
+          sessions={sessions}
+          phone={phone}
+          selectedSessions={selectedSessions}
+          setSelectedSessions={setSelectedSessions}
+          onDeleteSessions={handleOpenDeleteOtp}
+          isLoading={isLoading}
+          isDeleting={isDeleting}
+          setIsSessionsHintOpen={setIsSessionsHintOpen}
+        />
+      ) : (
+        <ProfileSessionsOtpContent
+          phone={phone}
+          onBack={backToSessions}
+          onVerify={handleVerifyAndDelete}
+        />
+      )}
     </ResponsiveModal>
   );
 }

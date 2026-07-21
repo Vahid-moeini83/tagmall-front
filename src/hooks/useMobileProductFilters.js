@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { formatPrice } from "@/lib/client/utils";
-
-const sellerTypeOptions = [
-  { id: "all", label: "همه فروشندگان" },
-  { id: "special", label: "فروشندگان ویژه" },
-  { id: "official", label: "فروشندگان رسمی" },
-  { id: "local", label: "فروشندگان بومی" },
-];
+import { sellerTypeOptions } from "@/components/modules/search-results/components/SellerTypeFilterContent";
 
 const sortOptions = [
   { id: "mostSold", label: "پرفروش‌ترین" },

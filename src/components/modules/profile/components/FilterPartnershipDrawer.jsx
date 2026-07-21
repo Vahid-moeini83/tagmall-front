@@ -27,7 +27,7 @@ function FilterPartnershipDrawer({
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose}>
-      <DrawerContent overlayClassName="lg:hidden z-100!" className="z-100!">
+      <DrawerContent overlayClassName="lg:hidden z-100! overflow-hidden" className="z-100! overflow-hidden">
         {/* Header */}
         <div className="relative bg-white px-[10px] pt-3">
           <p className="text-center text-base font-bold text-primary">
@@ -48,7 +48,7 @@ function FilterPartnershipDrawer({
             >
               <button
                 onClick={() => onFilterToggle(filter.id)}
-                className={`relative flex items-center justify-between w-full py-6`}
+                className={`relative flex items-center justify-between w-full py-4`}
               >
                 <div className="flex items-center gap-1">
                   <span className="text-gray-600 font-bold">

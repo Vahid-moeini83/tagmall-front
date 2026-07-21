@@ -37,6 +37,7 @@ import { mockSellerReviewsData } from "@/lib/client/mockReviewsData";
 import toast from "react-hot-toast";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import ProductOrderAccessoriesDrawer from "./ProductOrderAccessoriesDrawer";
+import ProductRelatedAccessoriesDrawer from "./ProductRelatedAccessoriesDrawer";
 
 export default function ProductMain({ product }) {
   console.log(product);
@@ -53,8 +54,11 @@ export default function ProductMain({ product }) {
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const [showOrderAccessoriesDrawer, setShowOrderAccessoriesDrawer] =
     useState(false);
+  const [showRelatedAccessoriesDrawer, setShowRelatedAccessoriesDrawer] =
+    useState(false);
   const orderCardRef = useRef(null);
   const [orderCardHeight, setOrderCardHeight] = useState(0);
+  const [isScrollAtTop, setIsScrollAtTop] = useState(true);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const hasMobileFeaturedSale =
@@ -385,6 +389,22 @@ export default function ProductMain({ product }) {
     isAvailable,
   ]);
 
+  // Hide content under the fixed order card only while scrolled to top
+  useEffect(() => {
+    if (isDesktop) return;
+
+    const scrollParent = orderCardRef.current?.closest(".overflow-y-auto");
+    if (!scrollParent) return;
+
+    const handleScroll = () => {
+      setIsScrollAtTop(scrollParent.scrollTop < 8);
+    };
+
+    handleScroll();
+    scrollParent.addEventListener("scroll", handleScroll, { passive: true });
+    return () => scrollParent.removeEventListener("scroll", handleScroll);
+  }, [isDesktop]);
+
   const mobileHeroMinHeight = !isDesktop
     ? orderCardHeight
       ? `calc(100svh - ${MOBILE_VIEWPORT_CHROME + orderCardHeight}px)`
@@ -466,6 +486,13 @@ export default function ProductMain({ product }) {
             ref={orderCardRef}
             className="fixed right-[10px] left-[10px] bottom-19 rounded-lg bg-white lg:bg-none lg:static z-10"
           >
+            {/* Opaque cover so content under/above the card is hidden at page top */}
+            {!isDesktop && isScrollAtTop && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-[10px] -top-12 bottom-[-5.5rem] bg-white -z-10 rounded-none"
+              />
+            )}
             <div className="bg-gray-200 lg:bg-[unset] rounded-lg p-[10px] pt-3 lg:pr-0 lg:pt-4">
               {/* Special Sale & Timer */}
               {product?.is_featured_sale || product?.discount_percent ? (
@@ -1131,10 +1158,11 @@ export default function ProductMain({ product }) {
             {/* Divider */}
             <div className="w-full h-[4px] bg-gray-200 lg:hidden" />
 
-            {/* Mobile specs link */}
-            <Link
-              href={`/search/1?view=accessories&product=${encodeURIComponent(product?.name || "")}`}
-              className="lg:hidden my-3 flex items-center justify-between px-[10px]"
+            {/* Mobile related accessories */}
+            <button
+              type="button"
+              onClick={() => setShowRelatedAccessoriesDrawer(true)}
+              className="lg:hidden my-3 flex items-center justify-between px-[10px] w-full"
             >
               <div className="flex items-center justify-between w-full gap-4">
                 <div className="flex items-center gap-4">
@@ -1145,7 +1173,7 @@ export default function ProductMain({ product }) {
                 </div>
                 <ChevronLeftIcon size={20} className="ml-4 lg:hidden" />
               </div>
-            </Link>
+            </button>
 
             {/* Order button */}
             <div className="hidden lg:block text-center mt-4">
@@ -1312,6 +1340,14 @@ export default function ProductMain({ product }) {
         <ProductOrderAccessoriesDrawer
           open={showOrderAccessoriesDrawer}
           onOpenChange={setShowOrderAccessoriesDrawer}
+          productName={product?.name || ""}
+        />
+      ) : null}
+
+      {!isDesktop ? (
+        <ProductRelatedAccessoriesDrawer
+          open={showRelatedAccessoriesDrawer}
+          onOpenChange={setShowRelatedAccessoriesDrawer}
           productName={product?.name || ""}
         />
       ) : null}

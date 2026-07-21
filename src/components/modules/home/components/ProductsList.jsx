@@ -79,7 +79,7 @@ export default function ProductsList({
           dir="rtl"
           slidesPerView={slides.length === 1 ? 1 : 1.2}
           centeredSlides={slides.length > 1}
-          spaceBetween={0}
+          spaceBetween={5}
           grabCursor
           onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
           className="h-full"

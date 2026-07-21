@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSearchParams } from "next/navigation";
+import { sellerTypeOptions } from "./SellerTypeFilterContent";
 
 function SearchResults() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -52,7 +53,7 @@ function SearchResults() {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedSpecs, setSelectedSpecs] = useState([]);
   const [sellerType, setSellerType] = useState("all");
-  const [searchValue, setSearchValue] = useState("گوشی موبایل");
+  const searchValue = usePublicStore((s) => s.searchValue);
   const minPrice = 500;
   const maxPrice = 100000000;
   const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
@@ -63,7 +64,6 @@ function SearchResults() {
   );
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
-  const setDefaultSearchValue = usePublicStore((s) => s.setSearchValue);
 
   const handleLocateClick = () => {
     setSearchBoxOpen(false);
@@ -86,16 +86,8 @@ function SearchResults() {
       : "موقعیت یابی لوازم جانبی مرتبط";
 
   const handleSearchInputClick = () => {
-    setDefaultSearchValue(searchValue);
     setSearchBoxOpen(true);
   };
-
-  const sellerTypeOptions = [
-    { id: "all", label: "همه فروشندگان" },
-    { id: "special", label: "فروشندگان ویژه" },
-    { id: "official", label: "فروشندگان رسمی" },
-    { id: "local", label: "فروشندگان بومی" },
-  ];
 
   const sortOptions = [
     { id: "mostSold", label: "پرفروش‌ترین" },
@@ -211,13 +203,14 @@ function SearchResults() {
             />
             <div className="flex-1">
               <SearchInput
-                value=""
+                value={searchValue}
                 onChange={() => {}}
                 placeholder="برند، کالا، لوازم جانبی، قطعات"
                 readOnly
                 hasLogo={!isDesktop}
                 bgColor="bg-white"
                 className="max-w-[642px]"
+                onClick={handleSearchInputClick}
               />
             </div>
           </div>
@@ -367,7 +360,7 @@ function SearchResults() {
               </div>
 
               <TabsContent
-                className="flex-1 overflow-y-auto pt-[108px] pb-28"
+                className="flex-1 overflow-y-auto pt-[108px] pb-24"
                 value="parts"
                 dir="rtl"
               >
@@ -380,7 +373,7 @@ function SearchResults() {
                 <ProductsList products={mockSearchProducts} />
               </TabsContent>
               <TabsContent
-                className="flex-1 overflow-y-auto pt-[108px] pb-28"
+                className="flex-1 overflow-y-auto pt-[108px] pb-24"
                 value="accessories"
                 dir="rtl"
               >
@@ -394,7 +387,7 @@ function SearchResults() {
               </TabsContent>
             </Tabs>
 
-            <div className="fixed bottom-17 right-0 left-0 bg-white py-4 px-[10px] flex justify-center items-center z-10">
+            <div className="fixed bottom-0 right-0 left-0 bg-white py-4 px-[10px] flex justify-center items-center z-10">
               <button
                 type="button"
                 onClick={handleAccessoryLocateClick}
@@ -432,9 +425,6 @@ function SearchResults() {
               availableProductsIconActive={showAvailable}
               onAvailableProductsToggle={() => setShowAvailable(!showAvailable)}
             />
-
-            {/* Main Navigation */}
-            <MainNavigation isHomePage={false} />
           </div>
         ) : (
           /* Normal View */
@@ -447,7 +437,7 @@ function SearchResults() {
                   className="cursor-pointer"
                 >
                   <SearchInput
-                    value=""
+                    value={searchValue}
                     onChange={() => {}}
                     hasLogo
                     placeholder="برند، کالا، لوازم جانبی، قطعات"

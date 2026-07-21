@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
-import { formatPrice } from "@/lib/client/utils";
+import { formatPrice, toEnglishNumber } from "@/lib/client/utils";
 import { toast } from "react-hot-toast";
 
 function PriceRangeFilterContent({
@@ -23,7 +23,7 @@ function PriceRangeFilterContent({
   }, [priceRange, isEditingMin, isEditingMax]);
 
   const validateAndSubmitMin = () => {
-    const numeric = Number(minInput.replace(/[^0-9]/g, ""));
+    const numeric = Number(toEnglishNumber(minInput).replace(/[^0-9]/g, ""));
 
     if (isNaN(numeric)) {
       setMinInput(priceRange[0].toString());
@@ -46,7 +46,7 @@ function PriceRangeFilterContent({
   };
 
   const validateAndSubmitMax = () => {
-    const numeric = Number(maxInput.replace(/[^0-9]/g, ""));
+    const numeric = Number(toEnglishNumber(maxInput).replace(/[^0-9]/g, ""));
 
     if (isNaN(numeric)) {
       setMaxInput(priceRange[1].toString());
@@ -87,7 +87,9 @@ function PriceRangeFilterContent({
               autoFocus
               value={minInput}
               onChange={(e) =>
-                setMinInput(e.target.value.replace(/[^0-9]/g, ""))
+                setMinInput(
+                  toEnglishNumber(e.target.value).replace(/[^0-9]/g, ""),
+                )
               }
               onBlur={validateAndSubmitMin}
               onKeyDown={(e) => e.key === "Enter" && validateAndSubmitMin()}
@@ -114,7 +116,9 @@ function PriceRangeFilterContent({
               autoFocus
               value={maxInput}
               onChange={(e) =>
-                setMaxInput(e.target.value.replace(/[^0-9]/g, ""))
+                setMaxInput(
+                  toEnglishNumber(e.target.value).replace(/[^0-9]/g, ""),
+                )
               }
               onBlur={validateAndSubmitMax}
               onKeyDown={(e) => e.key === "Enter" && validateAndSubmitMax()}

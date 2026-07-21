@@ -229,45 +229,90 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
         />
       )}
 
-      {/* Fullscreen Image Modal */}
-      {isFullScreen && (
-        <div className="fixed inset-0 z-200 bg-gray-200 backdrop-blur-sm flex flex-col">
-          {productName && (
-            <h2 className="font-extralight text-center text-primary text-base mt-4 mb-4 px-[10px] shrink-0">
-              {productName}
-            </h2>
-          )}
+      {/* Fullscreen Image - drawer on mobile, overlay on desktop */}
+      {isDesktop ? (
+        isFullScreen && (
+          <div className="fixed inset-0 z-200 bg-gray-200 backdrop-blur-sm flex flex-col">
+            {productName && (
+              <h2 className="font-extralight text-center text-primary text-base mt-4 mb-4 px-[10px] shrink-0">
+                {productName}
+              </h2>
+            )}
 
-          <div className="flex-1 px-[10px] mt-[80px]">
-            <div className="relative rounded-lg overflow-hidden w-full h-full">
-              <Image
-                src={cooperationImage}
-                fill
-                alt="Partnership Fullscreen"
-                className="object-cover"
-              />
+            <div className="flex-1 px-[10px] mt-[80px]">
+              <div className="relative rounded-lg overflow-hidden w-full h-full">
+                <Image
+                  src={cooperationImage}
+                  fill
+                  alt="Partnership Fullscreen"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-5 items-end px-[10px] pb-7 mt-12">
+              <button
+                type="button"
+                onClick={() => setIsFullScreen(false)}
+                className="cursor-pointer ml-[15px]"
+                aria-label="بستن تمام صفحه"
+              >
+                <SmallScreenIcon size={24} />
+              </button>
+              <button
+                type="button"
+                onClick={handleDownloadImage}
+                className="w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center gap-5"
+              >
+                <DownloadIcon size={20} />
+                دریافت محتوا
+              </button>
             </div>
           </div>
+        )
+      ) : (
+        <Drawer open={isFullScreen} onOpenChange={setIsFullScreen}>
+          <DrawerContent
+            className="z-100! h-[96%]! overflow-hidden flex flex-col bg-gray-200"
+            overlayClassName="z-100 lg:hidden"
+          >
+            {productName && (
+              <h2 className="font-extralight text-center text-primary text-base mt-4 mb-4 px-[10px] shrink-0">
+                {productName}
+              </h2>
+            )}
 
-          <div className="flex flex-col gap-5 items-end px-[10px] pb-7 mt-12">
-            <button
-              type="button"
-              onClick={() => setIsFullScreen(false)}
-              className="cursor-pointer ml-[15px]"
-              aria-label="بستن تمام صفحه"
-            >
-              <SmallScreenIcon size={24} />
-            </button>
-            <button
-              type="button"
-              onClick={handleDownloadImage}
-              className="w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center gap-5"
-            >
-              <DownloadIcon size={20} />
-              دریافت محتوا
-            </button>
-          </div>
-        </div>
+            <div className="flex-1 min-h-0 px-[10px] mt-8">
+              <div className="relative rounded-lg overflow-hidden w-full h-full">
+                <Image
+                  src={cooperationImage}
+                  fill
+                  alt="Partnership Fullscreen"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-5 items-end px-[10px] pb-7 mt-8 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsFullScreen(false)}
+                className="cursor-pointer ml-[15px]"
+                aria-label="بستن تمام صفحه"
+              >
+                <SmallScreenIcon size={24} />
+              </button>
+              <button
+                type="button"
+                onClick={handleDownloadImage}
+                className="w-full rounded-full bg-white text-primary border-2 border-primary py-2 flex items-center justify-center gap-5"
+              >
+                <DownloadIcon size={20} />
+                دریافت محتوا
+              </button>
+            </div>
+          </DrawerContent>
+        </Drawer>
       )}
 
       {/* Return Guide Modal */}

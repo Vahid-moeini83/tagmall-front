@@ -1,6 +1,7 @@
 "use client";
 
 import { StrokeArrowLeftIcon } from "@/icons";
+import { toEnglishNumber } from "@/lib/client/utils";
 import { useRef, useState } from "react";
 
 function OtpInput({
@@ -18,8 +19,8 @@ function OtpInput({
   const [isFocused, setIsFocused] = useState(false);
 
   const handleEnter = (e) => {
-    const v = e.target.value;
-    if (/^\d*$/.test(v) && v.length <= length) setValue(v);
+    const v = toEnglishNumber(e.target.value).replace(/[^0-9]/g, "");
+    if (v.length <= length) setValue(v);
   };
 
   const handleContainerClick = () => {
