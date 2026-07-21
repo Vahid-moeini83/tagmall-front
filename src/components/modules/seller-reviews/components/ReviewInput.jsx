@@ -1,28 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StarIcon } from "@/icons";
+import { ScanLineIcon } from "lucide-react";
 import Image from "next/image";
 
-export default function ReviewInput({ userAvatar, onSubmit }) {
+export default function ReviewInput({
+  userAvatar,
+  onSubmit,
+  isEditMode = false,
+  isReportMode = false,
+}) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [isFileMode, setIsFileMode] = useState(false);
+  const [file, setFile] = useState(null);
+  const textareaRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  // Sync textarea height with comment
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [comment]);
+
+  const handleFileSelect = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setIsFileMode(true);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
+    setIsFileMode(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const handleSubmit = () => {
-    if (rating > 0 && comment.trim()) {
-      onSubmit({ rating, comment });
+    if (rating > 0 && (comment.trim() || file)) {
+      onSubmit({ rating, comment, file });
       setRating(0);
       setComment("");
+      setFile(null);
+      setIsFileMode(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
   return (
     <div className="flex items-end gap-2 max-w-[500px] mx-auto w-full">
       {/* Review input box */}
-      <div className="flex-1 bg-gray-200 rounded-lg px-1 lg:px-[10px] pt-1 lg:pt-[15px] pb-2 lg:pb-[12px] flex flex-col gap-5 lg:gap-[26px]">
+      <div className="flex-1 bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2">
         {/* Stars */}
-        <div className="flex items-center justify-center gap-7 lg:gap-[30px] bg-white py-2 rounded-lg">
+        <div className="flex items-center justify-center gap-7 lg:gap-[30px] bg-white py-2 rounded-lg px-2">
           {[1, 2, 3, 4, 5].map((star) => {
             const isActive = star <= (hoveredRating || rating);
             return (
@@ -56,22 +94,63 @@ export default function ReviewInput({ userAvatar, onSubmit }) {
           })}
         </div>
 
-        {/* Review input field and submit button */}
+        {/* File preview (if file selected) */}
+        {isFileMode && file && (
+          <div className="flex items-center justify-between bg-white px-2 py-1 rounded-lg">
+            <span className="text-xs text-gray-600 truncate max-w-[200px]">
+              {file.name}
+            </span>
+            <button
+              type="button"
+              onClick={handleRemoveFile}
+              className="text-gray-400 hover:text-error-medium"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Comment input and actions */}
         <div className="flex items-center gap-2 px-1">
-          <input
-            type="text"
+          <textarea
+            ref={textareaRef}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="نظر خود را به اشتراک بگذارید..."
-            className="font-iransans flex-1 bg-transparent border-none outline-none text-sm text-gray-800 placeholder:text-gray-400"
+            rows={1}
+            className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 px-2 flex-1 bg-transparent border-none outline-none resize-none overflow-hidden leading-6"
+            style={{ minHeight: "48px" }}
           />
-          <button
-            onClick={handleSubmit}
-            disabled={rating === 0 || !comment.trim()}
-            className="font-iransans text-primary text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            ارسال
-          </button>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Scan/Scan Line icon for file upload */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              className="hidden"
+              accept="image/*"
+            />
+            {!comment.trim() && !file && !isEditMode && !isReportMode ? (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="text-gray-600 hover:text-primary transition-colors"
+              >
+                <ScanLineIcon size={24} />
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                disabled={rating === 0 && !comment.trim() && !file}
+                className={`font-iransans text-sm transition-colors cursor-pointer ${
+                  comment.trim() || file ? "text-primary" : "text-gray-400"
+                }`}
+              >
+                ارسال
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

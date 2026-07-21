@@ -54,6 +54,10 @@ function SupportSingleChat({ setIsOpen, conversation }) {
   const menuRef = useRef(null);
   const triggerRefs = useRef({});
   const textareaRef = useRef(null);
+  const imageLongPressTimerRef = useRef(null);
+  const imageLongPressTriggeredRef = useRef(false);
+
+  const IMAGE_LONG_PRESS_MS = 500;
 
   const fetchMessages = async () => {
     const token = await getToken();
@@ -355,6 +359,35 @@ function SupportSingleChat({ setIsOpen, conversation }) {
     setActiveTriggerElement(triggerRefs.current[msg.id]);
   };
 
+  const openImageContextMenu = (msg) => {
+    if (contextMenuOpen && activeMessageId === msg.id) {
+      handleCloseMenu();
+      return;
+    }
+
+    setContextMenuOpen(true);
+    setActiveMessageId(msg.id);
+    setActiveTriggerElement(triggerRefs.current[msg.id]);
+  };
+
+  const clearImageLongPress = () => {
+    if (imageLongPressTimerRef.current) {
+      clearTimeout(imageLongPressTimerRef.current);
+      imageLongPressTimerRef.current = null;
+    }
+  };
+
+  const startImageLongPress = (msg) => {
+    if (msg.type !== "image") return;
+
+    imageLongPressTriggeredRef.current = false;
+    clearImageLongPress();
+    imageLongPressTimerRef.current = setTimeout(() => {
+      imageLongPressTriggeredRef.current = true;
+      openImageContextMenu(msg);
+    }, IMAGE_LONG_PRESS_MS);
+  };
+
   const resetTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -651,11 +684,11 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                       } ${isSameSenderAsPrev(messages, index) ? "mt-1" : "mt-6 lg:mt-4"}`}
                     >
                       <div
-                        className={`${msg.sender === "user" ? "flex-row" : "flex-row-reverse"} flex gap-2 max-w-[80%] lg:max-w-[40%] ${!last ? (msg.sender === "user" ? "mr-[50px]" : "ml-[50px]") : ""} ${contextMenuOpen && activeMessageId === msg.id ? "relative z-999" : ""}`}
+                        className={`${msg.sender === "user" ? "flex-row" : "flex-row-reverse"} flex gap-2 max-w-[80%] lg:max-w-[40%] ${!last ? (msg.sender === "user" ? "mr-[50px]" : "ml-[50px]") : ""}`}
                       >
                         {last && (
                           <div
-                            className={`flex items-end ${msg.id === lastUserMessageId ? "pb-[18px]" : ""}`}
+                            className={`flex items-end ${msg.id === lastUserMessageId ? "pb-[18px]" : ""} ${contextMenuOpen && activeMessageId === msg.id ? "relative z-999" : ""}`}
                           >
                             <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center">
                               {msg.sender === "support" ? (
@@ -671,8 +704,22 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                           <div
                             ref={(el) => (triggerRefs.current[msg.id] = el)}
                             className={`relative flex items-center gap-2 ${msg.sender === "user" ? "flex-row" : "flex-row-reverse"} ${contextMenuOpen && activeMessageId === msg.id ? "z-999" : ""}`}
-                            onClick={(e) => handleOpenMenu(e, msg)}
+                            onClick={(e) => {
+                              if (msg.type === "image") return;
+                              handleOpenMenu(e, msg);
+                            }}
                             onContextMenu={(e) => handleOpenMenu(e, msg)}
+                            onTouchStart={() => startImageLongPress(msg)}
+                            onTouchEnd={clearImageLongPress}
+                            onTouchMove={clearImageLongPress}
+                            onTouchCancel={clearImageLongPress}
+                            onMouseDown={(e) => {
+                              if (msg.type === "image" && e.button === 0) {
+                                startImageLongPress(msg);
+                              }
+                            }}
+                            onMouseUp={clearImageLongPress}
+                            onMouseLeave={clearImageLongPress}
                           >
                             <div className={bubbleClasses} data-bubble>
                               {msg.replyTo &&
@@ -710,11 +757,16 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                                   height={64}
                                   onClick={(e) => {
                                     e.stopPropagation();
+                                    if (imageLongPressTriggeredRef.current) {
+                                      imageLongPressTriggeredRef.current = false;
+                                      return;
+                                    }
                                     setPreviewImage(msg.image);
                                   }}
                                   // priority
                                   loading="lazy"
-                                  className={`object-cover rounded-md ${last ? (msg.sender === "user" ? "rounded-br-none" : "rounded-bl-none") : ""}`}
+                                  className={`object-cover rounded-md select-none ${last ? (msg.sender === "user" ? "rounded-br-none" : "rounded-bl-none") : ""}`}
+                                  draggable={false}
                                 />
                               ) : (
                                 <p className="font-iransans px-4 leading-10 text-justify wrap-break-word">
@@ -749,7 +801,8 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                                       : undefined
                                   }
                                   onEdit={
-                                    msg.sender === "user"
+                                    msg.sender === "user" &&
+                                    msg.type !== "image"
                                       ? () => {
                                           setEditMsg(msg);
                                           setReplyTo(null);

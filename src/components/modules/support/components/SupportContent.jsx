@@ -4,23 +4,31 @@ import { useState, useEffect } from "react";
 import MainNavigation from "@/components/layout/navigation-menu";
 import { SearchInput, SearchBox } from "@/components/ui/search";
 import { SupportChats, SupportOrders } from "..";
-import { ReceiptDeliveryShell } from "@/components/modules/receipt";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import usePublicStore from "@/app/store/publicStore";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+function getActiveTabFromParams(searchParams) {
+  if (searchParams.get("conversationId")) return "chats";
+
+  const tab = searchParams.get("tab");
+  if (tab === "orders" || tab === "chats") return tab;
+
+  return "chats";
+}
+
 function SupportContent({ conversations, initialOrders }) {
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
   const setSearchBoxOpen = usePublicStore((s) => s.setSearchBoxOpen);
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState("chats");
+  const [activeTab, setActiveTab] = useState(() =>
+    getActiveTabFromParams(searchParams),
+  );
 
   useEffect(() => {
-    if (searchParams.get("conversationId")) {
-      setActiveTab("chats");
-    }
+    setActiveTab(getActiveTabFromParams(searchParams));
   }, [searchParams]);
 
   const handleSearchClick = (e) => {
@@ -37,9 +45,6 @@ function SupportContent({ conversations, initialOrders }) {
         onClose={() => setSearchBoxOpen(false)}
         isHomePage={false}
       />
-
-      {/* Receipt Delivery Shell */}
-      <ReceiptDeliveryShell />
 
       {/* Desktop Layout */}
       <div className="hidden lg:flex h-screen bg-gray-200 px-10 pt-[25px] pb-[5px] flex-col">

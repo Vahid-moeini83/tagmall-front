@@ -183,7 +183,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
           onClick={() => setIsFiltersDrawerOpen(true)}
         >
           <p className="text-gray-600 font-bold">
-            ترتیب نمایش:{" "}
+            اولویت نمایش:{" "}
             <span className="font-extralight">{getFilterLabel()}</span>
           </p>
         </span>
@@ -207,7 +207,7 @@ export default function ProfileReceivedLinks({ setActiveSection }) {
         </button>
 
         {/* Products list */}
-        <div className="space-y-4 lg:space-y-8 pb-4">
+        <div className="space-y-[10px] lg:space-y-8 pb-4">
           {mockProducts.map((product) => (
             <div
               key={product.id}

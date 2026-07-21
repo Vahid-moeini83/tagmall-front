@@ -173,7 +173,7 @@ function LoginOtp({
           <span dir="ltr">
             ارسال مجدد کد تایید تا{" "}
             <span className="text-error-medium">{formatTime(timeLeft)}</span>{" "}
-            دقیقه دیگر
+            دیگر
           </span>
         )}
       </button>

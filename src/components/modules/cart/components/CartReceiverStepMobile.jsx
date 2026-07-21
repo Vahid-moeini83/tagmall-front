@@ -85,18 +85,18 @@ function CartReceiverStepMobile({ receiverInfo, onConfirm, onEdit }) {
       </div>
 
       <div className="fixed right-0 left-0 bottom-18 z-40 bg-white px-[10px] py-4 space-y-3">
-        <div className="flex items-center justify-center gap-6">
+        <div className="flex items-center justify-center gap-0.5">
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 border-2 border-primary text-primary rounded-full py-2 font-bold cursor-pointer"
+            className="w-1/2 border-2 border-primary text-primary rounded-full py-2 font-bold cursor-pointer"
           >
             تایید
           </button>
           <button
             type="button"
             onClick={onEdit}
-            className="flex-1 text-primary font-bold cursor-pointer"
+            className="w-1/2 text-primary font-bold cursor-pointer"
           >
             ویرایش
           </button>

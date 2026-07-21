@@ -225,6 +225,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                 <ProductReviews review={product?.product_review} />
                 <ProductUserComments
                   productId={product?.id}
+                  productName={product?.name}
                   initialComments={comments}
                   commentsError={commentsError}
                 />
@@ -322,6 +323,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
           >
             <ProductUserComments
               productId={product?.id}
+              productName={product?.name}
               initialComments={comments}
               commentsError={commentsError}
             />

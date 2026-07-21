@@ -279,242 +279,90 @@ function CartItems({
                           : "pb-8 not-last:border-b-2 border-gray-200"
                       }`}
                     >
-                      <div
-                        className={
-                          isMobile ? "px-[10px] pb-4" : undefined
-                        }
-                      >
-                      {isMobile ? (
-                        <div className="flex flex-col gap-2">
-                          {/* Seller Header */}
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <Image
-                                src={
-                                  seller.avatar ||
-                                  "/assets/images/fallback/avatar.png"
-                                }
-                                width={50}
-                                height={50}
-                                alt="seller"
-                                className="rounded-lg object-cover"
-                              />
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-sm font-bold text-gray-600">
-                                  {seller.name || store.name}
-                                </span>
-                                <VerifyIcon size={18} />
-                              </div>
-                            </div>
-                            {index === 0 && (
-                              <span className="text-error-medium font-bold tabular-nums">
-                                ۰۰:۰۰:۰۰
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Product Card */}
-                          <div className="border-2 border-gray-200 rounded-xl p-[5px] space-y-3">
-                            <div className="flex items-start gap-3">
-                              <div className="relative w-[50px] h-[50px] rounded-lg overflow-hidden shrink-0">
-                                <Image
-                                  src={
-                                    product.image ||
-                                    "/assets/images/fallback/no-photo.jpg"
-                                  }
-                                  fill
-                                  alt={product.name}
-                                  className="object-cover"
-                                />
-                              </div>
-
-                              <div className="flex-1 min-w-0 space-y-2">
-                                <div className="flex items-start justify-between gap-2">
-                                  <p className="font-bold text-gray-600 text-xs leading-6 line-clamp-1">
-                                    {product.name}
-                                  </p>
-                                  {item.notes && item.notes.length > 0 && (
-                                    <NoteIcon
-                                      size={18}
-                                      color="#000000"
-                                      className="cursor-pointer shrink-0"
-                                      onClick={() => handleShowNotes(item.id)}
-                                    />
-                                  )}
-                                </div>
-                                <p className="text-xs text-gray-600">
-                                  <span className="font-bold">قیمت </span>
-                                  {formatPrice(item.unit_price)} تومان
-                                </p>
-                              </div>
-
-                              <div
-                                className="flex items-center gap-1 shrink-0 pt-4 pl-2"
-                                dir="ltr"
-                              >
-                                <PlusIcon
-                                  size={20}
-                                  onClick={() =>
-                                    !isUpdating[item.id] &&
-                                    handleQuantityChange(
-                                      item.id,
-                                      item.quantity,
-                                      "increase",
-                                    )
-                                  }
-                                  className={`text-primary cursor-pointer ${isUpdating[item.id] ? "opacity-50" : ""}`}
-                                />
-                                <span className="text-gray-600 min-w-[20px] text-center select-none text-sm font-bold">
-                                  {localQuantities[item.id] ?? item.quantity}
-                                </span>
-                                {isUpdating[item.id] &&
-                                (localQuantities[item.id] ?? item.quantity) ===
-                                  1 ? (
-                                  <SpinnerLoading
-                                    size={20}
-                                    className="border-error-medium"
-                                  />
-                                ) : (
-                                  <MinusIcon
-                                    size={20}
-                                    onClick={() =>
-                                      !isUpdating[item.id] &&
-                                      handleQuantityChange(
-                                        item.id,
-                                        item.quantity,
-                                        "decrease",
-                                      )
-                                    }
-                                    className={`cursor-pointer ${
-                                      (localQuantities[item.id] ??
-                                        item.quantity) === 1
-                                        ? "text-error-medium"
-                                        : "text-primary"
-                                    } ${isUpdating[item.id] ? "opacity-50" : ""}`}
-                                  />
-                                )}
-                              </div>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleOpenAccessories(product.name)
-                              }
-                              className="relative w-full border-2 border-primary rounded-xl py-2.5 flex items-center justify-center gap-2 text-primary font-bold text-sm cursor-pointer"
-                            >
-                              <SquarePlusIcon2
-                                size={20}
-                                className="text-primary absolute right-2"
-                              />
-                              <span>لوازم جانبی مرتبط</span>
-                            </button>
-                          </div>
-
-                          {/* Delivery Info */}
-                          <div className="flex items-center gap-5 pr-4 mt-3">
-                            <HintIcon size={20} className="shrink-0" />
-                            <span className="text-xs text-gray-600">
-                              با مراجعه به فروشگاه سفارش تحویل شما می شود.
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        // Desktop Layout
-                        <div className="grid grid-cols-2">
-                          <div className="flex justify-center items-center">
-                            <div className="relative w-50 h-50 rounded-lg overflow-hidden">
-                              <Image
-                                src={
-                                  product.image ||
-                                  "/assets/images/fallback/no-photo.jpg"
-                                }
-                                fill
-                                alt={product.name}
-                                className="object-contain"
-                              />
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-start justify-start gap-6">
-                            {/* Seller Info */}
-                            <div className="flex items-center justify-between w-full">
+                      <div className={isMobile ? "px-[10px] pb-4" : undefined}>
+                        {isMobile ? (
+                          <div className="flex flex-col gap-2">
+                            {/* Seller Header */}
+                            <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <Image
                                   src={
                                     seller.avatar ||
                                     "/assets/images/fallback/avatar.png"
                                   }
-                                  width={48}
-                                  height={48}
+                                  width={50}
+                                  height={50}
                                   alt="seller"
-                                  className="rounded-lg"
+                                  className="rounded-lg object-cover"
                                 />
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm text-gray-600">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-sm font-bold text-gray-600">
                                     {seller.name || store.name}
                                   </span>
-                                  <VerifyIcon size={20} />
+                                  <VerifyIcon size={18} />
                                 </div>
                               </div>
-                            </div>
-
-                            {/* Product Info */}
-                            <div className="pr-14 w-full">
-                              <div className="flex items-center justify-between">
-                                <p className="font-bold text-gray-600 line-clamp-1 mb-4">
-                                  {product.name}
-                                </p>
-                                {item.notes && item.notes.length > 0 && (
-                                  <NoteIcon
-                                    size={20}
-                                    color="#000000"
-                                    className="cursor-pointer mb-4 ml-3"
-                                    onClick={() => handleShowNotes(item.id)}
-                                  />
-                                )}
-                              </div>
-                              <div className="flex items-center gap-2 mb-2 text-gray-600">
-                                <p>
-                                  <span className="font-bold">قیمت</span>
-                                  <span>
-                                    {formatPrice(item.unit_price)} تومان
-                                  </span>
-                                  {isOnline && item.shipping_cost > 0 && (
-                                    <span>
-                                      {" "}
-                                      و{" "}
-                                      <span className="font-bold">
-                                        هزینه ارسال
-                                      </span>
-                                      <span className="mr-0.5">
-                                        {formatPrice(item.shipping_cost)} تومان
-                                      </span>
-                                    </span>
-                                  )}
-                                  {!isOnline && (
-                                    <span className="text-gray-600">
-                                      {" "}
-                                      (خرید حضوری)
-                                    </span>
-                                  )}
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Related Accessories + Actions */}
-                            <div className="flex items-center justify-between w-full pr-3.5">
-                              <div className="flex items-center gap-4 cursor-pointer">
-                                <SquarePlusIcon2
-                                  size={20}
-                                  className="text-primary"
-                                />
-                                <span className="text-primary">
-                                  لوازم جانبی و قطعات مرتبط
+                              {index === 0 && (
+                                <span className="text-error-medium font-bold tabular-nums">
+                                  ۰۰:۰۰:۰۰
                                 </span>
-                              </div>
+                              )}
+                            </div>
 
-                              <div className="flex items-center gap-4">
-                                <div className="flex items-center px-3 py-2 gap-1 border-2 border-gray-200 rounded-md">
+                            {/* Product Card */}
+                            <div className="border-2 border-gray-200 rounded-xl space-y-3">
+                              <div className="flex items-start gap-3">
+                                <div className="relative w-[50px] h-[50px] rounded-tr-lg overflow-hidden shrink-0">
+                                  <Image
+                                    src={
+                                      product.image ||
+                                      "/assets/images/fallback/no-photo.jpg"
+                                    }
+                                    fill
+                                    alt={product.name}
+                                    className="object-cover"
+                                  />
+                                </div>
+
+                                <div className="flex-1 min-w-0 space-y-2 pt-[5px] pl-[5px]">
+                                  <div className="flex items-start justify-between gap-2">
+                                    <p className="font-bold text-gray-600 text-xs leading-6 line-clamp-1">
+                                      {product.name}
+                                    </p>
+                                    {item.notes && item.notes.length > 0 && (
+                                      <NoteIcon
+                                        size={18}
+                                        color="#000000"
+                                        className="cursor-pointer shrink-0"
+                                        onClick={() => handleShowNotes(item.id)}
+                                      />
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-gray-600">
+                                    <span className="font-bold">قیمت </span>
+                                    {formatPrice(item.unit_price)} تومان
+                                  </p>
+                                </div>
+
+                                <div
+                                  className="flex items-center gap-1 shrink-0 pt-4 pl-2"
+                                  dir="ltr"
+                                >
+                                  <PlusIcon
+                                    size={20}
+                                    onClick={() =>
+                                      !isUpdating[item.id] &&
+                                      handleQuantityChange(
+                                        item.id,
+                                        item.quantity,
+                                        "increase",
+                                      )
+                                    }
+                                    className={`text-primary cursor-pointer ${isUpdating[item.id] ? "opacity-50" : ""}`}
+                                  />
+                                  <span className="text-gray-600 min-w-[20px] text-center select-none text-sm font-bold">
+                                    {localQuantities[item.id] ?? item.quantity}
+                                  </span>
                                   {isUpdating[item.id] &&
                                   (localQuantities[item.id] ??
                                     item.quantity) === 1 ? (
@@ -537,33 +385,186 @@ function CartItems({
                                         (localQuantities[item.id] ??
                                           item.quantity) === 1
                                           ? "text-error-medium"
-                                          : "text-gray-800"
+                                          : "text-primary"
                                       } ${isUpdating[item.id] ? "opacity-50" : ""}`}
                                     />
                                   )}
+                                </div>
+                              </div>
 
-                                  <span className="text-gray-600 min-w-[30px] text-center select-none">
-                                    {localQuantities[item.id] ?? item.quantity}
-                                  </span>
+<div className="mx-[5px] mb-[5px]">
+<button
+                                type="button"
+                                onClick={() =>
+                                  handleOpenAccessories(product.name)
+                                }
+                                className="relative w-full border-2 border-primary rounded-xl py-2.5 flex items-center justify-center gap-2 text-primary font-bold text-sm cursor-pointer"
+                              >
+                                <SquarePlusIcon2
+                                  size={20}
+                                  className="text-primary absolute right-2"
+                                />
+                                <span>لوازم جانبی مرتبط</span>
+                              </button>
+</div>
 
-                                  <PlusIcon
-                                    size={20}
-                                    onClick={() =>
-                                      !isUpdating[item.id] &&
-                                      handleQuantityChange(
-                                        item.id,
-                                        item.quantity,
-                                        "increase",
-                                      )
+                            </div>
+
+                            {/* Delivery Info */}
+                            <div className="flex items-center gap-5 pr-4 mt-3">
+                              <HintIcon size={20} className="shrink-0" />
+                              <span className="text-xs text-gray-600">
+                                با مراجعه به فروشگاه سفارش تحویل شما می شود.
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          // Desktop Layout
+                          <div className="grid grid-cols-2">
+                            <div className="flex justify-center items-center">
+                              <div className="relative w-50 h-50 rounded-lg overflow-hidden">
+                                <Image
+                                  src={
+                                    product.image ||
+                                    "/assets/images/fallback/no-photo.jpg"
+                                  }
+                                  fill
+                                  alt={product.name}
+                                  className="object-contain"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-start justify-start gap-6">
+                              {/* Seller Info */}
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-2">
+                                  <Image
+                                    src={
+                                      seller.avatar ||
+                                      "/assets/images/fallback/avatar.png"
                                     }
-                                    className={`text-primary cursor-pointer ${isUpdating[item.id] ? "opacity-50" : ""}`}
+                                    width={48}
+                                    height={48}
+                                    alt="seller"
+                                    className="rounded-lg"
                                   />
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm text-gray-600">
+                                      {seller.name || store.name}
+                                    </span>
+                                    <VerifyIcon size={20} />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Product Info */}
+                              <div className="pr-14 w-full">
+                                <div className="flex items-center justify-between">
+                                  <p className="font-bold text-gray-600 line-clamp-1 mb-4">
+                                    {product.name}
+                                  </p>
+                                  {item.notes && item.notes.length > 0 && (
+                                    <NoteIcon
+                                      size={20}
+                                      color="#000000"
+                                      className="cursor-pointer mb-4 ml-3"
+                                      onClick={() => handleShowNotes(item.id)}
+                                    />
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 mb-2 text-gray-600">
+                                  <p>
+                                    <span className="font-bold">قیمت</span>
+                                    <span>
+                                      {formatPrice(item.unit_price)} تومان
+                                    </span>
+                                    {isOnline && item.shipping_cost > 0 && (
+                                      <span>
+                                        {" "}
+                                        و{" "}
+                                        <span className="font-bold">
+                                          هزینه ارسال
+                                        </span>
+                                        <span className="mr-0.5">
+                                          {formatPrice(item.shipping_cost)}{" "}
+                                          تومان
+                                        </span>
+                                      </span>
+                                    )}
+                                    {!isOnline && (
+                                      <span className="text-gray-600">
+                                        {" "}
+                                        (خرید حضوری)
+                                      </span>
+                                    )}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Related Accessories + Actions */}
+                              <div className="flex items-center justify-between w-full pr-3.5">
+                                <div className="flex items-center gap-4 cursor-pointer">
+                                  <SquarePlusIcon2
+                                    size={20}
+                                    className="text-primary"
+                                  />
+                                  <span className="text-primary">
+                                    لوازم جانبی و قطعات مرتبط
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center gap-4">
+                                  <div className="flex items-center px-3 py-2 gap-1 border-2 border-gray-200 rounded-md">
+                                    {isUpdating[item.id] &&
+                                    (localQuantities[item.id] ??
+                                      item.quantity) === 1 ? (
+                                      <SpinnerLoading
+                                        size={20}
+                                        className="border-error-medium"
+                                      />
+                                    ) : (
+                                      <MinusIcon
+                                        size={20}
+                                        onClick={() =>
+                                          !isUpdating[item.id] &&
+                                          handleQuantityChange(
+                                            item.id,
+                                            item.quantity,
+                                            "decrease",
+                                          )
+                                        }
+                                        className={`cursor-pointer ${
+                                          (localQuantities[item.id] ??
+                                            item.quantity) === 1
+                                            ? "text-error-medium"
+                                            : "text-gray-800"
+                                        } ${isUpdating[item.id] ? "opacity-50" : ""}`}
+                                      />
+                                    )}
+
+                                    <span className="text-gray-600 min-w-[30px] text-center select-none">
+                                      {localQuantities[item.id] ??
+                                        item.quantity}
+                                    </span>
+
+                                    <PlusIcon
+                                      size={20}
+                                      onClick={() =>
+                                        !isUpdating[item.id] &&
+                                        handleQuantityChange(
+                                          item.id,
+                                          item.quantity,
+                                          "increase",
+                                        )
+                                      }
+                                      className={`text-primary cursor-pointer ${isUpdating[item.id] ? "opacity-50" : ""}`}
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                       </div>
                     </div>
                   );

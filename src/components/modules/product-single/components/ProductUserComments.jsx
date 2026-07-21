@@ -13,6 +13,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import MessageContextMenu from "@/components/ui/MessageContextMenu";
 import {
   createComment,
+  updateComment,
   deleteComment,
   toggleCommentLike,
 } from "@/lib/server/actions/product";
@@ -41,6 +42,7 @@ function getUserDisplayName(user) {
 
 export default function ProductUserComments({
   productId,
+  productName,
   initialComments,
   commentsError,
 }) {
@@ -123,6 +125,7 @@ export default function ProductUserComments({
   const [submitting, setSubmitting] = useState(false);
   const [deletingMessageId, setDeletingMessageId] = useState(null);
   const [reportMsgId, setReportMsgId] = useState(null);
+  const [editMsgId, setEditMsgId] = useState(null);
 
   const setLoginOpen = usePublicStore((s) => s.setLoginOpen);
 
@@ -233,7 +236,38 @@ export default function ProductUserComments({
 
   const handleReply = (messageId) => {
     handleCloseMenu();
+    setEditMsgId(null);
+    setReportMsgId(null);
+    setNewComment("");
     handleReplyToMessage(messageId);
+  };
+
+  const handleEdit = (messageId) => {
+    const { message } = findMessageAndBox(messageId);
+    if (!message) return;
+
+    handleCloseMenu();
+    setEditMsgId(messageId);
+    setActiveReplyId(null);
+    setReportMsgId(null);
+    setReplyInputs({});
+    setNewComment(message.message || "");
+    setShowCommentInput(true);
+
+    setTimeout(() => {
+      const el = inputRef.current || activeReplyInputRef.current;
+      if (el) {
+        el.focus();
+        el.style.height = "auto";
+        el.style.height = `${el.scrollHeight}px`;
+      }
+    }, 100);
+  };
+
+  const handleCancelEdit = () => {
+    setEditMsgId(null);
+    setNewComment("");
+    setShowCommentInput(false);
   };
 
   const handleDelete = async (messageId) => {
@@ -280,21 +314,58 @@ export default function ProductUserComments({
     handleCloseMenu();
     setReportMsgId(messageId);
     setActiveReplyId(null);
+    setEditMsgId(null);
+    setNewComment("");
   };
 
   const handleSubmitComment = async (messageId = null) => {
-    console.log("Msg ID: ", messageId);
     const isReply = messageId !== null && messageId !== undefined;
-
-    console.log("Is reply: ", isReply);
+    const isEdit = Boolean(editMsgId) && !isReply;
     const text = isReply ? replyInputs[messageId]?.text : newComment;
 
     if (!text?.trim()) return;
 
     const token = await getToken();
-    console.log(token);
     if (!token) {
       setLoginOpen(true);
+      return;
+    }
+
+    setSubmitting(true);
+
+    // Edit existing comment
+    if (isEdit) {
+      const { message: editMessage } = findMessageAndBox(editMsgId);
+      if (!editMessage?.apiId) {
+        setSubmitting(false);
+        return;
+      }
+
+      const { updateCommentRes, updateCommentErr } = await updateComment(
+        token,
+        editMessage.apiId,
+        { body: text },
+      );
+
+      if (updateCommentErr) {
+        toast.error("خطا در ویرایش نظر");
+        setSubmitting(false);
+        return;
+      }
+
+      const updatedBody = updateCommentRes?.data?.body ?? text;
+
+      setChatBoxes((prev) =>
+        prev?.map((box) => ({
+          ...box,
+          messages: box?.messages?.map((msg) =>
+            msg.id === editMsgId ? { ...msg, message: updatedBody } : msg,
+          ),
+        })),
+      );
+
+      handleCancelEdit();
+      setSubmitting(false);
       return;
     }
 
@@ -308,7 +379,10 @@ export default function ProductUserComments({
       const { message: replyToMessage, box: targetBox } =
         findMessageAndBox(messageId);
 
-      if (!replyToMessage || !targetBox) return;
+      if (!replyToMessage || !targetBox) {
+        setSubmitting(false);
+        return;
+      }
 
       const firstCommentId = targetBox.messages[0].apiId;
 
@@ -318,8 +392,6 @@ export default function ProductUserComments({
         reply_to_id: replyToMessage.apiId,
       };
     }
-
-    setSubmitting(true);
 
     const { createCommentRes, createCommentErr } = await createComment(
       token,
@@ -430,6 +502,7 @@ export default function ProductUserComments({
   const handleCancelComment = () => {
     setShowCommentInput(false);
     setNewComment("");
+    setEditMsgId(null);
   };
 
   const handleCancelReply = (messageId) => {
@@ -559,8 +632,8 @@ export default function ProductUserComments({
                           ref={inputRef}
                           value={newComment}
                           onChange={(e) => setNewComment(e.target.value)}
-                          placeholder="نظر یا پرسش خود را بنویسید..."
-                          className="w-full min-h-[80px] p-2 border-2 border-gray-200 rounded-lg resize-none outline-none focus:border-primary text-xs font-iransans"
+                          placeholder={`دیدگاه شما در مورد ${productName || "محصول"}`}
+                          className="w-full min-h-[80px] p-2 border-2 border-gray-200 rounded-lg resize-none outline-none focus:border-primary text-xs font-iransans placeholder:line-clamp-1"
                         />
                         <div className="flex items-center justify-end gap-2 mt-2">
                           <button
@@ -612,7 +685,7 @@ export default function ProductUserComments({
                 return (
                   <div
                     key={box.id}
-                    className="flex items-start gap-[6px] shrink-0 mb-4 lg:mb-12 w-full lg:w-auto border-b-2 border-gray-200 lg:border-white pb-4 lg:pb-0 lg:border-0"
+                    className="flex items-start gap-[6px] shrink-0 mb-4 lg:mb-12 w-full lg:w-auto border-b-5 border-gray-200 lg:border-white pb-4 lg:pb-0 lg:border-0"
                   >
                     <div
                       className={`flex flex-col gap-2 w-full lg:w-auto lg:max-h-[208px] scroll-hidden lg:overflow-y-auto relative items-start px-[10px] lg:px-0`}
@@ -709,12 +782,21 @@ export default function ProductUserComments({
                                       <MessageContextMenu
                                         isOpen={true}
                                         onReply={() => handleReply(msg.id)}
+                                        onEdit={
+                                          msg.isUserMessage
+                                            ? () => handleEdit(msg.id)
+                                            : undefined
+                                        }
                                         onDelete={
                                           msg.isUserMessage
                                             ? () => handleDelete(msg.id)
                                             : undefined
                                         }
-                                        onReport={() => handleReport(msg.id)}
+                                        onReport={
+                                          msg.isUserMessage
+                                            ? undefined
+                                            : () => handleReport(msg.id)
+                                        }
                                         onClose={handleCloseMenu}
                                         position={isUserMsg ? "right" : "left"}
                                         triggerRef={{
@@ -835,10 +917,12 @@ export default function ProductUserComments({
               <div className="fixed right-0 left-0 bottom-0 flex items-end px-[10px] pt-2 pb-6 bg-white z-30">
                 <div className="flex flex-col gap-3 flex-1">
                   {/* reply header */}
-                  {activeReplyId && (
+                  {activeReplyId && !editMsgId && (
                     <div className="flex items-center justify-center relative">
-                      <span className="font-iransans font-bold text-primary text-base">
-                        پاسخ به نظر
+                      <span className="font-iransans font-bold text-primary text-base line-clamp-1 px-10">
+                        پاسخ به دیدگاه{" "}
+                        {findMessageAndBox(activeReplyId).message?.user ||
+                          "کاربر"}
                       </span>
                       <button
                         onClick={() => handleCancelReply(activeReplyId)}
@@ -848,11 +932,27 @@ export default function ProductUserComments({
                       </button>
                     </div>
                   )}
+                  {/* edit header */}
+                  {editMsgId && (
+                    <div className="flex items-center justify-center relative">
+                      <span className="font-iransans font-bold text-primary text-base">
+                        ویرایش دیدگاه
+                      </span>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="absolute left-3"
+                      >
+                        <CloseSquareIcon size={20} />
+                      </button>
+                    </div>
+                  )}
                   {/* report header */}
                   {reportMsgId && (
                     <div className="flex items-center justify-center relative">
-                      <span className="font-iransans font-bold text-error-medium text-base">
-                        گزارش نظر
+                      <span className="font-iransans font-bold text-error-medium text-base line-clamp-1 px-10">
+                        گزارش دیدگاه{" "}
+                        {findMessageAndBox(reportMsgId).message?.user ||
+                          "کاربر"}
                       </span>
                       <button
                         onClick={() => setReportMsgId(null)}
@@ -866,42 +966,68 @@ export default function ProductUserComments({
                   {/* input wrapper */}
                   <div
                     className={
-                      activeReplyId || reportMsgId
+                      activeReplyId || reportMsgId || editMsgId
                         ? "bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2"
                         : ""
                     }
                   >
-                    {/* reply preview */}
-                    {activeReplyId && (
-                      <div
-                        onClick={() => scrollToReplyTarget(activeReplyId)}
-                        className="border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] mr-auto rounded-bl-none cursor-pointer"
-                      >
-                        <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
-                          {(() => {
-                            const { message: foundMsg } =
-                              findMessageAndBox(activeReplyId);
-                            return foundMsg?.message || "";
-                          })()}
-                        </p>
-                      </div>
-                    )}
+                    {/* reply / edit preview */}
+                    {(activeReplyId || editMsgId) &&
+                      (() => {
+                        const previewId = editMsgId || activeReplyId;
+                        const { message: previewMsg } =
+                          findMessageAndBox(previewId);
+                        const isOwnPreview = Boolean(previewMsg?.isUserMessage);
+
+                        return (
+                          <div
+                            onClick={() =>
+                              activeReplyId
+                                ? scrollToReplyTarget(activeReplyId)
+                                : undefined
+                            }
+                            className={`border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] ${
+                              activeReplyId ? "cursor-pointer" : ""
+                            } ${
+                              isOwnPreview
+                                ? "ml-auto rounded-br-none"
+                                : "mr-auto rounded-bl-none"
+                            }`}
+                          >
+                            <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
+                              {previewMsg?.message || ""}
+                            </p>
+                          </div>
+                        );
+                      })()}
 
                     <div
-                      className={`flex items-end rounded-xl overflow-hidden ${
-                        activeReplyId || reportMsgId
+                      className={`relative flex items-end rounded-xl overflow-hidden ${
+                        activeReplyId || reportMsgId || editMsgId
                           ? "bg-white"
                           : "bg-gray-200"
                       }`}
                     >
+                      {!activeReplyId &&
+                        !reportMsgId &&
+                        !editMsgId &&
+                        !newComment.trim() && (
+                          <span className="pointer-events-none absolute inset-y-0 right-4 left-12 flex items-center text-gray-400 text-sm">
+                            <span className="line-clamp-1 w-full text-center">
+                              دیدگاه شما در مورد {productName || "محصول"}
+                            </span>
+                          </span>
+                        )}
                       <textarea
                         ref={activeReplyId ? activeReplyInputRef : inputRef}
                         placeholder={
                           reportMsgId
                             ? "توضیحات ...."
-                            : activeReplyId
-                              ? "پاسخ ...."
-                              : "دیدگاه خود را ثبت کنید ..."
+                            : editMsgId
+                              ? "ویرایش ...."
+                              : activeReplyId
+                                ? "پاسخ ...."
+                                : ""
                         }
                         value={
                           activeReplyId
@@ -926,6 +1052,7 @@ export default function ProductUserComments({
                       <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
                         {!activeReplyId &&
                           !reportMsgId &&
+                          !editMsgId &&
                           newComment.trim().length === 0 && (
                             <>
                               <input
@@ -946,6 +1073,7 @@ export default function ProductUserComments({
                           )}
                         {(activeReplyId ||
                           reportMsgId ||
+                          editMsgId ||
                           newComment.trim().length > 0) && (
                           <button
                             disabled={

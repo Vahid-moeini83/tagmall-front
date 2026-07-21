@@ -59,7 +59,7 @@ function FilterReceivedLinksDrawer({
             onClick={() => setShowAvailable(!showAvailable)}
             active={showAvailable}
             size={20}
-            className="absolute left-5 cursor-pointer"
+            className="absolute left-[25px] cursor-pointer"
           />
         </div>
 
@@ -83,7 +83,7 @@ function FilterReceivedLinksDrawer({
                     {filter.label}:
                   </span>
                   {getFilterValue(filter.id) && (
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 font-extralight">
                       {getFilterValue(filter.id)}
                     </span>
                   )}
@@ -92,13 +92,13 @@ function FilterReceivedLinksDrawer({
                   <ChevronUpIcon
                     size={20}
                     color="var(--color-gray-800)"
-                    className="absolute left-[14px]"
+                    className="absolute left-[19px]"
                   />
                 ) : (
                   <ChevronDownIcon
                     size={20}
                     color="var(--color-gray-800)"
-                    className="absolute left-[14px]"
+                    className="absolute left-[19px]"
                   />
                 )}
               </button>
@@ -112,7 +112,7 @@ function FilterReceivedLinksDrawer({
                 }`}
               >
                 {expandedFilter.includes(filter.id) && (
-                  <div className="pb-3">
+                  <div>
                     {filter.id === "sort" && (
                       <ReceivedLinksFilterContent
                         selectedFilter={selectedFilter}

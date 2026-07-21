@@ -290,7 +290,7 @@ function SearchHistory() {
                 key={item?.uniqueKey}
                 className={`overflow-hidden transition-all duration-300 ${
                   expandedCategory === item?.id
-                    ? "bg-gray-200 rounded-lg px-[10px] lg:pr-[10px] lg:pl-[6px] py-4"
+                    ? "bg-gray-200 rounded-lg px-[10px] lg:pr-[10px] lg:pl-[6px]"
                     : ""
                 }`}
               >

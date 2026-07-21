@@ -484,7 +484,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
               <HintIcon size={28} className="mt-2.5" />
               <p className="leading-12 text-justify font-iransans">
                 با{" "}
-                <Link href="#" className="text-primary font-bold font-iransans">
+                <Link href="#" className="text-primary font-iransans">
                   احراز هویت
                 </Link>{" "}
                 نشست‌های فعال را مدیریت کنید و از خدمات کیف پول اعتباری بهره مند
@@ -643,7 +643,11 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                   className="bg-gray-200!"
                 />
                 <p className="font-iransans text-gray-600 text-justify">
-                  با احراز کد پستی با اطمینان از خدمات ما بهره مند شوید
+                  با{" "}
+                  <span className="text-primary font-iransans">
+                    احراز کد پستی
+                  </span>{" "}
+                  با اطمینان از خدمات ما بهره مند شوید
                 </p>
               </div>
             </CustomAccordion>
@@ -689,7 +693,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
                     }}
                     bottomButtonText={
                       bankList.length > 0
-                        ? "واریز به حساب دیگری انجام شود؟"
+                        ? "به حساب دیگری واریز شود؟"
                         : "ثبت حساب بانکی"
                     }
                     buttonOnClick={() => setIsBankOpen(true)}

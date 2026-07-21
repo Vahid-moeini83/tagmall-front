@@ -174,7 +174,7 @@ export default function ProfilePartnership({ setActiveSection, setIsOpen }) {
           با مشارکت در فروش ما قدرت خرید شما را بیش تر می کنیم
         </p>
         {/* Products list */}
-        <div className="space-y-3 lg:space-y-8 pb-4">
+        <div className="space-y-[10px] lg:space-y-8 pb-4">
           {mockProducts.map((product) => (
             <div
               key={product.id}

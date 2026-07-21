@@ -12,14 +12,14 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
-import { SupportSingleChat } from "..";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatRelativeTime } from "@/lib/client/utils";
 import { deleteConversations } from "@/lib/server/actions/support";
+import { buildSupportConversation } from "../utils/conversation";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
+import usePublicStore from "@/app/store/publicStore";
 
 function formatChatItems(conversationsData) {
   return conversationsData.map((conv) => {
@@ -57,10 +57,10 @@ function SupportChats({ conversations, isMobile = false }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [deleteMode, setDeleteMode] = useState(false);
   const [pendingDeletes, setPendingDeletes] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedConversation, setSelectedConversation] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [chatItems, setChatItems] = useState([]);
+
+  const openConversation = usePublicStore((s) => s.openConversation);
 
   useEffect(() => {
     if (conversations?.data) {
@@ -75,31 +75,18 @@ function SupportChats({ conversations, isMobile = false }) {
   };
 
   useEffect(() => {
-    if (!conversationIdFromUrl) {
-      setIsOpen(false);
-      setSelectedConversation(null);
-      return;
-    }
+    if (!conversationIdFromUrl) return;
 
     const parsedId = Number.parseInt(conversationIdFromUrl, 10);
     const conversation = chatItems.find((chat) => chat.id === parsedId);
 
     if (conversation) {
-      setSelectedConversation(conversation);
-      setIsOpen(true);
+      openConversation(conversation);
       return;
     }
 
-    // Newly created support chat may not exist in list yet
-    setSelectedConversation({
-      id: parsedId,
-      name: "واحد پشتیبانی",
-      isSupport: true,
-      department: 2,
-      msg: "",
-    });
-    setIsOpen(true);
-  }, [conversationIdFromUrl, chatItems]);
+    openConversation(buildSupportConversation(parsedId));
+  }, [conversationIdFromUrl, chatItems, openConversation]);
 
   const [imagesSliderRef, imagesSlider] = useKeenSlider({
     vertical: isMobile ? false : true,
@@ -168,17 +155,10 @@ function SupportChats({ conversations, isMobile = false }) {
   };
 
   const handleOpenChat = (conversation) => {
-    setSelectedConversation(conversation);
-    setIsOpen(true);
+    openConversation(conversation);
     router.push(`/support?conversationId=${conversation.id}`, {
       scroll: false,
     });
-  };
-
-  const handleCloseChat = () => {
-    setIsOpen(false);
-    setSelectedConversation(null);
-    router.push("/support", { scroll: false });
   };
 
   const supportChat = chatItems.find((chat) => chat.isSupport);
@@ -216,12 +196,12 @@ function SupportChats({ conversations, isMobile = false }) {
                           </div>
 
                           <div className="flex flex-col lg:gap-6">
-                            <div className="font-bold text-gray-600 text-xs lg:text-base lg:pt-2">
+                            <div className="font-bold! text-gray-600 text-xs lg:text-base lg:pt-2">
                               {supportChat.name}
                             </div>
 
                             <div className="flex items-center gap-2">
-                              <p className="font-iransans font-semibold text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
+                              <p className="font-iransans text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
                                 {supportChat.msg}
                               </p>
                               {supportChat?.last_message_at && (
@@ -240,11 +220,15 @@ function SupportChats({ conversations, isMobile = false }) {
                         </div>
                       )}
 
-                      {otherChats.map((item, index) => (
+                      {otherChats.map((item) => (
                         <div key={item.id}>
                           <div
+                            className="border-t-2 border-gray-200 mr-11"
+                            aria-hidden
+                          />
+                          <div
                             onClick={() => handleOpenChat(item)}
-                            className="relative flex items-start gap-[6px] lg:gap-3 pt-1 lg:pt-3 pb-1 lg:pb-3 border-t-2 border-gray-200 cursor-pointer"
+                            className="relative flex items-start gap-[6px] lg:gap-3 pt-1 lg:pt-3 pb-1 lg:pb-3 cursor-pointer"
                           >
                             {item.other_user?.avatar ? (
                               <Image
@@ -261,12 +245,12 @@ function SupportChats({ conversations, isMobile = false }) {
                             )}
 
                             <div className="flex flex-col lg:gap-6 lg:pt-2 flex-1">
-                              <div className="font-bold text-gray-600 text-xs lg:text-base">
+                              <div className="font-bold! text-gray-600 text-xs lg:text-base">
                                 {item.name}
                               </div>
 
                               <div className="flex items-center gap-2">
-                                <p className="font-iransans font-semibold text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
+                                <p className="font-iransans text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
                                   {item.msg}
                                 </p>
                                 {item?.last_message_at && (
@@ -299,9 +283,6 @@ function SupportChats({ conversations, isMobile = false }) {
                               <div className="absolute left-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-error-medium" />
                             )}
                           </div>
-                          {index < otherChats.length - 1 && (
-                            <div className="w-full h-[2px] bg-gray-200 mr-12" />
-                          )}
                         </div>
                       ))}
                     </div>
@@ -431,38 +412,6 @@ function SupportChats({ conversations, isMobile = false }) {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-
-      {!isMobile && isDesktop && isOpen && selectedConversation && (
-        <div className="fixed inset-0 z-1000 bg-white h-screen">
-          <SupportSingleChat
-            isOpen={isOpen}
-            setIsOpen={handleCloseChat}
-            conversation={selectedConversation}
-          />
-        </div>
-      )}
-
-      {isMobile && !isDesktop && (
-        <Drawer
-          open={isOpen}
-          onOpenChange={handleCloseChat}
-          dismissible={true}
-          shouldScaleBackground={false}
-        >
-          <DrawerContent
-            className="z-100! px-[10px] h-[96%]! fixed!"
-            overlayClassName="z-100 lg:hidden"
-          >
-            {selectedConversation && (
-              <SupportSingleChat
-                isOpen={isOpen}
-                setIsOpen={handleCloseChat}
-                conversation={selectedConversation}
-              />
-            )}
-          </DrawerContent>
-        </Drawer>
-      )}
     </>
   );
 }

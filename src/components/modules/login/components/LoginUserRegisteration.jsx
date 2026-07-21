@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { saveToken, saveUser } from "@/lib/server/cookies";
 import usePublicStore from "@/app/store/publicStore";
 import Image from "next/image";
+import ResponsiveModal from "@/components/ui/responsive-modal";
 
 function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
   const router = useRouter();
@@ -17,6 +18,7 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
   const [lastName, setLastName] = useState("");
   const [nationalCode, setNationalCode] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [errors, setErrors] = useState({
     firstName: "",
@@ -33,6 +35,16 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
     lastName.trim() &&
     isValidIranianNationalCode(nationalCode) &&
     acceptedTerms;
+
+  const openTerms = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsTermsOpen(true);
+  };
+
+  const closeTerms = () => {
+    setIsTermsOpen(false);
+  };
 
   const handleConfirm = async () => {
     const newErrors = {
@@ -203,7 +215,22 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
             checked={acceptedTerms}
             onChange={setAcceptedTerms}
             className="bg-gray-200! border-0!"
-            label="شرایط بهره مندی از خدمات تگ مال را می پذیرم"
+            label={
+              <>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={openTerms}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") openTerms(e);
+                  }}
+                  className="text-primary cursor-pointer"
+                >
+                  شرایط
+                </span>{" "}
+                بهره مندی از خدمات تگ مال را می پذیرم
+              </>
+            }
           />
         </div>
       </div>
@@ -218,7 +245,33 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
       >
         بهره مندی از خدمات ما :)
       </button>
+
+      <ResponsiveModal
+        isOpen={isTermsOpen}
+        onClose={closeTerms}
+        title="شرایط و قوانین تگ مال"
+        nested
+        isHintBox
+      >
+        <div className="text-sm text-gray-600 leading-8 text-justify space-y-3">
+          <p>
+            استفاده از خدمات تگ مال به معنای پذیرش شرایط و قوانین زیر است. این
+            متن فعلاً برای تست نمایش داده می‌شود و نسخه نهایی قوانین به‌زودی
+            جایگزین آن خواهد شد.
+          </p>
+          <p>
+            کاربران موظف‌اند اطلاعات صحیح وارد کنند و از هرگونه سوءاستفاده از
+            سرویس خودداری نمایند. تگ مال حق به‌روزرسانی این شرایط را برای خود
+            محفوظ می‌دارد.
+          </p>
+          <p>
+            در صورت نیاز به پشتیبانی، می‌توانید از بخش پشتیبانی داخل اپلیکیشن با
+            ما در ارتباط باشید.
+          </p>
+        </div>
+      </ResponsiveModal>
     </div>
   );
 }
+
 export default LoginUserRegisteration;

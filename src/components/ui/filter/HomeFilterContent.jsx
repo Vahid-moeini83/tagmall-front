@@ -55,7 +55,7 @@ export default function HomeFilterContent() {
               <Checkbox
                 checked={checked}
                 onChange={(val) => handleChange(opt.id, val)}
-                className={"bg-gray-200! border-0!"}
+                className={"bg-gray-200! border-0! gap-5!"}
                 label={
                   <span className="font-extralight flex-1 text-right text-base text-gray-600">
                     {opt.label}{" "}
@@ -70,7 +70,7 @@ export default function HomeFilterContent() {
               )}
             </div>
             {index !== filterOptions.length - 1 && (
-              <div className="w-full h-[2px] bg-gray-200 mr-10" />
+              <div className="w-full h-[3px] bg-gray-200 mr-14" />
             )}
           </div>
         );

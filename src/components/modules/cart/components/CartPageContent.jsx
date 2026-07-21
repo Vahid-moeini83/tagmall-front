@@ -15,6 +15,8 @@ import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
 import usePublicStore from "@/app/store/publicStore";
 import { useRouter } from "next/navigation";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { ProfileEditInfo } from "@/components/modules/profile";
 
 function CartPageContent({ initialCartData }) {
   const [isOrderItemsOpen, setIsOrderItemsOpen] = useState(false);
@@ -26,6 +28,7 @@ function CartPageContent({ initialCartData }) {
   const [invoiceData, setInvoiceData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [orderId, setOrderId] = useState(null);
+  const [isProfileEditOpen, setIsProfileEditOpen] = useState(false);
 
   const setCartItemsCount = usePublicStore((s) => s.setCartItemsCount);
   const searchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
@@ -98,7 +101,7 @@ function CartPageContent({ initialCartData }) {
   };
 
   const handleSuccessPayment = () => {
-    router.push("/");
+    router.push("/support?tab=orders");
   };
 
   const handlePreviousStep = () => {
@@ -185,7 +188,7 @@ function CartPageContent({ initialCartData }) {
             <CartReceiverStepMobile
               receiverInfo={receiverInfo}
               onConfirm={() => setCurrentStep(3)}
-              onEdit={() => setCurrentStep(1)}
+              onEdit={() => setIsProfileEditOpen(true)}
             />
           )}
 
@@ -270,7 +273,7 @@ function CartPageContent({ initialCartData }) {
                       openAccordion={openAccordion}
                       setOpenAccordion={setOpenAccordion}
                       invoiceData={invoiceData}
-                      onPaymentSuccess={() => setIsPaid(true)}
+                      onPaymentSuccess={handleSuccessPayment}
                       setOrderId={setOrderId}
                     />
                   </div>
@@ -287,6 +290,29 @@ function CartPageContent({ initialCartData }) {
           </div>
         </div>
       </div>
+
+      <Drawer
+        open={isProfileEditOpen}
+        onOpenChange={(open) => {
+          setIsProfileEditOpen(open);
+          if (!open) {
+            fetchInvoice();
+          }
+        }}
+      >
+        <DrawerContent
+          className="z-100! h-[96%]!"
+          overlayClassName="z-100 lg:hidden"
+        >
+          <ProfileEditInfo
+            setIsEditingProfile={() => {
+              setIsProfileEditOpen(false);
+              fetchInvoice();
+            }}
+            setIsProfileOpen={() => setIsProfileEditOpen(false)}
+          />
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }

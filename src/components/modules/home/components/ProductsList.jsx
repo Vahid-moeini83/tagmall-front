@@ -7,10 +7,10 @@ import { NoteIcon, StrokeArrowLeftIcon } from "@/icons";
 import { DialogWrapper } from "@/components/ui/dialog";
 import { useMemo, useState } from "react";
 import ProductsListSlidePanel from "./ProductsListSlidePanel";
-import { useRouter } from "next/navigation";
 import usePublicStore from "@/app/store/publicStore";
 import { getToken } from "@/lib/server/cookies";
 import { createConversation } from "@/lib/server/actions/support";
+import { buildSupportConversation } from "@/components/modules/support/utils/conversation";
 import toast from "react-hot-toast";
 
 export default function ProductsList({
@@ -24,8 +24,8 @@ export default function ProductsList({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const router = useRouter();
   const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
+  const openConversation = usePublicStore((state) => state.openConversation);
 
   const showSpecial = filterMode !== "visit";
   const showOrders = filterMode !== "special";
@@ -61,7 +61,7 @@ export default function ProductsList({
       const conversationId = createConversationRes.data?.id;
 
       if (conversationId) {
-        router.push(`/support?conversationId=${conversationId}`);
+        openConversation(buildSupportConversation(conversationId));
       } else {
         toast.error("خطا در برقراری ارتباط با پشتیبانی");
       }

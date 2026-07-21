@@ -49,9 +49,11 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
 
       {/* Hint text */}
       {activeAddressAuth && (
-        <div className="flex items-center gap-5 text-gray-600 mt-4 mb-3.5 mr-4">
+        <div className="flex items-center gap-5 mt-4 mb-3.5 mr-4">
           <HintIcon size={20} className="shrink-0" />
-          احراز کد پستی توسط اداره پست انجام می‌شود
+          <span className="text-gray-600">
+            کد پستی توسط اداره پست احراز می‌شود
+          </span>
         </div>
       )}
 

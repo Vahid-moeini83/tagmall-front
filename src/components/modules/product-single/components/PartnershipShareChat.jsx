@@ -103,10 +103,10 @@ export default function PartnershipShareChat({
   };
 
   return (
-    <div className="pt-2 lg:pt-0 lg:px-[140px] flex flex-col h-full select-none overflow-hidden">
+    <div className="pt-2 lg:pt-0 px-[5px] lg:px-[140px] flex flex-col h-full select-none overflow-hidden">
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
-        <div className="flex items-center justify-between border-b-2 border-gray-200 lg:border-0 pb-4 lg:pb-2">
+        <div className="flex items-center justify-between lg:pb-2">
           <h2 className="font-iransans font-semibold text-primary text-sm lg:text-lg leading-7 text-center lg:text-start flex-1 px-2 lg:px-0">
             تجربه کاربران از بسترهای به اشتراک گذاری محتوا
           </h2>
@@ -116,7 +116,7 @@ export default function PartnershipShareChat({
       {/* Messages */}
       <div
         ref={chatContainerRef}
-        className="lg:pt-24 pb-78 lg:pb-56 overflow-y-auto scroll-hidden flex-1 px-[10px] lg:px-0"
+        className="lg:pt-24 pb-78 lg:pb-56 overflow-y-auto scroll-hidden flex-1 lg:px-0"
       >
         <div className="flex flex-col">
           {messages.map((msg, index) => {
@@ -143,7 +143,7 @@ export default function PartnershipShareChat({
             return (
               <div key={msg.id}>
                 {showDateSeparator && (
-                  <div className="flex justify-center my-6">
+                  <div className="flex justify-center my-4">
                     <div className="bg-gray-200 text-gray-600 text-xs px-4 py-1 rounded-full">
                       {currentDateLabel}
                     </div>
@@ -161,14 +161,14 @@ export default function PartnershipShareChat({
                 >
                   <div
                     className={cn(
-                      "flex gap-2 max-w-[80%] lg:max-w-[40%]",
+                      "flex gap-[5px] max-w-[80%] lg:max-w-[40%]",
                       isMine ? "flex-row" : "flex-row-reverse",
                       !last ? (isMine ? "mr-[50px]" : "ml-[50px]") : "",
                     )}
                   >
                     {last && (
                       <div className="flex items-end">
-                        <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center mb-4">
                           <UserIcon size={20} />
                         </div>
                       </div>

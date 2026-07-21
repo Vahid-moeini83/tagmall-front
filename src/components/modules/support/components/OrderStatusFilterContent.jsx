@@ -33,7 +33,7 @@ function OrderStatusFilterContent({ orderStatus, onChange }) {
           </div>
 
           {orderStatusOptions.length - 1 > index && (
-            <div className="h-px bg-gray-200 mr-8" />
+            <div className="h-[2px] bg-gray-200 mr-8" />
           )}
         </div>
       ))}

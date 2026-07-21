@@ -63,7 +63,7 @@ function CartPaymentStepMobile({
     <div className="pb-46">
       <div className="space-y-7">
         <h3 className="font-bold text-gray-600">شیوه پرداخت:</h3>
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-hidden">
           <Radio
             name="payment"
             value="gateway"
@@ -73,7 +73,7 @@ function CartPaymentStepMobile({
             label={"درگاه بانکی"}
           />
 
-          <div className="w-full h-[2px] bg-gray-200" />
+          <div className="w-full h-[3px] bg-gray-200 mr-14" />
 
           <Radio
             name="payment"

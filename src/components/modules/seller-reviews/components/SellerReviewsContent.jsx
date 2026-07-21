@@ -233,7 +233,7 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
         </div>
 
         {/* Fixed bottom section */}
-        <div className="fixed left-0 right-0 bg-white py-2 lg:py-4 px-4 lg:px-[80px] bottom-0">
+        <div className="fixed left-0 right-0 bg-white py-2 lg:py-4 px-[10px] lg:px-[80px] bottom-0">
           <div className="flex items-center gap-4">
             {/* Back button */}
             <button

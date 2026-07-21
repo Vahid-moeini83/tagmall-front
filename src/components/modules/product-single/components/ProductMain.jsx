@@ -28,9 +28,9 @@ import { formatPrice, formatSecondsToTime } from "@/lib/client/utils";
 import Link from "next/link";
 import usePublicStore from "@/app/store/publicStore";
 import { createConversation } from "@/lib/server/actions/support";
+import { buildSellerConversation } from "@/components/modules/support/utils/conversation";
 import { addCartItem, getCart } from "@/lib/server/actions/cart";
 import { getToken } from "@/lib/server/cookies";
-import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import SellerReviewsContent from "../../seller-reviews/components/SellerReviewsContent";
 import { mockSellerReviewsData } from "@/lib/client/mockReviewsData";
@@ -65,8 +65,7 @@ export default function ProductMain({ product }) {
   const setProductAttribute = usePublicStore((s) => s.setProductAttribute);
   const setLoginOpen = usePublicStore((s) => s.setLoginOpen);
   const setCartItemsCount = usePublicStore((s) => s.setCartItemsCount);
-
-  const router = useRouter();
+  const openConversation = usePublicStore((s) => s.openConversation);
 
   const toggleExpand = (id) => {
     setExpanded((prev) =>
@@ -244,7 +243,9 @@ export default function ProductMain({ product }) {
       const conversationId = createConversationRes.data?.id;
 
       if (conversationId) {
-        router.push(`/support?conversationId=${conversationId}`);
+        openConversation(
+          buildSellerConversation(conversationId, product?.seller_info),
+        );
       } else {
         toast.error("خطا در برقراری ارتباط با فروشنده");
       }
@@ -635,7 +636,7 @@ export default function ProductMain({ product }) {
                                       </div>
                                       {isColorAttribute && item.meta?.hex && (
                                         <div
-                                          className="w-5 h-5 rounded-full ml-2"
+                                          className="w-5 h-5 rounded-full border-2 border-gray-200 ml-2"
                                           style={{
                                             backgroundColor: item.meta.hex,
                                           }}
@@ -646,7 +647,7 @@ export default function ProductMain({ product }) {
                                       selectedItem?.id !== item.id &&
                                       selectedItem?.id !==
                                         attribute.items[index + 1]?.id && (
-                                        <div className="border-t-2 border-gray-200 mr-9" />
+                                        <div className="border-t-2 border-gray-200 mr-13" />
                                       )}
                                   </div>
                                 ))}
@@ -1135,11 +1136,14 @@ export default function ProductMain({ product }) {
               href={`/search/1?view=accessories&product=${encodeURIComponent(product?.name || "")}`}
               className="lg:hidden my-3 flex items-center justify-between px-[10px]"
             >
-              <div className="flex items-center gap-4">
-                <SquarePlusIcon2 size={20} className="mr-4" />
-                <span className="text-primary text-base font-bold">
-                  لوازم جانبی و قطعات مرتبط
-                </span>
+              <div className="flex items-center justify-between w-full gap-4">
+                <div className="flex items-center gap-4">
+                  <SquarePlusIcon2 size={20} className="mr-4" />
+                  <span className="text-primary text-base font-bold">
+                    لوازم جانبی و قطعات مرتبط
+                  </span>
+                </div>
+                <ChevronLeftIcon size={20} className="ml-4 lg:hidden" />
               </div>
             </Link>
 

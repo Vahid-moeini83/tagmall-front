@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import AppShells from "@/components/layout/AppShells";
 
 export const metadata = {
   title: "تگ مال",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="fa" dir="rtl">
       <body className="antialiased">
         {children}
+        <AppShells />
         <Toaster
           position="top-center"
           reverseOrder={false}

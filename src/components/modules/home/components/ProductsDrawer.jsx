@@ -2,17 +2,18 @@
 
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import {
+  ChevronDownIcon,
   ClockIcon,
   LocationIcon,
   StoreIcon,
   StrokeArrowLeftIcon,
+  SupportIcon,
   VerifyIcon,
 } from "@/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/client/utils";
 import ProductCardMobile from "./ProductCardMobile";
 import usePublicStore from "@/app/store/publicStore";
@@ -23,6 +24,7 @@ import {
 } from "@/components/ui/loading";
 import { getToken } from "@/lib/server/cookies";
 import { createConversation } from "@/lib/server/actions/support";
+import { buildSupportConversation } from "@/components/modules/support/utils/conversation";
 import toast from "react-hot-toast";
 
 const SHOP_IMAGES = [
@@ -32,7 +34,7 @@ const SHOP_IMAGES = [
 ];
 
 const SNAP_CLOSED_DEFAULT_HEIGHT = 320;
-const SNAP_CLOSED_SELLER_DETAILS_HEIGHT = 430;
+const SNAP_CLOSED_SELLER_DETAILS_HEIGHT = 340;
 const SNAP_CLOSED_WITH_SEARCH_HEIGHT = 375;
 const SNAP_OPEN_MAX_RATIO = 0.96;
 const SNAP_FALLBACK_VIEWPORT_HEIGHT = 812;
@@ -187,7 +189,7 @@ export default function ProductsDrawer({
 }) {
   const showSearchResultBox = usePublicStore((s) => s.showSearchResultBox);
   const setLoginOpen = usePublicStore((s) => s.setLoginOpen);
-  const router = useRouter();
+  const openConversation = usePublicStore((s) => s.openConversation);
   const filterMode = usePublicStore((s) => {
     const { homeFilterSpecial, homeFilterVisit } = s;
     if (homeFilterSpecial && homeFilterVisit) return "all";
@@ -392,14 +394,14 @@ export default function ProductsDrawer({
       const conversationId = createConversationRes.data?.id;
 
       if (conversationId) {
-        router.push(`/support?conversationId=${conversationId}`);
+        openConversation(buildSupportConversation(conversationId));
       } else {
         toast.error("خطا در برقراری ارتباط با پشتیبانی");
       }
     } else if (createConversationErr) {
       toast.error("خطا در برقراری ارتباط با پشتیبانی");
     }
-  }, [router, setLoginOpen]);
+  }, [openConversation, setLoginOpen]);
 
   useEffect(() => {
     const onResize = () => {
@@ -540,8 +542,12 @@ export default function ProductsDrawer({
         modal={false}
       >
         <DrawerContent
+          data-home-products-drawer=""
+          data-drawer-closed={
+            activeSnapPoint === snapPoints[0] ? "" : undefined
+          }
           className={cn(
-            "rounded-t-xl pt-0 px-0! border-0! lg:hidden bg-gray-200/20! backdrop-blur-sm outline-none!",
+            "group/home-drawer rounded-t-xl pt-0 px-0! border-0! lg:hidden bg-gray-200/20! backdrop-blur-sm outline-none! overflow-visible!",
             MOBILE_NAV_BOTTOM_OFFSET_CLASS,
             `data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-${MOBILE_DRAWER_BOTTOM_OFFSET_PX}px-env(safe-area-inset-bottom))]!`,
             "data-[vaul-drawer-direction=bottom]:min-h-[98svh]!",
@@ -577,7 +583,7 @@ export default function ProductsDrawer({
                 <div className="flex flex-col shrink-0 w-full">
                   <div className="w-full text-start flex items-center justify-between gap-2 py-1.5 px-1 rounded-lg">
                     <div className="flex items-center gap-2 min-w-0">
-                      <div className="w-9 h-9 relative shrink-0 rounded-lg overflow-hidden bg-white">
+                      <div className="w-[50px] h-[50px] relative shrink-0 rounded-lg overflow-hidden bg-white">
                         <Image
                           src={
                             selectedSeller.profileImage ||
@@ -591,7 +597,7 @@ export default function ProductsDrawer({
                       <span
                         role="button"
                         tabIndex={0}
-                        className="font-medium text-gray-700 truncate text-sm cursor-pointer"
+                        className="font-bold text-gray-600 truncate text-sm cursor-pointer"
                         onClick={handleSellerClick}
                       >
                         {selectedSeller.name}
@@ -605,51 +611,60 @@ export default function ProductsDrawer({
                     <button
                       type="button"
                       onClick={handleBackToProducts}
-                      className="shrink-0 p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-700"
                       aria-label="برگشت به لیست محصولات"
                     >
-                      <StrokeArrowLeftIcon size={20} color="currentColor" />
+                      <StrokeArrowLeftIcon
+                        size={20}
+                        color="currentColor"
+                        className="ml-[14px]"
+                      />
                     </button>
                   </div>
-                  <div className="rounded-lg bg-white p-3 flex flex-col gap-3 mt-2 shrink-0 shadow-sm">
+                  <div className="rounded-lg bg-white py-[10px] px-[10px] flex flex-col gap-3 shrink-0 shadow-sm">
                     <div className="flex flex-col gap-2 text-sm text-start">
                       {selectedSeller.workingHours && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-5 mr-[5px]">
                           <ClockIcon className="w-5 h-5" />
-                          <div className="flex flex-col gap-2">
-                            <span className="font-semibold text-gray-700">
-                              زمان فعالیت فروشگاه
-                            </span>
-                            <span className="text-gray-600">
-                              معمولا {selectedSeller.workingHours}
+                          <div className="flex flex-col gap-2 py-2">
+                            <span className="font-bold text-gray-600">
+                              زمان فعالیت فروشگاه:{" "}
+                              <span className="text-gray-600 font-extralight">
+                                معمولا {selectedSeller.workingHours}
+                              </span>
                             </span>
                           </div>
                         </div>
                       )}
                       {selectedSeller.address && (
                         <>
-                          <div className="w-full h-[2px] bg-gray-200 mr-7" />
-                          <div className="flex items-center gap-2">
+                          <div className="w-full h-[2px] bg-gray-200 mr-11" />
+                          <div className="flex items-center gap-5 mr-[5px]">
                             <LocationIcon className="w-5 h-5" />
                             <div className="flex flex-col gap-2">
-                              <span className="font-semibold text-gray-700">
-                                موقعیت فروشگاه
-                              </span>
-                              <span className="text-gray-600">
-                                {selectedSeller.address}
+                              <span className="font-bold text-gray-600">
+                                موقعیت فروشگاه:{" "}
+                                <span className="text-gray-600 font-extralight">
+                                  {selectedSeller.address}
+                                </span>
                               </span>
                             </div>
                           </div>
                         </>
                       )}
-                      <div className="w-full h-[2px] bg-gray-200 mr-7" />
+                      <div className="w-full h-[2px] bg-gray-200 mr-11" />
                       <button
                         type="button"
                         onClick={() => setShowShopImagesGallery(true)}
-                        className="w-full flex items-center gap-2 pt-2 pb-1 text-primary hover:opacity-90 transition-opacity text-start"
+                        className="w-full flex items-center gap-5 py-2 text-primary mr-[5px] text-start"
                       >
                         <StoreIcon className="w-5 h-5 shrink-0" color="#000" />
-                        <span>تصاویر فروشگاه</span>
+                        <div className="flex items-center justify-between w-full">
+                          <span className="font-bold">تصاویر فروشگاه</span>
+                          <ChevronDownIcon
+                            size={20}
+                            className={"rotate-90 text-gray-800 ml-4"}
+                          />
+                        </div>
                       </button>
                     </div>
                   </div>
@@ -820,14 +835,21 @@ export default function ProductsDrawer({
       </Drawer>
 
       {showShopImagesGallery && (
-        <div className="fixed inset-0 z-1000 flex flex-col bg-gray-200/20 backdrop-blur-sm">
-          <Image
-            src="/assets/images/logo/main-logo.svg"
-            width={110}
-            height={40}
-            alt="Logo"
-            className="absolute right-2.5 top-6"
-          />
+        <div className="fixed inset-0 z-1000 flex flex-col bg-gray-200/50 backdrop-blur-sm">
+          <div className="flex items-center justify-between px-[10px] pt-6">
+            <Image
+              src="/assets/images/logo/main-logo.svg"
+              width={130}
+              height={50}
+              alt="Logo"
+              className="object-cover"
+            />
+            <StrokeArrowLeftIcon
+              onClick={() => setShowShopImagesGallery(false)}
+              size={20}
+              className={"ml-4"}
+            />
+          </div>
           <div className="flex-1 flex flex-col justify-center min-h-0 overflow-hidden px-3 py-4">
             <Swiper
               dir="rtl"
@@ -835,7 +857,7 @@ export default function ProductsDrawer({
               slidesPerView={1}
               spaceBetween={10}
               grabCursor
-              className="rounded-lg overflow-hidden shadow-md max-h-64 sm:max-h-72 max-w-full"
+              className="rounded-lg overflow-hidden h-100 max-w-full"
               onSwiper={(swiper) => {
                 gallerySwiperRef.current = swiper;
               }}
@@ -855,34 +877,28 @@ export default function ProductsDrawer({
                 </SwiperSlide>
               ))}
             </Swiper>
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center gap-2 -mt-6 z-10">
               {SHOP_IMAGES.map((_, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => gallerySwiperRef.current?.slideTo(idx)}
                   className={cn(
-                    "w-2 h-2 rounded-full transition-all cursor-pointer",
-                    galleryCurrentSlide === idx
-                      ? "bg-primary w-6"
-                      : "bg-gray-400 hover:bg-gray-400",
+                    "w-3 h-3 rounded-full transition-all cursor-pointer",
+                    galleryCurrentSlide === idx ? "bg-primary w-6" : "bg-white",
                   )}
                   aria-label={`اسلاید ${idx + 1}`}
                 />
               ))}
             </div>
           </div>
-          <div className="relative flex items-center justify-center px-4 py-4 pb-8">
-            <StrokeArrowLeftIcon
-              onClick={() => setShowShopImagesGallery(false)}
-              size={20}
-              className="absolute right-6"
-            />
+          <div className="relative flex items-center justify-center px-[10px] py-4 pb-8">
             <button
               type="button"
               onClick={handleSupport}
-              className="text-primary font-semibold text-sm hover:opacity-90 cursor-pointer transition-opacity"
+              className="flex items-center justify-center gap-4 font-bold w-full text-primary border-2 border-primary rounded-full py-2"
             >
+              <SupportIcon size={20} />
               ارتباط با واحد پشتیبانی
             </button>
           </div>

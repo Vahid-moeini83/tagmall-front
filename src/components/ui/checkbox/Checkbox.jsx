@@ -11,7 +11,7 @@ function Checkbox({
   ...props
 }) {
   return (
-    <label className="flex items-center gap-2.5 cursor-pointer select-none">
+    <label className="flex items-center gap-5 cursor-pointer select-none">
       <input
         type="checkbox"
         checked={checked}

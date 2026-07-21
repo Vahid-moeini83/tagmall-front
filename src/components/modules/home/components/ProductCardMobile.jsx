@@ -114,7 +114,7 @@ function ProductCardMobile({
               {isOrder ? (
                 <>
                   <span className="text-primary text-sm font-bold sm:pr-4">
-                    سفارشات(خرید حضوری)
+                    سفارشات
                   </span>
                   <ReceiptIcon size={20} />
                 </>
@@ -148,7 +148,10 @@ function ProductCardMobile({
               <div className="flex flex-col gap-0.5">
                 {isOrder ? (
                   <p className="font-bold text-sm text-gray-600">
-                    وضعیت <span className="font-extralight">{statusLabel}</span>
+                    وضعیت <span className="font-extralight">{statusLabel}</span>{" "}
+                    <span className="text-gray-400 text-xs font-extralight">
+                      بروزرسانی 1 دقیقه پیش
+                    </span>
                   </p>
                 ) : (
                   <>

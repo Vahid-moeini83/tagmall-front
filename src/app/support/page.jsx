@@ -9,7 +9,7 @@ async function SupportPage() {
   const { conversationsRes } = await getConversations(token);
   const { ordersRes } = await getUserOrders(token, 1);
 
-  console.log(ordersRes);
+  console.log(conversationsRes);
 
   return (
     <SupportContent

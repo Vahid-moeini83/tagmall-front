@@ -58,7 +58,7 @@ const ProfileAvatarContent = ({
         ) : (
           <div className="flex items-center gap-2 mt-[5px] mb-3">
             <div
-              className={`flex-1 text-base text-center border-2 rounded-full py-2 px-4 ${
+              className={`w-1/2 text-base text-center border-2 rounded-full py-2 px-4 ${
                 isUpdating
                   ? "text-gray-400 border-gray-200 cursor-not-allowed"
                   : "text-primary border-primary cursor-pointer"
@@ -69,7 +69,7 @@ const ProfileAvatarContent = ({
             </div>
 
             <div
-              className={`flex-1 text-center text-base ${
+              className={`w-1/2 text-center text-base ${
                 isUpdating
                   ? "text-gray-400 cursor-not-allowed"
                   : "text-error-medium cursor-pointer"

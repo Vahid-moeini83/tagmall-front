@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { flushSync } from "react-dom";
 import Image from "next/image";
@@ -7,6 +8,7 @@ import toast from "react-hot-toast";
 import { SellerMarker, UserMarker } from "@/components/ui/markers";
 import { GPSIcon } from "@/icons";
 import usePublicStore from "@/app/store/publicStore";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   HOME_MAP_INITIAL_CENTER,
   HOME_MAP_INITIAL_ZOOM,
@@ -20,6 +22,10 @@ const CUSTOM_TILE_URL =
   "https://api.neshan.org/tile/raster/basemap/{z}/{x}/{y}?style=neshan&Api-key=service.cfd22467b9064762be3c1beec3756c47";
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OSM contributors</a>';
+
+// Mobile GPS sits 5px above drawer (40px button + 5px gap); visible only when drawer is closed
+const MOBILE_GPS_ABOVE_DRAWER_CLASS =
+  "absolute left-4 -top-[45px] z-1001 hidden group-data-[drawer-closed]/home-drawer:block";
 
 function normalizeStoreId(id) {
   return id == null ? null : String(id);
@@ -61,6 +67,8 @@ function MapComponent({
   const isGpsEnabledRef = useRef(false);
 
   const isSearchBoxOpen = usePublicStore((s) => s.searchBoxOpen);
+  const isSmUp = useMediaQuery("(min-width: 640px)");
+  const [homeDrawerEl, setHomeDrawerEl] = useState(null);
 
   // Keep latest callbacks without re-attaching map listeners
   useEffect(() => {
@@ -78,6 +86,26 @@ function MapComponent({
   useEffect(() => {
     skipInitialAreaFetchRef.current = skipInitialAreaFetch;
   }, [skipInitialAreaFetch]);
+
+  // Attach mobile GPS to the home drawer so it moves with drawer transform
+  useEffect(() => {
+    if (isSmUp) {
+      setHomeDrawerEl(null);
+      return;
+    }
+
+    let retryId = 0;
+    const bindDrawer = () => {
+      const el = document.querySelector("[data-home-products-drawer]");
+      setHomeDrawerEl(el);
+      if (!el) {
+        retryId = window.setTimeout(bindDrawer, 100);
+      }
+    };
+
+    bindDrawer();
+    return () => window.clearTimeout(retryId);
+  }, [isSmUp]);
 
   const resetMapView = () => {
     if (!mapRef.current) return;
@@ -501,34 +529,46 @@ function MapComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSellerId]);
 
+  const gpsButton = (
+    <div
+      onClick={toggleGps}
+      onMouseDown={handleGpsButtonMouseDown}
+      onMouseUp={handleGpsButtonMouseUp}
+      onMouseLeave={handleGpsButtonMouseUp}
+      className={
+        isSmUp
+          ? "absolute left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
+          : `${MOBILE_GPS_ABOVE_DRAWER_CLASS} cursor-pointer pointer-events-auto`
+      }
+    >
+      <div
+        className={`bg-gray-200/40 backdrop-blur-sm border border-white sm:bg-gray-100/70 rounded-lg flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${
+          isGpsEnabled ? "text-primary" : "text-gray-800"
+        }`}
+      >
+        <GPSIcon size={20} />
+      </div>
+    </div>
+  );
+
   return (
     <div className="absolute inset-0 z-0 w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full" />
 
-      {/* دکمه GPS */}
-      <div
-        onClick={toggleGps}
-        onMouseDown={handleGpsButtonMouseDown}
-        onMouseUp={handleGpsButtonMouseUp}
-        onMouseLeave={handleGpsButtonMouseUp}
-        className="absolute bottom-[calc(360px+env(safe-area-inset-bottom))] left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
-      >
-        <div
-          className={`bg-gray-200/40 backdrop-blur-sm border border-white sm:bg-gray-100/70 rounded-lg flex flex-col justify-center items-center gap-0.5 w-10 h-10 sm:w-[50px] sm:h-[50px] ${
-            isGpsEnabled ? "text-primary" : "text-gray-800"
-          }`}
-        >
-          <GPSIcon size={20} />
-        </div>
-      </div>
+      {/* موبایل: GPS به دراور portal می‌شود تا با حرکت دراور جابه‌جا شود */}
+      {!isSmUp && homeDrawerEl
+        ? createPortal(gpsButton, homeDrawerEl)
+        : isSmUp
+          ? gpsButton
+          : null}
 
       {/* لوگو */}
       {!isSearchBoxOpen && (
         <div className="absolute top-6 lg:top-9 right-2.5 lg:left-8 lg:right-[unset] z-1000">
           <Image
             src="/assets/images/logo/main-logo.svg"
-            width={110}
-            height={40}
+            width={130}
+            height={50}
             alt="main-logo"
             className="object-contain"
           />

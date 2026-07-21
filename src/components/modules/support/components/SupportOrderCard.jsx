@@ -50,18 +50,14 @@ export default function SupportOrderCard({ order, isLast = false }) {
   };
 
   return (
-    <div
-      className={`w-full ${isLast ? "" : "border-b-4 border-gray-200"}`}
-    >
+    <div className={`w-full ${isLast ? "" : "border-b-4 border-gray-200"}`}>
       {/* Content keeps side padding; border sits on full-width wrapper */}
       <div className="px-[10px] pb-[10px]">
         <div className="flex items-center justify-between mb-[5px] px-0.5">
           <div className="flex items-center gap-2 min-w-0">
             <div className="relative w-[50px] h-[50px] shrink-0 rounded-lg overflow-hidden border border-gray-200">
               <Image
-                src={
-                  order.store_avatar ?? "/assets/images/fallback/avatar.png"
-                }
+                src={order.store_avatar ?? "/assets/images/fallback/avatar.png"}
                 alt={order.store_name}
                 fill
                 className="object-cover"
@@ -79,7 +75,7 @@ export default function SupportOrderCard({ order, isLast = false }) {
             className="cursor-pointer"
             aria-label="نمایش رسید تحویل"
           >
-            <ReceiptIcon size={20} className="shrink-0 ml-1" />
+            <ReceiptIcon size={20} className="shrink-0 ml-[10px]" />
           </button>
         </div>
 
@@ -103,9 +99,7 @@ export default function SupportOrderCard({ order, isLast = false }) {
                 <div className="flex items-center gap-4">
                   <div className="relative w-[100px] h-[100px] shrink-0 rounded-xl overflow-hidden bg-gray-50">
                     <Image
-                      src={
-                        item.image ?? "/assets/images/fallback/no-photo.jpg"
-                      }
+                      src={item.image ?? "/assets/images/fallback/no-photo.jpg"}
                       alt={item.product_name}
                       fill
                       className="object-cover"
@@ -139,7 +133,7 @@ export default function SupportOrderCard({ order, isLast = false }) {
           </Swiper>
 
           {items.length > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-4">
+            <div className="flex justify-center items-center gap-2 mt-0">
               {items.map((item, idx) => (
                 <button
                   key={item.id}

@@ -104,6 +104,15 @@ const usePublicStore = create((set, get) => ({
   closeReceiptDrawer() {
     set({ receiptDrawerOpen: false, receiptData: null });
   },
+
+  conversationOpen: false,
+  activeConversation: null,
+  openConversation(conversation) {
+    set({ conversationOpen: true, activeConversation: conversation });
+  },
+  closeConversation() {
+    set({ conversationOpen: false, activeConversation: null });
+  },
 }));
 
 export default usePublicStore;

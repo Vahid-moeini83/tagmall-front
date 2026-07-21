@@ -5,7 +5,9 @@ import { ChevronDownIcon, ChevronUpIcon } from "@/icons";
 import OrderStatusFilterContent, {
   getOrderStatusLabel,
 } from "./OrderStatusFilterContent";
-import OrderDateRangeFilterContent from "./OrderDateRangeFilterContent";
+import DateRangeFilterContent, {
+  formatDateRangeLabel,
+} from "@/components/ui/date-range";
 
 const mobileFilters = [
   { id: "order-status", label: "وضعیت سفارشات" },
@@ -20,15 +22,19 @@ function FilterOrdersDrawer({
   orderStatus,
   onStatusChange,
   fromDate,
-  onFromDateChange,
+  setFromDate,
   toDate,
-  onToDateChange,
+  setToDate,
   hasFiltersChanged,
   onResetFilters,
 }) {
   const getFilterValue = (filterId) => {
     if (filterId === "order-status") {
       return getOrderStatusLabel(orderStatus);
+    }
+
+    if (filterId === "date-range") {
+      return formatDateRangeLabel(fromDate, toDate);
     }
 
     return "";
@@ -42,73 +48,80 @@ function FilterOrdersDrawer({
       }}
     >
       <DrawerContent overlayClassName="lg:hidden">
-        <div className="px-[10px] pt-4">
+        <div className="px-[10px] pt-3">
           <h3 className="pb-2 text-center text-base font-bold text-primary">
             پیگیری سفارشات
           </h3>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-[10px]">
-          {mobileFilters.map((filter, index) => (
-            <div
-              key={filter.id}
-              className={
-                mobileFilters.length - 1 === index ? "" : "border-b border-gray-200"
-              }
-            >
-              <button
-                type="button"
-                onClick={() => onFilterToggle(filter.id)}
-                className="relative flex w-full items-center justify-between py-4"
-              >
-                <div className="flex items-center gap-1">
-                  <span className="font-bold text-gray-600">{filter.label}</span>
-                  {filter.id === "order-status" && getFilterValue(filter.id) && (
-                    <>
-                      <span className="text-gray-600">:</span>
-                      <span className="text-sm font-normal text-gray-600">
-                        {getFilterValue(filter.id)}
-                      </span>
-                    </>
-                  )}
-                </div>
+        <div className="flex-1 px-[10px]">
+          {mobileFilters.map((filter, index) => {
+            const filterValue = getFilterValue(filter.id);
 
-                {expandedFilter.includes(filter.id) ? (
-                  <ChevronUpIcon size={20} className="absolute left-[14px]" />
-                ) : (
-                  <ChevronDownIcon size={20} className="absolute left-[14px]" />
-                )}
-              </button>
-
+            return (
               <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  expandedFilter.includes(filter.id)
-                    ? "max-h-[1000px] opacity-100"
-                    : "max-h-0 opacity-0"
-                }`}
+                key={filter.id}
+                className={
+                  mobileFilters.length - 1 === index
+                    ? ""
+                    : "border-b border-gray-200"
+                }
               >
-                {expandedFilter.includes(filter.id) && (
-                  <div className="pb-3">
-                    {filter.id === "order-status" && (
-                      <OrderStatusFilterContent
-                        orderStatus={orderStatus}
-                        onChange={onStatusChange}
-                      />
-                    )}
-
-                    {filter.id === "date-range" && (
-                      <OrderDateRangeFilterContent
-                        fromDate={fromDate}
-                        onFromDateChange={onFromDateChange}
-                        toDate={toDate}
-                        onToDateChange={onToDateChange}
-                      />
+                <button
+                  type="button"
+                  onClick={() => onFilterToggle(filter.id)}
+                  className="relative flex w-full items-center justify-between py-4"
+                >
+                  <div className="flex items-center gap-1">
+                    <span className="font-bold text-gray-600">
+                      {filter.label}
+                      {filterValue ? ":" : ""}
+                    </span>
+                    {filterValue && (
+                      <span className="text-sm text-gray-600 font-extralight">
+                        {filterValue}
+                      </span>
                     )}
                   </div>
-                )}
+
+                  {expandedFilter.includes(filter.id) ? (
+                    <ChevronUpIcon size={20} className="absolute left-[19px]" />
+                  ) : (
+                    <ChevronDownIcon size={20} className="absolute left-[19px]" />
+                  )}
+                </button>
+
+                <div
+                  className={`transition-all duration-300 ${
+                    expandedFilter.includes(filter.id)
+                      ? "max-h-[1000px] opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
+                >
+                  {expandedFilter.includes(filter.id) && (
+                    <div>
+                      {filter.id === "order-status" && (
+                        <OrderStatusFilterContent
+                          orderStatus={orderStatus}
+                          onChange={onStatusChange}
+                        />
+                      )}
+
+                      {filter.id === "date-range" && (
+                        <DateRangeFilterContent
+                          fromDate={fromDate}
+                          setFromDate={setFromDate}
+                          toDate={toDate}
+                          setToDate={setToDate}
+                          showLabel={false}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <DrawerFooter className="bg-white px-[10px] pt-4 pb-18">

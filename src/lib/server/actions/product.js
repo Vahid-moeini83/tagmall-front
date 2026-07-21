@@ -75,6 +75,24 @@ export async function createComment(token, bodyData) {
   }
 }
 
+// Update existing comment
+export async function updateComment(token, commentId, bodyData) {
+  try {
+    const response = await http({
+      url: `/comments/${commentId}`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: bodyData,
+    });
+    return { updateCommentRes: response.data };
+  } catch (err) {
+    console.log("Error updating comment: ", err);
+    return { updateCommentErr: err };
+  }
+}
+
 // Delete comment
 export async function deleteComment(token, commentId) {
   try {

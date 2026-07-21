@@ -36,9 +36,9 @@ function SearchResultBox({ searchTerm = null, standalone = false }) {
   return (
     <div
       onClick={handleSearchResultBoxClick}
-      className="relative flex items-center justify-center lg:top-7 lg:left-30 xl:left-48 lg:h-[50px] w-full lg:w-96 xl:w-120 z-50 bg-white px-2 py-3 lg:py-0 rounded-lg shadow-md animate-slide-in-down"
+      className="relative flex items-center justify-center lg:top-7 lg:left-30 xl:left-48 lg:h-[50px] w-full lg:w-96 xl:w-120 z-50 px-2 py-3 lg:py-0 animate-slide-in-down"
     >
-      <div className="text-gray-600 text-center font-semibold">
+      <div className="text-primary text-center font-bold">
         گروه کالایی{" "}
         <span className="font-extralight">{searchResultData || "نامشخص"}</span>
       </div>

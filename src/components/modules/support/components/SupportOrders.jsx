@@ -14,8 +14,9 @@ import { useRouter } from "next/navigation";
 import usePublicStore from "@/app/store/publicStore";
 import toast from "react-hot-toast";
 import { createConversation } from "@/lib/server/actions/support";
+import { buildSupportConversation } from "../utils/conversation";
 import { getUserOrders } from "@/lib/server/actions/cart";
-import { OrderItemsSkeleton } from "@/components/ui/loading/cart";
+import { SupportOrdersSkeleton } from "@/components/ui/loading/support";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import SupportOrderCard from "./SupportOrderCard";
@@ -107,10 +108,7 @@ function mapOrdersFromApi(ordersList = []) {
 function SupportOrders({ initialOrders }) {
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
-  const [expandedFilter, setExpandedFilter] = useState([
-    "order-status",
-    "date-range",
-  ]);
+  const [expandedFilter, setExpandedFilter] = useState([]);
   const [orderType, setOrderType] = useState(null);
   const [orderStatus, setOrderStatus] = useState(null);
   const [fromDate, setFromDate] = useState(null);
@@ -132,6 +130,7 @@ function SupportOrders({ initialOrders }) {
   const router = useRouter();
 
   const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
+  const openConversation = usePublicStore((state) => state.openConversation);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -188,7 +187,10 @@ function SupportOrders({ initialOrders }) {
       const conversationId = createConversationRes.data?.id;
 
       if (conversationId) {
-        router.push(`/support?conversationId=${conversationId}&tab=chats`);
+        openConversation(buildSupportConversation(conversationId));
+        router.push(`/support?conversationId=${conversationId}&tab=chats`, {
+          scroll: false,
+        });
       } else {
         toast.error("Error connecting to support");
       }
@@ -313,13 +315,13 @@ function SupportOrders({ initialOrders }) {
                 <span className="font-bold">سفارشات</span>{" "}
                 <span className="font-extralight">{getStatusLabel()}</span>
               </span>
-              <ChevronLeftIcon size={16} className="shrink-0 text-primary" />
+              <ChevronLeftIcon size={16} className="shrink-0 ml-[15px]" />
             </button>
 
             <div className="space-y-[5px] lg:space-y-10 lg:mt-10">
               {isLoadingOrders && orders.length === 0 ? (
-                <div className="px-[10px] lg:px-0">
-                  <OrderItemsSkeleton isMobile={!isDesktop} />
+                <div className="lg:px-0">
+                  <SupportOrdersSkeleton isMobile={!isDesktop} />
                 </div>
               ) : filteredOrders.length === 0 ? (
                 <div className="text-center py-10 text-gray-500 px-[10px] lg:px-0">
@@ -377,9 +379,9 @@ function SupportOrders({ initialOrders }) {
         orderStatus={orderStatus}
         onStatusChange={setOrderStatus}
         fromDate={fromDate}
-        onFromDateChange={setFromDate}
+        setFromDate={setFromDate}
         toDate={toDate}
-        onToDateChange={setToDate}
+        setToDate={setToDate}
         hasFiltersChanged={hasFiltersChanged}
         onResetFilters={handleResetFilters}
       />

@@ -113,7 +113,7 @@ function DrawerFooter({ className, ...props }) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn("gap-2 py-4 px-[10px] mt-auto flex flex-col", className)}
+      className={cn("gap-2 pt-[5px] px-[10px] mt-auto flex flex-col", className)}
       {...props}
     />
   );
