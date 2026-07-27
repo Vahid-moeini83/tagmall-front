@@ -52,10 +52,17 @@ function ProductSingle({ product, productError, comments, commentsError }) {
     fetchCartCount();
   }, [setCartItemsCount]);
 
+  // Show product fetch error once (do not call toast during render)
+  useEffect(() => {
+    if (productError) {
+      toast.error("خطا در نمایش محصول. لطفا دوباره تلاش کنید");
+    }
+  }, [productError]);
+
   // Product base info
   const productBaseInfo = {
     category: "گوشی موبایل",
-    name: product?.name,
+    name: product?.name || "نامشخص",
   };
 
   // Clear attributes on unmount
@@ -148,12 +155,6 @@ function ProductSingle({ product, productError, comments, commentsError }) {
     return () => container.removeEventListener("scroll", handleScroll);
   }, [isDesktop]);
 
-  // Check if there is no error
-  if (productError) {
-    toast.error("خطا در دریافت اطلاعات محصول");
-    return;
-  }
-
   return (
     <>
       {/* Desktop Layout */}
@@ -225,7 +226,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                 <ProductReviews review={product?.product_review} />
                 <ProductUserComments
                   productId={product?.id}
-                  productName={product?.name}
+                  productName={product?.name || "نامشخص"}
                   initialComments={comments}
                   commentsError={commentsError}
                 />
@@ -238,7 +239,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
               >
                 <ProductPartnership
                   cooperation={product?.cooperation_in_sale}
-                  productName={product?.name}
+                  productName={product?.name || "نامشخص"}
                 />
               </div>
             </div>
@@ -296,7 +297,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                   {activeSection === "partnership" && (
                     <ProductPartnership
                       cooperation={product?.cooperation_in_sale}
-                      productName={product?.name}
+                      productName={product?.name || "نامشخص"}
                     />
                   )}
                 </div>
@@ -323,7 +324,7 @@ function ProductSingle({ product, productError, comments, commentsError }) {
           >
             <ProductUserComments
               productId={product?.id}
-              productName={product?.name}
+              productName={product?.name || "نامشخص"}
               initialComments={comments}
               commentsError={commentsError}
             />

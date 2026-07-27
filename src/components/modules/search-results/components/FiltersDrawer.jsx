@@ -47,8 +47,8 @@ function FiltersDrawer({
         className={`data-[vaul-drawer-direction=bottom]:h-[96%]! data-[vaul-drawer-direction=bottom]:max-h-[96svh]! ${drawerClassName}`}
       >
         {/* Content */}
-        <div className="relative bg-white rounded-t-2xl px-[10px] mt-4">
-          <p className="font-iransans text-center text-sm text-gray-600">
+        <div className="relative bg-white rounded-t-2xl px-[10px] mt-3 pb-3">
+          <p className="font-iransans font-bold text-center text-sm text-gray-600">
             انتخاب آسان تر براساس اولویت شما
           </p>
           <AvailableProductsIcon
@@ -58,7 +58,7 @@ function FiltersDrawer({
             className="absolute top-0 left-5 "
           />
         </div>
-        <div className="flex-1 overflow-y-auto bg-white px-[10px] py-4">
+        <div className="flex-1 overflow-y-auto bg-white px-[10px] pb-4">
           {mobileFilters.map((filter, index) => (
             <div
               key={filter.id}

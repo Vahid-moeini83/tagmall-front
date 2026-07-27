@@ -69,7 +69,7 @@ function ProfileWalletAmountContent({
           onChange={handleChange}
           disabled={isLoading}
           className={`h-[50px] text-center text-gray-600 bg-gray-200 ${error ? "" : "border-0!"}`}
-          labelClassName={"mb-2"}
+          labelClassName={"mb-2 text-gray-600 lg:text-primary"}
           placeholder={"مبلغ"}
           error={error}
         />

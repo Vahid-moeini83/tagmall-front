@@ -140,19 +140,11 @@ function ProfileSessionsContent({
       {/* دکمه حذف */}
       <button
         disabled={selectedSessions.length === 0 || isDeleting}
-        className={
-          isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mb-4 text-base ${
-                selectedSessions.length > 0 && !isDeleting
-                  ? "text-error-medium border-error-medium cursor-pointer"
-                  : "text-gray-400 border-gray-200 cursor-not-allowed"
-              }`
-            : `text-center py-4 ${
-                selectedSessions.length > 0 && !isDeleting
-                  ? "text-error-medium cursor-pointer"
-                  : "text-gray-400 cursor-not-allowed"
-              }`
-        }
+        className={`w-full text-center border-2 rounded-full py-2 px-4 mb-4 text-base ${
+          selectedSessions.length > 0 && !isDeleting
+            ? "text-error-medium border-error-medium cursor-pointer"
+            : "text-gray-400 border-gray-200 cursor-not-allowed"
+        }`}
         onClick={onDeleteSessions}
       >
         {isDeleting

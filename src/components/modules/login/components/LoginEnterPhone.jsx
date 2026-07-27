@@ -80,7 +80,7 @@ function LoginEnterPhone({
           <div className="flex items-center gap-5 mt-4 mr-4">
             <HintIcon size={20} />
             <span className="font-bold text-sm text-gray-600">
-              کد تایید به شماره تماس شما ارسال می‌شود
+              کد تایید به شماره تماس شما پیامک می‌شود
             </span>
           </div>
         </div>

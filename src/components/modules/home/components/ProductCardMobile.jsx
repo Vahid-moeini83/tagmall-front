@@ -23,7 +23,7 @@ export function ProductCardSellerHeader({
         onClick={() => onSellerClick?.(product)}
         className={`flex items-center gap-2 min-w-0 ${isListMode ? "cursor-pointer" : ""}`}
       >
-        <div className="w-[50px] h-[50px] relative shrink-0 rounded-md overflow-hidden bg-white">
+        <div className="w-[50px] h-[50px] relative shrink-0 rounded-lg overflow-hidden bg-white">
           <Image
             src={
               product.seller.profileImage ||

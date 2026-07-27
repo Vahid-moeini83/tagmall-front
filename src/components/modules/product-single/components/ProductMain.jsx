@@ -82,7 +82,7 @@ export default function ProductMain({ product }) {
   // Seller data
   const sellerData = {
     sellerName:
-      product?.seller_info?.name || product?.store_info?.name || "فروشنده",
+      product?.seller_info?.name || product?.store_info?.name || "نامشخص",
     sellerAvatar:
       product?.seller_info?.avatar ||
       product?.store_info?.avatar ||
@@ -453,7 +453,7 @@ export default function ProductMain({ product }) {
                     {sellerData.rating}
                     <span className="text-xs text-gray-400">/5</span>
                   </span>
-                  <StarIcon className="w-[12px] h-[12px] lg:w-[15px] lg:h-[15px] text-yellow-600 mb-1" />
+                  <StarIcon className="w-[10px] h-[10px] lg:w-[15px] lg:h-[15px] text-yellow-600 mb-1" />
                 </div>
                 <span className="text-center font-bold text-gray-600 pl-2 lg:pl-4">
                   آرا{" "}
@@ -518,7 +518,7 @@ export default function ProductMain({ product }) {
               {/* Product Name & Price */}
               <div className="flex flex-col items-center lg:items-start gap-2 lg:gap-4 pb-4">
                 <p className="hidden lg:block text-gray-600 text-lg">
-                  {product?.name}
+                  {product?.name || "نامشخص"}
                 </p>
                 <p className="text-gray-600 lg:text-lg">
                   {currentPrice.toLocaleString("fa-IR")} تومان
@@ -596,7 +596,7 @@ export default function ProductMain({ product }) {
                               id={`attribute-${attribute.id}`}
                               expandedItems={expanded}
                               onToggle={toggleExpand}
-                              triggerClassName={isPrevOpen ? "pt-1" : ""}
+                              triggerClassName={isPrevOpen ? "pt-3" : ""}
                               customLabel={
                                 <div>
                                   <span className="text-gray-600 text-base font-bold">
@@ -613,7 +613,9 @@ export default function ProductMain({ product }) {
                               }
                               iconClassName="left-[18px]"
                             >
-                              <div className="space-y-0 mb-[10px]">
+                              <div
+                                className={`space-y-0${selectedItem && attribute.items?.length > 0 && selectedItem.id === attribute.items[attribute.items.length - 1].id ? " mb-[10px]" : ""}`}
+                              >
                                 {attribute.items?.map((item, index) => (
                                   <div key={item.id}>
                                     <button
@@ -1200,7 +1202,7 @@ export default function ProductMain({ product }) {
           overlayClassName="z-100 lg:hidden"
         >
           <h2 className="font-extralight text-center text-primary text-base lg:text-lg mt-4 mb-4 px-[10px] shrink-0">
-            {product?.name}
+            {product?.name || "نامشخص"}
           </h2>
 
           <div className="flex-1 overflow-y-auto px-[10px] pb-28">
@@ -1340,7 +1342,7 @@ export default function ProductMain({ product }) {
         <ProductOrderAccessoriesDrawer
           open={showOrderAccessoriesDrawer}
           onOpenChange={setShowOrderAccessoriesDrawer}
-          productName={product?.name || ""}
+          productName={product?.name || "نامشخص"}
         />
       ) : null}
 
@@ -1348,7 +1350,7 @@ export default function ProductMain({ product }) {
         <ProductRelatedAccessoriesDrawer
           open={showRelatedAccessoriesDrawer}
           onOpenChange={setShowRelatedAccessoriesDrawer}
-          productName={product?.name || ""}
+          productName={product?.name || "نامشخص"}
         />
       ) : null}
     </div>

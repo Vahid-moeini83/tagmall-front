@@ -66,19 +66,11 @@ function ProfileEmailContent({ email, setReceivedOtp, setEmail, onNext }) {
       <button
         onClick={handleSendOtp}
         disabled={!isFormValid || isLoading}
-        className={
-          isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-1.5 mb-3 text-base ${
-                !isFormValid || isLoading
-                  ? "text-gray-400 border-gray-200 cursor-not-allowed"
-                  : "text-primary border-primary cursor-pointer"
-              }`
-            : `mt-6 w-full py-3 text-base ${
-                !isFormValid || isLoading
-                  ? "text-gray-400 cursor-not-allowed"
-                  : "text-primary cursor-pointer"
-              }`
-        }
+        className={`w-full text-center border-2 rounded-full py-2 px-4 mt-1.5 mb-3 text-base ${
+          !isFormValid || isLoading
+            ? "text-gray-400 border-gray-200 cursor-not-allowed"
+            : "text-primary border-primary cursor-pointer"
+        }`}
       >
         ارسال کد تایید
       </button>

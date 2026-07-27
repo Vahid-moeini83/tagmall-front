@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LocationIcon,
   StrokeLocationIcon,
@@ -19,9 +19,8 @@ import Link from "next/link";
 import HomeFilterContent from "@/components/ui/filter/HomeFilterContent";
 import usePublicStore from "@/app/store/publicStore";
 import { ProfileModal } from "@/components/modules/profile";
-import { LoginContent } from "@/components/modules/login";
 import { PopoverWithTrigger } from "@/components/ui/popover";
-import { getToken, getUser } from "@/lib/server/cookies";
+import { getToken } from "@/lib/server/cookies";
 import { getUserProfile } from "@/lib/server/actions/profile";
 import toast from "react-hot-toast";
 
@@ -55,10 +54,10 @@ const LONG_PRESS_MS = 500;
 
 function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
   const pathname = usePathname();
+  const router = useRouter();
   const user = usePublicStore((state) => state.userInfo);
   const accessToken = usePublicStore((state) => state.token);
   const setUserInfo = usePublicStore((state) => state.setUserInfo);
-  const isLoginOpen = usePublicStore((state) => state.isLoginOpen);
   const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
   const cartItemsCount = usePublicStore((state) => state.cartItemsCount);
   const toggleHomeProductsListOpen = usePublicStore(
@@ -194,11 +193,24 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
     setSearchBoxOpen(!searchBoxOpen);
   }
 
-  function handleOtherButtonClick(e) {
+  function handleOtherButtonClick() {
     setIsProfileOpen(false);
     if (searchBoxOpen) {
       setSearchBoxOpen(false);
     }
+  }
+
+  async function handleProtectedNavClick(e, href) {
+    e.preventDefault();
+    handleOtherButtonClick();
+
+    const token = await getToken();
+    if (!token && !accessToken) {
+      setLoginOpen(true);
+      return;
+    }
+
+    router.push(href);
   }
 
   // Update indicator position for mobile
@@ -266,9 +278,6 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
         triggerElement={avatarElement}
       />
 
-      {/* Login Modal */}
-      <LoginContent isOpen={isLoginOpen} setIsOpen={setLoginOpen} />
-
       {/* Inline variant - simplified buttons without background indicator (Desktop only) */}
       {!isHomePage && (
         <div className="hidden lg:flex flex-col items-center gap-2">
@@ -282,6 +291,8 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
               const Component = item.href ? Link : "button";
               const isActive = isButtonActive(item);
               const icon = isActive ? item.activeIcon : item.icon;
+              const isProtected = item.id === "cart" || item.id === "support";
+
               return (
                 <Component
                   key={item.id}
@@ -290,7 +301,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                   onClick={
                     item.id === "search"
                       ? handleSearchClick
-                      : handleOtherButtonClick
+                      : isProtected
+                        ? (e) => handleProtectedNavClick(e, item.href)
+                        : handleOtherButtonClick
                   }
                   className={`relative flex items-center justify-center w-12 h-12 rounded-lg z-10 transition-colors duration-300 ${
                     isActive ? "text-primary!" : "text-black"
@@ -313,7 +326,7 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
           <div className="relative">
             {/* Background indicator for avatar when profile is open and no avatar image */}
             {isProfileOpen && !user.avatar && (
-              <div className="absolute inset-0 w-12 h-12 bg-gray-200 shadow-inner border border-white rounded-lg pointer-events-none" />
+              <div className="absolute inset-0 w-12 h-12 bg-gray-200 shadow-inner rounded-lg pointer-events-none" />
             )}
             {avatarElement}
           </div>
@@ -323,7 +336,7 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
       {/* Desktop: fixed sidebar on the right */}
       {isHomePage && (
         <div
-          className={`hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 px-6 xl:pr-10 flex-col items-center justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
+          className={`hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 lg:px-6 xl:px-16 flex-col items-center justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
         >
           <button
             type="button"
@@ -342,10 +355,12 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                 className="absolute bottom-0 w-12 h-12 bg-white shadow-inner border border-white rounded-lg transition-all duration-300 ease-in-out pointer-events-none"
                 style={indicatorStyle}
               />
-              {filteredNavLinks.map((item, index) => {
+              {filteredNavLinks.map((item) => {
                 const Component = item.href ? Link : "button";
                 const isActive = isButtonActive(item);
                 const icon = isActive ? item.activeIcon : item.icon;
+                const isProtected = item.id === "cart" || item.id === "support";
+
                 return (
                   <Component
                     key={item.id}
@@ -354,7 +369,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                     onClick={
                       item.id === "search"
                         ? handleSearchClick
-                        : handleOtherButtonClick
+                        : isProtected
+                          ? (e) => handleProtectedNavClick(e, item.href)
+                          : handleOtherButtonClick
                     }
                     className={`relative flex items-center justify-center w-12 h-12 rounded-lg z-10 transition-colors duration-300 ${
                       isActive ? "text-primary!" : "text-black"
@@ -471,12 +488,18 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
             }
 
             const Component = item.href ? Link : "button";
+            const isProtected = item.id === "cart" || item.id === "support";
+
             return (
               <Component
                 key={item.id}
                 ref={(el) => (buttonRefs.current[item.id] = el)}
                 href={item.href}
-                onClick={handleOtherButtonClick}
+                onClick={
+                  isProtected
+                    ? (e) => handleProtectedNavClick(e, item.href)
+                    : handleOtherButtonClick
+                }
                 className={`relative flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
                   isActive ? "text-primary!" : "text-black"
                 }`}
@@ -499,6 +522,8 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
             const Component = item.href ? Link : "button";
             const isActive = isButtonActive(item);
             const icon = isActive ? item.activeIcon : item.icon;
+            const isProtected = item.id === "cart" || item.id === "support";
+
             return (
               <Component
                 key={item.id}
@@ -507,7 +532,9 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
                 onClick={
                   item.id === "search"
                     ? handleSearchClick
-                    : handleOtherButtonClick
+                    : isProtected
+                      ? (e) => handleProtectedNavClick(e, item.href)
+                      : handleOtherButtonClick
                 }
                 className={`relative flex items-center justify-center w-12 h-12 shrink-0 rounded-lg z-10 transition-colors duration-300 ${
                   isActive ? "text-primary!" : "text-black"

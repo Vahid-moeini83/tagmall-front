@@ -123,6 +123,15 @@
     font-family: Dana;
   }
 
+  /* Prevent iOS Safari auto-zoom on focus (requires font-size >= 16px) */
+  @media (max-width: 1023px) {
+    input,
+    textarea,
+    select {
+      font-size: 14px !important;
+    }
+  }
+
   /* مهم: هر المنتی که overflow-y دارد LTR شود */
   *[style*="overflow-y"],
   *[class*="overflow-y"] {

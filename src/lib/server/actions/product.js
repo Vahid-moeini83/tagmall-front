@@ -2,6 +2,17 @@
 
 import http from "@/app/api/axiosInstance";
 
+/** Plain serializable error for Server → Client Component props */
+function toPlainError(err) {
+  return {
+    message:
+      err?.response?.data?.message ||
+      err?.message ||
+      "خطا در دریافت اطلاعات",
+    status: err?.response?.status || null,
+  };
+}
+
 // Get product details (no token required)
 export async function getProductById(productId) {
   try {
@@ -12,7 +23,7 @@ export async function getProductById(productId) {
     return { productRes: response.data };
   } catch (err) {
     console.log("Error fetching product: ", err);
-    return { productErr: err };
+    return { productErr: toPlainError(err) };
   }
 }
 
@@ -53,7 +64,7 @@ export async function getProductComments(productId, token = null) {
     return { commentsRes: response.data };
   } catch (err) {
     console.log("Error fetching comments: ", err);
-    return { commentsErr: err };
+    return { commentsErr: toPlainError(err) };
   }
 }
 

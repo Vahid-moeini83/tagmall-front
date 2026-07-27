@@ -75,11 +75,11 @@ function ProfileMainPanel({
         <div>
           {/* Wallet section */}
           {isLoading ? (
-            <Skeleton className="w-full h-[150px] mb-6" />
+            <Skeleton className="w-full h-[150px] mb-6 lg:mb-[50px]" />
           ) : (
             <div
               onClick={() => setIsWalletOpen(true)}
-              className="relative w-full lg:w-full lg:mx-auto mb-6 cursor-pointer"
+              className="relative w-full lg:w-full lg:mx-auto mb-6 lg:mb-[50px] cursor-pointer"
             >
               <div className="relative flex flex-col gap-10 pt-6 pb-3 px-3 bg-primary rounded-lg h-full">
                 <div className="flex items-center justify-center">
@@ -117,7 +117,7 @@ function ProfileMainPanel({
                 <ExternalLinkIcon size={20} />
               </button>
             </div>
-            <p className="font-iransans font-bold lg:font-normal text-xs lg:text-sm text-gray-600 pr-12 leading-7">
+            <p className="font-iransans font-bold lg:font-normal text-xs lg:text-sm text-gray-600 pr-12 pl-[5px] lg:pl-[10px] leading-7 lg:leading-12">
               با ثبت محصولات و بهره مند از خدمات ما ، بازدید و فروش بیش تر و
               تجربه بی نظیری برای مشتریان خود فراهم کنید
             </p>
@@ -136,7 +136,7 @@ function ProfileMainPanel({
                 <ChevronLeftIcon size={20} />
               </button>
             </div>
-            <p className="font-iransans font-bold lg:font-normal text-xs lg:text-sm text-gray-600 pr-12 leading-7">
+            <p className="font-iransans font-bold lg:font-normal text-xs lg:text-sm text-gray-600 pr-12 pl-[5px] lg:pl-[10px] leading-7 lg:leading-12">
               با به اشتراک گذاری لینک فروش محصولات ، به ازای فروش هر کالا از
               مزایای فروش کالا بهره مند شوید .
             </p>

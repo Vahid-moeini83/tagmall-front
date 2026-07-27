@@ -64,7 +64,7 @@ function FilterOrdersDrawer({
                 className={
                   mobileFilters.length - 1 === index
                     ? ""
-                    : "border-b border-gray-200"
+                    : "border-b-2 border-gray-200"
                 }
               >
                 <button

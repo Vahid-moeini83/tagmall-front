@@ -883,12 +883,6 @@ function SupportSingleChat({ setIsOpen, conversation }) {
               )}
 
             <div className="flex items-center justify-center gap-4 lg:gap-1">
-              <StrokeArrowLeftIcon
-                size={20}
-                onClick={() => setIsOpen(false)}
-                className="hidden lg:inline absolute bottom-16 right-16 rotate-180 cursor-pointer"
-              />
-
               <div
                 className={`relative w-full max-w-[540px] ${contextMenuOpen ? "z-999" : ""}`}
               >

@@ -154,7 +154,7 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="lg:hidden flex items-center justify-center pt-4 pb-2 px-[10px]">
+      <div className="lg:hidden flex items-center justify-center pt-4 pb-4 px-[10px]">
         <h3 className="font-iransans font-bold text-primary">
           تجربه خرید از{" "}
           <span className="font-iransans font-extralight">
@@ -192,7 +192,7 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
                   آرا {sellerData.totalReviews}
                 </span>
                 <div className="flex items-center gap-1">
-                  <StarIcon size={20} className="text-yellow-600 mb-1" />
+                  <StarIcon className="w-[10px] h-[10px] text-yellow-600 mb-1" />
                   <span className="text-sm lg:text-base">
                     {sellerData.rating}
                     <span className="text-xs text-gray-600/70">/5</span>

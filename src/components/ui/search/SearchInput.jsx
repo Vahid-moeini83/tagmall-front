@@ -1,23 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import Image from "next/image";
 import { SearchIcon, CloseSquareIcon } from "@/icons";
 
-function SearchInput({
-  placeholder = "برند، کالا، لوازم جانبی، قطعات",
-  value: controlledValue,
-  onChange: controlledOnChange,
-  autoFocus = false,
-  showSearchIcon = true,
-  hasLogo = false,
-  readOnly = false,
-  bgColor = "bg-gray-200",
-  className = "",
-  onClick,
-  maxWidth = "max-w-[540px]",
-}) {
+const SearchInput = forwardRef(function SearchInput(
+  {
+    placeholder = "برند، کالا، لوازم جانبی، قطعات",
+    value: controlledValue,
+    onChange: controlledOnChange,
+    autoFocus = false,
+    showSearchIcon = true,
+    hasLogo = false,
+    readOnly = false,
+    bgColor = "bg-gray-200",
+    className = "",
+    onClick,
+    maxWidth = "max-w-[540px]",
+  },
+  ref,
+) {
   const [internalValue, setInternalValue] = useState("");
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => inputRef.current);
 
   // Use controlled value if provided, otherwise use internal state
   const searchValue =
@@ -26,6 +32,7 @@ function SearchInput({
 
   const handleClearSearch = () => {
     handleChange("");
+    inputRef.current?.focus();
   };
 
   return (
@@ -43,19 +50,28 @@ function SearchInput({
         />
       )}
       <input
+        ref={inputRef}
         type="text"
+        enterKeyHint="search"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
         placeholder={placeholder}
         value={searchValue}
         onChange={(e) => handleChange(e.target.value)}
         readOnly={readOnly}
-        className={`w-full py-3 px-4 text-center text-sm lg:text-base text-gray-600 placeholder:text-gray-400 bg-transparent focus:outline-none ${readOnly && onClick ? "cursor-pointer" : ""}`}
+        // text-base (16px) prevents iOS auto-zoom on focus
+        className={`w-full py-3 px-4 text-center text-gray-600 placeholder:text-gray-400 bg-transparent focus:outline-none touch-manipulation ${readOnly && onClick ? "cursor-pointer" : ""}`}
         autoFocus={autoFocus}
         onClick={readOnly && onClick ? onClick : undefined}
       />
       {searchValue && !readOnly ? (
         <button
+          type="button"
           onClick={handleClearSearch}
           className="absolute left-2.5 w-5 h-5 cursor-pointer"
+          aria-label="پاک کردن جستجو"
         >
           <CloseSquareIcon size={20} />
         </button>
@@ -66,6 +82,6 @@ function SearchInput({
       )}
     </div>
   );
-}
+});
 
 export default SearchInput;

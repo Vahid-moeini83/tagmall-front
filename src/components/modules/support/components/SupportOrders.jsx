@@ -10,11 +10,13 @@ import { ChevronLeftIcon, SupportIcon } from "@/icons";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FilterOrdersDrawer, OrderStatusFilterDialog } from "..";
 import { getToken } from "@/lib/server/cookies";
-import { useRouter } from "next/navigation";
 import usePublicStore from "@/app/store/publicStore";
 import toast from "react-hot-toast";
 import { createConversation } from "@/lib/server/actions/support";
-import { buildSupportConversation } from "../utils/conversation";
+import {
+  buildSupportConversation,
+  pushConversationHistory,
+} from "../utils/conversation";
 import { getUserOrders } from "@/lib/server/actions/cart";
 import { SupportOrdersSkeleton } from "@/components/ui/loading/support";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
@@ -127,8 +129,6 @@ function SupportOrders({ initialOrders }) {
   const observer = useRef();
   const isLoadingRef = useRef(false);
 
-  const router = useRouter();
-
   const setLoginOpen = usePublicStore((state) => state.setLoginOpen);
   const openConversation = usePublicStore((state) => state.openConversation);
 
@@ -188,9 +188,7 @@ function SupportOrders({ initialOrders }) {
 
       if (conversationId) {
         openConversation(buildSupportConversation(conversationId));
-        router.push(`/support?conversationId=${conversationId}&tab=chats`, {
-          scroll: false,
-        });
+        pushConversationHistory(conversationId, { tab: "chats" });
       } else {
         toast.error("Error connecting to support");
       }

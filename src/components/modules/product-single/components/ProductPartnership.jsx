@@ -7,6 +7,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import PartnershipShareChat from "./PartnershipShareChat";
 import {
+  CommentsIcon,
   DownloadIcon,
   CopyIcon,
   HintIcon,
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/accordion";
 import { PartnershipHintDialog } from "@/components/ui/dialog";
 import ResponsiveModal from "@/components/ui/responsive-modal";
+import Link from "next/link";
 
 export default function ProductPartnership({ cooperation, productName = "" }) {
   const [showLink, setShowLink] = useState(false);
@@ -29,6 +31,8 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isReturnGuideOpen, setIsReturnGuideOpen] = useState(false);
   const [shareChatOpen, setShareChatOpen] = useState(false);
+  // drawer پلتفرم‌های اشتراک‌گذاری — فقط موبایل
+  const [sharePlatformsOpen, setSharePlatformsOpen] = useState(false);
 
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const isContributor = cooperation?.is_contributor === true;
@@ -38,14 +42,14 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
     cooperation?.image || "/assets/images/fallback/no-photo.jpg";
 
   const socialPlatforms = [
+    { name: "YouTube", url: "#" },
     {
-      name: "اینستاگرام",
-      logo: "/assets/images/logo/instagram.svg",
+      name: "Instagram",
       url: "#",
     },
-    { name: "یوتیوب", logo: "/assets/images/logo/youtube.svg", url: "#" },
-    { name: "بله", logo: "/assets/images/logo/bale.svg", url: "#" },
-    { name: "تلگرام", logo: "/assets/images/logo/telegram.svg", url: "#" },
+    { name: "Telegram", url: "#" },
+    { name: "روبیکا", url: "#" },
+    { name: "بله", url: "#" },
   ];
 
   const handleOpenReturnGuide = () => {
@@ -203,7 +207,11 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                       <button
                         type="button"
                         className="flex items-center justify-center shrink-0 bg-white rounded-lg w-10 h-10 cursor-pointer"
-                        onClick={() => setShareChatOpen(true)}
+                        onClick={() =>
+                          isDesktop
+                            ? setShareChatOpen(true)
+                            : setSharePlatformsOpen(true)
+                        }
                         aria-label="اشتراک گذاری"
                       >
                         <ExternalLinkIcon size={20} />
@@ -345,7 +353,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
       ) : (
         <Drawer open={shareChatOpen} onOpenChange={setShareChatOpen}>
           <DrawerContent
-            className="z-100! px-[10px] h-[96%]!"
+            className="z-100! h-[96%]!"
             overlayClassName="z-100 lg:hidden"
           >
             <PartnershipShareChat
@@ -357,6 +365,50 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
           </DrawerContent>
         </Drawer>
       )}
+
+      {/* Drawer پلتفرم‌های اشتراک‌گذاری — فقط موبایل */}
+      <Drawer open={sharePlatformsOpen} onOpenChange={setSharePlatformsOpen}>
+        <DrawerContent
+          className="z-100! px-[10px] h-[96%]! flex flex-col"
+          overlayClassName="z-100 lg:hidden"
+        >
+          {/* عنوان */}
+          <h2 className="font-bold text-primary text-base text-center mt-3 mb-5 shrink-0">
+            بسترهای پیشنهادی اشتراک گذاری محتوا
+          </h2>
+
+          {/* لیست پلتفرم‌ها */}
+          <div className="flex-1 overflow-y-auto scroll-hidden">
+            <div className="flex flex-col" style={{ gap: "10px" }}>
+              {socialPlatforms.map((platform) => (
+                <Link
+                  key={platform.name}
+                  href={"#"}
+                  className="flex items-center justify-center gap-3 w-full py-2 rounded-full border-2 border-gray-200"
+                >
+                  <span className="text-gray-600 font-bold text-sm">
+                    {platform.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* دکمه تجربه کاربران — چسبیده به پایین با فاصله 12px */}
+          <div className="shrink-0 pb-3 pt-4">
+            <button
+              type="button"
+              onClick={() => {
+                setShareChatOpen(true);
+              }}
+              className="flex items-center justify-center gap-3 w-full py-2 border-2 border-primary rounded-full text-primary font-bold"
+            >
+              <CommentsIcon size={20} />
+              تجربه کاربران
+            </button>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

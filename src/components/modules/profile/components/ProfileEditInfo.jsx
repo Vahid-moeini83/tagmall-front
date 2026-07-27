@@ -454,7 +454,7 @@ const ProfileEditInfo = ({ setIsEditingProfile, setIsProfileOpen }) => {
 
           <LogoutIcon
             onClick={() => setIsLogoutOpen(true)}
-            className="text-error-medium ml-4 cursor-pointer"
+            className="text-error-medium ml-3 cursor-pointer"
             size={20}
           />
         </div>

@@ -126,7 +126,7 @@ function SupportLoadingView({ activeTab }) {
               </div>
 
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item}>
+                <div key={item} className="overflow-hidden ">
                   <div className="flex items-start gap-[6px] pt-1 pb-1">
                     <Skeleton className="w-10 h-10 rounded-[14px] shrink-0" />
                     <div className="flex flex-col gap-2 flex-1">

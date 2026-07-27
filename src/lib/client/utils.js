@@ -287,3 +287,25 @@ export const formatSecondsToTime = (seconds) => {
   const secs = seconds % 60;
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 };
+
+export function formatPartnershipRelativeTime(dateInput) {
+  const date = new Date(dateInput);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 60) {
+    return `${Math.max(1, diffMins)} دقیقه پیش`;
+  } else if (diffHours < 24) {
+    return `${diffHours} ساعت پیش`;
+  } else if (diffDays <= 3) {
+    return `${diffDays} روز پیش`;
+  }
+  return date.toLocaleDateString("fa-IR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}

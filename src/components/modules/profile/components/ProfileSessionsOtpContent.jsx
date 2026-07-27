@@ -128,19 +128,11 @@ function ProfileSessionsOtpContent({ phone, onBack, onVerify }) {
         type="button"
         disabled={!isResendActive}
         onClick={handleResendOtp}
-        className={
-          isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-5 mb-3 text-base ${
-                isResendActive
-                  ? "text-primary border-primary cursor-pointer"
-                  : "text-gray-400 border-gray-200 cursor-not-allowed"
-              }`
-            : `mt-6 w-full py-3 text-base ${
-                isResendActive
-                  ? "text-primary cursor-pointer"
-                  : "text-gray-400 cursor-not-allowed"
-              }`
-        }
+        className={`w-full text-center border-2 rounded-full py-2 px-4 mt-5 mb-3 text-base ${
+          isResendActive
+            ? "text-primary border-primary cursor-pointer"
+            : "text-gray-400 border-gray-200 cursor-not-allowed"
+        }`}
       >
         {isResendActive ? (
           "ارسال مجدد کد تایید"

@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import usePublicStore from "@/app/store/publicStore";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { dismissConversationHistory } from "../utils/conversation";
 import SupportSingleChat from "./SupportSingleChat";
 
 function ConversationShell() {
@@ -11,21 +12,35 @@ function ConversationShell() {
   const conversationOpen = usePublicStore((s) => s.conversationOpen);
   const activeConversation = usePublicStore((s) => s.activeConversation);
   const closeConversation = usePublicStore((s) => s.closeConversation);
-
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const closingFromUiRef = useRef(false);
 
   const handleClose = () => {
+    if (closingFromUiRef.current) return;
+
     closeConversation();
 
-    if (pathname === "/support" && searchParams.get("conversationId")) {
-      const tab = searchParams.get("tab");
-      router.replace(tab ? `/support?tab=${tab}` : "/support", {
-        scroll: false,
-      });
+    const result = dismissConversationHistory();
+    // history.back() will fire popstate; ignore that duplicate close
+    if (result === "back") {
+      closingFromUiRef.current = true;
     }
   };
+
+  // System / browser back: only close the chat overlay (URL already restored)
+  useEffect(() => {
+    if (!conversationOpen) return;
+
+    const onPopState = () => {
+      if (closingFromUiRef.current) {
+        closingFromUiRef.current = false;
+        return;
+      }
+      closeConversation();
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [conversationOpen, closeConversation]);
 
   if (!conversationOpen || !activeConversation) return null;
 

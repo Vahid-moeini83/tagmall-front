@@ -421,7 +421,7 @@ function SearchHistory() {
       </div>
 
       {!expandedCategory && (
-        <div className="py-4 lg:px-[10px]">
+        <div className="pt-4 lg:px-[10px]">
           {isGlobalDeleteMode ? (
             <ConfirmCancelButtons
               onConfirm={handleConfirmDeletes}

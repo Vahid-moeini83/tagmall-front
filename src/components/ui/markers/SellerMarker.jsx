@@ -25,7 +25,7 @@ function SellerMarker({ seller, isActive }) {
         />
         <div
           className={cn(
-            "relative w-12 h-12 rounded-[14px] border-[3.5px] p-[3px] shadow-md overflow-hidden bg-white z-10 transition-colors duration-300 ease-out",
+            "relative w-12 h-12 rounded-lg border-[3.5px] p-[3px] shadow-md overflow-hidden bg-white z-10 transition-colors duration-300 ease-out",
             borderColor,
           )}
         >

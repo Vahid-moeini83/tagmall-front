@@ -37,7 +37,7 @@ function ReceiptDeliveryContent({ receiptData, onClose }) {
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-white select-none">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden select-none">
       <ReceiptDeliveryHeader onSupport={handleSupport} onClose={onClose} />
 
       <ReceiptSellerHeader

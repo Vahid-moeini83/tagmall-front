@@ -61,19 +61,11 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
       <button
         onClick={handleSubmit}
         disabled={!isFormValid || isLoading}
-        className={
-          isDrawer
-            ? `w-full text-center border-2 rounded-full py-2 px-4 mt-1.5 mb-3 text-base ${
-                !isFormValid || isLoading
-                  ? "text-gray-400 border-gray-200 cursor-not-allowed"
-                  : "text-primary border-primary cursor-pointer"
-              }`
-            : `w-full mt-6 py-3 text-base ${
-                !isFormValid || isLoading
-                  ? "text-gray-400 cursor-not-allowed"
-                  : "text-primary cursor-pointer"
-              }`
-        }
+        className={`w-full text-center border-2 rounded-full py-2 px-4 mt-1.5 mb-3 text-base ${
+          !isFormValid || isLoading
+            ? "text-gray-400 border-gray-200 cursor-not-allowed"
+            : "text-primary border-primary cursor-pointer"
+        }`}
       >
         {activeAddressAuth ? "احراز کد پستی" : "افزودن موقعیت"}
       </button>

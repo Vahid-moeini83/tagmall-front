@@ -9,6 +9,7 @@ export const mockPartnershipExperiences = [
     likes: 24,
     isLiked: false,
     createdAt: "2025-12-18T10:30:00",
+    platform: "Instagram",
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const mockPartnershipExperiences = [
     likes: 11,
     isLiked: true,
     createdAt: "2025-12-17T16:45:00",
+    platform: "Telegram",
   },
   {
     id: 3,
@@ -27,5 +29,6 @@ export const mockPartnershipExperiences = [
     likes: 37,
     isLiked: false,
     createdAt: "2025-12-15T09:15:00",
+    platform: "YouTube",
   },
 ];

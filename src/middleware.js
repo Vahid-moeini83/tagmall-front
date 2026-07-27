@@ -14,16 +14,18 @@ export async function middleware(request) {
   });
 
   // مسیرهایی که نیاز به لاگین دارن
-  const protectedRoutes = ["/profile"];
+  const protectedRoutes = ["/profile", "/cart", "/support"];
 
   // اگه مسیر فعلی یکی از protected ها باشه
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     const accessToken = request.cookies.get("accessToken")?.value;
     const user = request.cookies.get("user")?.value;
 
-    // اگه کوکی‌ها نبودن → بفرستش صفحه اصلی
+    // اگه کوکی‌ها نبودن → صفحه اصلی + باز کردن لاگین
     if (!accessToken || !user) {
-      return NextResponse.redirect(new URL("/", request.url));
+      const loginUrl = new URL("/", request.url);
+      loginUrl.searchParams.set("login", "1");
+      return NextResponse.redirect(loginUrl);
     }
   }
 

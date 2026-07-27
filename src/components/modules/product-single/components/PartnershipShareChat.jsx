@@ -1,38 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { HeartIcon, StrokeArrowLeftIcon, UserIcon } from "@/icons";
+import {
+  ChevronDownIcon,
+  CommentsIcon,
+  HeartIcon,
+  StrokeArrowLeftIcon,
+  UserIcon,
+} from "@/icons";
 import PartnershipPlatformSlider from "./PartnershipPlatformSlider";
-import { cn } from "@/lib/client/utils";
+import { cn, formatPartnershipRelativeTime } from "@/lib/client/utils";
 import {
   mockPartnershipExperiences,
   PARTNERSHIP_CURRENT_USER_ID,
 } from "@/lib/client/mockPartnershipExperiences";
 import toast from "react-hot-toast";
-
-function formatDateLabel(dateInput) {
-  const today = new Date();
-  const messageDate = new Date(dateInput);
-
-  const diffTime =
-    today.setHours(0, 0, 0, 0) - new Date(messageDate).setHours(0, 0, 0, 0);
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-  if (diffDays === 0) return "امروز";
-  if (diffDays === 1) return "دیروز";
-
-  return messageDate.toLocaleDateString("fa-IR", {
-    day: "numeric",
-    month: "long",
-  });
-}
-
-function formatMessageTime(dateInput) {
-  return new Date(dateInput).toLocaleTimeString("fa-IR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+import { CustomAccordion } from "@/components/ui/accordion";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 
 function isLastOfGroup(messages, index) {
   const current = messages[index];
@@ -58,13 +42,39 @@ export default function PartnershipShareChat({
     ),
   );
   const [draft, setDraft] = useState("");
+  const [selectedPlatform, setSelectedPlatform] = useState(null);
+  const [platformDrawerOpen, setPlatformDrawerOpen] = useState(false);
+  const [expandedAccordions, setExpandedAccordions] = useState([
+    "بله",
+    "روبیکا",
+    "Telegram",
+    "YouTube",
+    "Instagram",
+  ]);
 
   const chatContainerRef = useRef(null);
   const lastMessageRef = useRef(null);
 
+  const platforms =
+    socialPlatforms.length > 0
+      ? socialPlatforms
+      : [
+          { name: "بله", url: "#" },
+          { name: "روبیکا", url: "#" },
+          { name: "Telegram", url: "#" },
+          { name: "YouTube", url: "#" },
+          { name: "Instagram", url: "#" },
+        ];
+
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const toggleAccordion = (id) => {
+    setExpandedAccordions((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
 
   const toggleLike = (messageId) => {
     const wasLiked = likedMessages[messageId];
@@ -95,15 +105,107 @@ export default function PartnershipShareChat({
       likes: 0,
       isLiked: false,
       createdAt: new Date().toISOString(),
+      platform: selectedPlatform?.name || null,
     };
 
     setMessages((prev) => [...prev, newMessage]);
     setDraft("");
+    setSelectedPlatform(null);
     toast.success("تجربه شما ثبت شد");
   };
 
+  const renderMessageBubble = (msg, index, arr) => {
+    const isMine = msg.userId === PARTNERSHIP_CURRENT_USER_ID;
+    const last = isLastOfGroup(arr, index);
+
+    const bubbleClasses = cn(
+      "font-iransans text-justify overflow-hidden rounded-lg text-xs lg:text-sm text-gray-800 w-fit",
+      isMine
+        ? last
+          ? "border-2 border-gray-400 rounded-br-none"
+          : "border-2 border-gray-400"
+        : last
+          ? "border-2 border-gray-200 rounded-bl-none"
+          : "border-2 border-gray-200",
+    );
+
+    return (
+      <div key={msg.id}>
+        <div
+          className={cn(
+            "flex flex-col w-full",
+            isMine ? "items-start" : "items-end",
+            isSameSenderAsPrev(arr, index) ? "mt-1" : "mt-6 lg:mt-4",
+          )}
+        >
+          <div
+            className={cn(
+              "flex gap-[5px] max-w-[80%] lg:max-w-[40%]",
+              isMine ? "flex-row" : "flex-row-reverse",
+              !last ? (isMine ? "mr-[50px]" : "ml-[50px]") : "",
+            )}
+          >
+            {last && (
+              <div className="flex items-end">
+                <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center mb-4">
+                  <UserIcon size={20} />
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-1 min-w-0">
+              <div
+                className={cn(
+                  "flex items-center gap-2",
+                  !isMine && "flex-row-reverse",
+                )}
+              >
+                <div className={bubbleClasses}>
+                  <p className="font-iransans px-4 leading-10 text-justify wrap-break-word">
+                    <span className="font-bold">{msg.userName}:</span>{" "}
+                    {msg.text}
+                  </p>
+                </div>
+
+                {!isMine && (
+                  <div className="flex flex-col items-center justify-center gap-1 shrink-0 self-center">
+                    <button
+                      type="button"
+                      onClick={() => toggleLike(msg.id)}
+                      aria-label="لایک"
+                      className="cursor-pointer"
+                    >
+                      <HeartIcon
+                        size={20}
+                        filled={likedMessages[msg.id]}
+                        color="var(--gray-color-400)"
+                      />
+                    </button>
+                    <span
+                      className={cn(
+                        "text-xs leading-none",
+                        likedMessages[msg.id]
+                          ? "text-error-medium"
+                          : "text-gray-400",
+                      )}
+                    >
+                      {msg.likes}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <span className="font-iransans text-gray-400 text-xs block text-center pr-6">
+                {formatPartnershipRelativeTime(msg.createdAt)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="pt-2 lg:pt-0 px-[5px] lg:px-[140px] flex flex-col h-full select-none overflow-hidden">
+    <div className="pt-3 lg:pt-0 lg:px-[140px] flex flex-col h-full select-none overflow-hidden">
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
         <div className="flex items-center justify-between lg:pb-2">
@@ -119,112 +221,43 @@ export default function PartnershipShareChat({
         className="lg:pt-24 pb-78 lg:pb-56 overflow-y-auto scroll-hidden flex-1 lg:px-0"
       >
         <div className="flex flex-col">
-          {messages.map((msg, index) => {
-            const isMine = msg.userId === PARTNERSHIP_CURRENT_USER_ID;
-            const currentDateLabel = formatDateLabel(msg.createdAt);
-            const prevDateLabel =
-              index > 0
-                ? formatDateLabel(messages[index - 1].createdAt)
-                : null;
-            const showDateSeparator = currentDateLabel !== prevDateLabel;
-            const last = isLastOfGroup(messages, index);
+          {platforms
+            .filter((p) => messages.some((m) => m.platform === p.name))
+            .map((platform, index, filtered) => {
+              const platformMessages = messages.filter(
+                (m) => m.platform === platform.name,
+              );
 
-            const bubbleClasses = cn(
-              "font-iransans text-justify overflow-hidden rounded-lg text-xs lg:text-sm text-gray-800 w-fit",
-              isMine
-                ? last
-                  ? "border-2 border-gray-400 rounded-br-none"
-                  : "border-2 border-gray-400"
-                : last
-                  ? "border-2 border-gray-200 rounded-bl-none"
-                  : "border-2 border-gray-200",
-            );
-
-            return (
-              <div key={msg.id}>
-                {showDateSeparator && (
-                  <div className="flex justify-center my-4">
-                    <div className="bg-gray-200 text-gray-600 text-xs px-4 py-1 rounded-full">
-                      {currentDateLabel}
-                    </div>
-                  </div>
-                )}
-
-                <div
-                  className={cn(
-                    "flex flex-col w-full",
-                    isMine ? "items-start" : "items-end",
-                    isSameSenderAsPrev(messages, index)
-                      ? "mt-1"
-                      : "mt-6 lg:mt-4",
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "flex gap-[5px] max-w-[80%] lg:max-w-[40%]",
-                      isMine ? "flex-row" : "flex-row-reverse",
-                      !last ? (isMine ? "mr-[50px]" : "ml-[50px]") : "",
-                    )}
+              return (
+                <div key={platform.name}>
+                  <CustomAccordion
+                    id={platform.name}
+                    expandedItems={expandedAccordions}
+                    onToggle={toggleAccordion}
+                    customLabel={
+                      <div className="w-full text-center">
+                        <span className="text-gray-600 font-bold text-base">
+                          {platform.name}
+                        </span>
+                      </div>
+                    }
+                    containerClassName={
+                      index < filtered.length - 1
+                        ? "border-b-4 border-gray-200"
+                        : ""
+                    }
+                    triggerClassName="justify-center"
+                    iconClassName="left-[25px]!"
                   >
-                    {last && (
-                      <div className="flex items-end">
-                        <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center mb-4">
-                          <UserIcon size={20} />
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex flex-col gap-1 min-w-0">
-                      <div
-                        className={cn(
-                          "flex items-center gap-2",
-                          !isMine && "flex-row-reverse",
-                        )}
-                      >
-                        <div className={bubbleClasses}>
-                          <p className="font-iransans px-4 leading-10 text-justify wrap-break-word">
-                            <span className="font-bold">{msg.userName}:</span>{" "}
-                            {msg.text}
-                          </p>
-                        </div>
-
-                        {!isMine && (
-                          <div className="flex flex-col items-center justify-center gap-1 shrink-0 self-center">
-                            <button
-                              type="button"
-                              onClick={() => toggleLike(msg.id)}
-                              aria-label="لایک"
-                              className="cursor-pointer"
-                            >
-                              <HeartIcon
-                                size={20}
-                                filled={likedMessages[msg.id]}
-                                color="var(--gray-color-400)"
-                              />
-                            </button>
-                            <span
-                              className={cn(
-                                "text-xs leading-none",
-                                likedMessages[msg.id]
-                                  ? "text-error-medium"
-                                  : "text-gray-400",
-                              )}
-                            >
-                              {msg.likes}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <span className="font-iransans text-gray-400 text-xs text-center">
-                        {formatMessageTime(msg.createdAt)}
-                      </span>
+                    <div className="pb-3 px-[10px]">
+                      {platformMessages.map((msg, idx) =>
+                        renderMessageBubble(msg, idx, platformMessages),
+                      )}
                     </div>
-                  </div>
+                  </CustomAccordion>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
         <div ref={lastMessageRef} />
       </div>
@@ -243,8 +276,29 @@ export default function PartnershipShareChat({
                 className="hidden lg:inline absolute bottom-16 right-16 rotate-180 cursor-pointer"
               />
 
-              {isContributor ? (
-                <div className="relative rounded-t-md rounded-bl-md bg-gray-200 overflow-hidden w-full max-w-[540px]">
+              <div className="bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2 w-full max-w-[540px]">
+                {/* Top bar - clickable to open platform drawer */}
+                <div className="flex items-center justify-center relative pt-2 pb-3">
+                  <button
+                    onClick={() => setPlatformDrawerOpen(true)}
+                    className="cursor-pointer"
+                  >
+                    <span className="text-gray-600">
+                      {selectedPlatform
+                        ? selectedPlatform.name
+                        : "بستر اشتراک گذاری محتوا"}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="absolute left-[10px] cursor-pointer"
+                  >
+                    <ChevronDownIcon size={20} className="rotate-90" />
+                  </button>
+                </div>
+
+                {/* Input */}
+                <div className="flex items-end rounded-xl overflow-hidden bg-white">
                   <input
                     type="text"
                     value={draft}
@@ -255,31 +309,62 @@ export default function PartnershipShareChat({
                         handleSubmitExperience();
                       }
                     }}
-                    placeholder="تجربه خود را بنویسید ..."
-                    className="font-iransans placeholder:text-gray-400 text-gray-600 h-14 lg:h-12 pr-3 pl-16 w-full outline-none bg-transparent"
+                    placeholder={
+                      selectedPlatform
+                        ? `تجربه شما از ${selectedPlatform.name}`
+                        : "تجربه شما از ..."
+                    }
+                    className="font-iransans placeholder:text-gray-400 placeholder:text-center placeholder:pr-9 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none bg-transparent flex-1"
                   />
-                  {draft.trim().length > 0 && (
+                  <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
                     <button
                       type="button"
+                      disabled={draft.trim().length <= 0}
                       onClick={handleSubmitExperience}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 font-iransans text-primary cursor-pointer"
+                      className={`font-iransans pr-1 ${
+                        draft.trim().length > 0
+                          ? "text-primary cursor-pointer"
+                          : "text-gray-400 cursor-not-allowed"
+                      }`}
                     >
                       ثبت
                     </button>
-                  )}
+                  </div>
                 </div>
-              ) : (
-                <div className="w-full max-w-none lg:max-w-[540px] -mx-[10px] lg:mx-0">
-                  <PartnershipPlatformSlider
-                    platforms={socialPlatforms}
-                    affiliateLink={affiliateLink}
-                  />
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Platform drawer */}
+      <Drawer open={platformDrawerOpen} onOpenChange={setPlatformDrawerOpen}>
+        <DrawerContent
+          className="z-100! px-[10px]! pb-6!"
+          overlayClassName="z-100 lg:hidden"
+        >
+          <h2 className="font-bold text-primary text-base text-center mt-3 mb-5">
+            بسترهای پیشنهادی اشتراک گذاری محتوا
+          </h2>
+
+          <div className="flex flex-col gap-[10px]">
+            {platforms.map((platform) => (
+              <button
+                key={platform.name}
+                onClick={() => {
+                  setSelectedPlatform(platform);
+                  setPlatformDrawerOpen(false);
+                }}
+                className="flex items-center justify-center w-full py-2 rounded-full border-2 border-gray-200 cursor-pointer"
+              >
+                <span className="text-gray-600 font-bold text-sm">
+                  {platform.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

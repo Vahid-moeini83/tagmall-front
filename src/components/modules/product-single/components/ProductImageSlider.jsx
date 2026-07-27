@@ -16,11 +16,7 @@ export default function ProductImageSlider({
   const images =
     gallery && gallery.length > 0
       ? gallery
-      : [
-          "/assets/images/fallback/phone.png",
-          "/assets/images/fallback/phone.png",
-          "/assets/images/fallback/phone.png",
-        ];
+      : ["/assets/images/fallback/phone.png"];
 
   const [sliderRef, instanceRef] = useKeenSlider({
     rtl: true,

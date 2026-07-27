@@ -12,10 +12,13 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { formatRelativeTime } from "@/lib/client/utils";
 import { deleteConversations } from "@/lib/server/actions/support";
-import { buildSupportConversation } from "../utils/conversation";
+import {
+  buildSupportConversation,
+  pushConversationHistory,
+} from "../utils/conversation";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { getToken } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
@@ -44,13 +47,14 @@ function formatChatItems(conversationsData) {
       updated_at: conv.updated_at,
       other_user: otherUser,
       latest_message: conv.latest_message,
+      read_status: conv.read_status,
+      read_status_text: conv.read_status_text,
     };
   });
 }
 
 function SupportChats({ conversations, isMobile = false }) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-  const router = useRouter();
   const searchParams = useSearchParams();
   const conversationIdFromUrl = searchParams.get("conversationId");
 
@@ -156,13 +160,13 @@ function SupportChats({ conversations, isMobile = false }) {
 
   const handleOpenChat = (conversation) => {
     openConversation(conversation);
-    router.push(`/support?conversationId=${conversation.id}`, {
-      scroll: false,
-    });
+    pushConversationHistory(conversation.id);
   };
 
   const supportChat = chatItems.find((chat) => chat.isSupport);
   const otherChats = chatItems.filter((chat) => !chat.isSupport);
+
+  console.log(chatItems);
 
   const isConfirmDeleteEnabled = pendingDeletes.length > 0;
 
@@ -195,20 +199,18 @@ function SupportChats({ conversations, isMobile = false }) {
                             <SupportIcon size={20} />
                           </div>
 
-                          <div className="flex flex-col lg:gap-6">
+                          <div className="flex flex-col gap-1 lg:gap-6">
                             <div className="font-bold! text-gray-600 text-xs lg:text-base lg:pt-2">
                               {supportChat.name}
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <p className="font-iransans text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
                                 {supportChat.msg}
                               </p>
-                              {supportChat?.last_message_at && (
-                                <p className="text-gray-400 text-xs lg:text-base pt-2">
-                                  {formatRelativeTime(
-                                    supportChat?.last_message_at,
-                                  )}
+                              {supportChat?.read_status > 0 && (
+                                <p className="text-gray-400 text-xs lg:text-base pt-1">
+                                  {supportChat?.read_status_text}
                                 </p>
                               )}
                             </div>
@@ -244,18 +246,18 @@ function SupportChats({ conversations, isMobile = false }) {
                               </div>
                             )}
 
-                            <div className="flex flex-col lg:gap-6 lg:pt-2 flex-1">
+                            <div className="flex flex-col gap-[4px] lg:gap-6 lg:pt-2 flex-1">
                               <div className="font-bold! text-gray-600 text-xs lg:text-base">
                                 {item.name}
                               </div>
 
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
                                 <p className="font-iransans text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
                                   {item.msg}
                                 </p>
-                                {item?.last_message_at && (
+                                {item?.read_status > 0 && (
                                   <p className="text-gray-400 text-xs lg:text-base pt-2">
-                                    {formatRelativeTime(item?.last_message_at)}
+                                    {item?.read_status_text}
                                   </p>
                                 )}
                               </div>
@@ -266,7 +268,7 @@ function SupportChats({ conversations, isMobile = false }) {
                             )}
 
                             {deleteMode && (
-                              <div className="absolute left-[6px] top-1/2 -translate-y-1/2">
+                              <div className="absolute left-[6px] top-1/2 -translate-y-1/2 pt-2">
                                 <button
                                   onClick={(e) =>
                                     handleMarkForDeletion(e, item.id)

@@ -1,13 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SearchHistory from "./SearchHistory";
 import SearchSuggestions from "./SearchSuggestions";
 import SearchInput from "./SearchInput";
-import { fetchSearchSuggestions } from "@/lib/server/actions/search";
-import toast from "react-hot-toast";
-import { VALID_LOADERS } from "next/dist/shared/lib/image-config";
-
 import http from "@/app/api/axiosInstance";
 import usePublicStore from "@/app/store/publicStore";
 
@@ -16,6 +12,7 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
   const [searchValue, setSearchValue] = useState(searchDeafaultValue);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const mobileInputRef = useRef(null);
 
   const fetchSuggestions = async (keyword) => {
     if (keyword.trim().length < 2) {
@@ -36,7 +33,6 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
       });
       const { products = [], categories = [] } = response.data.data;
 
-      // Combine categories and products without transformation
       const combinedData = [
         ...categories.map((cat) => ({ ...cat, type: "category" })),
         ...products.map((prod) => ({ ...prod, type: "product" })),
@@ -56,6 +52,12 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
       if (searchDeafaultValue.trim().length >= 2) {
         fetchSuggestions(searchDeafaultValue);
       }
+
+      const focusTimer = window.setTimeout(() => {
+        mobileInputRef.current?.focus?.();
+      }, 50);
+
+      return () => window.clearTimeout(focusTimer);
     }
   }, [isOpen, searchDeafaultValue]);
 
@@ -65,9 +67,9 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
         fetchSuggestions(searchValue);
       }, 300);
       return () => clearTimeout(timeoutId);
-    } else {
-      setSuggestions([]);
     }
+
+    setSuggestions([]);
   }, [searchValue]);
 
   if (!isOpen) return null;
@@ -76,26 +78,23 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className={`fixed inset-0 bg-black/20 backdrop-blur-sm ${isHomePage ? "hidden lg:block z-60" : "z-50"}`}
         onClick={onClose}
       />
 
-      {/* Mobile Full Screen Layout */}
       <div className="fixed inset-x-0 top-0 bottom-[72px] max-h-[calc(100vh-72px)] overflow-hidden z-60 bg-white flex flex-col lg:hidden">
-        {/* Search Input */}
         <div className="px-2.5 mt-8 mb-9">
           <SearchInput
+            ref={mobileInputRef}
             value={searchValue}
             onChange={setSearchValue}
             placeholder="برند، کالا، لوازم جانبی، قطعات"
             hasLogo
-            // autoFocus
+            autoFocus
           />
         </div>
 
-        {/* Content Area with Bottom Box */}
         <div className="flex-1 flex flex-col px-2.5 pb-2.5 overflow-hidden">
           <div className="flex-1 overflow-hidden flex flex-col">
             {showHistory ? (
@@ -111,11 +110,9 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
         </div>
       </div>
 
-      {/* Desktop Positioned Layout */}
       <div className="hidden lg:block">
         {isHomePage ? (
           <>
-            {/* Home page layout - centered */}
             <div className="fixed top-[25px] right-[140px] z-60 w-full max-w-[495px] bg-white rounded-t-md shadow-lg">
               <SearchInput
                 value={searchValue}
@@ -142,7 +139,6 @@ function SearchBox({ isOpen, onClose, isHomePage = true }) {
           </>
         ) : (
           <>
-            {/* Other pages layout - aligned with search input */}
             <div className="fixed top-[25px] right-[140px] z-60 w-full max-w-[642px] bg-white rounded-t-md shadow-lg">
               <SearchInput
                 value={searchValue}

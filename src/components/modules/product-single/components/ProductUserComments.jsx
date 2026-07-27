@@ -318,6 +318,19 @@ export default function ProductUserComments({
     setNewComment("");
   };
 
+  // Report description only — not sent as a chat message (API later)
+  const handleSubmitReport = () => {
+    if (!newComment.trim() || !reportMsgId) return;
+
+    // TODO: connect report API with reportMsgId + description
+    toast.success("گزارش با موفقیت ثبت شد");
+    setReportMsgId(null);
+    setNewComment("");
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+    }
+  };
+
   const handleSubmitComment = async (messageId = null) => {
     const isReply = messageId !== null && messageId !== undefined;
     const isEdit = Boolean(editMsgId) && !isReply;
@@ -750,19 +763,44 @@ export default function ProductUserComments({
                                     }
                                   >
                                     <div className={bubbleClasses}>
-                                      {msg.replyTo && msg.replyToText && (
-                                        <div
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            scrollToReplyTarget(msg.replyTo);
-                                          }}
-                                          className={`border-2 border-gray-400 mt-1 mx-1.5 p-2 rounded-xl mb-1 max-w-[80%] cursor-pointer ${isUserMsg ? "rounded-br-none ml-auto" : "rounded-bl-none mr-auto"}`}
-                                        >
-                                          <span className="text-xs text-gray-600 font-iransans line-clamp-1 overflow-hidden">
-                                            {msg.replyToText}
-                                          </span>
-                                        </div>
-                                      )}
+                                      {msg.replyTo &&
+                                        msg.replyToText &&
+                                        (() => {
+                                          // پیدا کردن پیام reply شده برای تشخیص صاحبش
+                                          const repliedMsg = (() => {
+                                            for (const b of chatBoxes) {
+                                              const found = b.messages.find(
+                                                (m) => m.id === msg.replyTo,
+                                              );
+                                              if (found) return found;
+                                            }
+                                            return null;
+                                          })();
+                                          // اگه کاربر به پیام خودش ریپلای کرده → سمت راست، rounded-br-none
+                                          // اگه به پیام دیگری ریپلای کرده → سمت چپ، rounded-bl-none
+                                          const replyIsOwnMsg = Boolean(
+                                            repliedMsg?.isUserMessage,
+                                          );
+                                          const replyBoxClass =
+                                            isUserMsg && replyIsOwnMsg
+                                              ? "rounded-br-none ml-auto"
+                                              : "rounded-bl-none mr-auto";
+                                          return (
+                                            <div
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                scrollToReplyTarget(
+                                                  msg.replyTo,
+                                                );
+                                              }}
+                                              className={`border-2 border-gray-400 mt-1 mx-1.5 p-2 rounded-xl mb-1 max-w-[80%] cursor-pointer ${replyBoxClass}`}
+                                            >
+                                              <span className="text-xs text-gray-600 font-iransans line-clamp-1 overflow-hidden">
+                                                {msg.replyToText}
+                                              </span>
+                                            </div>
+                                          );
+                                        })()}
                                       <div className="flex flex-col gap-[6px] py-[5px] px-[10px]">
                                         <p className="font-iransans text-xs font-bold mb-1!">
                                           {msg.user}:
@@ -971,10 +1009,11 @@ export default function ProductUserComments({
                         : ""
                     }
                   >
-                    {/* reply / edit preview */}
-                    {(activeReplyId || editMsgId) &&
+                    {/* reply / edit / report preview */}
+                    {(activeReplyId || editMsgId || reportMsgId) &&
                       (() => {
-                        const previewId = editMsgId || activeReplyId;
+                        const previewId =
+                          editMsgId || activeReplyId || reportMsgId;
                         const { message: previewMsg } =
                           findMessageAndBox(previewId);
                         const isOwnPreview = Boolean(previewMsg?.isUserMessage);
@@ -1081,11 +1120,15 @@ export default function ProductUserComments({
                                 ? !replyInputs[activeReplyId]?.text?.trim()
                                 : !newComment.trim()) || submitting
                             }
-                            onClick={() =>
-                              activeReplyId
-                                ? handleSubmitComment(activeReplyId)
-                                : handleSubmitComment()
-                            }
+                            onClick={() => {
+                              if (reportMsgId) {
+                                handleSubmitReport();
+                              } else if (activeReplyId) {
+                                handleSubmitComment(activeReplyId);
+                              } else {
+                                handleSubmitComment();
+                              }
+                            }}
                             className={`font-iransans transition-colors ${
                               (
                                 activeReplyId

@@ -74,7 +74,7 @@ export default function ReviewInput({
               >
                 {isActive ? (
                   <StarIcon className="text-yellow-600 w-5 h-5 lg:w-6 lg:h-6" />
-                ) : (
+                ) : ( 
                   <svg
                     width="20"
                     height="20"
@@ -116,10 +116,10 @@ export default function ReviewInput({
             ref={textareaRef}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="نظر خود را به اشتراک بگذارید..."
+            placeholder="تجربه خرید شما از فروشنده"
             rows={1}
-            className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 px-2 flex-1 bg-transparent border-none outline-none resize-none overflow-hidden leading-6"
-            style={{ minHeight: "48px" }}
+            className="font-iransans placeholder:text-gray-400 placeholder:text-sm placeholder:text-center placeholder:pr-5 text-gray-600 min-h-12 py-3 px-2 flex-1 bg-transparent border-none outline-none resize-none overflow-hidden leading-6"
+            // style={{ minHeight: "48px" }}
           />
 
           <div className="flex items-center gap-2 shrink-0">

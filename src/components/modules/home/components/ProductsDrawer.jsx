@@ -714,7 +714,7 @@ export default function ProductsDrawer({
             "data-[vaul-drawer-direction=bottom]:w-full data-[vaul-drawer-direction=bottom]:max-w-[640px]",
           )}
           overlayClassName="lg:hidden"
-          dragHandleClassName="pb-1!"
+          // dragHandleClassName="pb-1"
           dragHandleLineClassName="bg-gray-800!"
         >
           <div
@@ -830,7 +830,7 @@ export default function ProductsDrawer({
                 </div>
               ) : isListMode ? (
                 <div
-                  className="flex-1 min-h-0 overflow-y-auto scroll-hidden flex flex-col gap-3"
+                  className="flex-1 min-h-0 overflow-y-auto scroll-hidden flex flex-col gap-2"
                   style={{
                     paddingBottom: `calc(${MOBILE_DRAWER_BOTTOM_OFFSET_PX}px + env(safe-area-inset-bottom))`,
                   }}
@@ -842,76 +842,142 @@ export default function ProductsDrawer({
                     />
                   ) : (
                     <>
-                      {filterMode === "all" &&
-                        activeSellerPurchasedProducts.length > 0 && (
-                          <div className="relative shrink-0 w-full flex flex-col gap-2">
-                            {!showSearchResultBox && (
-                              <span className="text-center text-base pt-3 text-gray-600">
-                                فروش ویژه و سفارشات آماده تحویل
-                              </span>
-                            )}
-                            <Swiper
-                              dir="rtl"
-                              slidesPerView={1}
-                              spaceBetween={10}
-                              grabCursor
-                              className="min-h-0 w-full"
-                              onSwiper={(swiper) => {
-                                ordersSwiperRef.current = swiper;
-                              }}
-                              onSlideChange={(swiper) => {
-                                setOrdersCurrentSlide(swiper.realIndex);
-                              }}
-                            >
-                              {activeSellerPurchasedProducts.map((product) => (
-                                <SwiperSlide
-                                  key={product.id}
-                                  className="w-full! overflow-hidden"
+                      {(() => {
+                        // آیا کارت سفارش بالای اولین فروش ویژه نمایش داده می‌شه؟
+                        const showOrdersAboveFirstSpecial =
+                          filterMode === "all" &&
+                          activeSellerPurchasedProducts.length > 0;
+
+                        // storeId اولین فروشگاه در لیست فروش ویژه
+                        const firstSpecialStoreId = Object.keys(
+                          listModeProductsBySeller,
+                        )[0];
+                        const firstStoreHasOrders =
+                          firstSpecialStoreId &&
+                          (purchasedProductsBySeller[firstSpecialStoreId]
+                            ?.length ?? 0) > 0;
+
+                        // آیا باید دو کارت بهم چسبیده باشن؟
+                        const joinOrderAndSpecial =
+                          showOrdersAboveFirstSpecial && firstStoreHasOrders;
+
+                        return (
+                          <>
+                            {showOrdersAboveFirstSpecial && (
+                              <div
+                                className={cn(
+                                  "relative shrink-0 w-full flex flex-col gap-2",
+                                  // اگه فروش ویژه همون فروشگاه زیرشه، margin-bottom رو حذف کن
+                                  joinOrderAndSpecial ? "mb-0" : "",
+                                )}
+                              >
+                                {!showSearchResultBox && (
+                                  <span className="text-center text-base pt-3 text-gray-600">
+                                    فروش ویژه و سفارشات آماده تحویل
+                                  </span>
+                                )}
+                                <Swiper
+                                  dir="rtl"
+                                  slidesPerView={1}
+                                  spaceBetween={10}
+                                  grabCursor
+                                  className="min-h-0 w-full"
+                                  onSwiper={(swiper) => {
+                                    ordersSwiperRef.current = swiper;
+                                  }}
+                                  onSlideChange={(swiper) => {
+                                    setOrdersCurrentSlide(swiper.realIndex);
+                                  }}
                                 >
-                                  <ProductCardMobile
-                                    product={product}
-                                    variant="order"
-                                    onSellerClick={handleSellerClick}
-                                    isListMode={isListMode}
-                                  />
-                                </SwiperSlide>
-                              ))}
-                            </Swiper>
-                            {activeSellerPurchasedProducts.length > 1 && (
-                              <div className="absolute left-1/2 -translate-x-1/2 bottom-[10px] z-10 flex justify-center gap-2 pointer-events-none">
-                                {activeSellerPurchasedProducts.map((_, idx) => (
-                                  <button
-                                    key={idx}
-                                    type="button"
-                                    onClick={() =>
-                                      ordersSwiperRef.current?.slideTo(idx)
-                                    }
-                                    className={cn(
-                                      "w-2 h-2 rounded-full transition-all cursor-pointer pointer-events-auto",
-                                      ordersCurrentSlide === idx
-                                        ? "bg-primary w-6"
-                                        : "bg-gray-400 hover:bg-gray-400",
+                                  {activeSellerPurchasedProducts.map(
+                                    (product) => (
+                                      <SwiperSlide
+                                        key={product.id}
+                                        className="w-full! overflow-hidden"
+                                      >
+                                        <ProductCardMobile
+                                          product={product}
+                                          variant="order"
+                                          onSellerClick={handleSellerClick}
+                                          isListMode={isListMode}
+                                          // پایین کارت سفارش rounded-none بشه وقتی فروش ویژه همون فروشگاه زیرشه
+                                          cardClassName={
+                                            joinOrderAndSpecial
+                                              ? "rounded-t-lg rounded-b-none"
+                                              : undefined
+                                          }
+                                        />
+                                      </SwiperSlide>
+                                    ),
+                                  )}
+                                </Swiper>
+                                {activeSellerPurchasedProducts.length > 1 && (
+                                  <div className="absolute left-1/2 -translate-x-1/2 bottom-[10px] z-10 flex justify-center gap-2 pointer-events-none">
+                                    {activeSellerPurchasedProducts.map(
+                                      (_, idx) => (
+                                        <button
+                                          key={idx}
+                                          type="button"
+                                          onClick={() =>
+                                            ordersSwiperRef.current?.slideTo(
+                                              idx,
+                                            )
+                                          }
+                                          className={cn(
+                                            "w-2 h-2 rounded-full transition-all cursor-pointer pointer-events-auto",
+                                            ordersCurrentSlide === idx
+                                              ? "bg-primary w-6"
+                                              : "bg-gray-400 hover:bg-gray-400",
+                                          )}
+                                          aria-label={`اسلاید ${idx + 1}`}
+                                        />
+                                      ),
                                     )}
-                                    aria-label={`اسلاید ${idx + 1}`}
-                                  />
-                                ))}
+                                  </div>
+                                )}
                               </div>
                             )}
-                          </div>
-                        )}
-                      {Object.entries(listModeProductsBySeller).map(
-                        ([storeId, products]) => (
-                          <div key={storeId} className="shrink-0">
-                            <SellerHorizontalSlider
-                              products={products}
-                              variant={closedStateVariant}
-                              onSellerClick={handleSellerClick}
-                              isListMode={isListMode}
-                              setIsReviewsModalOpen={setIsReviewsModalOpen}
-                            />
-                          </div>
-                        ),
-                      )}
+                            {Object.entries(listModeProductsBySeller).map(
+                              ([storeId, products], index) => {
+                                const storeHasOrders =
+                                  (purchasedProductsBySeller[storeId]?.length ??
+                                    0) > 0;
+                                const hideFirstSpecialHeader =
+                                  index === 0 && storeHasOrders;
+                                // بالای کارت فروش ویژه rounded-none بشه وقتی کارت سفارش همون فروشگاه بالاشه
+                                const specialCardClassName =
+                                  joinOrderAndSpecial && index === 0
+                                    ? "rounded-b-lg rounded-t-none"
+                                    : undefined;
+
+                                return (
+                                  <div
+                                    key={storeId}
+                                    className="shrink-0"
+                                    style={
+                                      joinOrderAndSpecial && index === 0
+                                        ? { marginTop: "5px" }
+                                        : undefined
+                                    }
+                                  >
+                                    <SellerHorizontalSlider
+                                      products={products}
+                                      variant={closedStateVariant}
+                                      onSellerClick={handleSellerClick}
+                                      isListMode={isListMode}
+                                      setIsReviewsModalOpen={
+                                        setIsReviewsModalOpen
+                                      }
+                                      hideSellerHeader={hideFirstSpecialHeader}
+                                      cardClassName={specialCardClassName}
+                                    />
+                                  </div>
+                                );
+                              },
+                            )}
+                          </>
+                        );
+                      })()}
                     </>
                   )}
                 </div>

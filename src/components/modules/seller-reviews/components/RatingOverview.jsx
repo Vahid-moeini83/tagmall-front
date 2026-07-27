@@ -17,7 +17,7 @@ export default function RatingOverview({ ratingDistribution }) {
                   {item.stars}
                   <span className="text-xs text-gray-600/70">/5</span>
                 </span>
-                <StarIcon className="text-yellow-600" size={16} />
+                <StarIcon className="w-[10px] h-[10px] text-yellow-600" />
               </div>
             </div>
             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">

@@ -102,7 +102,7 @@ export default function ReviewCard({
                     data-bubble
                   >
                     <div className="flex items-center justify-end gap-1">
-                      <StarIcon className="text-yellow-600" size={20} />
+                      <StarIcon className="w-[10px] h-[10px] text-yellow-600" />
                       <span>{review.rating}</span>
                     </div>
 
