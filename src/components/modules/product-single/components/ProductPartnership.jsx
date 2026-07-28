@@ -373,7 +373,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
           overlayClassName="z-100 lg:hidden"
         >
           {/* عنوان */}
-          <h2 className="font-bold text-primary text-base text-center mt-3 mb-5 shrink-0">
+          <h2 className=" font-bold text-primary text-base text-center mt-3 mb-5 shrink-0">
             بسترهای پیشنهادی اشتراک گذاری محتوا
           </h2>
 

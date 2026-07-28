@@ -194,7 +194,7 @@ export default function PartnershipShareChat({
                   </div>
                 )}
               </div>
-              <span className="font-iransans text-gray-400 text-xs block text-center pr-6">
+              <span className="pt-1 text-gray-400 text-xs block text-center pr-6">
                 {formatPartnershipRelativeTime(msg.createdAt)}
               </span>
             </div>
@@ -208,9 +208,9 @@ export default function PartnershipShareChat({
     <div className="pt-3 lg:pt-0 lg:px-[140px] flex flex-col h-full select-none overflow-hidden">
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
-        <div className="flex items-center justify-between lg:pb-2">
+        <div className="flex items-center justify-between pb-3 lg:pb-2">
           <h2 className="font-iransans font-semibold text-primary text-sm lg:text-lg leading-7 text-center lg:text-start flex-1 px-2 lg:px-0">
-            تجربه کاربران از بسترهای به اشتراک گذاری محتوا
+            تجربه کاربران از بسترهای اشتراک گذاری محتوا
           </h2>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function PartnershipShareChat({
                     triggerClassName="justify-center"
                     iconClassName="left-[25px]!"
                   >
-                    <div className="pb-3 px-[10px]">
+                    <div className="pb-1 px-[10px]">
                       {platformMessages.map((msg, idx) =>
                         renderMessageBubble(msg, idx, platformMessages),
                       )}
@@ -344,7 +344,7 @@ export default function PartnershipShareChat({
           overlayClassName="z-100 lg:hidden"
         >
           <h2 className="font-bold text-primary text-base text-center mt-3 mb-5">
-            بسترهای پیشنهادی اشتراک گذاری محتوا
+            بستر اشتراک گذاری محتوا
           </h2>
 
           <div className="flex flex-col gap-[10px]">
