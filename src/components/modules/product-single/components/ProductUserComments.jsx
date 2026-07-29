@@ -252,10 +252,9 @@ export default function ProductUserComments({
     setReportMsgId(null);
     setReplyInputs({});
     setNewComment(message.message || "");
-    setShowCommentInput(true);
 
     setTimeout(() => {
-      const el = inputRef.current || activeReplyInputRef.current;
+      const el = activeReplyInputRef.current;
       if (el) {
         el.focus();
         el.style.height = "auto";
@@ -267,7 +266,6 @@ export default function ProductUserComments({
   const handleCancelEdit = () => {
     setEditMsgId(null);
     setNewComment("");
-    setShowCommentInput(false);
   };
 
   const handleDelete = async (messageId) => {
@@ -488,6 +486,7 @@ export default function ProductUserComments({
 
   const handleOpenCommentInput = () => {
     setShowCommentInput(true);
+    setEditMsgId(null);
     // Focus on input after it's rendered
     setTimeout(() => {
       inputRef.current?.focus();
@@ -638,7 +637,7 @@ export default function ProductUserComments({
                   </div>
 
                   {/* Comment Input Box */}
-                  {showCommentInput ? (
+                  {showCommentInput && !editMsgId ? (
                     isDesktop ? (
                       <div className="bg-white rounded-lg p-3">
                         <textarea
@@ -677,7 +676,8 @@ export default function ProductUserComments({
                       </div>
                     ) : null
                   ) : (
-                    isDesktop && (
+                    isDesktop &&
+                    !editMsgId && (
                       <button
                         onClick={handleOpenCommentInput}
                         className="font-iransans rounded-lg py-4 bg-white text-primary text-center"
@@ -698,10 +698,10 @@ export default function ProductUserComments({
                 return (
                   <div
                     key={box.id}
-                    className="flex items-start gap-[6px] shrink-0 mb-4 lg:mb-12 w-full lg:w-auto border-b-5 border-gray-200 lg:border-white pb-4 lg:pb-0 lg:border-0"
+                    className="flex items-start gap-[6px] shrink-0 mb-4 lg:mb-12 w-full lg:w-[250px] border-b-5 border-gray-200 lg:border-white pb-4 lg:pb-0 lg:border-0"
                   >
                     <div
-                      className={`flex flex-col gap-2 w-full lg:w-auto lg:max-h-[208px] scroll-hidden lg:overflow-y-auto relative items-start px-[10px] lg:px-0`}
+                      className={`flex flex-col gap-2 w-full lg:max-h-[208px] scroll-hidden lg:overflow-y-auto relative items-start px-[10px] lg:px-0`}
                     >
                       {allMessages?.map((msg) => {
                         const isUserMsg = msg.isUserMessage;
@@ -883,10 +883,20 @@ export default function ProductUserComments({
                                 <div className="flex items-center justify-start gap-3 mt-2">
                                   <div className="flex flex-col gap-2 items-center w-full max-w-[175px]">
                                     <div className="w-full bg-white rounded-lg p-2 border-2 border-gray-200">
-                                      <div className="bg-gray-100 border-r-4 border-gray-600 py-1 px-2 rounded-md mb-2">
-                                        <span className="font-iransans text-gray-600 text-xs line-clamp-1">
+                                      <div
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          scrollToReplyTarget(msg.id);
+                                        }}
+                                        className={`border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] cursor-pointer mb-2 ${
+                                          isUserMsg
+                                            ? "ml-auto rounded-br-none"
+                                            : "mr-auto rounded-bl-none"
+                                        }`}
+                                      >
+                                        <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
                                           {msg.message}
-                                        </span>
+                                        </p>
                                       </div>
                                       <textarea
                                         ref={activeReplyInputRef}
@@ -938,6 +948,69 @@ export default function ProductUserComments({
                                   </div>
                                 </div>
                               )}
+                            {/* Edit Input for this message - Desktop only */}
+                            {isDesktop && editMsgId === msg.id && (
+                              <div className="flex items-center justify-start gap-3 mt-2">
+                                <div className="flex flex-col gap-2 items-center w-full max-w-[175px]">
+                                  <div className="w-full bg-white rounded-lg p-2 border-2 border-gray-200">
+                                    <div
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        scrollToReplyTarget(msg.id);
+                                      }}
+                                      className={`border-2 border-gray-400 rounded-full p-[10px] max-w-[70%] cursor-pointer mb-2 ${
+                                        msg.isUserMessage
+                                          ? "ml-auto rounded-br-none"
+                                          : "mr-auto rounded-bl-none"
+                                      }`}
+                                    >
+                                      <p className="font-iransans text-xs text-gray-600 line-clamp-1 overflow-hidden">
+                                        {msg.message}
+                                      </p>
+                                    </div>
+                                    <textarea
+                                      ref={activeReplyInputRef}
+                                      value={newComment}
+                                      onChange={(e) => {
+                                        setNewComment(e.target.value);
+                                        e.target.style.height = "auto";
+                                        e.target.style.height = `${e.target.scrollHeight}px`;
+                                      }}
+                                      placeholder="ویرایش دیدگاه..."
+                                      className="w-full min-h-[48px] text-xs font-iransans resize-none outline-none"
+                                    />
+                                    <div className="flex items-center justify-end gap-2">
+                                      <button
+                                        onClick={handleCancelEdit}
+                                        disabled={submitting}
+                                        className="px-2 py-1 text-xs font-iransans text-gray-400 disabled:opacity-50"
+                                      >
+                                        انصراف
+                                      </button>
+                                      <button
+                                        onClick={() => handleSubmitComment()}
+                                        disabled={
+                                          !newComment.trim() || submitting
+                                        }
+                                        className="px-2 py-1 text-xs font-iransans text-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                                      >
+                                        {submitting ? (
+                                          <>
+                                            <SpinnerLoading
+                                              size={12}
+                                              className="border-primary"
+                                            />
+                                            ارسال...
+                                          </>
+                                        ) : (
+                                          "ارسال"
+                                        )}
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         );
                       })}

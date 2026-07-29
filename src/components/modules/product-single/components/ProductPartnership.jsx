@@ -112,38 +112,38 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                 {/* Texts */}
                 <div className="hidden lg:block space-y-0 mb-6">
                   <div className="mb-2! lg:mb-3!">
-                    <p className="font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
+                    <p className="font-iransans font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
                       با به اشتراک گذاری لینک فروش محصولات ، یک درصد از فروش هر
                       کالا را بهره مند شوید .
                     </p>
                   </div>
 
                   <div className="mb-2! lg:mb-3!">
-                    <p className="font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
+                    <p className="font-iransans font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
                       لینک مشارکت در فروش هر کالا برای شما اختصاصی می باشد .
                     </p>
                   </div>
 
                   <div className="mb-2! lg:mb-3!">
-                    <p className="text-gray-600 text-justify text-xs/6 lg:text-base/12 font-bold">
+                    <p className="font-iransans text-gray-600 text-justify text-xs/6 lg:text-base/12 font-bold">
                       بررسی بازدهی لینک های به اشتراک گذاشته شده :
                     </p>
-                    <p className="font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
+                    <p className="font-iransans font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
                       با بررسی بازدهی لینک های به اشتراک گذاشته شده ؛ عملکرد
                       بهتر و سود بیش ترکسب کنید .
                     </p>
                   </div>
 
                   <div className="mb-2! lg:mb-3!">
-                    <p className="text-gray-600 text-justify text-xs/6 lg:text-base/12 font-bold">
+                    <p className="font-iransans text-gray-600 text-justify text-xs/6 lg:text-base/12 font-bold">
                       محاسبه و پرداخت سود مشارکت در فروش :
                     </p>
-                    <p className="font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
+                    <p className="font-iransans font-extralight text-gray-600 text-justify text-xs/6 lg:text-base/12">
                       با توجه به امکان مرجوع شدن کالا توسط خریدار سود مشارکت در
                       فروش پس ازپایان{" "}
                       <span
                         onClick={handleOpenReturnGuide}
-                        className="text-primary cursor-pointer"
+                        className="text-primary cursor-pointer font-iransans"
                       >
                         فرصت مرجوع شدن کالا
                       </span>{" "}
@@ -153,7 +153,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                 </div>
 
                 {/* Button or Link Box */}
-                <div className="bg-gray-200 rounded-lg px-[10px] pt-[15px] pb-[5px]">
+                <div className="bg-gray-200 rounded-lg px-[10px] pt-[15px] pb-[5px] lg:p-[5px]">
                   <div className="flex lg:hidden items-center justify-between px-[5px]">
                     <span className="text-primary text-base font-bold">
                       مشارکت در فروش
@@ -177,21 +177,22 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                       دریافت لینک مشارکت در فروش
                     </button>
                   ) : true ? (
-                    <div className="flex items-center gap-3 mt-5 lg:mt-0 relative">
+                    <div className="flex lg:flex-col items-center gap-3 mt-5 lg:mt-0 relative">
                       {/* Link Box */}
-                      <div className="bg-white flex-1 p-[10px] rounded-lg flex justify-end items-center lg:gap-6">
+                      <div className="w-full bg-white lg:bg-transparent flex-1 p-[10px] lg:pb-0 rounded-lg flex justify-end items-center lg:gap-6">
                         {/* Link */}
                         <span
                           dir="ltr"
-                          className="text-gray-400 ml-6 lg:ml-0 line-clamp-1 max-w-[170px] lg:max-w-[unset] text-ellipsis"
+                          className="w-full text-center text-gray-500 ml-6 lg:ml-0 pt-1 lg:pr-20 line-clamp-1 max-w-[170px] lg:max-w-[unset] text-ellipsis"
                         >
-                          {affiliateLink}
+                          {affiliateLink ||
+                            "https://tagmall.ir/products/id/sharelink?user"}
                         </span>
                         <div className="flex items-center">
                           {/* Copy Icon */}
                           <CopyIcon size={20} />
                           {/* Border */}
-                          <div className="border-r-2 border-gray-200 h-6 mx-[14px]" />
+                          <div className="border-r-2 border-gray-200 lg:border-white h-6 mx-[14px]" />
                           {/* Download Icon */}
                           <button
                             type="button"
@@ -206,7 +207,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                       {/* Share Icon */}
                       <button
                         type="button"
-                        className="flex items-center justify-center shrink-0 bg-white rounded-lg w-10 h-10 cursor-pointer -ml-1"
+                        className="lg:hidden flex items-center justify-center shrink-0 bg-white rounded-lg w-10 h-10 cursor-pointer -ml-1"
                         onClick={() =>
                           isDesktop
                             ? setShareChatOpen(true)
@@ -215,6 +216,11 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                         aria-label="اشتراک گذاری"
                       >
                         <ExternalLinkIcon size={20} />
+                      </button>
+                      {/* Desktop share button */}
+                      <button className="w-full hidden lg:flex justify-center items-center gap-4 py-2 rounded-xl bg-white text-lg text-primary">
+                        <ExternalLinkIcon size={20} />
+                        اشتراک گذاری
                       </button>
                     </div>
                   ) : (
