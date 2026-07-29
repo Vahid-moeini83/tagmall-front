@@ -6,7 +6,7 @@ function MobileSortFilterRow({ sortLabel, onClick, className = "" }) {
       <button
         type="button"
         onClick={onClick}
-        className="text-xs flex items-center gap-3 mb-4 pr-2 cursor-pointer"
+        className="text-xs flex items-center gap-3 mb-5 pr-4 cursor-pointer"
       >
         <ArrowUpDownIcon size={20} />
         <span className="text-gray-600 text-sm font-extralight">

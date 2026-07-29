@@ -101,7 +101,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                 <div className="lg:hidden flex items-center justify-end pl-2 mt-[50px]">
                   <FullScreenIcon
                     size={20}
-                    className="cursor-pointer ml-0.5"
+                    className="cursor-pointer ml-1.5"
                     onClick={() => setIsFullScreen(true)}
                   />
                 </div>
@@ -153,8 +153,8 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                 </div>
 
                 {/* Button or Link Box */}
-                <div className="bg-gray-200 rounded-lg p-[10px]">
-                  <div className="flex lg:hidden items-center justify-between">
+                <div className="bg-gray-200 rounded-lg px-[10px] pt-[15px] pb-[5px]">
+                  <div className="flex lg:hidden items-center justify-between px-[5px]">
                     <span className="text-primary text-base font-bold">
                       مشارکت در فروش
                     </span>
@@ -164,7 +164,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                     />
                   </div>
                   <div className="block lg:hidden mt-6 space-y-2">
-                    <div className="text-gray-600 font-extralight">
+                    <div className="text-gray-600 font-extralight mr-2">
                       <span className="font-bold">سود مشارکت در فروش </span>1
                       درصد به ازای فروش هر کالا
                     </div>
@@ -177,7 +177,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                       دریافت لینک مشارکت در فروش
                     </button>
                   ) : true ? (
-                    <div className="flex items-center gap-4 mt-5 lg:mt-0 relative">
+                    <div className="flex items-center gap-3 mt-5 lg:mt-0 relative">
                       {/* Link Box */}
                       <div className="bg-white flex-1 p-[10px] rounded-lg flex justify-end items-center lg:gap-6">
                         {/* Link */}
@@ -206,7 +206,7 @@ export default function ProductPartnership({ cooperation, productName = "" }) {
                       {/* Share Icon */}
                       <button
                         type="button"
-                        className="flex items-center justify-center shrink-0 bg-white rounded-lg w-10 h-10 cursor-pointer"
+                        className="flex items-center justify-center shrink-0 bg-white rounded-lg w-10 h-10 cursor-pointer -ml-1"
                         onClick={() =>
                           isDesktop
                             ? setShareChatOpen(true)

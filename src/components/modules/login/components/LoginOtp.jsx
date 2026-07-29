@@ -119,16 +119,15 @@ function LoginOtp({
     <div className="h-full flex flex-col justify-between mt-6 lg:mt-0">
       <div>
         {/* Slogan logo */}
-        <div className="flex items-center justify-center">
+        <div className="relative w-[150px] h-[50px] lg:w-[330px] lg:h-[100px] mx-auto flex items-center justify-center">
           <Image
             src="/assets/images/logo/slogan-logo.svg"
-            width={160}
-            height={50}
+            fill
             alt="لوگوی شعار"
           />
         </div>
         {/* Title */}
-        <div className="flex items-center justify-between mt-9">
+        <div className="flex items-center justify-between mt-9 lg:mt-12">
           <h1 className="font-bold text-primary text-base">
             ورود به حساب کاربری {`(${receivedOtp})`}
           </h1>

@@ -54,6 +54,7 @@ export default function PartnershipShareChat({
 
   const chatContainerRef = useRef(null);
   const lastMessageRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const platforms =
     socialPlatforms.length > 0
@@ -69,6 +70,14 @@ export default function PartnershipShareChat({
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Sync textarea height with comment
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [draft]);
 
   const toggleAccordion = (id) => {
     setExpandedAccordions((prev) =>
@@ -97,6 +106,11 @@ export default function PartnershipShareChat({
     const trimmed = draft.trim();
     if (!trimmed) return;
 
+    if (!selectedPlatform) {
+      toast.error("ابتدا بستر اشتراک گذاری را انتخاب کنید");
+      return;
+    }
+
     const newMessage = {
       id: Date.now(),
       userId: PARTNERSHIP_CURRENT_USER_ID,
@@ -110,6 +124,9 @@ export default function PartnershipShareChat({
 
     setMessages((prev) => [...prev, newMessage]);
     setDraft("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
     setSelectedPlatform(null);
     toast.success("تجربه شما ثبت شد");
   };
@@ -119,11 +136,11 @@ export default function PartnershipShareChat({
     const last = isLastOfGroup(arr, index);
 
     const bubbleClasses = cn(
-      "font-iransans text-justify overflow-hidden rounded-lg text-xs lg:text-sm text-gray-800 w-fit",
+      "font-iransans text-justify overflow-hidden rounded-xl text-xs lg:text-sm text-gray-800 w-fit",
       isMine
         ? last
-          ? "border-2 border-gray-400 rounded-br-none"
-          : "border-2 border-gray-400"
+          ? "border-2 border-primary rounded-br-none"
+          : "border-2 border-primary"
         : last
           ? "border-2 border-gray-200 rounded-bl-none"
           : "border-2 border-gray-200",
@@ -147,7 +164,7 @@ export default function PartnershipShareChat({
           >
             {last && (
               <div className="flex items-end">
-                <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-lg border-2 border-gray-200 flex items-center justify-center mb-5.5">
                   <UserIcon size={20} />
                 </div>
               </div>
@@ -160,11 +177,18 @@ export default function PartnershipShareChat({
                   !isMine && "flex-row-reverse",
                 )}
               >
-                <div className={bubbleClasses}>
-                  <p className="font-iransans px-4 leading-10 text-justify wrap-break-word">
-                    <span className="font-bold">{msg.userName}:</span>{" "}
-                    {msg.text}
-                  </p>
+                <div className="flex flex-col gap-1 min-w-0">
+                  <div className={bubbleClasses}>
+                    <p className="font-iransans px-4 leading-10 text-justify wrap-break-word">
+                      <span className="font-bold">{msg.userName}:</span>{" "}
+                      {msg.text}
+                    </p>
+                  </div>
+                  <span
+                    className={`pt-1 text-gray-400 text-xs block text-center`}
+                  >
+                    {formatPartnershipRelativeTime(msg.createdAt)}
+                  </span>
                 </div>
 
                 {!isMine && (
@@ -194,9 +218,6 @@ export default function PartnershipShareChat({
                   </div>
                 )}
               </div>
-              <span className="pt-1 text-gray-400 text-xs block text-center pr-6">
-                {formatPartnershipRelativeTime(msg.createdAt)}
-              </span>
             </div>
           </div>
         </div>
@@ -208,7 +229,7 @@ export default function PartnershipShareChat({
     <div className="pt-3 lg:pt-0 lg:px-[140px] flex flex-col h-full select-none overflow-hidden">
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
-        <div className="flex items-center justify-between pb-3 lg:pb-2">
+        <div className="flex items-center justify-between pb-4 lg:pb-2">
           <h2 className="font-iransans font-semibold text-primary text-sm lg:text-lg leading-7 text-center lg:text-start flex-1 px-2 lg:px-0">
             تجربه کاربران از بسترهای اشتراک گذاری محتوا
           </h2>
@@ -298,33 +319,29 @@ export default function PartnershipShareChat({
                 </div>
 
                 {/* Input */}
-                <div className="flex items-end rounded-xl overflow-hidden bg-white">
-                  <input
-                    type="text"
+                <div className="flex items-center gap-2 px-1 bg-white rounded-xl">
+                  <textarea
+                    ref={textareaRef}
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleSubmitExperience();
-                      }
-                    }}
                     placeholder={
                       selectedPlatform
                         ? `تجربه شما از ${selectedPlatform.name}`
                         : "تجربه شما از ..."
                     }
-                    className="font-iransans placeholder:text-gray-400 placeholder:text-center placeholder:pr-9 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none bg-transparent flex-1"
+                    rows={1}
+                    className="font-iransans placeholder:text-gray-400 placeholder:text-sm placeholder:text-center placeholder:pr-8 text-gray-600 min-h-12 py-3 px-2 flex-1 bg-transparent border-none outline-none resize-none overflow-hidden leading-6"
                   />
-                  <div className="flex items-center justify-center w-12 min-h-12 shrink-0">
+
+                  <div className="flex items-center gap-2 shrink-0">
                     <button
                       type="button"
                       disabled={draft.trim().length <= 0}
                       onClick={handleSubmitExperience}
-                      className={`font-iransans pr-1 ${
+                      className={`font-iransans text-sm transition-colors cursor-pointer ${
                         draft.trim().length > 0
-                          ? "text-primary cursor-pointer"
-                          : "text-gray-400 cursor-not-allowed"
+                          ? "text-primary"
+                          : "text-gray-400"
                       }`}
                     >
                       ثبت

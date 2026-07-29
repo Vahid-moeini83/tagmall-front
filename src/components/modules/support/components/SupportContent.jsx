@@ -50,7 +50,7 @@ function SupportContent({ conversations, initialOrders }) {
       <div className="hidden lg:flex h-screen bg-gray-200 px-10 pt-[25px] pb-[5px] flex-col">
         <div className="flex flex-col gap-[25px] flex-1 min-h-0">
           {/* Top Section - Search Input */}
-          <div className="flex items-center gap-[25px] pr-6 relative">
+          <div className="flex items-center gap-[25px] pr-8 relative">
             <Link href={"/"}>
               <Image
                 src="/assets/images/logo/small-logo.svg"

@@ -309,3 +309,20 @@ export function formatPartnershipRelativeTime(dateInput) {
     year: "numeric",
   });
 }
+
+export const formatDateLabel = (dateString) => {
+  const today = new Date();
+  const messageDate = new Date(dateString);
+
+  const diffTime =
+    today.setHours(0, 0, 0, 0) - new Date(messageDate).setHours(0, 0, 0, 0);
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  if (diffDays === 0) return "امروز";
+  if (diffDays === 1) return "دیروز";
+
+  return messageDate.toLocaleDateString("fa-IR", {
+    day: "numeric",
+    month: "long",
+  });
+};

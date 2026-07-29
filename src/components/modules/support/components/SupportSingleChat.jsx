@@ -1,16 +1,14 @@
 "use client";
 
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   CloseSquareIcon,
-  MoreSquareIcon,
+  GalleryIcon,
   StrokeArrowLeftIcon,
   SupportIcon,
   UserIcon,
 } from "@/icons";
-import { ScanLineIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MessageContextMenu from "@/components/ui/MessageContextMenu";
 import {
   getConversationMessages,
@@ -18,11 +16,11 @@ import {
   sendMessage,
   deleteMessage,
 } from "@/lib/server/actions/support";
-import usePublicStore from "@/app/store/publicStore";
 import { getToken, getUser } from "@/lib/server/cookies";
 import toast from "react-hot-toast";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { ChatSkeleton } from "@/components/ui/loading";
+import { formatDateLabel } from "@/lib/client/utils";
 
 function SupportSingleChat({ setIsOpen, conversation }) {
   const [messages, setMessages] = useState([]);
@@ -328,23 +326,6 @@ function SupportSingleChat({ setIsOpen, conversation }) {
     }
   };
 
-  const formatDateLabel = (dateString) => {
-    const today = new Date();
-    const messageDate = new Date(dateString);
-
-    const diffTime =
-      today.setHours(0, 0, 0, 0) - new Date(messageDate).setHours(0, 0, 0, 0);
-    const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-    if (diffDays === 0) return "امروز";
-    if (diffDays === 1) return "دیروز";
-
-    return messageDate.toLocaleDateString("fa-IR", {
-      day: "numeric",
-      month: "long",
-    });
-  };
-
   const handleOpenMenu = (e, msg) => {
     e.preventDefault();
     e.stopPropagation();
@@ -609,7 +590,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
       {/* Chat content */}
       <div
         ref={chatContainerRef}
-        className="lg:pt-24 pb-78 lg:pb-56 overflow-y-auto scroll-hidden flex-1"
+        className="lg:pt-24 pb-78 lg:pb-64 overflow-y-auto scroll-hidden flex-1"
       >
         {loading ? (
           <ChatSkeleton />
@@ -861,6 +842,11 @@ function SupportSingleChat({ setIsOpen, conversation }) {
 
       {/* Chat box */}
       <div className="fixed right-0 left-0 bottom-0 flex items-end gap-4 lg:items-center lg:justify-center px-[10px] lg:px-[140px] pt-2 lg:pt-4 pb-6 lg:pb-12 bg-white">
+        <StrokeArrowLeftIcon
+          size={20}
+          onClick={() => setIsOpen(false)}
+          className={"absolute bottom-16 right-16 rotate-180"}
+        />
         <div className="flex items-end gap-1 flex-1">
           <div className="flex flex-col gap-3 flex-1">
             {/* پیام‌های آماده — فقط حالت نرمال */}
@@ -869,7 +855,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
               !replyTo &&
               !isReported &&
               showRecommended && (
-                <div className="space-y-2">
+                <div className="space-y-2 lg:w-[540px] lg:mx-auto">
                   {recommendedMessages.map((item) => (
                     <p
                       key={item.id}
@@ -906,9 +892,9 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                             setMessage("");
                             resetTextareaHeight();
                           }}
-                          className="absolute left-3"
+                          className="absolute left-4"
                         >
-                          <CloseSquareIcon size={22} />
+                          <CloseSquareIcon size={20} />
                         </button>
                       </div>
                     )}
@@ -984,7 +970,9 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                           {/* input */}
                           <div
                             className={`flex items-end rounded-xl overflow-hidden ${
-                              activeMsg ? "bg-white" : "bg-gray-200"
+                              activeMsg
+                                ? "bg-white lg:bg-gray-200"
+                                : "bg-gray-200"
                             }`}
                           >
                             <textarea
@@ -1004,12 +992,6 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                                 setMessage(e.target.value);
                                 e.target.style.height = "auto";
                                 e.target.style.height = `${e.target.scrollHeight}px`;
-                              }}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" && !e.shiftKey) {
-                                  e.preventDefault();
-                                  handleComposerSubmit();
-                                }
                               }}
                               className="font-iransans placeholder:text-gray-400 text-gray-600 min-h-12 py-3 pr-4 w-full outline-none select-all bg-transparent resize-none overflow-hidden leading-6 text-right placeholder:text-center placeholder:pr-8 flex-1"
                             />
@@ -1033,7 +1015,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                                       }
                                       className="cursor-pointer pr-3"
                                     >
-                                      <ScanLineIcon className="text-gray-800" />
+                                      <GalleryIcon className="text-gray-800" />
                                     </button>
                                   </>
                                 )}

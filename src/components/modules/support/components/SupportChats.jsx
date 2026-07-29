@@ -54,7 +54,6 @@ function formatChatItems(conversationsData) {
 }
 
 function SupportChats({ conversations, isMobile = false }) {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const searchParams = useSearchParams();
   const conversationIdFromUrl = searchParams.get("conversationId");
 
@@ -72,12 +71,6 @@ function SupportChats({ conversations, isMobile = false }) {
     }
   }, [conversations]);
 
-  const restoreChatItems = () => {
-    if (conversations?.data) {
-      setChatItems(formatChatItems(conversations.data));
-    }
-  };
-
   useEffect(() => {
     if (!conversationIdFromUrl) return;
 
@@ -91,6 +84,12 @@ function SupportChats({ conversations, isMobile = false }) {
 
     openConversation(buildSupportConversation(parsedId));
   }, [conversationIdFromUrl, chatItems, openConversation]);
+
+  const restoreChatItems = () => {
+    if (conversations?.data) {
+      setChatItems(formatChatItems(conversations.data));
+    }
+  };
 
   const [imagesSliderRef, imagesSlider] = useKeenSlider({
     vertical: isMobile ? false : true,
@@ -166,9 +165,9 @@ function SupportChats({ conversations, isMobile = false }) {
   const supportChat = chatItems.find((chat) => chat.isSupport);
   const otherChats = chatItems.filter((chat) => !chat.isSupport);
 
-  console.log(chatItems);
-
   const isConfirmDeleteEnabled = pendingDeletes.length > 0;
+
+  console.log(supportChat);
 
   return (
     <>
@@ -208,11 +207,9 @@ function SupportChats({ conversations, isMobile = false }) {
                               <p className="font-iransans text-gray-600 mb-0! max-w-[132px] lg:max-w-[200px] line-clamp-1 text-xs lg:text-base">
                                 {supportChat.msg}
                               </p>
-                              {supportChat?.read_status > 0 && (
-                                <p className="text-gray-400 text-xs lg:text-base pt-1">
-                                  {supportChat?.read_status_text}
-                                </p>
-                              )}
+                              <p className="text-gray-400 text-xs lg:text-base pt-1">
+                                {supportChat?.read_status_text}
+                              </p>
                             </div>
                           </div>
 
@@ -230,7 +227,7 @@ function SupportChats({ conversations, isMobile = false }) {
                           />
                           <div
                             onClick={() => handleOpenChat(item)}
-                            className="relative flex items-start gap-[6px] lg:gap-3 pt-1 lg:pt-3 pb-1 lg:pb-3 cursor-pointer"
+                            className="relative flex items-start gap-[6px] lg:gap-3 pt-1 pb-1 lg:pb-3 cursor-pointer"
                           >
                             {item.other_user?.avatar ? (
                               <Image
@@ -295,7 +292,7 @@ function SupportChats({ conversations, isMobile = false }) {
                           <button
                             type="button"
                             disabled={isDeleting || !isConfirmDeleteEnabled}
-                            className={`flex-1 cursor-pointer border-2 py-2 rounded-full flex items-center justify-center disabled:cursor-not-allowed ${
+                            className={`w-1/2 cursor-pointer border-2 py-2 rounded-full flex items-center justify-center disabled:cursor-not-allowed ${
                               isConfirmDeleteEnabled
                                 ? "text-primary border-primary disabled:opacity-70"
                                 : "text-gray-400 border-gray-400"
@@ -314,7 +311,7 @@ function SupportChats({ conversations, isMobile = false }) {
                           <button
                             type="button"
                             disabled={isDeleting}
-                            className="flex-1 text-error-medium cursor-pointer py-2 rounded-full disabled:opacity-70"
+                            className="w-1/2 text-error-medium cursor-pointer py-2 rounded-full disabled:opacity-70"
                             onClick={handleCancelDeletes}
                           >
                             انصراف
@@ -323,7 +320,7 @@ function SupportChats({ conversations, isMobile = false }) {
                       ) : (
                         <button
                           type="button"
-                          className="w-full text-primary cursor-pointer"
+                          className="w-full text-primary border-2 border-primary rounded-full py-2 cursor-pointer"
                           onClick={handleDeleteButtonClick}
                         >
                           پاک کردن پیام ها

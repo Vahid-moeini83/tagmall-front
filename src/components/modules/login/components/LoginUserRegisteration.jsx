@@ -139,16 +139,15 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
     <div className="h-full flex flex-col justify-between overflow-y-auto scroll-hidden mt-6 lg:mt-0">
       <div>
         {/* Slogan logo */}
-        <div className="flex items-center justify-center">
+        <div className="relative w-[150px] h-[50px] lg:w-[330px] lg:h-[100px] mx-auto flex items-center justify-center">
           <Image
             src="/assets/images/logo/slogan-logo.svg"
-            width={160}
-            height={50}
+            fill
             alt="لوگوی شعار"
           />
         </div>
         {/* Title */}
-        <h1 className="font-bold text-primary text-base mt-9">
+        <h1 className="font-bold text-primary text-base mt-9 lg:mt-12">
           ایجاد حساب کاربری:
         </h1>
         {/* Main content */}

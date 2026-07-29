@@ -691,132 +691,110 @@ export default function ProductMain({ product }) {
 
                 {/* Desktop: Accordion wrapper */}
                 <div className="hidden lg:block">
-                  <Accordion type="single" collapsible>
-                    <AccordionItem value="variety">
-                      <AccordionTrigger className="text-gray-600 pl-[11px] justify-between hover:no-underline cursor-pointer">
-                        <div>
-                          <span className="font-bold text-gray-600 text-base">
-                            تنوع کالا
-                          </span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="mt-4">
-                        <div className="space-y-4">
-                          {attributes.map((attribute, attrIndex) => {
-                            const selectedItem = getSelectedAttributeItem(
-                              attribute.id,
-                            );
-                            const isColorAttribute = attribute.id === 3;
-                            return (
-                              <div key={attribute.id}>
-                                {attrIndex > 0 && (
-                                  <div className="border-t-2 border-gray-200 mb-4" />
-                                )}
-                                <Accordion type="single" collapsible>
-                                  <AccordionItem
-                                    value={`attribute-${attribute.id}`}
+                  <div className="space-y-4">
+                    {attributes.map((attribute, attrIndex) => {
+                      const selectedItem = getSelectedAttributeItem(
+                        attribute.id,
+                      );
+                      const isColorAttribute = attribute.id === 3;
+                      return (
+                        <div key={attribute.id}>
+                          {attrIndex > 0 && (
+                            <div className="border-t-2 border-gray-200 mb-4" />
+                          )}
+                          <Accordion type="single" collapsible>
+                            <AccordionItem value={`attribute-${attribute.id}`}>
+                              <AccordionTrigger className="text-gray-600 px-[11px] justify-between hover:no-underline cursor-pointer">
+                                <div>
+                                  <span className="font-bold text-gray-600 text-base">
+                                    {attribute.attribute_name}:
+                                  </span>{" "}
+                                  <span
+                                    className={`text-base ${selectedItem ? "" : "text-gray-400"}`}
                                   >
-                                    <AccordionTrigger className="text-gray-600 pl-[11px] justify-between hover:no-underline cursor-pointer">
-                                      <div>
-                                        <span className="font-bold text-gray-600 text-base">
-                                          {attribute.attribute_name}:
-                                        </span>{" "}
-                                        <span
-                                          className={`text-base ${selectedItem ? "" : "text-gray-400"}`}
-                                        >
-                                          {selectedItem
-                                            ? selectedItem.value
-                                            : `(${attribute.items?.length || 0} ${attribute.attribute_name})`}
-                                        </span>
-                                      </div>
-                                    </AccordionTrigger>
-                                    <AccordionContent className="mt-4">
-                                      <div className="space-y-4">
-                                        {attribute.items?.map((item, index) => (
-                                          <div key={item.id}>
-                                            <button
-                                              onClick={() => {
-                                                handleSelectAttribute(
-                                                  attribute.id,
-                                                  item,
-                                                );
-                                              }}
-                                              className={`w-full flex items-start justify-between cursor-pointer p-3 rounded-lg transition-colors ${
-                                                selectedItem?.id === item.id
-                                                  ? "bg-gray-200"
-                                                  : ""
-                                              }`}
-                                            >
-                                              <div className="flex items-start gap-3">
-                                                <Image
-                                                  src={
-                                                    item.image ||
-                                                    "/assets/images/fallback/no-photo.jpg"
-                                                  }
-                                                  width={24}
-                                                  height={36}
-                                                  alt={item.value}
-                                                  className="object-contain"
-                                                />
-                                                <div className="flex flex-col gap-[24px] items-start">
-                                                  <span className="text-gray-600 text-base">
-                                                    <span className="font-bold">
-                                                      {attribute.attribute_name}
-                                                    </span>{" "}
-                                                    {item.value}
-                                                  </span>
-                                                  <span className="text-gray-600 text-base">
-                                                    <span className="font-bold">
-                                                      از
-                                                    </span>{" "}
-                                                    {(
-                                                      parseFloat(
-                                                        product?.base_price ||
-                                                          0,
-                                                      ) +
-                                                      parseFloat(
-                                                        item.added_price || 0,
-                                                      )
-                                                    ).toLocaleString(
-                                                      "fa-IR",
-                                                    )}{" "}
-                                                    تومان
-                                                  </span>
-                                                </div>
-                                              </div>
-                                              {isColorAttribute &&
-                                                item.meta?.hex && (
-                                                  <div
-                                                    className="w-5 h-5 rounded-full"
-                                                    style={{
-                                                      backgroundColor:
-                                                        item.meta.hex,
-                                                    }}
-                                                  />
-                                                )}
-                                            </button>
-                                            {index <
-                                              attribute.items.length - 1 &&
-                                              selectedItem?.id !== item.id &&
-                                              selectedItem?.id !==
-                                                attribute.items[index + 1]
-                                                  ?.id && (
-                                                <div className="border-t-2 border-gray-200 mr-14" />
-                                              )}
+                                    {selectedItem
+                                      ? selectedItem.value
+                                      : `(${attribute.items?.length || 0} ${attribute.attribute_name})`}
+                                  </span>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent className="mt-4 pb-0!">
+                                <div className="space-y-4">
+                                  {attribute.items?.map((item, index) => (
+                                    <div key={item.id}>
+                                      <button
+                                        onClick={() => {
+                                          handleSelectAttribute(
+                                            attribute.id,
+                                            item,
+                                          );
+                                        }}
+                                        className={`w-full flex items-start justify-between cursor-pointer p-[10px] rounded-lg transition-colors ${
+                                          selectedItem?.id === item.id
+                                            ? "bg-gray-200"
+                                            : ""
+                                        }`}
+                                      >
+                                        <div className="flex items-start gap-3">
+                                          <div className="relative w-10 h-10">
+                                            <Image
+                                              src={
+                                                item.image ||
+                                                "/assets/images/fallback/no-photo.jpg"
+                                              }
+                                              fill
+                                              alt={item.value}
+                                              className="object-cover rounded-md"
+                                            />
                                           </div>
-                                        ))}
-                                      </div>
-                                    </AccordionContent>
-                                  </AccordionItem>
-                                </Accordion>
-                              </div>
-                            );
-                          })}
+                                          <div className="flex flex-col gap-[24px] items-start">
+                                            <span className="text-gray-600 text-base">
+                                              <span className="font-bold">
+                                                {attribute.attribute_name}
+                                              </span>{" "}
+                                              {item.value}
+                                            </span>
+                                            <span className="text-gray-600 text-base">
+                                              <span className="font-bold">
+                                                از
+                                              </span>{" "}
+                                              {(
+                                                parseFloat(
+                                                  product?.base_price || 0,
+                                                ) +
+                                                parseFloat(
+                                                  item.added_price || 0,
+                                                )
+                                              ).toLocaleString("fa-IR")}{" "}
+                                              تومان
+                                            </span>
+                                          </div>
+                                        </div>
+                                        {isColorAttribute && item.meta?.hex && (
+                                          <div
+                                            className="w-5 h-5 border border-gray-400 rounded-full"
+                                            style={{
+                                              backgroundColor: item.meta.hex,
+                                            }}
+                                          />
+                                        )}
+                                      </button>
+                                      {index < attribute.items.length - 1 &&
+                                        selectedItem?.id !== item.id &&
+                                        selectedItem?.id !==
+                                          attribute.items[index + 1]?.id && (
+                                          <div className="border-t-2 border-gray-200 mr-14" />
+                                        )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  <div className="border-t-2 border-gray-200 mt-4" />
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
@@ -968,7 +946,7 @@ export default function ProductMain({ product }) {
               <div className="hidden lg:block">
                 <Accordion type="single" collapsible>
                   <AccordionItem value="delivery">
-                    <AccordionTrigger className="text-gray-600 pl-[11px] justify-between hover:no-underline">
+                    <AccordionTrigger className="text-gray-600 px-[11px] justify-between hover:no-underline">
                       <div>
                         <span className="font-bold text-gray-600 text-base">
                           روش تحویل سفارش
@@ -976,15 +954,15 @@ export default function ProductMain({ product }) {
                         <span>{deliveryMethods[deliveryMethod]}</span>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="mt-4">
+                    <AccordionContent className="mt-4 pb-0!">
                       <div className="space-y-4">
                         {/* Delivery by seller */}
                         {deliveryMethodsData.find(
                           (m) => m.type === "shipping",
                         ) && (
-                          <div className="pr-3.5">
+                          <div className="pr-4">
                             <label
-                              className={`flex items-start gap-3 ${!isDeliveryMethodSupported("shipping") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                              className={`flex items-start gap-4 ${!isDeliveryMethodSupported("shipping") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                             >
                               <Radio
                                 name="delivery"
@@ -1045,9 +1023,9 @@ export default function ProductMain({ product }) {
                         {deliveryMethodsData.find(
                           (m) => m.type === "pickup",
                         ) && (
-                          <div className="pr-2">
+                          <div className="pr-4">
                             <label
-                              className={`flex items-start gap-3 ${!isDeliveryMethodSupported("pickup") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                              className={`flex items-start gap-4 ${!isDeliveryMethodSupported("pickup") ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                             >
                               <Radio
                                 name="delivery"
@@ -1099,7 +1077,7 @@ export default function ProductMain({ product }) {
 
                             {/* Centered button */}
                             <div className="flex justify-center">
-                              <button className="flex items-center gap-2 text-primary">
+                              <button className="flex justify-center items-center gap-2 text-primary border-2 border-primary rounded-full py-2 w-full">
                                 <LocationIcon size={20} />
                                 <span>موقعیت یابی فروشگاه</span>
                               </button>
@@ -1117,7 +1095,7 @@ export default function ProductMain({ product }) {
             <div className="w-full h-[4px] bg-gray-200 lg:hidden" />
 
             {/* Quantity Selector */}
-            <div className="lg:border-t-2 lg:border-gray-200 lg:pt-4 px-[10px] lg:px-0">
+            <div className="lg:border-t-2 lg:border-gray-200 lg:pt-4 px-[10px] lg:pl-0">
               <div className="flex items-center justify-between py-3 lg:py-0">
                 <span className="text-primary text-base font-bold">
                   تعداد سفارش:
@@ -1146,7 +1124,7 @@ export default function ProductMain({ product }) {
             {/* Note Section */}
             <div
               onClick={handleConversation}
-              className="flex items-center justify-between lg:bg-gray-200 lg:rounded-lg lg:p-4 my-3 lg:my-0 px-[10px] cursor-pointer"
+              className="flex items-center justify-between my-3 lg:my-0 px-[10px] lg:pl-0 lg:border-t-2 lg:border-gray-200 lg:pt-4 cursor-pointer"
             >
               <div className="flex items-center gap-4">
                 <NoteIcon size={20} className="mr-4 lg:mr-0" />
@@ -1154,7 +1132,7 @@ export default function ProductMain({ product }) {
                   یادداشت
                 </span>
               </div>
-              <ChevronLeftIcon size={20} className="ml-4 lg:hidden" />
+              <ChevronLeftIcon size={20} className="ml-4" />
             </div>
 
             {/* Divider */}
@@ -1182,12 +1160,17 @@ export default function ProductMain({ product }) {
               <button
                 onClick={handleAddToCart}
                 disabled={isAddingToCart || !isAvailable}
-                className="text-primary text-[20px] lg:pb-6 cursor-pointer hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center w-full gap-4 border-2 border-primary rounded-full text-primary text-[20px] lg:py-2 lg:mb-6 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
+                {!isAddingToCart ? (
+                  <SquarePlusIcon2 size={20} />
+                ) : (
+                  <SpinnerLoading size={20} />
+                )}
                 {!isAvailable
                   ? "ناموجود"
                   : isAddingToCart
-                    ? "در حال افزودن..."
+                    ? "در حال افزودن"
                     : "ثبت سفارش"}
               </button>
             </div>

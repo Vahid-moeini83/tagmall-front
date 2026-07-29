@@ -74,7 +74,7 @@ export default function ReviewInput({
               >
                 {isActive ? (
                   <StarIcon className="text-yellow-600 w-5 h-5 lg:w-6 lg:h-6" />
-                ) : ( 
+                ) : (
                   <svg
                     width="20"
                     height="20"
@@ -94,22 +94,6 @@ export default function ReviewInput({
           })}
         </div>
 
-        {/* File preview (if file selected) */}
-        {isFileMode && file && (
-          <div className="flex items-center justify-between bg-white px-2 py-1 rounded-lg">
-            <span className="text-xs text-gray-600 truncate max-w-[200px]">
-              {file.name}
-            </span>
-            <button
-              type="button"
-              onClick={handleRemoveFile}
-              className="text-gray-400 hover:text-error-medium"
-            >
-              ×
-            </button>
-          </div>
-        )}
-
         {/* Comment input and actions */}
         <div className="flex items-center gap-2 px-1">
           <textarea
@@ -123,33 +107,15 @@ export default function ReviewInput({
           />
 
           <div className="flex items-center gap-2 shrink-0">
-            {/* Scan/Scan Line icon for file upload */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              className="hidden"
-              accept="image/*"
-            />
-            {!comment.trim() && !file && !isEditMode && !isReportMode ? (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="text-gray-600 hover:text-primary transition-colors"
-              >
-                <ScanLineIcon size={24} />
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={rating === 0 && !comment.trim() && !file}
-                className={`font-iransans text-sm transition-colors cursor-pointer ${
-                  comment.trim() || file ? "text-primary" : "text-gray-400"
-                }`}
-              >
-                ارسال
-              </button>
-            )}
+            <button
+              onClick={handleSubmit}
+              disabled={rating === 0 && !comment.trim() && !file}
+              className={`font-iransans text-sm transition-colors cursor-pointer ${
+                comment.trim() || file ? "text-primary" : "text-gray-400"
+              }`}
+            >
+              ارسال
+            </button>
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { ConversationIcon } from "@/icons";
 
 export default function ProductSpecifications({ setShowComments, specs }) {
   return (
-    <div className="lg:bg-white lg:rounded-t-lg pb-20 pt-18 lg:py-[50px] lg:px-[100px]">
+    <div className="lg:bg-white lg:rounded-t-lg pb-40 pt-18 lg:py-[50px] lg:px-[100px]">
       <Accordion type="single" collapsible defaultValue="specifications">
         <AccordionItem value="specifications">
           <AccordionTrigger className="hidden lg:flex text-primary text-[16px] lg:text-[20px] font-semibold hover:no-underline justify-between">

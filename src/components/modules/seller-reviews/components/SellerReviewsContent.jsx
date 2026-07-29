@@ -134,7 +134,7 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
     // After user submitted a review — thank you instead of input
     if (hasUserReview) {
       return (
-        <div className="flex-1 flex items-center justify-center pt-2 pb-8 lg:py-4">
+        <div className="flex-1 flex items-center justify-center lg:h-[106px] pt-2 pb-8 lg:py-4">
           <p className="font-iransans font-bold text-success-medium text-sm lg:text-base text-center">
             از اشتراک گذاری تجربه خرید متشکریم :)
           </p>
@@ -163,9 +163,9 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
         </h3>
       </div>
       <div className="overflow-y-auto scroll-hidden">
-        <div className="min-h-screen lg:py-[50px] lg:px-[140px] pb-46 lg:pb-[160px]">
+        <div className="min-h-screen lg:py-[50px] lg:px-[140px] pb-54 lg:pb-[160px]">
           {/* Main content */}
-          <div className="flex flex-col gap-3 lg:gap-8">
+          <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between lg:items-start lg:flex-col gap-1 px-[10px] lg:px-0">
               {/* Seller profile section */}
               <div className="flex items-center gap-2">
@@ -187,15 +187,15 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
                 </div>
               </div>
               {/* Overall rating section */}
-              <div className="flex items-center gap-1 ml-[5px]">
-                <span className="text-sm text-gray-600">
+              <div className="flex lg:flex-col-reverse items-center gap-1 ml-[5px]">
+                <span className="font-bold text-sm text-gray-600/50">
                   آرا {sellerData.totalReviews}
                 </span>
                 <div className="flex items-center gap-1">
                   <StarIcon className="w-[10px] h-[10px] text-yellow-600 mb-1" />
-                  <span className="text-sm lg:text-base">
+                  <span className="text-sm lg:text-base text-gray-600">
                     {sellerData.rating}
-                    <span className="text-xs text-gray-600/70">/5</span>
+                    <span className="text-xs text-gray-600/50">/5</span>
                   </span>
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
             </div>
 
             {/* Reviews section */}
-            <div className="flex flex-col gap-4 lg:gap-6 w-full lg:mt-0">
+            <div className="flex flex-col gap-4 lg:gap-6 w-full lg:mt-0 border-0 lg:border-t-2 lg:border-gray-200 lg:pt-[50px]">
               {reviews.map((review) => (
                 <div
                   key={review.id}

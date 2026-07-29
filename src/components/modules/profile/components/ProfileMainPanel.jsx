@@ -79,18 +79,18 @@ function ProfileMainPanel({
           ) : (
             <div
               onClick={() => setIsWalletOpen(true)}
-              className="relative w-full lg:w-full lg:mx-auto mb-6 lg:mb-[50px] cursor-pointer"
+              className="relative w-full lg:w-full lg:mx-auto mb-6 lg:mb-[50px] cursor-pointer h-[150px]"
             >
-              <div className="relative flex flex-col gap-10 pt-6 pb-3 px-3 bg-primary rounded-lg h-full">
+              <div className="relative flex justify-center items-center gap-10 px-3 bg-primary rounded-lg h-full">
                 <div className="flex items-center justify-center">
                   <Image
                     src="/assets/images/logo/wallet-logo.svg"
                     width={126}
-                    height={48}
+                    height={50}
                     alt="لوگو"
                   />
                 </div>
-                <p className="font-extralight text-center lg:text-base text-white">
+                <p className="absolute bottom-3 left-0 right-0 font-extralight text-center lg:text-base text-white">
                   <span className="font-bold">موجودی: </span>
                   {formatPrice(walletAmount)} تومان
                 </p>

@@ -26,15 +26,15 @@ function ProductOrderAccessoriesDrawer({ open, onOpenChange, productName }) {
             <span className="font-bold">لوازم جانبی</span> {productName}
           </h2>
 
-          <p className="font-iransans text-center text-sm text-gray-600 px-[10px] shrink-0">
-            با خرید کامل‌تر در زمان صرفه‌جویی کن :)
-          </p>
+          <MobileSortFilterRow
+            sortLabel={sortLabel}
+            onClick={openFiltersDrawer}
+          />
 
           <div className="flex-1 overflow-y-auto px-[10px] pb-10">
-            <MobileSortFilterRow
-              sortLabel={sortLabel}
-              onClick={openFiltersDrawer}
-            />
+            <p className="font-iransans text-center text-sm text-gray-600 mb-5 shrink-0">
+              با خرید کامل‌تر در زمان صرفه‌جویی کن :)
+            </p>
 
             <div className="space-y-[10px]">
               {mockRelatedAccessories.map((product) => (
@@ -43,7 +43,7 @@ function ProductOrderAccessoriesDrawer({ open, onOpenChange, productName }) {
             </div>
           </div>
 
-          <div className="shrink-0 py-4 px-[10px]">
+          <div className="shrink-0 py-2 px-[10px]">
             <Link
               href="/cart"
               onClick={() => onOpenChange(false)}

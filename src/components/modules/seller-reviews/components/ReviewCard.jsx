@@ -102,8 +102,11 @@ export default function ReviewCard({
                     data-bubble
                   >
                     <div className="flex items-center justify-end gap-1">
-                      <StarIcon className="w-[10px] h-[10px] text-yellow-600" />
-                      <span>{review.rating}</span>
+                      <span className="text-sm lg:text-base text-gray-600">
+                        {review.rating}
+                        <span className="text-xs text-gray-600/50">/5</span>
+                      </span>
+                      <StarIcon className="w-[10px] h-[10px] text-yellow-600 mb-1" />
                     </div>
 
                     <p className="text-gray-600 font-iransans text-xs lg:text-sm leading-relaxed">
@@ -115,7 +118,9 @@ export default function ReviewCard({
 
                     <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-600">
                       <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
-                      <span className="font-iransans">{review.productName}</span>
+                      <span className="font-iransans">
+                        {review.productName}
+                      </span>
                     </div>
                   </div>
 
@@ -125,9 +130,7 @@ export default function ReviewCard({
                       <MessageContextMenu
                         isOpen={true}
                         onDelete={
-                          isUserReview
-                            ? () => onDelete?.(review.id)
-                            : undefined
+                          isUserReview ? () => onDelete?.(review.id) : undefined
                         }
                         onReport={
                           !isUserReview

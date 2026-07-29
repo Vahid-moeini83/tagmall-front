@@ -5,7 +5,7 @@ import CartMobileInvoice from "./CartMobileInvoice";
 
 function CartMobileFooter({ billSummary, onSubmit, isSubmitting, disabled }) {
   return (
-    <div className="fixed right-0 left-0 bottom-18 z-40 bg-white px-[10px] py-4 space-y-3">
+    <div className="fixed right-0 left-0 bottom-18 z-40 bg-white px-[10px] pt-4 pb-[10px] space-y-3">
       <CartMobileInvoice billSummary={billSummary} />
 
       <button
