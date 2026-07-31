@@ -4,9 +4,9 @@ import { SupportIcon, StrokeArrowLeftIcon } from "@/icons";
 
 function ReceiptDeliveryHeader({ onSupport, onClose }) {
   return (
-    <div className="shrink-0  px-[12px] pb-4 pt-3 lg:px-[140px] lg:pt-10">
+    <div className="shrink-0 px-[12px] pb-4 pt-2 lg:px-[140px] lg:pt-10">
       <div className="relative flex items-center justify-center">
-        <h3 className="text-base font-bold text-primary lg:text-xl">
+        <h3 className="text-base font-bold text-primary lg:text-xl pt-1">
           رسید تحویل سفارش
         </h3>
 

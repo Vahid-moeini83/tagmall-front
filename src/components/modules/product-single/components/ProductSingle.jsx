@@ -263,23 +263,25 @@ function ProductSingle({ product, productError, comments, commentsError }) {
                   )}
                   {activeSection === "specsAndComments" && (
                     <Tabs defaultValue="specs" className="px-[10px]">
-                      <TabsList
-                        dir="rtl"
-                        className="fixed left-[10px]! right-[10px]! bg-gray-200 rounded-xl! max-w-[540px] flex items-center gap-1 h-14! mx-auto!"
-                      >
-                        <TabsTrigger
-                          value="specs"
-                          className="data-[state=active]:bg-white rounded-xl! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                      <div className="fixed top-12 py-3 px-[10px] left-0 right-0 bg-white">
+                        <TabsList
+                          dir="rtl"
+                          className="w-full bg-gray-200 rounded-xl! max-w-[540px] flex items-center gap-1 h-14!"
                         >
-                          مشخصات
-                        </TabsTrigger>
-                        <TabsTrigger
-                          value="reviews"
-                          className="data-[state=active]:bg-white rounded-xl! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
-                        >
-                          نقد و بررسی
-                        </TabsTrigger>
-                      </TabsList>
+                          <TabsTrigger
+                            value="specs"
+                            className="data-[state=active]:bg-white rounded-xl! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                          >
+                            مشخصات
+                          </TabsTrigger>
+                          <TabsTrigger
+                            value="reviews"
+                            className="data-[state=active]:bg-white rounded-xl! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                          >
+                            نقد و بررسی
+                          </TabsTrigger>
+                        </TabsList>
+                      </div>
                       <TabsContent value="specs" dir="rtl">
                         <ProductSpecifications
                           setShowComments={setShowComments}

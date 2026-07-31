@@ -163,7 +163,7 @@ export default function SellerReviewsContent({ onClose, sellerData }) {
         </h3>
       </div>
       <div className="overflow-y-auto scroll-hidden">
-        <div className="min-h-screen lg:py-[50px] lg:px-[140px] pb-54 lg:pb-[160px]">
+        <div className="min-h-screen lg:py-[50px] lg:px-[140px] pb-68 lg:pb-[160px]">
           {/* Main content */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between lg:items-start lg:flex-col gap-1 px-[10px] lg:px-0">

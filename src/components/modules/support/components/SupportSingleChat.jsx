@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import SpinnerLoading from "@/components/ui/loading/SpinnerLoading";
 import { ChatSkeleton } from "@/components/ui/loading";
 import { formatDateLabel } from "@/lib/client/utils";
+import { ScanLineIcon } from "lucide-react";
 
 function SupportSingleChat({ setIsOpen, conversation }) {
   const [messages, setMessages] = useState([]);
@@ -568,7 +569,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
 
       {/* Header */}
       <div className="lg:fixed lg:top-0 lg:right-0 lg:left-0 lg:pt-10 lg:px-[140px] bg-white z-10">
-        <div className="flex items-center justify-center lg:justify-between py-1 lg:pb-2">
+        <div className="flex items-center justify-center lg:justify-between py-1 pb-3">
           <div className="flex items-center gap-1">
             <div className="hidden lg:flex items-center justify-center w-10 h-10 rounded-[14px] border-2 border-gray-200">
               <SupportIcon size={20} />
@@ -845,7 +846,7 @@ function SupportSingleChat({ setIsOpen, conversation }) {
         <StrokeArrowLeftIcon
           size={20}
           onClick={() => setIsOpen(false)}
-          className={"absolute bottom-16 right-16 rotate-180"}
+          className={"hidden lg:block absolute bottom-16 right-16 rotate-180"}
         />
         <div className="flex items-end gap-1 flex-1">
           <div className="flex flex-col gap-3 flex-1">
@@ -1013,9 +1014,13 @@ function SupportSingleChat({ setIsOpen, conversation }) {
                                       onClick={() =>
                                         fileInputRef.current?.click()
                                       }
-                                      className="cursor-pointer pr-3"
+                                      className="cursor-pointer"
                                     >
-                                      <GalleryIcon className="text-gray-800" />
+                                      <GalleryIcon
+                                        size={20}
+                                        className="text-gray-800 hidden lg:block"
+                                      />
+                                      <ScanLineIcon className="lg:hidden" />
                                     </button>
                                   </>
                                 )}

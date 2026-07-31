@@ -99,23 +99,25 @@ function SupportContent({ conversations, initialOrders }) {
       {/* Mobile layout */}
       <div className="lg:hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList
-            dir="rtl"
-            className="fixed top-6 left-[10px]! right-[10px]! bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! z-20"
-          >
-            <TabsTrigger
-              value="chats"
-              className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+          <div className="fixed top-0 py-6 left-0 right-0 bg-white px-[10px] z-20">
+            <TabsList
+              dir="rtl"
+              className="w-full bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14!"
             >
-              پیام ها
-            </TabsTrigger>
-            <TabsTrigger
-              value="orders"
-              className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
-            >
-              پیگیری سفارشات
-            </TabsTrigger>
-          </TabsList>
+              <TabsTrigger
+                value="chats"
+                className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+              >
+                پیام ها
+              </TabsTrigger>
+              <TabsTrigger
+                value="orders"
+                className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+              >
+                پیگیری سفارشات
+              </TabsTrigger>
+            </TabsList>
+          </div>
           <TabsContent className="pt-[90px] px-[10px]" value="chats" dir="rtl">
             <div className="overflow-y-auto">
               <SupportChats isMobile={true} conversations={conversations} />

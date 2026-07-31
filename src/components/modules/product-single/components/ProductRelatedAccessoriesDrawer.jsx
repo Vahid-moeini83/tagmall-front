@@ -13,7 +13,7 @@ import useMobileProductFilters from "@/hooks/useMobileProductFilters";
 import { useState } from "react";
 
 function ProductRelatedAccessoriesDrawer({ open, onOpenChange, productName }) {
-  const [activeAccessoryTab, setActiveAccessoryTab] = useState("parts");
+  const [activeAccessoryTab, setActiveAccessoryTab] = useState("accessories");
   const setShowSearchResultBox = usePublicStore(
     (s) => s.setShowSearchResultBox,
   );
@@ -58,16 +58,16 @@ function ProductRelatedAccessoriesDrawer({ open, onOpenChange, productName }) {
                 className="mt-4 bg-gray-200 rounded-lg! max-w-[540px] flex items-center gap-1 h-14! mx-auto! w-full"
               >
                 <TabsTrigger
-                  value="parts"
-                  className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
-                >
-                  قطعات
-                </TabsTrigger>
-                <TabsTrigger
                   value="accessories"
                   className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
                 >
                   لوازم جانبی
+                </TabsTrigger>
+                <TabsTrigger
+                  value="parts"
+                  className="data-[state=active]:bg-white rounded-lg! flex-1 shadow-none! text-gray-600 data-[state=active]:text-primary font-bold! h-[48px]"
+                >
+                  قطعات
                 </TabsTrigger>
               </TabsList>
             </div>

@@ -430,7 +430,7 @@ function SearchResults() {
           /* Normal View */
           <>
             {/* Fixed Header */}
-            <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] pt-[20px] pb-4">
+            <div className="fixed top-0 left-0 right-0 bg-white z-50 px-[10px] py-6">
               <div className="relative">
                 <div
                   onClick={handleSearchInputClick}

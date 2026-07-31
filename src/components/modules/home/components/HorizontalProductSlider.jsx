@@ -93,7 +93,7 @@ export default function HorizontalProductSlider({
                     </span>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center gap-3">
+                  <div className="flex flex-col items-center gap-2 w-full">
                     <p className="text-gray-600">
                       <span className="font-bold">وضعیت</span>:{" "}
                       {product.orderHistory?.statusLabel ?? "نامشخص"}
@@ -101,10 +101,10 @@ export default function HorizontalProductSlider({
                     <p className="text-gray-600">
                       <span className="font-bold">تعداد</span>: ۱ عدد
                     </p>
-                    <div className="flex items-center gap-2 text-primary">
+                    <button className="flex justify-center items-center gap-2 text-primary border-2 border-gray-200 rounded-full py-2 w-full">
                       <NoteIcon size={20} />
                       یادداشت
-                    </div>
+                    </button>
                   </div>
                 )}
 

@@ -12,7 +12,7 @@ function VerticalSlideCardSkeleton({
     return (
       <div
         className={cn(
-          "mx-auto w-[80%] overflow-hidden bg-white origin-center",
+          "mx-auto w-[80%] overflow-hidden bg-gray-200 origin-center",
           className,
         )}
       ></div>
@@ -22,23 +22,23 @@ function VerticalSlideCardSkeleton({
   return (
     <div
       className={cn(
-        "bg-white rounded-2xl w-full flex flex-col overflow-hidden origin-center",
+        "bg-gray-200 rounded-2xl w-full flex flex-col overflow-hidden origin-center",
         className,
       )}
     >
       <div className="flex items-center justify-between px-[50px] pt-[32px] shrink-0">
         <div className="flex items-center gap-2">
-          <Skeleton className="w-[50px] h-[50px] rounded-lg shrink-0" />
-          <Skeleton className="w-28 h-4" />
+          <Skeleton className="w-[50px] h-[50px] rounded-lg shrink-0 bg-white" />
+          <Skeleton className="w-40 h-4 bg-white" />
         </div>
-        <Skeleton className="w-20 h-5 shrink-0" />
+        <span className="text-error-medium text-lg font-bold">00:00:00</span>
       </div>
 
       <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
         <div className="flex items-center justify-between pr-[50px] pl-[64px] py-3 shrink-0">
           <div className="flex flex-col gap-1">
-            <Skeleton className="w-12 h-3" />
-            <Skeleton className="w-16 h-3" />
+            <Skeleton className="w-12 h-3 bg-white" />
+            <Skeleton className="w-16 h-3 bg-white" />
           </div>
           <Skeleton className="w-20 h-5" />
         </div>

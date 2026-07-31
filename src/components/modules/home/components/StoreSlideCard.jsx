@@ -130,10 +130,10 @@ export default function StoreSlideCard({
             </div>
             <div className="flex flex-col gap-0.5">
               <div className="flex items-center gap-1">
-                <span className="text-sm font-bold text-gray-700">
+                <span className="text-gray-600">
                   {store.seller.storeName || store.seller.name}
                 </span>
-                <VerifyIcon size={15} />
+                <VerifyIcon size={20} />
               </div>
             </div>
           </div>
@@ -154,10 +154,10 @@ export default function StoreSlideCard({
                 <AccordionTrigger className="flex items-center justify-between pr-[50px] pl-[64px]">
                   <div className="flex flex-col gap-1">
                     <div className="flex items-start gap-1">
-                      <StarIcon className="mt-0.5 h-3 w-3 text-yellow-600" />
-                      <span>
+                      <StarIcon size={12} className="mt-1 text-yellow-600" />
+                      <span className="text-base text-gray-600">
                         {store.seller.rating}
-                        <span className="text-sm text-gray-400">/5</span>
+                        <span className="text-xs text-gray-400">/5</span>
                       </span>
                     </div>
                     <span className="text-gray-400">
