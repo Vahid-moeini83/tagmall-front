@@ -70,6 +70,11 @@ function ProductRelatedAccessoriesDrawer({ open, onOpenChange, productName }) {
                   قطعات
                 </TabsTrigger>
               </TabsList>
+
+              <MobileSortFilterRow
+                sortLabel={sortLabel}
+                onClick={openFiltersDrawer}
+              />
             </div>
 
             <TabsContent
@@ -77,10 +82,6 @@ function ProductRelatedAccessoriesDrawer({ open, onOpenChange, productName }) {
               value="parts"
               dir="rtl"
             >
-              <MobileSortFilterRow
-                sortLabel={sortLabel}
-                onClick={openFiltersDrawer}
-              />
               <ProductsList products={mockSearchProducts} />
             </TabsContent>
 
@@ -89,10 +90,6 @@ function ProductRelatedAccessoriesDrawer({ open, onOpenChange, productName }) {
               value="accessories"
               dir="rtl"
             >
-              <MobileSortFilterRow
-                sortLabel={sortLabel}
-                onClick={openFiltersDrawer}
-              />
               <ProductsList products={mockSearchProducts} />
             </TabsContent>
           </Tabs>

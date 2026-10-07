@@ -306,7 +306,7 @@ function SupportOrders({ initialOrders }) {
 
             <button
               type="button"
-              className="mb-[10px] mt-4 flex w-full cursor-pointer items-center justify-between px-[10px] lg:hidden"
+              className="lg:hidden fixed right-0 left-0 top-25 bg-white z-10 pt-4 pb-3 flex w-full cursor-pointer items-center justify-between px-[10px]"
               onClick={() => setIsFiltersDrawerOpen(true)}
             >
               <span className="text-primary">
@@ -316,7 +316,7 @@ function SupportOrders({ initialOrders }) {
               <ChevronLeftIcon size={16} className="shrink-0 ml-[15px]" />
             </button>
 
-            <div className="space-y-[5px] lg:space-y-10 lg:mt-10">
+            <div className="space-y-[5px] pt-15 lg:space-y-10 lg:mt-10">
               {isLoadingOrders && orders.length === 0 ? (
                 <div className="lg:px-0">
                   <SupportOrdersSkeleton isMobile={!isDesktop} />

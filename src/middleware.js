@@ -14,7 +14,7 @@ export async function middleware(request) {
   });
 
   // مسیرهایی که نیاز به لاگین دارن
-  const protectedRoutes = ["/profile", "/cart", "/support"];
+  const protectedRoutes = ["/profile", "/cart"];
 
   // اگه مسیر فعلی یکی از protected ها باشه
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {

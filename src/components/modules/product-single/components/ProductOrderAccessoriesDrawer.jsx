@@ -29,6 +29,7 @@ function ProductOrderAccessoriesDrawer({ open, onOpenChange, productName }) {
           <MobileSortFilterRow
             sortLabel={sortLabel}
             onClick={openFiltersDrawer}
+            className="mt-0! mb-5!"
           />
 
           <div className="flex-1 overflow-y-auto px-[10px] pb-10">

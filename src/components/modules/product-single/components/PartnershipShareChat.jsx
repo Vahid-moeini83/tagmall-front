@@ -69,7 +69,7 @@ export default function PartnershipShareChat({
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages.length]);
 
   // Sync textarea height with comment
   useEffect(() => {
@@ -299,21 +299,18 @@ export default function PartnershipShareChat({
 
               <div className="bg-gray-200 rounded-xl p-[5px] flex flex-col gap-2 w-full max-w-[540px]">
                 {/* Top bar - clickable to open platform drawer */}
-                <div className="flex items-center justify-center relative pt-2 pb-3">
-                  <button
-                    onClick={() => setPlatformDrawerOpen(true)}
-                    className="cursor-pointer"
-                  >
+                <div
+                  onClick={() => setPlatformDrawerOpen(true)}
+                  className="flex items-center justify-center relative pt-2 pb-3"
+                >
+                  <button className="cursor-pointer">
                     <span className="text-gray-600">
                       {selectedPlatform
                         ? selectedPlatform.name
                         : "بستر اشتراک گذاری محتوا"}
                     </span>
                   </button>
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="absolute left-[10px] cursor-pointer"
-                  >
+                  <button className="absolute left-[10px] cursor-pointer">
                     <ChevronDownIcon size={20} className="rotate-90" />
                   </button>
                 </div>

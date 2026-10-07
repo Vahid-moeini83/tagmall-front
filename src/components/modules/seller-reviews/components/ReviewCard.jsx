@@ -116,12 +116,12 @@ export default function ReviewCard({
                       {review.comment}
                     </p>
 
-                    <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-600">
+                    {/* <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-600">
                       <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
                       <span className="font-iransans">
                         {review.productName}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
 
                   {contextMenuOpen &&

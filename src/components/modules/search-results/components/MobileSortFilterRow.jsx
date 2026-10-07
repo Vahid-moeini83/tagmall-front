@@ -2,11 +2,14 @@ import { ArrowUpDownIcon } from "@/icons";
 
 function MobileSortFilterRow({ sortLabel, onClick, className = "" }) {
   return (
-    <div dir="rtl" className={`w-full flex justify-start ${className}`}>
+    <div
+      dir="rtl"
+      className={`w-full flex justify-start mt-5 pr-4 ${className}`}
+    >
       <button
         type="button"
         onClick={onClick}
-        className="text-xs flex items-center gap-3 mb-5 pr-4 cursor-pointer"
+        className="text-xs flex items-center gap-3 cursor-pointer"
       >
         <ArrowUpDownIcon size={20} />
         <span className="text-gray-600 text-sm font-extralight">
