@@ -6,14 +6,15 @@
  * - Existing tokens in globals.css @theme must not be redefined here.
  */
 
-
 /* Group B: tokens that only exist in the new style guide.
  * Names must be semantic and must not collide with an existing token
  * or a default Tailwind token already used in src/. */
 @theme {
-  /* --color-surface: #ffffff; */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f9fafb;
+  --color-border-subtle: #f3f4f6;
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
-
 
 /* Group A: new values for tokens that already exist in globals.css.
  * Active only on elements that have `theme-new` (seller panel)
@@ -22,5 +23,5 @@
   /* Marker property: Tailwind rejects an empty @utility. Keep it. */
   --theme-new: 1;
 
-  /* --color-primary: #000000; */
+  --color-primary: #3d3183;
 }
