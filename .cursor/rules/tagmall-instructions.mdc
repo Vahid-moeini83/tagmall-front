@@ -309,6 +309,28 @@ async function exampleApi(token, data) {
 
 ---
 
+## 🎨 استایل گاید جدید (دسکتاپ + پنل فروشندگان)
+
+طرح **موبایل نباید هیچ تغییری کند.** استایل گاید جدید فقط برای دسکتاپ صفحات فعلی و کل پنل فروشندگان است. جزئیات کامل، جدول مقادیر و چک‌لیست‌ها در `THEME-NEW-GUIDE.md` (روت پروژه) است و قبل از هر کار روی دسکتاپ یا پنل فروشندگان باید خوانده شود.
+
+- تمام مقادیر استایل گاید جدید فقط در `src/app/theme-new.css` تعریف شوند.
+- توکنی که در `globals.css` وجود دارد ولی مقدار جدید دارد، فقط داخل `@utility theme-new` override شود؛ توکنی که کاملاً جدید است، با اسم معنایی در `@theme` همان فایل.
+- پنل فروشندگان روی wrapper اصلی layout خود کلاس `theme-new` دارد؛ هر صفحه‌ی فعلی فقط بعد از ریدیزاین کامل دسکتاپ، کلاس `lg:theme-new` می‌گیرد.
+- Portalها (`DialogContent`، `DrawerContent`، `PopoverContent`، `DropdownMenuContent`، `ContextMenuContent`) باید همان کلاس `theme-new` / `lg:theme-new` را از طریق `className` (و `overlayClassName`) بگیرند.
+- در فایل‌های مشترک موبایل و دسکتاپ، کلاس‌های مخصوص استایل گاید جدید فقط با prefix `lg:` نوشته شوند و کلاس‌های بدون prefix (موبایل) تغییر نکنند.
+
+### ❌ ممنوع
+
+- تغییر مقادیر `:root` یا `@theme` فعلی در `globals.css`.
+- هر selector روی `:root`، `html`، `body` یا `*` در `theme-new.css`.
+- تعریف دوباره‌ی یک توکن موجود (یا یک توکن پیش‌فرض Tailwind که الان در `src/` استفاده شده، مثل `gray-50`) در `@theme`.
+- اسم‌های نسخه‌دار یا بخش‌دار مثل `primary-v2`، `seller-primary` یا `desktop-gray`.
+- گذاشتن `theme-new` روی `body` یا `html`، یا فعال کردن `lg:theme-new` روی صفحه‌ای که ریدیزاینش نیمه‌کاره است.
+- پاک کردن `--theme-new: 1;` از `@utility theme-new` (utility خالی build را می‌شکند).
+- breakpoint جدید یا تشخیص موبایل/دسکتاپ با JavaScript برای تغییر ظاهر.
+
+---
+
 ## 🧱 مرور کلی کیفیت (QUALITY CHECKLIST)
 
 | دسته        | مورد بررسی                       | باید / نباید |

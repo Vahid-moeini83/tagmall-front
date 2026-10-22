@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../../public/assets/fonts/style.css";
+@import "./theme-new.css";
 
 :root {
   --primary-color: #3d3183;

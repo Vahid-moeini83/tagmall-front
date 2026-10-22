@@ -1,0 +1,26 @@
+/*
+ * New style guide (desktop redesign + seller panel).
+ * Mobile must never be affected: read THEME-NEW-GUIDE.md before editing.
+ *
+ * - Nothing in this file may target :root, html, body or *.
+ * - Existing tokens in globals.css @theme must not be redefined here.
+ */
+
+
+/* Group B: tokens that only exist in the new style guide.
+ * Names must be semantic and must not collide with an existing token
+ * or a default Tailwind token already used in src/. */
+@theme {
+  /* --color-surface: #ffffff; */
+}
+
+
+/* Group A: new values for tokens that already exist in globals.css.
+ * Active only on elements that have `theme-new` (seller panel)
+ * or `lg:theme-new` (redesigned desktop pages). */
+@utility theme-new {
+  /* Marker property: Tailwind rejects an empty @utility. Keep it. */
+  --theme-new: 1;
+
+  /* --color-primary: #000000; */
+}
