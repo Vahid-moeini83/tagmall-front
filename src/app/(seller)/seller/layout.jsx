@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function SellerLayout({ children }) {
   return (
-    <div className="theme-new min-h-screen bg-[#f3f4f6] text-[#1a1a2e] flex flex-col lg:flex-row">
+    <div className="theme-new min-h-screen bg-surface-muted text-text-primary flex flex-col lg:flex-row">
       {/* Sidebar navigation (renders on right side in RTL) */}
       <SellerSidebar />
 
