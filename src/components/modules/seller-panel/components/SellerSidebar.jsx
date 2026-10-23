@@ -14,6 +14,8 @@ import {
   PlusSimpleIcon,
   TicketSimplePercentIcon,
   SellerLogoutIcon,
+  MenuBarsIcon,
+  CloseIcon,
 } from "@/icons";
 
 
@@ -95,7 +97,7 @@ function SellerSidebar() {
   return (
     <>
       {/* Mobile top bar toggle */}
-      <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-gray-100 sticky top-0 z-30">
+      <div className="lg:hidden flex items-center justify-between p-4 bg-surface border-b border-border-subtle sticky top-0 z-30">
         <Link href="/seller" className="inline-block">
           <Image
             src="/assets/images/logo/slogan-logo.svg"
@@ -108,31 +110,14 @@ function SellerSidebar() {
         <button
           type="button"
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="p-2 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-100"
+          className="p-2 rounded-lg bg-surface-subtle text-text-secondary hover:bg-surface-muted transition-colors flex items-center justify-center"
           aria-label="Toggle navigation menu"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {mobileOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
+          {mobileOpen ? (
+            <CloseIcon size={20} className="text-text-primary" />
+          ) : (
+            <MenuBarsIcon size={24} className="text-text-primary" />
+          )}
         </button>
       </div>
 
@@ -147,10 +132,10 @@ function SellerSidebar() {
       {/* Sidebar container */}
       <aside
         className={`
-          fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-white border-l border-gray-100
+          fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-surface border-l border-border-subtle
           flex flex-col p-8 transition-transform duration-300 ease-in-out
           lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 lg:min-h-screen
-          ${mobileOpen ? "translate-x-0 shadow-2xl" : "translate-x-full lg:translate-x-0"}
+          ${mobileOpen ? "translate-x-0 shadow-modal" : "translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Top Logo */}
@@ -168,7 +153,7 @@ function SellerSidebar() {
 
         {/* User Profile Block */}
         <div className="flex items-center gap-3 mt-10 mb-8">
-          <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-gray-100">
+          <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-border-subtle">
             <Image
               src="/assets/images/seller/avatar.png"
               alt="آرمان میمندی نژاد"
@@ -178,14 +163,14 @@ function SellerSidebar() {
             />
           </div>
           <div className="truncate">
-            <p className="text-[16px] font-semibold text-[#1a1a2e] truncate">
+            <p className="text-body font-semibold text-text-primary truncate">
               آرمان میمندی نژاد
             </p>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex flex-col gap-1 flex-1 overflow-y-auto">
+        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive =
@@ -202,8 +187,8 @@ function SellerSidebar() {
                   h-[50px] px-4 rounded-xl flex items-center justify-between transition-colors
                   ${
                     isActive
-                      ? "bg-[#eeeff6] text-[#3d3183] font-medium"
-                      : "text-[#1a1a2e] hover:bg-gray-50"
+                      ? "bg-primary-50 text-primary font-medium"
+                      : "text-text-primary hover:bg-surface-subtle"
                   }
                 `}
               >
@@ -211,7 +196,7 @@ function SellerSidebar() {
                   <span
                     className={`
                       flex items-center justify-center
-                      ${isActive ? "text-[#3d3183]" : "text-[#4a4a68]"}
+                      ${isActive ? "text-primary" : "text-text-secondary"}
                     `}
                   >
                     <Icon size={item.iconSize} />
@@ -220,7 +205,7 @@ function SellerSidebar() {
                 </div>
 
                 {item.badge && (
-                  <span className="w-[18px] h-[18px] rounded-full bg-[#ef4444] text-white text-[11px] flex items-center justify-center font-medium">
+                  <span className="w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium">
                     {item.badge}
                   </span>
                 )}

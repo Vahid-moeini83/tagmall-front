@@ -35,30 +35,30 @@ const TOP_PRODUCTS = [
 
 function SellerTopProducts() {
   return (
-    <div className="bg-white rounded-[20px] p-6 flex flex-col gap-4 h-[397px] border border-gray-100/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+    <div className="bg-surface rounded-2xl p-6 flex flex-col gap-4 h-[397px] border border-border-subtle shadow-card">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-[16px] font-bold text-[#1a1a2e]">
+        <h2 className="text-body font-bold text-text-primary">
           پرفروش‌ترین محصولات
         </h2>
-        <span className="text-[12px] text-[#7a7a96] font-normal cursor-pointer hover:text-[#1a1a2e] transition-colors">
+        <span className="text-caption text-text-muted font-normal cursor-pointer hover:text-text-primary transition-colors">
           پرفروش‌ترین کالاها
         </span>
       </div>
 
       {/* Divider */}
-      <hr className="border-t border-[#f3f4f6]" />
+      <hr className="border-t border-border-subtle" />
 
       {/* Product List */}
       <div className="flex flex-col gap-3 flex-1 justify-between">
         {TOP_PRODUCTS.map((product) => (
           <div
             key={product.id}
-            className="bg-[#f9fafb] rounded-xl p-2 flex items-center justify-between gap-3 h-16 hover:bg-[#f3f4f6]/60 transition-colors"
+            className="bg-surface-subtle rounded-xl p-2 flex items-center justify-between gap-3 h-16 hover:bg-surface-muted transition-colors"
           >
             {/* Right: Product Thumbnail and Title */}
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-white border border-gray-100">
+              <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface border border-border-subtle">
                 <Image
                   src={product.image}
                   alt={product.title}
@@ -67,17 +67,17 @@ function SellerTopProducts() {
                   className="object-cover"
                 />
               </div>
-              <span className="text-[12px] text-[#1a1a2e] font-normal truncate">
+              <span className="text-caption text-text-primary font-normal truncate">
                 {product.title}
               </span>
             </div>
 
             {/* Left: Sales Count and Price */}
             <div className="flex flex-col items-start text-left shrink-0 pl-1">
-              <span className="text-[12px] font-bold text-[#108981]">
+              <span className="text-caption font-bold text-success">
                 {product.salesCount}
               </span>
-              <span className="text-[11px] text-[#7a7a96] font-normal">
+              <span className="text-[11px] text-text-muted font-normal">
                 {product.price}
               </span>
             </div>

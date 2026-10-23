@@ -14,8 +14,8 @@ const STATS_DATA = [
     change: "+۱۸.۵%",
     icon: CoinFrontSwapIcon,
     iconSize: 24,
-    iconColor: "text-[#3d3183]",
-    iconBg: "bg-[#dddeee]",
+    iconColor: "text-primary",
+    iconBg: "bg-primary-100",
   },
   {
     id: "orders-count",
@@ -24,8 +24,8 @@ const STATS_DATA = [
     change: "+۱۲%",
     icon: BasketShoppingIcon,
     iconSize: 20,
-    iconColor: "text-[#108981]",
-    iconBg: "bg-[#108981]/10",
+    iconColor: "text-success",
+    iconBg: "bg-success-light",
   },
   {
     id: "active-products",
@@ -34,8 +34,8 @@ const STATS_DATA = [
     change: "+۱۲%",
     icon: BarcodeReadIcon,
     iconSize: 24,
-    iconColor: "text-[#3d3183]",
-    iconBg: "bg-[#2b256a]/10",
+    iconColor: "text-primary",
+    iconBg: "bg-primary-50",
   },
   {
     id: "daily-views",
@@ -44,8 +44,8 @@ const STATS_DATA = [
     change: "+۴.۲%",
     icon: CursorClickIcon,
     iconSize: 24,
-    iconColor: "text-[#f58220]",
-    iconBg: "bg-[#ffbc99]/20",
+    iconColor: "text-secondary",
+    iconBg: "bg-secondary-50",
   },
 ];
 
@@ -59,11 +59,11 @@ function SellerStats() {
         return (
           <div
             key={item.id}
-            className="bg-white rounded-2xl p-5 flex flex-col justify-between h-[118px] border border-gray-100/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
+            className="bg-surface rounded-2xl p-5 flex flex-col justify-between h-[118px] border border-border-subtle shadow-card"
           >
             {/* Top row: Icon and Title */}
             <div className="flex items-center justify-between">
-              <span className="text-[14px] text-[#4a4a68] font-normal">
+              <span className="text-small text-text-secondary font-normal">
                 {item.title}
               </span>
               <div
@@ -75,10 +75,10 @@ function SellerStats() {
 
             {/* Bottom row: Value and Growth Percentage */}
             <div className="flex items-baseline justify-between">
-              <span className="text-[18px] font-semibold text-[#1a1a2e]">
+              <span className="text-h5 font-semibold text-text-primary">
                 {item.value}
               </span>
-              <span className="text-[14px] font-medium text-[#108981] dir-ltr inline-block">
+              <span className="text-small font-medium text-success dir-ltr inline-block">
                 {item.change}
               </span>
             </div>

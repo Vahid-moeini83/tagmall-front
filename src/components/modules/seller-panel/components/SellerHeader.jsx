@@ -1,10 +1,10 @@
 function SellerHeader() {
   return (
     <header className="flex flex-col gap-1 text-right">
-      <h1 className="text-[22px] font-semibold text-[#1a1a2e] leading-[30px]">
+      <h1 className="text-h4 font-semibold text-text-primary">
         پنل فروشگاه تگ مال
       </h1>
-      <p className="text-[12px] text-[#7a7a96] leading-[18px]">
+      <p className="text-caption text-text-muted">
         امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
       </p>
     </header>

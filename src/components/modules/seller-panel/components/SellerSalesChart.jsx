@@ -55,21 +55,21 @@ function SellerSalesChart() {
   const [hoveredMonth, setHoveredMonth] = useState(null);
 
   return (
-    <div className="bg-white rounded-2xl border border-[#f3f4f6] shadow-[0_2px_12px_rgba(0,0,0,0.06)] pt-7 px-8 pb-6 flex flex-col justify-between h-[399px]">
+    <div className="bg-surface rounded-2xl border border-border-subtle shadow-card pt-7 px-8 pb-6 flex flex-col justify-between h-[399px]">
       {/* Header with Title and Legend */}
       <div className="flex items-center justify-between">
-        <h2 className="text-[16px] font-bold text-[#1a1a2e]">
+        <h2 className="text-body font-bold text-text-primary">
           نمودار فروش ماهانه (۶ ماه اخیر)
         </h2>
 
         {/* Legend */}
-        <div className="flex items-center gap-5 text-[12px] text-[#1a1a2e]">
+        <div className="flex items-center gap-5 text-caption text-text-primary">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#3d3183]" />
+            <span className="w-2 h-2 rounded-full bg-primary" />
             <span>امسال</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#d1d6e0]" />
+            <span className="w-2 h-2 rounded-full bg-primary-200" />
             <span>سال گذشته</span>
           </div>
         </div>
@@ -81,10 +81,10 @@ function SellerSalesChart() {
         <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-6">
           {Y_AXIS_STEPS.map((step) => (
             <div key={step} className="flex items-center gap-3 w-full">
-              <span className="w-6 text-[11px] text-[#898781] text-left font-normal select-none">
+              <span className="w-6 text-[11px] text-text-muted text-left font-normal select-none">
                 {step}
               </span>
-              <div className="flex-1 border-t border-[#eeeff6]" />
+              <div className="flex-1 border-t border-primary-50" />
             </div>
           ))}
         </div>
@@ -103,7 +103,7 @@ function SellerSalesChart() {
               >
                 {/* Tooltip on hover */}
                 {isHovered && (
-                  <div className="absolute -top-10 bg-[#1a1a2e] text-white text-[11px] px-2.5 py-1 rounded-md shadow-md whitespace-nowrap z-20 pointer-events-none">
+                  <div className="absolute -top-10 bg-text-primary text-surface text-[11px] px-2.5 py-1 rounded-md shadow-card whitespace-nowrap z-20 pointer-events-none">
                     امسال: {item.thisYear} | پارسال: {item.lastYear}
                   </div>
                 )}
@@ -113,12 +113,12 @@ function SellerSalesChart() {
                   {/* This Year bar */}
                   <div
                     style={{ height: `${item.thisYearHeight}%` }}
-                    className="w-7 rounded-t-lg bg-[#3d3183] transition-all duration-200 group-hover:brightness-110"
+                    className="w-7 rounded-t-lg bg-primary transition-all duration-200 group-hover:brightness-110"
                   />
                   {/* Last Year bar */}
                   <div
                     style={{ height: `${item.lastYearHeight}%` }}
-                    className="w-7 rounded-t-lg bg-[#eeeff6] transition-all duration-200 group-hover:bg-[#e2e4ef]"
+                    className="w-7 rounded-t-lg bg-primary-50 transition-all duration-200 group-hover:bg-primary-100"
                   />
                 </div>
               </div>
@@ -127,7 +127,7 @@ function SellerSalesChart() {
         </div>
 
         {/* X-Axis Month Labels */}
-        <div className="flex justify-between items-center pr-10 pl-6 pt-1 text-[12px] text-[#1a1a2e] font-normal">
+        <div className="flex justify-between items-center pr-10 pl-6 pt-1 text-caption text-text-primary font-normal">
           {CHART_DATA.map((item) => (
             <span key={item.month} className="w-16 text-center">
               {item.month}
