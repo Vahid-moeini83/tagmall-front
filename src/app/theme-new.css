@@ -1,27 +1,209 @@
 /*
  * New style guide (desktop redesign + seller panel).
+ * Extracted directly from Figma Design System reference nodes:
+ * - Color Palette (45:46613)
+ * - Typography (45:46950)
+ * - Spacing, Radius & Grid (45:47237)
+ *
  * Mobile must never be affected: read THEME-NEW-GUIDE.md before editing.
  *
+ * Rules:
  * - Nothing in this file may target :root, html, body or *.
- * - Existing tokens in globals.css @theme must not be redefined here.
+ * - Existing tokens in globals.css @theme must not be redefined in @theme here.
+ * - Group A tokens (overrides of existing globals.css tokens) belong ONLY in @utility theme-new.
+ * - Group B tokens (brand new tokens) belong in @theme.
  */
 
-/* Group B: tokens that only exist in the new style guide.
- * Names must be semantic and must not collide with an existing token
- * or a default Tailwind token already used in src/. */
+/* ==========================================================================
+   Group B: Tokens that only exist in the new style guide.
+   Semantic tokens defined via standard Tailwind v4 namespaces.
+   ========================================================================== */
 @theme {
+  /* ------------------------------------------------------------------------
+     1. Surface & Border Colors (Semantic UI)
+     ------------------------------------------------------------------------ */
   --color-surface: #ffffff;
   --color-surface-subtle: #f9fafb;
+  --color-surface-muted: #f3f4f6;
+
   --color-border-subtle: #f3f4f6;
+  --color-border-default: #e5e7eb;
+  --color-border-strong: #d1d5db;
+
+  /* ------------------------------------------------------------------------
+     2. Primary Brand Color Scale (50 - 900)
+     Base (#3D3183) is existing; full spectrum is added for UI nuances.
+     ------------------------------------------------------------------------ */
+  --color-primary-50: #eeeff6;
+  --color-primary-100: #dddeee;
+  --color-primary-200: #c3c5df;
+  --color-primary-300: #9d9fc8;
+  --color-primary-400: #6868b1;
+  --color-primary-500: #3d3183;
+  --color-primary-600: #2b256a;
+  --color-primary-700: #201c54;
+  --color-primary-800: #16143e;
+  --color-primary-900: #0e0d2b;
+
+  /* ------------------------------------------------------------------------
+     3. Secondary Brand Color & Scale (50 - 900)
+     ------------------------------------------------------------------------ */
+  --color-secondary: #f58220;
+  --color-secondary-50: #fef6ef;
+  --color-secondary-100: #feecde;
+  --color-secondary-200: #fcdcc1;
+  --color-secondary-300: #fbc79b;
+  --color-secondary-400: #f9ae6e;
+  --color-secondary-500: #f58220;
+  --color-secondary-600: #d06f1b;
+  --color-secondary-700: #ac5b16;
+  --color-secondary-800: #7b4110;
+  --color-secondary-900: #562e0b;
+
+  /* ------------------------------------------------------------------------
+     4. Semantic Text Colors
+     ------------------------------------------------------------------------ */
+  --color-text-primary: #1a1a2e;
+  --color-text-main: #1a1a2e;
+  --color-text-secondary: #4a4a68;
+  --color-text-muted: #7a7a96;
+  --color-text-helper: #7a7a96;
+  --color-text-disabled: #b0b0c4;
+  --color-text-on-primary: #ffffff;
+  --color-text-on-secondary: #ffffff;
+  --color-text-link: #3d3183;
+  --color-text-link-active: #f58220;
+
+  /* ------------------------------------------------------------------------
+     5. Functional Colors - Info (Success, Warning, Error exist in globals)
+     ------------------------------------------------------------------------ */
+  --color-info: #3b82f6;
+  --color-info-light: #eff6ff;
+
+  /* ------------------------------------------------------------------------
+     6. Shadows
+     ------------------------------------------------------------------------ */
   --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+  /* ------------------------------------------------------------------------
+     7. Spacing Scale (4px Base Grid Tokens)
+     Generates p-sm, gap-base, m-lg, etc.
+     ------------------------------------------------------------------------ */
+  --spacing-2xs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 40px;
+  --spacing-3xl: 48px;
+  --spacing-4xl: 64px;
+  --spacing-5xl: 80px;
+  --spacing-6xl: 96px;
+  --spacing-7xl: 128px;
+
+  /* ------------------------------------------------------------------------
+     8. Border Radius (New Non-Conflicting Tokens)
+     ------------------------------------------------------------------------ */
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+
+  /* ------------------------------------------------------------------------
+     9. Typography Hierarchy (Desktop)
+     ------------------------------------------------------------------------ */
+  --text-display: 56px;
+  --text-display--line-height: 64px;
+
+  --text-h1: 44px;
+  --text-h1--line-height: 52px;
+
+  --text-h2: 36px;
+  --text-h2--line-height: 44px;
+
+  --text-h3: 28px;
+  --text-h3--line-height: 36px;
+
+  --text-h4: 22px;
+  --text-h4--line-height: 30px;
+
+  --text-h5: 18px;
+  --text-h5--line-height: 26px;
+
+  --text-body: 16px;
+  --text-body--line-height: 26px;
+
+  --text-small: 14px;
+  --text-small--line-height: 22px;
+
+  --text-caption: 12px;
+  --text-caption--line-height: 18px;
+
+  --text-label: 12px;
+  --text-label--line-height: 16px;
+
+  /* ------------------------------------------------------------------------
+     10. Typography Hierarchy (Mobile)
+     ------------------------------------------------------------------------ */
+  --text-mobile-display: 36px;
+  --text-mobile-display--line-height: 44px;
+
+  --text-mobile-h1: 32px;
+  --text-mobile-h1--line-height: 40px;
+
+  --text-mobile-h2: 26px;
+  --text-mobile-h2--line-height: 34px;
+
+  --text-mobile-h3: 22px;
+  --text-mobile-h3--line-height: 30px;
+
+  --text-mobile-h4: 18px;
+  --text-mobile-h4--line-height: 26px;
+
+  --text-mobile-body: 14px;
+  --text-mobile-body--line-height: 24px;
+
+  --text-mobile-caption: 11px;
+  --text-mobile-caption--line-height: 16px;
+
+  --text-mobile-label: 11px;
+  --text-mobile-label--line-height: 14px;
 }
 
-/* Group A: new values for tokens that already exist in globals.css.
- * Active only on elements that have `theme-new` (seller panel)
- * or `lg:theme-new` (redesigned desktop pages). */
+/* ==========================================================================
+   Group A: Overrides for tokens that already exist in globals.css.
+   Active ONLY on elements with `theme-new` (seller panel) or `lg:theme-new`.
+   ========================================================================== */
 @utility theme-new {
   /* Marker property: Tailwind rejects an empty @utility. Keep it. */
   --theme-new: 1;
 
+  /* Primary Brand Base */
   --color-primary: #3d3183;
+
+  /* Functional Status Colors (Updated to new design system base) */
+  --color-error: #ed2e2e;
+  --color-success: #00ba88;
+  --color-warning: #f4b740;
+
+  /* Neutral Gray Scale (Tailwind / Figma Standard) */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Border Radius (Overrides old globals.css radius values in new theme) */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
 }

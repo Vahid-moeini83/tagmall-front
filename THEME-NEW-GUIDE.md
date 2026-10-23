@@ -120,56 +120,180 @@ rg "\bsurface\b" src
 
 ---
 
-## ۵. جدول مقادیر (برای پر کردن)
+## ۵. جدول مقادیر دیزاین سیستم (استخراج شده از فیگما)
 
-ستون «دسته» را با A، B یا C پر کنید. برای دسته‌ی A، مقدار فعلی را از `globals.css` بنویسید تا تفاوت مشخص باشد.
+ستون «دسته» بر اساس قوانین ایزوله‌سازی تم با A (اورراید در `@utility theme-new`)، B (توکن جدید در `@theme`) یا C (یکسان در هر دو تم) تفکیک شده است.
 
 ### رنگ‌ها
 
-| نام در استایل گاید جدید | توکن در پروژه | مقدار فعلی | مقدار جدید | دسته |
+#### رنگ اصلی و طیف آن (Primary Brand)
+| نام در دیزاین سیستم | توکن در پروژه | مقدار فعلی | مقدار جدید | دسته |
 | --- | --- | --- | --- | --- |
-| Primary | `--color-primary` | `#3d3183` | `#3d3183` | C |
-| Surface | `--color-surface` | - | `#ffffff` | B |
-| Surface Subtle | `--color-surface-subtle` | - | `#f9fafb` | B |
-| Border Subtle | `--color-border-subtle` | - | `#f3f4f6` | B |
+| Primary (Base / 500) | `--color-primary` | `#3d3183` | `#3d3183` | A / C |
+| Primary 50 | `--color-primary-50` | - | `#eeeff6` | B |
+| Primary 100 | `--color-primary-100` | - | `#dddeee` | B |
+| Primary 200 | `--color-primary-200` | - | `#c3c5df` | B |
+| Primary 300 | `--color-primary-300` | - | `#9d9fc8` | B |
+| Primary 400 | `--color-primary-400` | - | `#6868b1` | B |
+| Primary 500 | `--color-primary-500` | - | `#3d3183` | B |
+| Primary 600 | `--color-primary-600` | - | `#2b256a` | B |
+| Primary 700 | `--color-primary-700` | - | `#201c54` | B |
+| Primary 800 | `--color-primary-800` | - | `#16143e` | B |
+| Primary 900 | `--color-primary-900` | - | `#0e0d2b` | B |
+
+#### رنگ ثانویه و طیف آن (Secondary Brand)
+| نام در دیزاین سیستم | توکن در پروژه | مقدار فعلی | مقدار جدید | دسته |
+| --- | --- | --- | --- | --- |
+| Secondary (Base / 500) | `--color-secondary` | - | `#f58220` | B |
+| Secondary 50 | `--color-secondary-50` | - | `#fef6ef` | B |
+| Secondary 100 | `--color-secondary-100` | - | `#feecde` | B |
+| Secondary 200 | `--color-secondary-200` | - | `#fcdcc1` | B |
+| Secondary 300 | `--color-secondary-300` | - | `#fbc79b` | B |
+| Secondary 400 | `--color-secondary-400` | - | `#f9ae6e` | B |
+| Secondary 500 | `--color-secondary-500` | - | `#f58220` | B |
+| Secondary 600 | `--color-secondary-600` | - | `#d06f1b` | B |
+| Secondary 700 | `--color-secondary-700` | - | `#ac5b16` | B |
+| Secondary 800 | `--color-secondary-800` | - | `#7b4110` | B |
+| Secondary 900 | `--color-secondary-900` | - | `#562e0b` | B |
+
+#### رنگ‌های خنثی و خاکستری (Neutrals & Grays)
+| نام در دیزاین سیستم | توکن در پروژه | مقدار فعلی | مقدار جدید | دسته |
+| --- | --- | --- | --- | --- |
+| سفید (White) | `--color-surface` | `#ffffff` | `#ffffff` | B |
+| خاکستری ۵۰ | `--color-gray-50` | - | `#f9fafb` | A |
+| خاکستری ۱۰۰ | `--color-gray-100` | `#f9f9f9` | `#f3f4f6` | A |
+| خاکستری ۲۰۰ | `--color-gray-200` | `#f9f7f7` | `#e5e7eb` | A |
+| خاکستری ۳۰۰ | `--color-gray-300` | `#ededed` | `#d1d5db` | A |
+| خاکستری ۴۰۰ | `--color-gray-400` | `#cbcbcb` | `#9ca3af` | A |
+| خاکستری ۵۰۰ | `--color-gray-500` | `#adadad` | `#6b7280` | A |
+| خاکستری ۶۰۰ | `--color-gray-600` | `#757575` | `#4b5563` | A |
+| خاکستری ۷۰۰ | `--color-gray-700` | `#474747` | `#374151` | A |
+| خاکستری ۸۰۰ | `--color-gray-800` | `#353535` | `#1f2937` | A |
+| خاکستری ۹۰۰ | `--color-gray-900` | - | `#111827` | A |
+
+#### سطوح و حاشیه‌ها (Surfaces & Borders)
+| نام معنایی | توکن در پروژه | مقدار | دسته |
+| --- | --- | --- | --- |
+| Surface | `--color-surface` | `#ffffff` | B |
+| Surface Subtle | `--color-surface-subtle` | `#f9fafb` | B |
+| Surface Muted | `--color-surface-muted` | `#f3f4f6` | B |
+| Border Subtle | `--color-border-subtle` | `#f3f4f6` | B |
+| Border Default | `--color-border-default` | `#e5e7eb` | B |
+| Border Strong | `--color-border-strong` | `#d1d5db` | B |
+
+#### رنگ‌های معنایی متن (Semantic Text Colors)
+| نقش متن | توکن در پروژه | مقدار | دسته |
+| --- | --- | --- | --- |
+| متن اصلی | `--color-text-primary` / `--color-text-main` | `#1a1a2e` | B |
+| متن ثانویه | `--color-text-secondary` | `#4a4a68` | B |
+| متن کمکی / فرعی | `--color-text-muted` / `--color-text-helper` | `#7a7a96` | B |
+| متن غیرفعال | `--color-text-disabled` | `#b0b0c4` | B |
+| متن روی رنگ اصلی | `--color-text-on-primary` | `#ffffff` | B |
+| متن روی رنگ ثانویه | `--color-text-on-secondary` | `#ffffff` | B |
+| متن لینک | `--color-text-link` | `#3d3183` | B |
+| متن لینک فعال | `--color-text-link-active` | `#f58220` | B |
+
+#### رنگ‌های وضعیتی و کاربردی (Functional Status Colors)
+| نقش | توکن در پروژه | مقدار قبلی | مقدار جدید در دیزاین سیستم | دسته |
+| --- | --- | --- | --- | --- |
+| موفقیت (Success Base) | `--color-success` | `#00966d` | `#00ba88` | A |
+| موفقیت روشن | `--color-success-light` | `#f3fdfa` | `#f3fdfa` | C |
+| هشدار (Warning Base) | `--color-warning` | `#a9791c` | `#f4b740` | A |
+| هشدار روشن | `--color-warning-light` | `#fff8e1` | `#fff8e1` | C |
+| خطا (Error Base) | `--color-error` | `#c30000` | `#ed2e2e` | A |
+| خطا روشن | `--color-error-light` | `#fff2f2` | `#fff2f2` | C |
+| اطلاعات (Info Base) | `--color-info` | - | `#3b82f6` | B |
+| اطلاعات روشن | `--color-info-light` | - | `#eff6ff` | B |
+
+---
 
 ### تایپوگرافی
 
-| نقش (عنوان، متن، کپشن ...) | توکن | فونت | اندازه | وزن | line-height | دسته |
-| --- | --- | --- | --- | --- | --- | --- |
-| عنوان اصلی پنل | `text-[22px]` | Dana | `22px` | `SemiBold` (600) | `30px` | C |
-| عناوین کارت‌ها و بخش‌ها | `text-[16px]` | Dana | `16px` | `Bold` (700) | `25px` | C |
-| عناوین و مقادیر آمار | `text-[18px]` | Dana | `18px` | `SemiBold` (600) | `26px` | C |
-| برچسب‌ها و متون فرعی | `text-[12px]` | Dana | `12px` | `Regular` (400) | `18px` | C |
+#### سلسله‌مراتب دسکتاپ (Desktop Typography)
+| نام المان | کلاس Tailwind | فونت | سایز | Line Height | وزن فونت |
+| --- | --- | --- | --- | --- | --- |
+| عنوان نمایشی (Display) | `text-display` | Dana | `56px` | `64px` | ExtraBold (800) |
+| عنوان ۱ (Heading 1) | `text-h1` | Dana | `44px` | `52px` | Bold (700) |
+| عنوان ۲ (Heading 2) | `text-h2` | Dana | `36px` | `44px` | Bold (700) |
+| عنوان ۳ (Heading 3) | `text-h3` | Dana | `28px` | `36px` | SemiBold (600) |
+| عنوان ۴ (Heading 4) | `text-h4` | Dana | `22px` | `30px` | SemiBold (600) |
+| عنوان ۵ (Heading 5) | `text-h5` | Dana | `18px` | `26px` | SemiBold (600) |
+| متن بدنه (Body) | `text-body` | Dana | `16px` | `26px` | Regular (400) |
+| متن کوچک (Small) | `text-small` | Dana | `14px` | `22px` | Regular (400) |
+| زیرنویس (Caption) | `text-caption` | Dana | `12px` | `18px` | Regular (400) |
+| برچسب (Label / Tag) | `text-label` | Dana | `12px` | `16px` | SemiBold (600) |
 
-### Radius
-
-| نام | توکن | مقدار فعلی | مقدار جدید | دسته |
-| --- | --- | --- | --- | --- |
-| sm | `--radius-sm` | `4px` | `4px` | C |
-| md | `--radius-md` | `10px` | `10px` | C |
-| lg | `--radius-lg` | `16px` | `16px` | C |
-| xl | `--radius-xl` | `24px` | `24px` | C |
-| 2xl | `--radius-2xl` | `32px` | `32px` | C |
-| 3xl | `--radius-3xl` | `64px` | `64px` | C |
-
-### سایه‌ها
-
-| نام | توکن | مقدار | دسته |
-| --- | --- | --- | --- |
-| Card Shadow | `--shadow-card` | `0 2px 12px rgba(0, 0, 0, 0.06)` | B |
-
-### فاصله‌گذاری و grid
-
-| نام | مقدار | توضیح |
-| --- | --- | --- |
-| عرض container دسکتاپ | `1440px` | عرض کل صفحه طراحی شده شامل منوی کناری و محتوا |
-| سایدبار راست | `300px` | منوی ناوبری پنل فروشنده با پس‌زمینه سفید و لبه داخلی |
-| محتوای اصلی | `1140px` | پدینگ ۴۰ پیکسل و فاصله ۲۴ پیکسلی بین سکشن‌ها |
-| فاصله کارت‌های آماری | `16px` | گرید ۴ ستونه در دسکتاپ |
-| فاصله بخش میانی | `20px` | فاصله بین نمودار و پرفروش‌ترین‌ها |
+#### سلسله‌مراتب موبایل (Mobile Typography)
+| نام المان | کلاس Tailwind | فونت | سایز | Line Height | وزن فونت |
+| --- | --- | --- | --- | --- | --- |
+| عنوان نمایشی | `text-mobile-display` | Dana | `36px` | `44px` | ExtraBold |
+| عنوان ۱ | `text-mobile-h1` | Dana | `32px` | `40px` | Bold |
+| عنوان ۲ | `text-mobile-h2` | Dana | `26px` | `34px` | Bold |
+| عنوان ۳ | `text-mobile-h3` | Dana | `22px` | `30px` | SemiBold |
+| عنوان ۴ | `text-mobile-h4` | Dana | `18px` | `26px` | SemiBold |
+| متن بدنه | `text-mobile-body` | Dana | `14px` | `24px` | Regular |
+| زیرنویس | `text-mobile-caption` | Dana | `11px` | `16px` | Regular |
+| برچسب | `text-mobile-label` | Dana | `11px` | `14px` | SemiBold |
 
 ---
+
+### شعاع گوشه‌ها (Border Radius)
+
+| نام در دیزاین سیستم | توکن پروژه | کلاس Tailwind | مقدار فعلی (موبایل) | مقدار دیزاین سیستم جدید | دسته |
+| --- | --- | --- | --- | --- | --- |
+| بدون گردی | `rounded-none` | `rounded-none` | `0px` | `0px` | C |
+| کم (Subtle) | `--radius-sm` | `rounded-sm` | `4px` | `4px` | C |
+| متوسط (Medium) | `--radius-md` | `rounded-md` | `10px` | `8px` | A |
+| زیاد (Large) | `--radius-lg` | `rounded-lg` | `16px` | `12px` | A |
+| خیلی زیاد (XLarge) | `--radius-xl` | `rounded-xl` | `24px` | `16px` | A |
+| گرد (Round) | `--radius-2xl` | `rounded-2xl` | `32px` | `24px` | A |
+| کپسولی (Pill) | `--radius-pill` | `rounded-pill` | - | `999px` | B |
+| دایره (Circle) | `--radius-circle` | `rounded-circle` | - | `50%` | B |
+
+---
+
+### مقیاس فاصله‌گذاری (Spacing Scale - 4px Grid)
+
+| نام توکن | کلاس Tailwind نمونه | مقدار فیزیکی | معادل REM | توضیح |
+| --- | --- | --- | --- | --- |
+| `spacing-2xs` | `p-2xs`, `gap-2xs` | `2px` | `0.125rem` | فواصل بسیار ریز، برچسب‌ها |
+| `spacing-xs` | `p-xs`, `gap-xs` | `4px` | `0.25rem` | فاصله میکرو، آیکون و متن نزدیک |
+| `spacing-sm` | `p-sm`, `gap-sm` | `8px` | `0.5rem` | پدینگ دکمه‌های کوچک، فاصله این‌پوت‌ها |
+| `spacing-md` | `p-md`, `gap-md` | `12px` | `0.75rem` | فاصله بین آیتم‌های فشرده |
+| `spacing-base` | `p-base`, `gap-base` | `16px` | `1rem` | پدینگ پیش‌فرض کارت‌ها و گرید |
+| `spacing-lg` | `p-lg`, `gap-lg` | `24px` | `1.5rem` | پدینگ سکشن‌ها، فاصله ستون‌ها |
+| `spacing-xl` | `p-xl`, `gap-xl` | `32px` | `2rem` | فاصله بین بلاک‌های محتوایی |
+| `spacing-2xl` | `p-2xl`, `gap-2xl` | `40px` | `2.5rem` | حاشیه‌های بیرونی تبلت |
+| `spacing-3xl` | `p-3xl`, `gap-3xl` | `48px` | `3rem` | تفکیک سکشن‌های اصلی |
+| `spacing-4xl` | `p-4xl`, `gap-4xl` | `64px` | `4rem` | هدرهای بزرگ و فاصله‌های ماکرو |
+| `spacing-5xl` | `p-5xl`, `gap-5xl` | `80px` | `5rem` | مارجین کناری دسکتاپ (80px Margin) |
+| `spacing-6xl` | `p-6xl`, `gap-6xl` | `96px` | `6rem` | سکشن‌های لندینگ |
+| `spacing-7xl` | `p-7xl`, `gap-7xl` | `128px` | `8rem` | فواصل کلان |
+
+---
+
+### سایه‌ها (Shadows)
+
+| نام | توکن | کلاس Tailwind | مقدار | دسته |
+| --- | --- | --- | --- | --- |
+| Card Shadow | `--shadow-card` | `shadow-card` | `0 2px 12px rgba(0, 0, 0, 0.06)` | B |
+| Dropdown Shadow | `--shadow-dropdown` | `shadow-dropdown` | `0 4px 20px rgba(0, 0, 0, 0.08)` | B |
+| Modal Shadow | `--shadow-modal` | `shadow-modal` | `0 10px 30px rgba(0, 0, 0, 0.12)` | B |
+
+---
+
+### سیستم گرید و ساختار صفحات (Grid & Layout System)
+
+| دستگاه | ستون‌ها (Columns) | فاصله بین ستون‌ها (Gutter) | مارجین کناری (Margin) | بازه عرض صفحه (Breakpoint) |
+| --- | --- | --- | --- | --- |
+| دسکتاپ بزرگ (Large Desktop) | ۱۲ ستونه | `24px` | `80px` | `1440px+` |
+| دسکتاپ (Desktop) | ۱۲ ستونه | `24px` | `80px` | `1024px – 1439px` |
+| تبلت (Tablet) | ۸ ستونه | `16px` | `40px` | `768px – 1023px` |
+| موبایل بزرگ (Large Mobile) | ۴ ستونه | `16px` | `16px` | `480px – 767px` |
+| موبایل (Mobile) | ۴ ستونه | `16px` | `16px` | `0 – 479px` |
+
+---
+
 
 ## ۶. نحوه‌ی فعال‌سازی
 
