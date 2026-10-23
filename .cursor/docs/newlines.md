@@ -9,7 +9,7 @@
 مدیر پروژه در سه فایل صوتی ارسالی بر **۳ محور اصلی** تأکید کرده‌اند:
 1. **استایل‌دهی با Tailwind CSS:** استفاده از کلاس‌های کاربردی و تعریف توکن‌های معنایی رنگ و استایل، پرهیز از CSS خام پراکنده.
 2. **مدیریت اصولی آیکون‌ها:** ممنوعیت قطعی قرار دادن کدهای خام SVG در کامپوننت‌ها و استفاده انحصاری از کامپوننت‌های Reusable در پوشه آیکون‌ها.
-3. **انطباق پیکسل‌به‌پیکسل با فیگما (Pixel-Perfect) و تفکیک تم:** استخراج دقیق دیزاین سیستم از نود مرجع فیگما، ممنوعیت هاردکد کردن مقادیر رنگ و ابعاد، و اجرای دقیق طبق قوانین [THEME-NEW-GUIDE.md](file:///d:/Workspace/tagmal/tagmall-front/THEME-NEW-GUIDE.md) برای حفظ نسخه موبایل.
+3. **انطباق پیکسل‌به‌پیکسل با فیگما (Pixel-Perfect) و تفکیک تم:** استخراج دقیق دیزاین سیستم از نود مرجع فیگما، ممنوعیت هاردکد کردن مقادیر رنگ و ابعاد، و اجرای دقیق طبق قوانین [THEME-NEW-GUIDE.md](./THEME-NEW-GUIDE.md) برای حفظ نسخه موبایل.
 
 ---
 
@@ -67,7 +67,7 @@
   * فواصل داخلی و خارجی (`padding` و `margin` و `gap`).
   * خروجی نهایی باید عینا و بدون کوچک‌ترین تفاوت بصری، مو به مو مانند طرح فیگما باشد.
 * **ایزوله‌سازی تم و عدم تغییر نسخه موبایل:**
-  * هر مقداری که از دیزاین سیستم جدید استخراج می‌شود، باید با رعایت قوانین [THEME-NEW-GUIDE.md](file:///d:/Workspace/tagmal/tagmall-front/THEME-NEW-GUIDE.md) در [theme-new.css](file:///d:/Workspace/tagmal/tagmall-front/src/app/theme-new.css) وارد شود:
+  * هر مقداری که از دیزاین سیستم جدید استخراج می‌شود، باید با رعایت قوانین [THEME-NEW-GUIDE.md](./THEME-NEW-GUIDE.md) در [theme-new.css](file:///d:/Workspace/tagmal/tagmall-front/src/app/theme-new.css) وارد شود:
     * **دسته A (توکن‌های قبلی با مقادیر جدید):** فقط در `@utility theme-new` override شوند تا روی موبایل اثر نگذارند.
     * **دسته B (توکن‌های کاملاً جدید):** در `@theme` با نام‌های معنایی اضافه شوند.
     * در فایل‌های مشترک، استایل‌های جدید صرفاً با پیشوند `lg:` اعمال شوند.
@@ -86,7 +86,7 @@
 ---
 
 ## ۶. مستندات مرتبط در پروژه
-* 📘 [راهنمای تم جدید دسکتاپ و پنل فروشندگان (THEME-NEW-GUIDE.md)](file:///d:/Workspace/tagmal/tagmall-front/THEME-NEW-GUIDE.md)
+* 📘 [راهنمای تم جدید دسکتاپ و پنل فروشندگان (THEME-NEW-GUIDE.md)](./THEME-NEW-GUIDE.md)
 * 📜 [دستورالعمل‌ها و خط قرمزهای معماری (tagmall-instructions.mdc)](file:///d:/Workspace/tagmal/tagmall-front/.cursor/rules/tagmall-instructions.mdc)
 * 🎨 [فایل مرجع آیکون‌های پروژه (src/icons/index.jsx)](file:///d:/Workspace/tagmal/tagmall-front/src/icons/index.jsx)
 * 🎨 [تعاریف استایل‌گاید جدید (src/app/theme-new.css)](file:///d:/Workspace/tagmal/tagmall-front/src/app/theme-new.css)
