@@ -13,7 +13,7 @@ export const metadata = {
 export default function SellerLayout({ children }) {
   return (
     <SellerNavigationProvider>
-      <div className="theme-new min-h-screen bg-surface-muted text-text-primary flex flex-col lg:flex-row">
+      <div className="theme-new min-h-screen bg-surface-muted bg-pattern-diagonal text-text-primary flex flex-col lg:flex-row">
         {/* Sidebar navigation (renders on right side in RTL on desktop, top bar + drawer on mobile) */}
         <SellerSidebar />
 

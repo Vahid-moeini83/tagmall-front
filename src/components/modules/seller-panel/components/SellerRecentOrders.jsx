@@ -100,7 +100,7 @@ function SellerRecentOrders() {
         {RECENT_ORDERS.map((order, idx) => (
           <div
             key={`mobile-${order.id}-${idx}`}
-            className="bg-surface rounded-xl p-3.5 border border-border-subtle flex flex-col gap-2.5 shadow-card"
+            className="bg-surface rounded-lg p-3.5 border border-border-subtle flex flex-col gap-2.5 shadow-card"
           >
             {/* Row 1: Order ID & Status Badge */}
             <div className="flex items-center justify-between">
@@ -108,7 +108,7 @@ function SellerRecentOrders() {
                 {order.id}
               </span>
               <span
-                className={`h-[26px] px-3 rounded-lg flex items-center justify-center text-[12px] font-medium ${order.status.bg} ${order.status.color}`}
+                className={`h-[26px] px-3 rounded-md flex items-center justify-center text-[12px] font-medium ${order.status.bg} ${order.status.color}`}
               >
                 {order.status.label}
               </span>
@@ -140,11 +140,11 @@ function SellerRecentOrders() {
       </div>
 
       {/* Desktop Responsive Table (Figma Node: 44:39024) */}
-      <div className="hidden lg:block bg-surface rounded-2xl p-6 border border-border-subtle shadow-card">
+      <div className="hidden lg:block bg-surface rounded-xl p-6 border border-border-subtle shadow-card">
         <div className="overflow-x-auto">
           <div className="min-w-[900px]">
             {/* Table Header */}
-            <div className="bg-surface-subtle rounded-xl h-[42px] px-6 grid grid-cols-6 items-center text-caption text-text-secondary font-normal">
+            <div className="bg-surface-subtle rounded-lg h-[42px] px-6 grid grid-cols-6 items-center text-caption text-text-secondary font-normal">
               <span>شماره سفارش</span>
               <span>روش تحویل</span>
               <span>محصولات</span>
@@ -195,7 +195,7 @@ function SellerRecentOrders() {
                     <div className="flex justify-center">
                       <span
                         className={`
-                          h-[26px] px-3.5 rounded-lg flex items-center justify-center text-caption font-medium
+                          h-[26px] px-3.5 rounded-md flex items-center justify-center text-caption font-medium
                           ${order.status.bg} ${order.status.color}
                         `}
                       >

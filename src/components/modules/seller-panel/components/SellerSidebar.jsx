@@ -212,7 +212,7 @@ function SellerSidebar() {
                 href={item.href}
                 onClick={closeMobileSidebar}
                 className={`
-                  h-[50px] px-4 rounded-xl flex items-center justify-between transition-colors
+                  h-[50px] px-4 rounded-md flex items-center justify-between transition-colors
                   ${
                     isActive
                       ? "bg-primary-50 text-primary font-medium"

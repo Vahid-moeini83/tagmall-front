@@ -55,7 +55,7 @@ function SellerSalesChart() {
   const [hoveredMonth, setHoveredMonth] = useState(null);
 
   return (
-    <div className="bg-surface rounded-2xl border border-border-subtle shadow-card p-4 sm:p-6 lg:pt-7 lg:px-8 lg:pb-6 flex flex-col justify-between h-auto min-h-[332px] lg:h-[399px]">
+    <div className="bg-surface rounded-xl border border-border-subtle shadow-card p-4 sm:p-6 lg:pt-7 lg:px-8 lg:pb-6 flex flex-col justify-between h-auto min-h-[332px] lg:h-[399px]">
       {/* Header with Title and Legend */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>

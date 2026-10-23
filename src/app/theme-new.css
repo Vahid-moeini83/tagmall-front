@@ -170,6 +170,30 @@
 
   --text-mobile-label: 11px;
   --text-mobile-label--line-height: 14px;
+
+  /* ------------------------------------------------------------------------
+     11. Background Patterns (Seller Panel & Subdued Textures)
+     ------------------------------------------------------------------------ */
+  --background-image-pattern-diagonal: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 6px,
+    rgba(26, 26, 46, 0.04) 6px,
+    rgba(26, 26, 46, 0.04) 7px
+  );
+}
+
+/* ==========================================================================
+   Background Pattern Utility for Seller Panel
+   ========================================================================== */
+@utility bg-pattern-diagonal {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 6px,
+    rgba(26, 26, 46, 0.04) 6px,
+    rgba(26, 26, 46, 0.04) 7px
+  );
 }
 
 /* ==========================================================================
