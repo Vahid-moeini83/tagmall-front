@@ -9,8 +9,9 @@ import {
   EditIcon,
   MessageTextIcon,
   CursorClickIcon,
+  CloseIcon,
 } from "@/icons";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, Info } from "lucide-react";
 
 /**
  * 8 products matching Figma node 44:44034 & 44:44999
@@ -147,14 +148,51 @@ const PRODUCTS_LIST = [
   },
 ];
 
+const CATEGORIES = [
+  "همه",
+  "موبایل",
+  "کالای دیجیتال",
+  "صوتی و تصویری",
+  "ساعت هوشمند",
+  "پوشاک مردانه",
+  "کوله و چمدان",
+  "لوازم جانبی موبایل",
+  "تجهیزات گیمینگ",
+];
+
+const STATUSES = [
+  "همه",
+  "تایید شده",
+  "فعال",
+  "ارسال شده",
+  "غیرفعال",
+  "در انتظار تأیید",
+  "تحویل داده شده",
+  "مرجوع شده",
+];
+
+const SORTS = ["جدیدترین", "ارزان‌ترین", "گران‌ترین", "بیشترین موجودی"];
+
 function SellerProducts() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSort] = useState("جدیدترین");
-  const [selectedStatus] = useState("همه");
-  const [selectedCategory] = useState("همه");
+  const [selectedSort, setSelectedSort] = useState("جدیدترین");
+  const [selectedStatus, setSelectedStatus] = useState("همه");
+  const [selectedCategory, setSelectedCategory] = useState("همه");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter products based on search input
+  // Mobile Filter Drawer modal states (Figma: 44:44530)
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [tempCategory, setTempCategory] = useState("موبایل");
+  const [tempStatus, setTempStatus] = useState("تایید شده");
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+
+  // Desktop dropdown states
+  const [desktopSortOpen, setDesktopSortOpen] = useState(false);
+  const [desktopCategoryOpen, setDesktopCategoryOpen] = useState(false);
+  const [desktopStatusOpen, setDesktopStatusOpen] = useState(false);
+
+  // Filter products based on search input & filters
   const filteredProducts = useMemo(() => {
     return PRODUCTS_LIST.filter((p) => {
       const matchQuery =
@@ -164,14 +202,22 @@ function SellerProducts() {
         p.category.includes(searchQuery.trim());
 
       const matchCategory =
-        selectedCategory === "همه" || p.category.includes(selectedCategory);
+        selectedCategory === "همه" ||
+        p.category.includes(selectedCategory) ||
+        (selectedCategory === "موبایل" && p.category.includes("دیجیتال"));
 
       const matchStatus =
-        selectedStatus === "همه" || p.status.label.includes(selectedStatus);
+        selectedStatus === "همه" ||
+        p.status.label.includes(selectedStatus) ||
+        (selectedStatus === "تایید شده" && p.status.label === "فعال");
 
       return matchQuery && matchCategory && matchStatus;
     });
   }, [searchQuery, selectedCategory, selectedStatus]);
+
+  // Active filters count in modal
+  const activeFiltersCount =
+    (tempCategory !== "همه" ? 1 : 0) + (tempStatus !== "همه" ? 1 : 0);
 
   return (
     <div className="flex-1 w-full max-w-[1140px] mx-auto p-4 sm:p-6 lg:p-10 pb-28 lg:pb-10 flex flex-col gap-5 lg:gap-6">
@@ -225,29 +271,139 @@ function SellerProducts() {
 
         {/* Left side in RTL: 3 Filter Dropdowns */}
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
-          >
-            <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
-            <span>مرتب سازی: جدیدترین</span>
-          </button>
+          {/* Dropdown 1: Sort */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setDesktopSortOpen(!desktopSortOpen);
+                setDesktopCategoryOpen(false);
+                setDesktopStatusOpen(false);
+              }}
+              className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
+            >
+              <ChevronDownIcon
+                size={18}
+                className={`text-text-muted shrink-0 transition-transform ${
+                  desktopSortOpen ? "rotate-180" : ""
+                }`}
+              />
+              <span>مرتب سازی: {selectedSort}</span>
+            </button>
+            {desktopSortOpen && (
+              <div className="absolute top-full mt-1.5 right-0 w-44 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1">
+                {SORTS.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSort(s);
+                      setDesktopSortOpen(false);
+                    }}
+                    className={`w-full px-3.5 py-2 text-right text-[13px] hover:bg-surface-subtle transition-colors ${
+                      selectedSort === s
+                        ? "text-primary font-semibold bg-primary-50"
+                        : "text-text-primary"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-          <button
-            type="button"
-            className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
-          >
-            <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
-            <span>مرتب سازی: جدیدترین</span>
-          </button>
+          {/* Dropdown 2: Category */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setDesktopCategoryOpen(!desktopCategoryOpen);
+                setDesktopSortOpen(false);
+                setDesktopStatusOpen(false);
+              }}
+              className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
+            >
+              <ChevronDownIcon
+                size={18}
+                className={`text-text-muted shrink-0 transition-transform ${
+                  desktopCategoryOpen ? "rotate-180" : ""
+                }`}
+              />
+              <span>
+                {selectedCategory === "همه"
+                  ? "مرتب سازی: جدیدترین"
+                  : `دسته بندی: ${selectedCategory}`}
+              </span>
+            </button>
+            {desktopCategoryOpen && (
+              <div className="absolute top-full mt-1.5 right-0 w-48 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setDesktopCategoryOpen(false);
+                    }}
+                    className={`w-full px-3.5 py-2 text-right text-[13px] hover:bg-surface-subtle transition-colors ${
+                      selectedCategory === cat
+                        ? "text-primary font-semibold bg-primary-50"
+                        : "text-text-primary"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-          <button
-            type="button"
-            className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
-          >
-            <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
-            <span>مرتب سازی: جدیدترین</span>
-          </button>
+          {/* Dropdown 3: Status */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setDesktopStatusOpen(!desktopStatusOpen);
+                setDesktopSortOpen(false);
+                setDesktopCategoryOpen(false);
+              }}
+              className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
+            >
+              <ChevronDownIcon
+                size={18}
+                className={`text-text-muted shrink-0 transition-transform ${
+                  desktopStatusOpen ? "rotate-180" : ""
+                }`}
+              />
+              <span>
+                {selectedStatus === "همه"
+                  ? "مرتب سازی: جدیدترین"
+                  : `وضعیت: ${selectedStatus}`}
+              </span>
+            </button>
+            {desktopStatusOpen && (
+              <div className="absolute top-full mt-1.5 right-0 w-44 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
+                {STATUSES.map((st) => (
+                  <button
+                    key={st}
+                    type="button"
+                    onClick={() => {
+                      setSelectedStatus(st);
+                      setDesktopStatusOpen(false);
+                    }}
+                    className={`w-full px-3.5 py-2 text-right text-[13px] hover:bg-surface-subtle transition-colors ${
+                      selectedStatus === st
+                        ? "text-primary font-semibold bg-primary-50"
+                        : "text-text-primary"
+                    }`}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -274,15 +430,25 @@ function SellerProducts() {
           {/* Dropdown button: تهران */}
           <button
             type="button"
+            onClick={() => {
+              setTempCategory(selectedCategory === "همه" ? "موبایل" : selectedCategory);
+              setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
+              setIsFilterModalOpen(true);
+            }}
             className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[13px] bg-surface hover:border-primary/40 transition-colors"
           >
             <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
             <span>تهران</span>
           </button>
 
-          {/* Filter button */}
+          {/* Filter button opens Bottom Sheet (Figma Node: 44:44570 -> 44:44659) */}
           <button
             type="button"
+            onClick={() => {
+              setTempCategory(selectedCategory === "همه" ? "موبایل" : selectedCategory);
+              setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
+              setIsFilterModalOpen(true);
+            }}
             className="w-[105px] h-11 bg-primary/10 border border-primary/20 rounded-xl px-3 flex items-center justify-center gap-1.5 text-primary text-[13px] font-semibold hover:bg-primary/20 transition-colors shrink-0"
           >
             <SlidersHorizontal size={16} />
@@ -566,6 +732,202 @@ function SellerProducts() {
           </div>
         </div>
       </div>
+
+      {/* 5. Mobile Filter Bottom Sheet Modal (Figma Node: 44:44530 & 44:44659) */}
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end">
+          {/* Backdrop with smooth fade-in */}
+          <div
+            className="fixed inset-0 bg-black/50 transition-opacity"
+            onClick={() => setIsFilterModalOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Bottom Sheet Container (Figma: [390x454], r:mixed -> rounded-t-[32px]) */}
+          <div
+            className="relative z-10 w-full max-w-[440px] mx-auto bg-surface rounded-t-[32px] p-5 pb-6 flex flex-col gap-4 shadow-modal animate-in slide-in-from-bottom duration-200"
+            dir="rtl"
+          >
+            {/* Drag Handle (Figma Node: 44:44660) */}
+            <div className="w-10 h-1 rounded-full bg-border-default mx-auto -mt-1 mb-1" />
+
+            {/* Header (Figma Node: 44:44662) */}
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col text-right">
+                <h3 className="text-[20px] font-bold text-text-primary">
+                  فیلتر محصولات
+                </h3>
+                <span className="text-[12px] text-text-muted mt-0.5">
+                  {activeFiltersCount === 0
+                    ? "هیچ فیلتری انتخاب نشده"
+                    : `${
+                        activeFiltersCount === 2
+                          ? "۲"
+                          : activeFiltersCount === 1
+                          ? "۱"
+                          : activeFiltersCount
+                      } فیلتر انتخاب شده`}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsFilterModalOpen(false)}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-subtle transition-colors"
+                aria-label="بستن"
+              >
+                <CloseIcon size={20} />
+              </button>
+            </div>
+
+            {/* Category Filter Field (Figma Node: 44:44669) */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[14px] font-medium text-text-primary text-right">
+                دسته بندی
+              </label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategoryDropdownOpen(!categoryDropdownOpen);
+                    setStatusDropdownOpen(false);
+                  }}
+                  className="w-full h-12 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-[14px] text-text-primary bg-surface hover:border-primary/40 transition-colors"
+                >
+                  <span className="truncate">
+                    {tempCategory === "همه"
+                      ? "دسته بندی: همه"
+                      : `دسته بندی: ${tempCategory}`}
+                  </span>
+                  <ChevronDownIcon
+                    size={18}
+                    className={`text-text-muted shrink-0 transition-transform ${
+                      categoryDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Category Dropdown Menu */}
+                {categoryDropdownOpen && (
+                  <div className="absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
+                    {CATEGORIES.map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => {
+                          setTempCategory(cat);
+                          setCategoryDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-2 text-right text-[13px] hover:bg-surface-subtle transition-colors ${
+                          tempCategory === cat
+                            ? "text-primary font-semibold bg-primary-50"
+                            : "text-text-primary"
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Status Filter Field (Figma Node: 44:44672) */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[14px] font-medium text-text-primary text-right">
+                وضعیت
+              </label>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStatusDropdownOpen(!statusDropdownOpen);
+                    setCategoryDropdownOpen(false);
+                  }}
+                  className="w-full h-12 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-[14px] text-text-primary bg-surface hover:border-primary/40 transition-colors"
+                >
+                  <span className="truncate">
+                    {tempStatus === "همه"
+                      ? "وضعیت: همه"
+                      : `وضعیت: ${tempStatus}`}
+                  </span>
+                  <ChevronDownIcon
+                    size={18}
+                    className={`text-text-muted shrink-0 transition-transform ${
+                      statusDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Status Dropdown Menu */}
+                {statusDropdownOpen && (
+                  <div className="absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
+                    {STATUSES.map((st) => (
+                      <button
+                        key={st}
+                        type="button"
+                        onClick={() => {
+                          setTempStatus(st);
+                          setStatusDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-2 text-right text-[13px] hover:bg-surface-subtle transition-colors ${
+                          tempStatus === st
+                            ? "text-primary font-semibold bg-primary-50"
+                            : "text-text-primary"
+                        }`}
+                      >
+                        {st}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Info Alert (Figma Node: 44:44675) */}
+            <div className="bg-surface-subtle rounded-xl p-3 flex items-center justify-between gap-2 border border-border-subtle/80">
+              <span className="text-[12px] text-text-muted">
+                برای دیدن همه کالاها، فیلترها را پاک کنید.
+              </span>
+              <Info size={18} className="text-[#3d3183] shrink-0" />
+            </div>
+
+            {/* Action Buttons (Figma Node: 44:44679) */}
+            <div className="flex items-center gap-2.5 pt-1">
+              {/* اعمال فیلترها (Right in RTL) */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(tempCategory);
+                  setSelectedStatus(tempStatus);
+                  setIsFilterModalOpen(false);
+                }}
+                className="flex-1 h-12 bg-primary text-white rounded-xl text-[14px] font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center shadow-sm"
+              >
+                اعمال فیلترها
+              </button>
+
+              {/* پاک کردن (Left in RTL) */}
+              <button
+                type="button"
+                onClick={() => {
+                  setTempCategory("همه");
+                  setTempStatus("همه");
+                  setSelectedCategory("همه");
+                  setSelectedStatus("همه");
+                  setIsFilterModalOpen(false);
+                }}
+                className="w-[108px] h-12 border border-border-default rounded-xl bg-surface text-text-primary text-[14px] font-medium hover:bg-surface-subtle transition-colors flex items-center justify-center shrink-0"
+              >
+                پاک کردن
+              </button>
+            </div>
+
+            {/* Safe area home indicator (Figma Node: 44:44684) */}
+            <div className="w-32 h-1 rounded-full bg-text-primary/20 mx-auto mt-2" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
