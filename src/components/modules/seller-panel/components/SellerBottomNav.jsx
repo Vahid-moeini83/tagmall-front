@@ -125,9 +125,6 @@ function SellerBottomNav() {
           </span>
         </button>
       </div>
-
-      {/* iOS-style home indicator line */}
-      <div className="w-[120px] h-1 bg-text-primary rounded-full mx-auto my-1" />
     </nav>
   );
 }

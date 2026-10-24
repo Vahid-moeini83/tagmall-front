@@ -749,7 +749,7 @@ function SellerProducts() {
 
           {/* Bottom Sheet Container (Figma: [390x454], r:mixed -> rounded-t-[32px]) */}
           <div
-            className="relative z-10 w-full max-w-[440px] mx-auto bg-surface rounded-t-2xl px-5 pt-2.5 pb-3 flex flex-col gap-5 shadow-modal animate-in slide-in-from-bottom duration-200"
+            className="relative z-10 w-full max-w-[440px] mx-auto bg-surface rounded-t-2xl px-5 pt-2.5 pb-6 flex flex-col gap-5 shadow-modal animate-in slide-in-from-bottom duration-200"
             dir="rtl"
           >
             {/* Drag Handle (Figma Node: 44:44660) */}
@@ -926,9 +926,6 @@ function SellerProducts() {
                 پاک کردن
               </button>
             </div>
-
-            {/* Safe area home indicator (Figma Node: 44:44684) */}
-            <div className="w-[120px] h-1 rounded-full bg-text-primary mx-auto mt-2" />
           </div>
         </div>
       )}

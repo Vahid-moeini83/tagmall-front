@@ -15,7 +15,6 @@ import {
   SellerLogoutIcon,
   CloseIcon,
 } from "@/icons";
-import { BatteryFull, Signal, Wifi } from "lucide-react";
 import { useSellerNavigation } from "../context/SellerNavigationContext";
 
 /**
@@ -94,16 +93,8 @@ function SellerSidebar() {
 
   return (
     <>
-      {/* Mobile status bar and app bar matching Figma PWA (44:39308) */}
+      {/* Mobile app bar */}
       <div className="lg:hidden sticky top-0 z-30 bg-surface">
-        <div className="h-11 px-6 flex items-center justify-between text-text-primary" dir="ltr" aria-hidden="true">
-          <span className="text-[15px] font-semibold">۱۲:۲۴</span>
-          <div className="flex items-center gap-1.5">
-            <Signal size={16} />
-            <Wifi size={16} />
-            <BatteryFull size={18} />
-          </div>
-        </div>
         <header className="flex items-center justify-between px-6 py-4 bg-surface border-b border-border-subtle h-[76px]">
           {/* Right side in RTL: Slogan Logo */}
           <Link href="/seller" className="inline-block shrink-0">
