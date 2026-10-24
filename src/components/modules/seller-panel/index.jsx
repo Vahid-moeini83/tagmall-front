@@ -7,6 +7,7 @@ export { default as SellerSalesChart } from "./components/SellerSalesChart";
 export { default as SellerTopProducts } from "./components/SellerTopProducts";
 export { default as SellerRecentOrders } from "./components/SellerRecentOrders";
 export { default as SellerProducts } from "./components/SellerProducts";
+export { default as SellerProductDetail } from "./components/SellerProductDetail";
 export {
   SellerNavigationProvider,
   useSellerNavigation,

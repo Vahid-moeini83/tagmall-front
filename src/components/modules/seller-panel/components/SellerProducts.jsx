@@ -540,13 +540,13 @@ function SellerProducts() {
             {/* Row 4: Actions (Edit on RIGHT (Figma x=225), Messages in MIDDLE (Figma x=113), Views on LEFT (Figma x=0)) */}
             <div className="grid grid-cols-3 items-center h-11 border-t border-border-subtle/70">
               {/* 1. Edit button on RIGHT in RTL */}
-              <button
-                type="button"
+              <Link
+                href={`/seller/products/${product.id}`}
                 className="h-11 rounded-lg bg-primary/10 text-primary text-[12px] font-normal flex items-center justify-center gap-1.5 hover:bg-primary/20 transition-colors"
               >
                 <EditIcon size={16} />
                 <span>ویرایش</span>
-              </button>
+              </Link>
 
               {/* 2. Messages in MIDDLE */}
               <button
@@ -667,13 +667,13 @@ function SellerProducts() {
                 >
                   <MessageTextIcon size={18} />
                 </button>
-                <button
-                  type="button"
+                <Link
+                  href={`/seller/products/${product.id}`}
                   title="ویرایش محصول"
                   className="hover:text-primary transition-colors p-1"
                 >
                   <EditIcon size={18} />
-                </button>
+                </Link>
               </div>
             </div>
           ))}
