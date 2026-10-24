@@ -102,7 +102,7 @@ function SellerStats() {
               className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
               dir="ltr"
             >
-              <span>۱۸.۵%+</span>
+              <span>{salesItem.mobileChange.replace(" ↑", "")}</span>
               <span className="text-[13px] leading-none">↑</span>
             </div>
           </div>
@@ -130,7 +130,7 @@ function SellerStats() {
                 className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
                 dir="ltr"
               >
-                <span>۱۲%+</span>
+                <span>{ordersItem.mobileChange.replace(" ↑", "")}</span>
                 <span className="text-[12px] leading-none">↑</span>
               </div>
             </div>
@@ -156,7 +156,7 @@ function SellerStats() {
                 className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
                 dir="ltr"
               >
-                <span>۱۲%+</span>
+                <span>{productsItem.mobileChange.replace(" ↑", "")}</span>
                 <span className="text-[12px] leading-none">↑</span>
               </div>
             </div>
@@ -185,7 +185,7 @@ function SellerStats() {
             className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
             dir="ltr"
           >
-            <span>۴.۲%+</span>
+            <span>{viewsItem.mobileChange.replace(" ↑", "")}</span>
             <span className="text-[13px] leading-none">↑</span>
           </div>
         </div>

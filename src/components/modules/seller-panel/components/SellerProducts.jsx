@@ -220,7 +220,7 @@ function SellerProducts() {
     (tempCategory !== "همه" ? 1 : 0) + (tempStatus !== "همه" ? 1 : 0);
 
   return (
-    <div className="flex-1 w-full max-w-[1140px] mx-auto p-4 sm:p-6 lg:p-10 pb-28 lg:pb-10 flex flex-col gap-5 lg:gap-6">
+    <div className="flex-1 w-full max-w-[1140px] mx-auto px-4 pt-5 pb-28 sm:p-6 lg:p-10 lg:pb-10 flex flex-col gap-4 lg:gap-6">
       {/* 1. Header (Desktop: title + date / Mobile: title + items count + Add button) */}
       <div className="flex flex-col gap-4">
         {/* Desktop top title & date (Figma Node 44:44037) */}
@@ -408,7 +408,7 @@ function SellerProducts() {
       </div>
 
       {/* Mobile Filter & Search Box (Figma Node: 44:45032) */}
-      <div className="lg:hidden bg-surface rounded-2xl p-4 border border-border-subtle shadow-card flex flex-col gap-3">
+      <div className="lg:hidden bg-surface rounded-xl p-3 border border-border-subtle shadow-card flex flex-col gap-2.5">
         {/* Row 1: Search Input */}
         <div className="relative">
           <input
@@ -416,18 +416,18 @@ function SellerProducts() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="جست و جو در محصولات"
-            className="w-full h-11 bg-surface-subtle rounded-xl px-4 text-center text-[13px] text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
+            className="w-full h-12 bg-surface-subtle rounded-lg px-3 text-right text-[14px] text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
           />
         </div>
 
         {/* Row 2: Search scope subtext */}
-        <p className="text-[11px] text-text-muted text-center">
+        <p className="text-[12px] leading-[18px] text-text-muted text-right">
           گروه کالایی، برند ها، محصولات، شناسه محصولات
         </p>
 
         {/* Row 3: Filter tools buttons matching Figma exact coordinates (44:45038 x=0, 44:45039 x=234) */}
         {/* In Figma: Filters button (purple) is on the RIGHT (x=234), Sort dropdown is on the LEFT (x=0) */}
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex items-center gap-2.5">
           {/* 1. Filter button on the RIGHT in RTL (Figma Node: 44:45039) */}
           <button
             type="button"
@@ -436,7 +436,7 @@ function SellerProducts() {
               setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
               setIsFilterModalOpen(true);
             }}
-            className="w-[105px] h-11 bg-primary/10 border border-primary/20 rounded-xl px-3 flex items-center justify-center gap-1.5 text-primary text-[13px] font-semibold hover:bg-primary/20 transition-colors shrink-0"
+            className="w-[100px] h-11 bg-primary/10 border border-primary/20 rounded-lg px-3 flex items-center justify-center gap-1.5 text-primary text-[13px] font-normal hover:bg-primary/20 transition-colors shrink-0"
           >
             <span>فیلترها</span>
             <SlidersHorizontal size={16} />
@@ -450,7 +450,7 @@ function SellerProducts() {
               setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
               setIsFilterModalOpen(true);
             }}
-            className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[13px] bg-surface hover:border-primary/40 transition-colors"
+            className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[16px] bg-surface hover:border-primary/40 transition-colors"
           >
             <span>تهران</span>
             <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
@@ -470,11 +470,11 @@ function SellerProducts() {
         {filteredProducts.map((product) => (
           <div
             key={`mobile-${product.id}`}
-            className="bg-surface rounded-2xl p-4 border border-border-subtle shadow-card flex flex-col gap-3.5"
+            className="bg-surface rounded-xl p-3.5 border border-border-subtle shadow-card flex flex-col gap-3"
           >
             {/* Row 1: Image on RIGHT (Figma: x=266), Title & SKU on LEFT (Figma: x=0) */}
             <div className="flex items-start gap-3">
-              <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-surface border border-border-subtle shadow-xs">
+              <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface border border-border-subtle shadow-xs">
                 <Image
                   src={product.image}
                   alt={product.title}
@@ -485,7 +485,7 @@ function SellerProducts() {
               </div>
 
               <div className="flex-1 min-w-0 flex flex-col gap-1 text-right">
-                <h3 className="text-[14px] font-bold text-text-primary line-clamp-2 leading-snug">
+                <h3 className="text-[14px] font-normal text-text-primary line-clamp-2 leading-[22px]">
                   {product.title}
                 </h3>
                 <span className="text-[12px] font-medium text-text-muted">
@@ -496,39 +496,39 @@ function SellerProducts() {
 
             {/* Row 2: Category on RIGHT (Figma: x=260), Status Badge on LEFT (Figma: x=0) */}
             <div className="flex items-center justify-between">
-              <span className="text-[13px] text-text-muted">
+              <span className="text-[12px] text-text-muted">
                 {product.category}
               </span>
 
               <span
-                className={`h-7 px-3.5 rounded-lg text-[12px] font-medium flex items-center justify-center ${product.status.bg} ${product.status.color}`}
+                className={`h-[26px] px-2.5 rounded-md text-[12px] font-normal flex items-center justify-center ${product.status.bg} ${product.status.color}`}
               >
                 {product.status.label}
               </span>
             </div>
 
             {/* Row 3: Price range on RIGHT (Figma: x=107), Stock on LEFT (Figma: x=10) */}
-            <div className="bg-surface-subtle rounded-xl p-3 flex items-center justify-between text-right">
+            <div className="bg-surface-subtle rounded-lg p-3 flex items-center justify-between text-right h-[84px]">
               {/* Price range on RIGHT */}
               <div className="flex flex-col gap-0.5 text-right">
-                <span className="text-[11px] text-text-muted">
+                <span className="text-[12px] text-text-muted">
                   بازه قیمتی (تومان)
                 </span>
-                <div className="text-[12px] font-semibold text-text-primary leading-tight flex flex-col items-start">
+                <div className="text-[14px] font-normal text-text-primary leading-[22px] flex flex-col items-start">
                   <span>{product.priceFrom}</span>
                   <span>{product.priceTo}</span>
                 </div>
               </div>
 
-              <div className="w-px h-9 bg-border-default/60 mx-3" />
+              <div className="w-px h-10 bg-border-default/60 mx-3" />
 
               {/* Stock on LEFT */}
               <div className="flex flex-col gap-0.5 min-w-[70px] text-left">
-                <span className="text-[11px] text-text-muted">
+                <span className="text-[12px] text-text-muted">
                   موجودی
                 </span>
                 <span
-                  className={`text-[13px] font-bold ${
+                  className={`text-[14px] font-normal ${
                     product.isOutOfStock ? "text-error" : "text-text-secondary"
                   }`}
                 >
@@ -538,11 +538,11 @@ function SellerProducts() {
             </div>
 
             {/* Row 4: Actions (Edit on RIGHT (Figma x=225), Messages in MIDDLE (Figma x=113), Views on LEFT (Figma x=0)) */}
-            <div className="flex items-center justify-between pt-2 border-t border-border-subtle/70">
+            <div className="grid grid-cols-3 items-center h-11 border-t border-border-subtle/70">
               {/* 1. Edit button on RIGHT in RTL */}
               <button
                 type="button"
-                className="h-9 px-4 rounded-xl bg-primary/10 text-primary text-[12px] font-semibold flex items-center gap-1.5 hover:bg-primary/20 transition-colors"
+                className="h-11 rounded-lg bg-primary/10 text-primary text-[12px] font-normal flex items-center justify-center gap-1.5 hover:bg-primary/20 transition-colors"
               >
                 <EditIcon size={16} />
                 <span>ویرایش</span>
@@ -551,7 +551,7 @@ function SellerProducts() {
               {/* 2. Messages in MIDDLE */}
               <button
                 type="button"
-                className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-medium"
+                className="h-11 flex items-center justify-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-normal"
               >
                 <MessageTextIcon size={18} />
                 <span>پیام‌ها</span>
@@ -560,7 +560,7 @@ function SellerProducts() {
               {/* 3. Views on LEFT */}
               <button
                 type="button"
-                className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-medium"
+                className="h-11 flex items-center justify-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-normal"
               >
                 <CursorClickIcon size={18} />
                 <span>بازدید</span>
@@ -749,16 +749,16 @@ function SellerProducts() {
 
           {/* Bottom Sheet Container (Figma: [390x454], r:mixed -> rounded-t-[32px]) */}
           <div
-            className="relative z-10 w-full max-w-[440px] mx-auto bg-surface rounded-t-[32px] p-5 pb-6 flex flex-col gap-4 shadow-modal animate-in slide-in-from-bottom duration-200"
+            className="relative z-10 w-full max-w-[440px] mx-auto bg-surface rounded-t-2xl px-5 pt-2.5 pb-3 flex flex-col gap-5 shadow-modal animate-in slide-in-from-bottom duration-200"
             dir="rtl"
           >
             {/* Drag Handle (Figma Node: 44:44660) */}
-            <div className="w-10 h-1 rounded-full bg-border-default mx-auto -mt-1 mb-1" />
+            <div className="w-10 h-1 rounded-full bg-border-default mx-auto" />
 
             {/* Header (Figma Node: 44:44662) - Title on RIGHT, Close button on LEFT */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col text-right">
-                <h3 className="text-[20px] font-bold text-text-primary">
+                <h3 className="text-[22px] leading-[30px] font-semibold text-text-primary">
                   فیلتر محصولات
                 </h3>
                 <span className="text-[12px] text-text-muted mt-0.5">
@@ -786,7 +786,7 @@ function SellerProducts() {
 
             {/* Category Filter Field (Figma Node: 44:44669) */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[14px] font-medium text-text-primary text-right">
+              <label className="text-[14px] leading-[22px] font-normal text-text-secondary text-right">
                 دسته بندی
               </label>
               <div className="relative">
@@ -838,7 +838,7 @@ function SellerProducts() {
 
             {/* Status Filter Field (Figma Node: 44:44672) */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[14px] font-medium text-text-primary text-right">
+              <label className="text-[14px] leading-[22px] font-normal text-text-secondary text-right">
                 وضعیت
               </label>
               <div className="relative">
@@ -897,7 +897,7 @@ function SellerProducts() {
             </div>
 
             {/* Action Buttons (Figma Node: 44:44679) - اعمال فیلترها on RIGHT (x=120), پاک کردن on LEFT (x=0) */}
-            <div className="flex items-center gap-2.5 pt-1">
+            <div className="flex items-center gap-3">
               {/* اعمال فیلترها (Right in RTL) */}
               <button
                 type="button"
@@ -906,7 +906,7 @@ function SellerProducts() {
                   setSelectedStatus(tempStatus);
                   setIsFilterModalOpen(false);
                 }}
-                className="flex-1 h-12 bg-primary text-white rounded-xl text-[14px] font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center shadow-sm"
+                className="flex-1 h-12 bg-primary text-white rounded-lg text-[14px] font-normal hover:bg-primary/90 transition-colors flex items-center justify-center shadow-sm"
               >
                 اعمال فیلترها
               </button>
@@ -921,14 +921,14 @@ function SellerProducts() {
                   setSelectedStatus("همه");
                   setIsFilterModalOpen(false);
                 }}
-                className="w-[108px] h-12 border border-border-default rounded-xl bg-surface text-text-primary text-[14px] font-medium hover:bg-surface-subtle transition-colors flex items-center justify-center shrink-0"
+                className="w-[108px] h-12 border border-border-default rounded-lg bg-surface text-text-secondary text-[14px] font-normal hover:bg-surface-subtle transition-colors flex items-center justify-center shrink-0"
               >
                 پاک کردن
               </button>
             </div>
 
             {/* Safe area home indicator (Figma Node: 44:44684) */}
-            <div className="w-32 h-1 rounded-full bg-text-primary/20 mx-auto mt-2" />
+            <div className="w-[120px] h-1 rounded-full bg-text-primary mx-auto mt-2" />
           </div>
         </div>
       )}

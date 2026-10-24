@@ -80,7 +80,7 @@ const RECENT_ORDERS = [
 
 function SellerRecentOrders() {
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4 lg:gap-0 lg:bg-surface lg:rounded-xl lg:p-6 lg:border lg:border-border-subtle lg:shadow-card">
       {/* Header: Matches both Figma mobile (44:39482) and desktop */}
       <div className="flex items-center justify-between">
         <h2 className="text-body sm:text-h5 font-bold text-text-primary">
@@ -140,7 +140,7 @@ function SellerRecentOrders() {
       </div>
 
       {/* Desktop Responsive Table (Figma Node: 44:39024) */}
-      <div className="hidden lg:block bg-surface rounded-xl p-6 border border-border-subtle shadow-card">
+      <div className="hidden lg:block mt-6">
         <div className="overflow-x-auto">
           <div className="min-w-[900px]">
             {/* Table Header */}
@@ -154,13 +154,13 @@ function SellerRecentOrders() {
             </div>
 
             {/* Table Body with side line indicator */}
-            <div className="relative mt-1">
+            <div className="relative mt-6">
               {/* Left vertical timeline line matching Figma */}
               <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-50 rounded-full">
                 <div className="h-[94px] w-full bg-primary-400 rounded-full" />
               </div>
 
-              <div className="divide-y divide-border-subtle">
+              <div className="flex flex-col gap-4">
                 {RECENT_ORDERS.map((order, idx) => (
                   <div
                     key={`desktop-${order.id}-${idx}`}
