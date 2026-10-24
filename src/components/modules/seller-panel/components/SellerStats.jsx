@@ -13,7 +13,7 @@ const STATS_DATA = [
     value: "۴۸,۵۰۰,۰۰۰",
     unit: "تومان",
     desktopValue: "۴۸,۵۰۰,۰۰۰ تومان",
-    change: "+۱۸.۵%",
+    desktopNumber: "۱۸.۵",
     mobileChange: "۱۸.۵٪+ ↑",
     icon: CoinFrontSwapIcon,
     iconSize: 24,
@@ -24,7 +24,7 @@ const STATS_DATA = [
     id: "orders-count",
     title: "تعداد سفارشات",
     value: "۳۴ سفارش",
-    change: "+۱۲%",
+    desktopNumber: "۱۲",
     mobileChange: "۱۲٪+ ↑",
     icon: BasketShoppingIcon,
     iconSize: 20,
@@ -36,7 +36,7 @@ const STATS_DATA = [
     id: "active-products",
     title: "محصولات فعال",
     value: "۴۸ کالا",
-    change: "+۱۲%",
+    desktopNumber: "۱۲",
     mobileChange: "۱۲٪+ ↑",
     icon: BarcodeReadIcon,
     iconSize: 24,
@@ -48,7 +48,7 @@ const STATS_DATA = [
     id: "daily-views",
     title: "بازدید امروز",
     value: "۱,۲۴۰ بار",
-    change: "+۴.۲%",
+    desktopNumber: "۴.۲",
     mobileChange: "۴.۲٪+ ↑",
     icon: CursorClickIcon,
     iconSize: 24,
@@ -96,10 +96,10 @@ function SellerStats() {
             </span>
           </div>
 
-          {/* Bottom row: Growth badge (Arrow on right side of number in Figma) */}
+          {/* Bottom row: Growth badge (Arrow on right side of Persian number/percent in Figma) */}
           <div className="flex items-center justify-start">
             <div className="inline-flex items-center gap-1 text-[13px] font-medium text-success" dir="ltr">
-              <span>۱۸.۵%+</span>
+              <span>۱۸.۵٪+</span>
               <span className="text-[13px] leading-none">↑</span>
             </div>
           </div>
@@ -122,7 +122,7 @@ function SellerStats() {
             </div>
             <div className="flex items-center justify-start">
               <div className="inline-flex items-center gap-1 text-[12px] font-medium text-success" dir="ltr">
-                <span>۱۲%+</span>
+                <span>۱۲٪+</span>
                 <span className="text-[12px] leading-none">↑</span>
               </div>
             </div>
@@ -143,7 +143,7 @@ function SellerStats() {
             </div>
             <div className="flex items-center justify-start">
               <div className="inline-flex items-center gap-1 text-[12px] font-medium text-success" dir="ltr">
-                <span>۱۲%+</span>
+                <span>۱۲٪+</span>
                 <span className="text-[12px] leading-none">↑</span>
               </div>
             </div>
@@ -167,7 +167,7 @@ function SellerStats() {
           </div>
 
           <div className="inline-flex items-center gap-1 text-[13px] font-medium text-success" dir="ltr">
-            <span>۴.۲%+</span>
+            <span>۴.۲٪+</span>
             <span className="text-[13px] leading-none">↑</span>
           </div>
         </div>
@@ -195,13 +195,15 @@ function SellerStats() {
                 </div>
               </div>
 
-              {/* Bottom row: Value and Growth Percentage */}
+              {/* Bottom row: Value and Growth Percentage (+ on left, number in middle, % on right in Figma) */}
               <div className="flex items-baseline justify-between">
                 <span className="text-h5 font-semibold text-text-primary">
                   {item.desktopValue || item.value}
                 </span>
-                <span className="text-small font-medium text-success" dir="ltr">
-                  {item.change}
+                <span className="text-small font-medium text-success inline-flex items-center gap-0.5" dir="ltr">
+                  <span>+</span>
+                  <span>{item.desktopNumber}</span>
+                  <span>%</span>
                 </span>
               </div>
             </div>

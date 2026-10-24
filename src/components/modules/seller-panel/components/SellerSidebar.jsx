@@ -110,10 +110,10 @@ function SellerSidebar() {
 
         {/* Left side in RTL: Messages button & Seller Avatar */}
         <div className="flex items-center gap-2">
-          {/* Messages icon button with unread count badge "۳" */}
+          {/* Messages icon button with unread count badge "۳" (Figma 44:39309, radius 12px) */}
           <Link
             href="/seller/messages"
-            className="relative w-11 h-11 rounded-xl flex items-center justify-center text-text-primary hover:bg-surface-subtle transition-colors"
+            className="relative w-11 h-11 rounded-lg flex items-center justify-center text-text-primary hover:bg-surface-subtle transition-colors"
             aria-label="پیام‌ها"
           >
             <MessageTextIcon size={24} className="text-[#4a4a68]" />
@@ -122,10 +122,10 @@ function SellerSidebar() {
             </span>
           </Link>
 
-          {/* Seller Avatar */}
+          {/* Seller Avatar (Figma 44:39310, radius 12px) */}
           <Link
             href="/seller/profile"
-            className="relative w-11 h-11 rounded-xl overflow-hidden shrink-0 border border-border-subtle inline-block"
+            className="relative w-11 h-11 rounded-lg overflow-hidden shrink-0 border border-border-subtle inline-block"
             aria-label="پروفایل فروشنده"
           >
             <Image
@@ -179,9 +179,9 @@ function SellerSidebar() {
           </button>
         </div>
 
-        {/* User Profile Block */}
+        {/* User Profile Block (Figma 44:39265: radius 8px) */}
         <div className="flex items-center gap-3 mt-10 mb-8">
-          <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-border-subtle">
+          <div className="relative w-12 h-12 rounded-md overflow-hidden shrink-0 border border-border-subtle">
             <Image
               src="/assets/images/seller/avatar.png"
               alt="آرمان میمندی نژاد"

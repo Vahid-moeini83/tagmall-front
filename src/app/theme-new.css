@@ -175,10 +175,10 @@
      11. Background Patterns (Seller Panel & Subdued Textures)
      ------------------------------------------------------------------------ */
   --background-image-pattern-diagonal: repeating-linear-gradient(
-    45deg,
+    135deg,
     transparent,
-    transparent 6px,
-    rgba(26, 26, 46, 0.04) 6px,
+    transparent 5px,
+    rgba(26, 26, 46, 0.04) 5px,
     rgba(26, 26, 46, 0.04) 7px
   );
 }
@@ -188,10 +188,10 @@
    ========================================================================== */
 @utility bg-pattern-diagonal {
   background-image: repeating-linear-gradient(
-    45deg,
+    135deg,
     transparent,
-    transparent 6px,
-    rgba(26, 26, 46, 0.04) 6px,
+    transparent 5px,
+    rgba(26, 26, 46, 0.04) 5px,
     rgba(26, 26, 46, 0.04) 7px
   );
 }

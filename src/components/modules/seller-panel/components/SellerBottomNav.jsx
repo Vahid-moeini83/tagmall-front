@@ -69,7 +69,7 @@ function SellerBottomNav() {
               }`}
             >
               <div
-                className={`w-12 h-7 rounded-lg flex items-center justify-center transition-colors ${
+                className={`w-14 h-8 rounded-lg flex items-center justify-center transition-colors ${
                   isActive ? "bg-primary-50 text-primary" : "text-text-muted"
                 }`}
               >
@@ -96,7 +96,7 @@ function SellerBottomNav() {
           aria-label="نمایش منوی کامل"
         >
           <div
-            className={`w-12 h-7 rounded-lg flex items-center justify-center transition-colors ${
+            className={`w-14 h-8 rounded-lg flex items-center justify-center transition-colors ${
               mobileSidebarOpen ? "bg-primary-50 text-primary" : "text-text-muted"
             }`}
           >
