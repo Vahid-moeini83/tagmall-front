@@ -11,7 +11,6 @@ import {
 } from "@/icons";
 import { useSellerNavigation } from "../context/SellerNavigationContext";
 
-
 /**
  * Mobile Bottom Navigation destinations matching Figma PWA design
  */
@@ -39,9 +38,9 @@ const BOTTOM_NAV_ITEMS = [
     label: "پیام‌ها",
     href: "/seller/messages",
     icon: MessageTextIcon,
+    badge: "۳",
   },
 ];
-
 
 function SellerBottomNav() {
   const pathname = usePathname();
@@ -65,19 +64,28 @@ function SellerBottomNav() {
               key={item.id}
               href={item.href}
               className={`flex flex-col items-center justify-center gap-1 w-16 h-full transition-colors select-none ${
-                isActive ? "text-primary" : "text-text-muted hover:text-text-secondary"
+                isActive
+                  ? "text-primary"
+                  : "text-text-muted hover:text-text-secondary"
               }`}
             >
               <div
-                className={`w-14 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                className={`relative w-12 h-7 rounded-lg flex items-center justify-center transition-colors ${
                   isActive ? "bg-primary-50 text-primary" : "text-text-muted"
                 }`}
               >
                 <Icon size={20} />
+                {item.badge && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-error text-white text-[10px] font-bold flex items-center justify-center pointer-events-none">
+                    {item.badge}
+                  </span>
+                )}
               </div>
               <span
                 className={`text-[11px] leading-tight ${
-                  isActive ? "font-semibold text-primary" : "font-normal text-text-muted"
+                  isActive
+                    ? "font-semibold text-primary"
+                    : "font-normal text-text-muted"
                 }`}
               >
                 {item.label}
@@ -91,20 +99,26 @@ function SellerBottomNav() {
           type="button"
           onClick={toggleMobileSidebar}
           className={`flex flex-col items-center justify-center gap-1 w-16 h-full transition-colors select-none ${
-            mobileSidebarOpen ? "text-primary" : "text-text-muted hover:text-text-secondary"
+            mobileSidebarOpen
+              ? "text-primary"
+              : "text-text-muted hover:text-text-secondary"
           }`}
           aria-label="نمایش منوی کامل"
         >
           <div
-            className={`w-14 h-8 rounded-lg flex items-center justify-center transition-colors ${
-              mobileSidebarOpen ? "bg-primary-50 text-primary" : "text-text-muted"
+            className={`w-12 h-7 rounded-lg flex items-center justify-center transition-colors ${
+              mobileSidebarOpen
+                ? "bg-primary-50 text-primary"
+                : "text-text-muted"
             }`}
           >
             <MenuBarsIcon size={20} />
           </div>
           <span
             className={`text-[11px] leading-tight ${
-              mobileSidebarOpen ? "font-semibold text-primary" : "font-normal text-text-muted"
+              mobileSidebarOpen
+                ? "font-semibold text-primary"
+                : "font-normal text-text-muted"
             }`}
           >
             بیشتر

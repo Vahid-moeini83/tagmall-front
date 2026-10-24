@@ -5,7 +5,6 @@ import {
   CursorClickIcon,
 } from "@/icons";
 
-
 const STATS_DATA = [
   {
     id: "total-sales",
@@ -13,7 +12,7 @@ const STATS_DATA = [
     value: "۴۸,۵۰۰,۰۰۰",
     unit: "تومان",
     desktopValue: "۴۸,۵۰۰,۰۰۰ تومان",
-    desktopNumber: "۱۸.۵",
+    change: "+۱۸.۵%",
     mobileChange: "۱۸.۵٪+ ↑",
     icon: CoinFrontSwapIcon,
     iconSize: 24,
@@ -24,7 +23,7 @@ const STATS_DATA = [
     id: "orders-count",
     title: "تعداد سفارشات",
     value: "۳۴ سفارش",
-    desktopNumber: "۱۲",
+    change: "+۱۲%",
     mobileChange: "۱۲٪+ ↑",
     icon: BasketShoppingIcon,
     iconSize: 20,
@@ -36,7 +35,7 @@ const STATS_DATA = [
     id: "active-products",
     title: "محصولات فعال",
     value: "۴۸ کالا",
-    desktopNumber: "۱۲",
+    change: "+۱۲%",
     mobileChange: "۱۲٪+ ↑",
     icon: BarcodeReadIcon,
     iconSize: 24,
@@ -48,7 +47,7 @@ const STATS_DATA = [
     id: "daily-views",
     title: "بازدید امروز",
     value: "۱,۲۴۰ بار",
-    desktopNumber: "۴.۲",
+    change: "+۴.۲%",
     mobileChange: "۴.۲٪+ ↑",
     icon: CursorClickIcon,
     iconSize: 24,
@@ -57,7 +56,6 @@ const STATS_DATA = [
     iconBg: "bg-secondary-50",
   },
 ];
-
 
 function SellerStats() {
   const salesItem = STATS_DATA[0];
@@ -81,7 +79,9 @@ function SellerStats() {
             <span className="text-small text-text-secondary font-normal">
               {salesItem.title}
             </span>
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${salesItem.iconBg} ${salesItem.iconColor}`}>
+            <div
+              className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${salesItem.iconBg} ${salesItem.iconColor}`}
+            >
               <SalesIcon size={salesItem.iconSize} />
             </div>
           </div>
@@ -96,10 +96,13 @@ function SellerStats() {
             </span>
           </div>
 
-          {/* Bottom row: Growth badge (Arrow on right side of Persian number/percent in Figma) */}
+          {/* Bottom row: Growth badge (Arrow on right side of number in Figma) */}
           <div className="flex items-center justify-start">
-            <div className="inline-flex items-center gap-1 text-[13px] font-medium text-success" dir="ltr">
-              <span>۱۸.۵٪+</span>
+            <div
+              className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
+              dir="ltr"
+            >
+              <span>۱۸.۵%+</span>
               <span className="text-[13px] leading-none">↑</span>
             </div>
           </div>
@@ -113,7 +116,9 @@ function SellerStats() {
               <span className="text-[12px] text-text-secondary font-normal">
                 {ordersItem.title}
               </span>
-              <div className={`w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 ${ordersItem.iconBg} ${ordersItem.iconColor}`}>
+              <div
+                className={`w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 ${ordersItem.iconBg} ${ordersItem.iconColor}`}
+              >
                 <OrdersIcon size={ordersItem.mobileIconSize} />
               </div>
             </div>
@@ -121,8 +126,11 @@ function SellerStats() {
               {ordersItem.value}
             </div>
             <div className="flex items-center justify-start">
-              <div className="inline-flex items-center gap-1 text-[12px] font-medium text-success" dir="ltr">
-                <span>۱۲٪+</span>
+              <div
+                className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
+                dir="ltr"
+              >
+                <span>۱۲%+</span>
                 <span className="text-[12px] leading-none">↑</span>
               </div>
             </div>
@@ -134,7 +142,9 @@ function SellerStats() {
               <span className="text-[12px] text-text-secondary font-normal">
                 {productsItem.title}
               </span>
-              <div className={`w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 ${productsItem.iconBg} ${productsItem.iconColor}`}>
+              <div
+                className={`w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0 ${productsItem.iconBg} ${productsItem.iconColor}`}
+              >
                 <ProductsIcon size={productsItem.mobileIconSize} />
               </div>
             </div>
@@ -142,8 +152,11 @@ function SellerStats() {
               {productsItem.value}
             </div>
             <div className="flex items-center justify-start">
-              <div className="inline-flex items-center gap-1 text-[12px] font-medium text-success" dir="ltr">
-                <span>۱۲٪+</span>
+              <div
+                className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
+                dir="ltr"
+              >
+                <span>۱۲%+</span>
                 <span className="text-[12px] leading-none">↑</span>
               </div>
             </div>
@@ -153,7 +166,9 @@ function SellerStats() {
         {/* Card 4: Daily views horizontal bar (Height: 70px, Radius: 16px) */}
         <div className="bg-surface rounded-xl px-4 py-3 flex items-center justify-between h-[70px] border border-border-subtle shadow-card">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${viewsItem.iconBg} ${viewsItem.iconColor}`}>
+            <div
+              className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${viewsItem.iconBg} ${viewsItem.iconColor}`}
+            >
               <ViewsIcon size={viewsItem.mobileIconSize} />
             </div>
             <div className="flex flex-col">
@@ -166,8 +181,11 @@ function SellerStats() {
             </div>
           </div>
 
-          <div className="inline-flex items-center gap-1 text-[13px] font-medium text-success" dir="ltr">
-            <span>۴.۲٪+</span>
+          <div
+            className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
+            dir="ltr"
+          >
+            <span>۴.۲%+</span>
             <span className="text-[13px] leading-none">↑</span>
           </div>
         </div>
@@ -195,15 +213,13 @@ function SellerStats() {
                 </div>
               </div>
 
-              {/* Bottom row: Value and Growth Percentage (+ on left, number in middle, % on right in Figma) */}
+              {/* Bottom row: Value and Growth Percentage */}
               <div className="flex items-baseline justify-between">
                 <span className="text-h5 font-semibold text-text-primary">
                   {item.desktopValue || item.value}
                 </span>
-                <span className="text-small font-medium text-success inline-flex items-center gap-0.5" dir="ltr">
-                  <span>+</span>
-                  <span>{item.desktopNumber}</span>
-                  <span>%</span>
+                <span className="text-small font-medium text-success" dir="ltr">
+                  {item.change}
                 </span>
               </div>
             </div>

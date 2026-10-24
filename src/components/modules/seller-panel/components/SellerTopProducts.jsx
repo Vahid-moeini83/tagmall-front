@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-
 const TOP_PRODUCTS = [
   {
     id: 1,
@@ -32,10 +31,9 @@ const TOP_PRODUCTS = [
   },
 ];
 
-
 function SellerTopProducts() {
   return (
-    <div className="bg-surface rounded-xl lg:rounded-[20px] p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 h-auto min-h-[374px] lg:h-[397px] border border-border-subtle shadow-card">
+    <div className="bg-surface rounded-xl p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 h-auto min-h-[374px] lg:h-[397px] border border-border-subtle shadow-card">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
         <h2 className="text-body font-bold text-text-primary">
