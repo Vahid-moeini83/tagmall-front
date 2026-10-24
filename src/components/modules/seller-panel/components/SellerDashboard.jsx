@@ -7,7 +7,7 @@ import SellerRecentOrders from "./SellerRecentOrders";
 
 function SellerDashboard() {
   return (
-    <div className="flex-1 w-full max-w-[1140px] mx-auto p-4 sm:p-6 lg:p-10 flex flex-col gap-6">
+    <div className="flex-1 w-full max-w-[1140px] mx-auto p-4 sm:p-6 lg:p-10 pb-28 lg:pb-10 flex flex-col gap-5 lg:gap-6">
       {/* 1. Header (Panel Title and Current Date/Time) */}
       <SellerHeader />
 
