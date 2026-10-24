@@ -258,7 +258,7 @@ function SellerProducts() {
       {/* 2. Filters & Search Bar */}
       {/* Desktop Filter Bar (Figma Node: 44:44046) */}
       <div className="hidden lg:flex bg-surface rounded-2xl p-4 border border-border-subtle shadow-card items-center justify-between gap-3">
-        {/* Right side in RTL: Search Input */}
+        {/* Right side in RTL: Search Input (Figma Node: 44:44052 x=636) */}
         <div className="relative w-[420px]">
           <input
             type="text"
@@ -269,7 +269,7 @@ function SellerProducts() {
           />
         </div>
 
-        {/* Left side in RTL: 3 Filter Dropdowns */}
+        {/* Left side in RTL: 3 Filter Dropdowns (Figma Nodes: 44:44048, 44:44050, 44:44051) */}
         <div className="flex items-center gap-3">
           {/* Dropdown 1: Sort */}
           <div className="relative">
@@ -425,23 +425,10 @@ function SellerProducts() {
           گروه کالایی، برند ها، محصولات، شناسه محصولات
         </p>
 
-        {/* Row 3: Filter tools buttons */}
+        {/* Row 3: Filter tools buttons matching Figma exact coordinates (44:45038 x=0, 44:45039 x=234) */}
+        {/* In Figma: Filters button (purple) is on the RIGHT (x=234), Sort dropdown is on the LEFT (x=0) */}
         <div className="flex items-center gap-2 pt-1">
-          {/* Dropdown button: تهران */}
-          <button
-            type="button"
-            onClick={() => {
-              setTempCategory(selectedCategory === "همه" ? "موبایل" : selectedCategory);
-              setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
-              setIsFilterModalOpen(true);
-            }}
-            className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[13px] bg-surface hover:border-primary/40 transition-colors"
-          >
-            <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
-            <span>تهران</span>
-          </button>
-
-          {/* Filter button opens Bottom Sheet (Figma Node: 44:44570 -> 44:44659) */}
+          {/* 1. Filter button on the RIGHT in RTL (Figma Node: 44:45039) */}
           <button
             type="button"
             onClick={() => {
@@ -451,8 +438,22 @@ function SellerProducts() {
             }}
             className="w-[105px] h-11 bg-primary/10 border border-primary/20 rounded-xl px-3 flex items-center justify-center gap-1.5 text-primary text-[13px] font-semibold hover:bg-primary/20 transition-colors shrink-0"
           >
-            <SlidersHorizontal size={16} />
             <span>فیلترها</span>
+            <SlidersHorizontal size={16} />
+          </button>
+
+          {/* 2. Dropdown button on the LEFT in RTL (Figma Node: 44:45038) */}
+          <button
+            type="button"
+            onClick={() => {
+              setTempCategory(selectedCategory === "همه" ? "موبایل" : selectedCategory);
+              setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
+              setIsFilterModalOpen(true);
+            }}
+            className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[13px] bg-surface hover:border-primary/40 transition-colors"
+          >
+            <span>تهران</span>
+            <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
           </button>
         </div>
       </div>
@@ -471,8 +472,18 @@ function SellerProducts() {
             key={`mobile-${product.id}`}
             className="bg-surface rounded-2xl p-4 border border-border-subtle shadow-card flex flex-col gap-3.5"
           >
-            {/* Row 1: Title & SKU on right, Image on left */}
-            <div className="flex items-start justify-between gap-3">
+            {/* Row 1: Image on RIGHT (Figma: x=266), Title & SKU on LEFT (Figma: x=0) */}
+            <div className="flex items-start gap-3">
+              <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-surface border border-border-subtle shadow-xs">
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </div>
+
               <div className="flex-1 min-w-0 flex flex-col gap-1 text-right">
                 <h3 className="text-[14px] font-bold text-text-primary line-clamp-2 leading-snug">
                   {product.title}
@@ -481,35 +492,38 @@ function SellerProducts() {
                   {product.code}
                 </span>
               </div>
-
-              <div className="relative w-[68px] h-[68px] rounded-xl overflow-hidden shrink-0 bg-surface border border-border-subtle shadow-xs">
-                <Image
-                  src={product.image}
-                  alt={product.title}
-                  fill
-                  sizes="68px"
-                  className="object-cover"
-                />
-              </div>
             </div>
 
-            {/* Row 2: Status Badge on right, Category on left */}
+            {/* Row 2: Category on RIGHT (Figma: x=260), Status Badge on LEFT (Figma: x=0) */}
             <div className="flex items-center justify-between">
+              <span className="text-[13px] text-text-muted">
+                {product.category}
+              </span>
+
               <span
                 className={`h-7 px-3.5 rounded-lg text-[12px] font-medium flex items-center justify-center ${product.status.bg} ${product.status.color}`}
               >
                 {product.status.label}
               </span>
-
-              <span className="text-[13px] text-text-muted">
-                {product.category}
-              </span>
             </div>
 
-            {/* Row 3: Price & Stock Grey Box */}
+            {/* Row 3: Price range on RIGHT (Figma: x=107), Stock on LEFT (Figma: x=10) */}
             <div className="bg-surface-subtle rounded-xl p-3 flex items-center justify-between text-right">
-              {/* Stock on right */}
-              <div className="flex flex-col gap-0.5 min-w-[70px]">
+              {/* Price range on RIGHT */}
+              <div className="flex flex-col gap-0.5 text-right">
+                <span className="text-[11px] text-text-muted">
+                  بازه قیمتی (تومان)
+                </span>
+                <div className="text-[12px] font-semibold text-text-primary leading-tight flex flex-col items-start">
+                  <span>{product.priceFrom}</span>
+                  <span>{product.priceTo}</span>
+                </div>
+              </div>
+
+              <div className="w-px h-9 bg-border-default/60 mx-3" />
+
+              {/* Stock on LEFT */}
+              <div className="flex flex-col gap-0.5 min-w-[70px] text-left">
                 <span className="text-[11px] text-text-muted">
                   موجودی
                 </span>
@@ -521,31 +535,20 @@ function SellerProducts() {
                   {product.stock}
                 </span>
               </div>
-
-              <div className="w-px h-9 bg-border-default/60 mx-3" />
-
-              {/* Price range on left */}
-              <div className="flex flex-col gap-0.5 text-left">
-                <span className="text-[11px] text-text-muted text-right">
-                  بازه قیمتی (تومان)
-                </span>
-                <div className="text-[12px] font-semibold text-text-primary leading-tight flex flex-col items-end">
-                  <span>{product.priceFrom}</span>
-                  <span>{product.priceTo}</span>
-                </div>
-              </div>
             </div>
 
-            {/* Row 4: Actions (Visit, Messages, Edit button) */}
+            {/* Row 4: Actions (Edit on RIGHT (Figma x=225), Messages in MIDDLE (Figma x=113), Views on LEFT (Figma x=0)) */}
             <div className="flex items-center justify-between pt-2 border-t border-border-subtle/70">
+              {/* 1. Edit button on RIGHT in RTL */}
               <button
                 type="button"
-                className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-medium"
+                className="h-9 px-4 rounded-xl bg-primary/10 text-primary text-[12px] font-semibold flex items-center gap-1.5 hover:bg-primary/20 transition-colors"
               >
-                <CursorClickIcon size={18} />
-                <span>بازدید</span>
+                <EditIcon size={16} />
+                <span>ویرایش</span>
               </button>
 
+              {/* 2. Messages in MIDDLE */}
               <button
                 type="button"
                 className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-medium"
@@ -554,12 +557,13 @@ function SellerProducts() {
                 <span>پیام‌ها</span>
               </button>
 
+              {/* 3. Views on LEFT */}
               <button
                 type="button"
-                className="h-9 px-4 rounded-xl bg-primary/10 text-primary text-[12px] font-semibold flex items-center gap-1.5 hover:bg-primary/20 transition-colors"
+                className="flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-medium"
               >
-                <EditIcon size={16} />
-                <span>ویرایش</span>
+                <CursorClickIcon size={18} />
+                <span>بازدید</span>
               </button>
             </div>
           </div>
@@ -647,14 +651,14 @@ function SellerProducts() {
                 </span>
               </div>
 
-              {/* Operations (3 icons: pen-line, messages-text, cursor-click) */}
+              {/* Operations (3 icons matching Figma: cursor-click on RIGHT (x=88), messages-text in MIDDLE (x=44), pen-line on LEFT (x=0)) */}
               <div className="flex items-center justify-center gap-3 text-text-muted">
                 <button
                   type="button"
-                  title="ویرایش محصول"
+                  title="آمار بازدید"
                   className="hover:text-primary transition-colors p-1"
                 >
-                  <EditIcon size={18} />
+                  <CursorClickIcon size={18} />
                 </button>
                 <button
                   type="button"
@@ -665,10 +669,10 @@ function SellerProducts() {
                 </button>
                 <button
                   type="button"
-                  title="آمار بازدید"
+                  title="ویرایش محصول"
                   className="hover:text-primary transition-colors p-1"
                 >
-                  <CursorClickIcon size={18} />
+                  <EditIcon size={18} />
                 </button>
               </div>
             </div>
@@ -751,7 +755,7 @@ function SellerProducts() {
             {/* Drag Handle (Figma Node: 44:44660) */}
             <div className="w-10 h-1 rounded-full bg-border-default mx-auto -mt-1 mb-1" />
 
-            {/* Header (Figma Node: 44:44662) */}
+            {/* Header (Figma Node: 44:44662) - Title on RIGHT, Close button on LEFT */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col text-right">
                 <h3 className="text-[20px] font-bold text-text-primary">
@@ -884,15 +888,15 @@ function SellerProducts() {
               </div>
             </div>
 
-            {/* Info Alert (Figma Node: 44:44675) */}
-            <div className="bg-surface-subtle rounded-xl p-3 flex items-center justify-between gap-2 border border-border-subtle/80">
+            {/* Info Alert (Figma Node: 44:44675) - Info icon on RIGHT (x=320), Text on LEFT (x=12) */}
+            <div className="bg-surface-subtle rounded-xl p-3 flex items-center gap-2.5 border border-border-subtle/80 text-right">
+              <Info size={18} className="text-[#3d3183] shrink-0" />
               <span className="text-[12px] text-text-muted">
                 برای دیدن همه کالاها، فیلترها را پاک کنید.
               </span>
-              <Info size={18} className="text-[#3d3183] shrink-0" />
             </div>
 
-            {/* Action Buttons (Figma Node: 44:44679) */}
+            {/* Action Buttons (Figma Node: 44:44679) - اعمال فیلترها on RIGHT (x=120), پاک کردن on LEFT (x=0) */}
             <div className="flex items-center gap-2.5 pt-1">
               {/* اعمال فیلترها (Right in RTL) */}
               <button
