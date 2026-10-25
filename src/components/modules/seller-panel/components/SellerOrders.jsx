@@ -101,14 +101,14 @@ function SellerOrders() {
       </section>
 
       <div className="flex flex-col gap-6">
-        <section aria-label="جستجو و فیلتر سفارش‌ها" dir="ltr" className="mx-auto flex w-full flex-col gap-3 rounded-xl bg-surface p-4 lg:h-[72px] lg:max-w-[1028px] lg:flex-row lg:items-center lg:gap-3 lg:rounded-none lg:bg-transparent lg:p-0">
+        <section aria-label="جستجو و فیلتر سفارش‌ها" dir="ltr" className="mx-auto flex w-full flex-col gap-3 rounded-xl bg-surface p-4 lg:h-[72px] lg:max-w-[1060px] lg:flex-row lg:items-center lg:gap-3 lg:rounded-2xl lg:bg-surface lg:p-4">
           <button type="button" dir="ltr" className="flex h-10 shrink-0 items-center justify-between rounded-[15px] border border-border-default bg-surface px-4 text-small text-text-primary lg:w-[280px]">
             <ChevronDownIcon size={20} className="text-text-secondary" />
-            <span dir="rtl" className="flex-1 text-right">فیلترهای پیشرفته</span>
+            <span dir="rtl" className="flex-1 text-right">تهران</span>
           </button>
           <button type="button" dir="ltr" className="flex h-10 shrink-0 items-center justify-between rounded-[15px] border border-border-default bg-surface px-4 text-small text-text-primary lg:w-[280px]">
             <ChevronDownIcon size={20} className="text-text-secondary" />
-            <span dir="rtl" className="flex-1 text-right">مرتب‌سازی: جدیدترین</span>
+            <span dir="rtl" className="flex-1 text-right">تهران</span>
           </button>
           <label dir="rtl" className="flex h-10 min-w-0 flex-1 items-center gap-3 rounded-xl bg-surface-muted px-4 text-text-muted lg:w-[444px] lg:flex-none">
             <SearchIcon size={20} className="shrink-0" />
