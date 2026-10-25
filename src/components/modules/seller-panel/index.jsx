@@ -14,6 +14,7 @@ export { default as SellerProductDetail } from "./components/SellerProductDetail
 export { default as SellerProductCreate } from "./components/SellerProductCreate";
 export { default as SellerProfile } from "./components/SellerProfile";
 export { default as SellerFinancialReport } from "./components/SellerFinancialReport";
+export { default as SellerWallet } from "./components/SellerWallet";
 export {
   SellerNavigationProvider,
   useSellerNavigation,

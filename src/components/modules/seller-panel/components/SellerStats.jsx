@@ -4,6 +4,7 @@ import {
   BarcodeReadIcon,
   CursorClickIcon,
   BoxUserIcon,
+  ReceiptIcon,
 } from "@/icons";
 
 const STATS_DATA = [
@@ -90,6 +91,55 @@ const FINANCIAL_STATS = [
 ];
 
 function SellerStats({ variant = "default" }) {
+  if (variant === "wallet") {
+    const metrics = [
+      {
+        title: "نرخ هر کلیک معتبر",
+        value: "۵۰۰",
+        unit: "تومان",
+        icon: CursorClickIcon,
+      },
+      {
+        title: "هزینهٔ کلیک‌ها",
+        value: "۱٬۵۰۰٬۰۰۰",
+        unit: "تومان",
+        icon: ReceiptIcon,
+      },
+      {
+        title: "تعداد کلیک معتبر",
+        value: "۳٬۰۰۰",
+        unit: "کلیک",
+        icon: CursorClickIcon,
+      },
+    ];
+    return (
+      <div
+        className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-4"
+        dir="ltr"
+      >
+        {metrics.map(({ title, value, unit, icon: Icon }) => (
+          <article
+            key={title}
+            className="flex h-[114px] min-w-0 flex-col gap-3 rounded-xl bg-surface p-5"
+            dir="rtl"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-[13px] leading-[21px] text-text-muted">
+                {title}
+              </h3>
+              <Icon size={20} className="text-primary" />
+            </div>
+            <p className="flex items-baseline gap-2">
+              <span className="text-[25px] font-normal leading-[41px]">
+                {value}
+              </span>
+              <span className="text-[13px] text-text-muted">{unit}</span>
+            </p>
+          </article>
+        ))}
+      </div>
+    );
+  }
   if (variant === "financial") {
     return (
       <section

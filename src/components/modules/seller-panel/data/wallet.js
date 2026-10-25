@@ -1,0 +1,72 @@
+// Reference-only data from the seller wallet frame 44:42110.
+export const WALLET_TRANSACTIONS = [
+  {
+    id: "WL-10586",
+    day: 30,
+    time: "۱۱:۴۵",
+    type: "click",
+    status: "deducted",
+    amount: -750000,
+    balance: 2500000,
+    detail: "۱٬۵۰۰ کلیک × ۵۰۰ تومان",
+  },
+  {
+    id: "WL-10521",
+    day: 29,
+    time: "۱۴:۲۰",
+    type: "charge",
+    status: "success",
+    amount: 1000000,
+    balance: 3250000,
+    detail: "پرداخت اینترنتی",
+  },
+  {
+    id: "WL-10480",
+    day: 28,
+    time: "۱۸:۳۰",
+    type: "click",
+    status: "deducted",
+    amount: -450000,
+    balance: 2250000,
+    detail: "۹۰۰ کلیک × ۵۰۰ تومان",
+  },
+  {
+    id: "WL-10412",
+    day: 27,
+    time: "۱۰:۰۵",
+    type: "charge",
+    status: "failed",
+    amount: 500000,
+    balance: 2700000,
+    detail: "بدون تغییر در موجودی",
+  },
+  {
+    id: "WL-10395",
+    day: 26,
+    time: "۱۶:۱۰",
+    type: "click",
+    status: "deducted",
+    amount: -300000,
+    balance: 2700000,
+    detail: "۶۰۰ کلیک × ۵۰۰ تومان",
+  },
+  {
+    id: "WL-10264",
+    day: 24,
+    time: "۰۹:۱۵",
+    type: "charge",
+    status: "success",
+    amount: 2000000,
+    balance: 3000000,
+    detail: "پرداخت اینترنتی",
+  },
+];
+
+export const WALLET_STATUS = {
+  deducted: { label: "کسر شده", className: "bg-primary-50 text-primary" },
+  success: {
+    label: "پرداخت موفق",
+    className: "bg-success-strong/10 text-success-strong",
+  },
+  failed: { label: "ناموفق", className: "bg-error/10 text-error" },
+};

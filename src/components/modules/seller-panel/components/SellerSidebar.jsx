@@ -93,6 +93,7 @@ const MENU_ITEMS = [
 const PROFILE_SECTIONS = [
   { id: "details", label: "مشخصات", href: "/seller/profile" },
   { id: "financial", label: "گزارش مالی", href: "/seller/profile#financial" },
+  { id: "wallet", label: "کیف پول اعتباری", href: "/seller/profile#wallet" },
   { id: "sessions", label: "نشست های فعال", href: "/seller/profile#sessions" },
   { id: "settings", label: "تنظیمات", href: "/seller/profile#settings" },
 ];
@@ -172,7 +173,7 @@ function SellerSidebar() {
         className={`
           fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-surface border-l border-border-subtle
           flex flex-col p-8 transition-transform duration-300 ease-in-out
-          lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 lg:min-h-screen
+          lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 ${isSellerProfile ? "lg:h-[1032px] lg:min-h-0 lg:self-start" : "lg:min-h-screen"}
           ${isMessageCenter ? "font-extralight lg:h-dvh lg:min-h-0 lg:border-l-0 lg:ring-1 lg:ring-inset lg:ring-border-default" : ""}
           ${mobileSidebarOpen ? "translate-x-0 shadow-modal" : "translate-x-full lg:translate-x-0"}
         `}
@@ -206,10 +207,10 @@ function SellerSidebar() {
 
         {/* User Profile Block */}
         <div
-          className={`flex items-center gap-3 mt-10 ${isMessageCenter ? "mb-10" : "mb-8"}`}
+          className={`flex items-center gap-3 mt-10 ${isMessageCenter || isSellerProfile ? "mb-10" : "mb-8"}`}
         >
           <div
-            className={`relative w-12 h-12 overflow-hidden shrink-0 border border-border-subtle ${isMessageCenter ? "rounded-md" : "rounded-full"}`}
+            className={`relative w-12 h-12 overflow-hidden shrink-0 border border-border-subtle ${isMessageCenter || isSellerProfile ? "rounded-md" : "rounded-full"}`}
           >
             <Image
               src="/assets/images/seller/avatar.png"
@@ -221,7 +222,7 @@ function SellerSidebar() {
           </div>
           <div className="truncate">
             <p
-              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : "font-semibold"}`}
+              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : isSellerProfile ? "font-normal" : "font-semibold"}`}
             >
               آرمان میمندی نژاد
             </p>
@@ -262,7 +263,7 @@ function SellerSidebar() {
                   relative h-[50px] px-4 rounded-md flex items-center justify-between transition-colors ${isMessageCenter ? "shrink-0" : ""}
                   ${
                     isActive
-                      ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : "font-medium"}`
+                      ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : isSellerProfile ? "font-normal" : "font-medium"}`
                       : "text-text-primary hover:bg-surface-subtle"
                   }
                 `}
@@ -277,7 +278,11 @@ function SellerSidebar() {
                     <Icon size={item.iconSize} />
                   </span>
                   <span
-                    className={isMessageCenter ? "text-body" : "text-[15px]"}
+                    className={
+                      isMessageCenter || isSellerProfile
+                        ? "text-body"
+                        : "text-[15px]"
+                    }
                   >
                     {item.label}
                   </span>
@@ -285,7 +290,7 @@ function SellerSidebar() {
 
                 {item.badge && (
                   <span
-                    className={`w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium ${isMessageCenter ? "absolute right-2 top-1.5" : ""}`}
+                    className={`w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium ${isMessageCenter || isSellerProfile ? "absolute right-2 top-1.5" : ""}`}
                   >
                     {item.badge}
                   </span>
@@ -299,7 +304,7 @@ function SellerSidebar() {
                   {navigationItem}
                   <nav
                     aria-label="بخش‌های پروفایل فروشنده"
-                    className="mr-6 flex flex-col border-r-2 border-text-secondary py-1 pr-3"
+                    className="relative mr-6 mt-2 flex h-[168px] flex-col pt-[3px] before:absolute before:right-0 before:top-0 before:h-[160px] before:w-[2px] before:bg-navigation-connector"
                   >
                     {PROFILE_SECTIONS.map((section) => (
                       <Link
@@ -312,7 +317,7 @@ function SellerSidebar() {
                         aria-current={
                           section.id === profileSection ? "page" : undefined
                         }
-                        className={`flex h-[29px] items-center text-small hover:text-primary ${section.id === profileSection ? "text-primary" : "text-text-secondary"}`}
+                        className={`relative flex h-[35px] shrink-0 items-center pr-[25px] text-small hover:text-primary focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-primary after:absolute after:right-0 after:top-0 after:h-[18px] after:w-[14px] after:rounded-br-lg after:border-b-2 after:border-r-2 after:border-navigation-connector ${section.id === profileSection ? "text-primary/80" : "text-text-secondary"}`}
                       >
                         {section.label}
                       </Link>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import SellerFinancialReport from "./SellerFinancialReport";
+import SellerWallet from "./SellerWallet";
 import useSellerProfileSection from "../hooks/useSellerProfileSection";
 import { Input } from "@/components/ui/input";
 import {
@@ -309,6 +310,7 @@ export default function SellerProfile() {
   };
 
   if (section === "financial") return <SellerFinancialReport />;
+  if (section === "wallet") return <SellerWallet />;
 
   return (
     <main className="mx-auto w-full max-w-[1140px] px-4 pb-10 pt-8 lg:px-10 lg:pt-10">
