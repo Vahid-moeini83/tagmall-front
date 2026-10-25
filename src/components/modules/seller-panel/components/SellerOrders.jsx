@@ -122,30 +122,30 @@ function SellerOrders() {
           </label>
         </section>
 
-        <section aria-label="فهرست سفارش‌ها" className="rounded-2xl border border-border-subtle bg-surface p-4 shadow-card lg:h-[700px] lg:p-6">
+        <section aria-label="فهرست سفارش‌ها" className="rounded-2xl border border-border-subtle bg-surface p-4 shadow-card lg:h-[700px] lg:rounded-[20px] lg:border-0 lg:p-6 lg:shadow-none">
           <div className="overflow-x-auto">
             <div className="min-w-[940px]">
-              <div className="grid h-11 grid-cols-[140px_110px_100px_100px_110px_125px_108px_100px] items-center justify-between rounded-xl bg-surface-muted px-4 text-caption font-semibold text-text-muted">
-                {TABLE_COLUMNS.map((column) => <span key={column}>{column}</span>)}
+              <div className="grid h-11 grid-cols-[140px_110px_100px_100px_110px_125px_108px_100px] items-center justify-between rounded-xl bg-surface-muted px-4 text-caption font-semibold text-text-muted lg:rounded-lg lg:text-[13px] lg:leading-5">
+                {TABLE_COLUMNS.map((column) => <span key={column} className={column === "عملیات" ? "lg:text-center" : ""}>{column}</span>)}
               </div>
 
-              <div className="mt-1">
+              <div className="mt-1 lg:mt-0 lg:space-y-1">
                 {visibleOrders.map((order) => (
-                  <div key={order.id} className="grid h-[56px] grid-cols-[140px_110px_100px_100px_110px_125px_108px_100px] items-center justify-between border-b border-border-subtle px-4 text-small text-text-primary last:border-b-0">
+                  <div key={order.id} className="grid h-[56px] grid-cols-[140px_110px_100px_100px_110px_125px_108px_100px] items-center justify-between border-b border-border-subtle px-4 text-small text-text-primary last:border-b-0 lg:h-[52px] lg:border-border-default lg:last:border-b">
                     <Link href={`/seller/orders/${encodeURIComponent(order.id)}`} dir="ltr" className="text-right font-semibold text-primary hover:underline">{order.id}</Link>
                     <span>{order.date}</span>
                     <span>{order.buyer}</span>
                     <span>{order.items}</span>
                     <span>{order.method}</span>
                     <span>{order.promise}</span>
-                    <span className={`inline-flex h-[27px] w-fit items-center justify-center rounded-[8px] px-3 text-caption font-semibold ${STATUS_STYLES[order.status]}`}>
+                    <span className={`inline-flex h-[27px] w-fit items-center justify-center rounded-[8px] px-3 text-caption font-semibold lg:w-[108px] ${STATUS_STYLES[order.status]}`}>
                       {order.status}
                     </span>
-                    <span dir="ltr" className="flex items-center justify-center gap-2">
-                      <button type="button" aria-label={`ویرایش سفارش ${order.id}`} className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle text-text-primary hover:bg-surface-muted">
+                    <span dir="ltr" className="flex items-center justify-center gap-2 lg:gap-3">
+                      <button type="button" aria-label={`ویرایش سفارش ${order.id}`} className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle text-text-primary hover:bg-surface-muted lg:rounded-md">
                         <EditIcon size={20} />
                       </button>
-                      <button type="button" aria-label={`پیام درباره سفارش ${order.id}`} className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle text-text-primary hover:bg-surface-muted">
+                      <button type="button" aria-label={`پیام درباره سفارش ${order.id}`} className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle text-text-primary hover:bg-surface-muted lg:rounded-md">
                         <MessageTextIcon size={20} />
                       </button>
                     </span>
@@ -155,20 +155,20 @@ function SellerOrders() {
             </div>
           </div>
 
-          <footer dir="ltr" className="mt-5 flex flex-col-reverse items-center justify-between gap-3 text-caption text-text-muted sm:flex-row">
+          <footer dir="ltr" className="mt-5 flex flex-col-reverse items-center justify-between gap-3 text-caption text-text-muted sm:flex-row lg:text-[13px] lg:leading-5">
             <span dir="rtl">نمایش {visibleOrders.length ? "۱" : "۰"} تا {formatNumber(visibleOrders.length)} از ۱۴۸ مورد</span>
             <nav dir="ltr" aria-label="صفحه‌بندی سفارش‌ها" className="flex items-center gap-2">
-              <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} className="h-8 rounded-lg border border-border-default px-3 text-small text-text-primary">قبلی</button>
+              <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} className="h-8 rounded-lg border border-border-default px-3 text-small text-text-primary lg:rounded-md lg:text-[13px] lg:leading-5">قبلی</button>
               <span className="flex items-center gap-1">
                 {[1, 2, 3].map((pageNumber) => (
-                  <button key={pageNumber} type="button" aria-current={page === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)} className={`h-7 min-w-7 rounded-md px-2 text-caption ${page === pageNumber ? "bg-primary text-white" : "bg-surface-muted text-text-primary"}`}>
+                  <button key={pageNumber} type="button" aria-current={page === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)} className={`h-7 min-w-7 rounded-md px-2 text-caption lg:w-7 lg:px-0 lg:rounded-[6px] lg:text-[13px] lg:leading-5 ${page === pageNumber ? "bg-primary text-white" : "bg-surface-muted text-text-primary"}`}>
                     {pageNumber === 1 ? "۱" : pageNumber}
                   </button>
                 ))}
-                <span className="px-1">…</span>
-                <button type="button" onClick={() => setPage(15)} className="h-7 min-w-7 rounded-md bg-surface-muted px-2 text-caption text-text-primary">۱۵</button>
+                <span className="px-1 lg:px-0">…</span>
+                <button type="button" onClick={() => setPage(15)} className="h-7 min-w-7 rounded-md bg-surface-muted px-2 text-caption text-text-primary lg:w-7 lg:px-0 lg:rounded-[6px] lg:text-[13px] lg:leading-5">۱۵</button>
               </span>
-              <button type="button" onClick={() => setPage((value) => Math.min(15, value + 1))} className="h-8 rounded-lg border border-border-default px-3 text-small text-text-primary">بعدی</button>
+              <button type="button" onClick={() => setPage((value) => Math.min(15, value + 1))} className="h-8 rounded-lg border border-border-default px-3 text-small text-text-primary lg:rounded-md lg:text-[13px] lg:leading-5">بعدی</button>
             </nav>
           </footer>
         </section>
