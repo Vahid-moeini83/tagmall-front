@@ -1,8 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   EditIcon,
   MessageTextIcon,
@@ -76,29 +84,65 @@ function ProfileField({
   required = true,
   strong = false,
 }) {
+  const [selectedValue, setSelectedValue] = useState(value);
+  const fieldId = `seller-profile-${label}`;
+
   return (
-    <label className="flex min-w-0 flex-col gap-2 text-small text-text-secondary">
+    <div className="flex min-w-0 flex-col gap-2 text-small text-text-secondary">
       <span className="flex items-center justify-start gap-1">
-        <span>{label}</span>
+        <label htmlFor={fieldId}>{label}</label>
         {required && <span className="text-error">*</span>}
       </span>
       <span className="relative block">
-        <Input
-          aria-label={label}
-          defaultValue={value}
-          variant={strong ? "sellerProfileStrong" : "sellerProfile"}
-          dir="auto"
-          lang={/[A-Za-z0-9]/.test(value) ? "en" : "fa"}
-          className={`w-full text-right ${dropdown ? "pl-10" : ""}`}
-        />
-        {dropdown && (
-          <ChevronDownIcon
-            size={18}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+        {dropdown ? (
+          <DropdownMenu dir="rtl">
+            <DropdownMenuTrigger asChild>
+              <button
+                id={fieldId}
+                type="button"
+                aria-label={label}
+                className={`flex h-12 w-full items-center justify-between gap-3 rounded-lg border border-border-default bg-surface-subtle px-3 text-right text-small ${strong ? "text-text-primary" : "text-text-disabled"} focus-visible:border-primary focus-visible:outline-none`}
+              >
+                <span dir="auto" lang={/[A-Za-z0-9]/.test(value) ? "en" : "fa"}>
+                  {selectedValue}
+                </span>
+                <ChevronDownIcon
+                  size={18}
+                  className="shrink-0 text-text-muted"
+                />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              dir="rtl"
+              align="start"
+              className="theme-new border border-border-default bg-surface py-1 shadow-dropdown"
+            >
+              <DropdownMenuRadioGroup
+                value={selectedValue}
+                onValueChange={setSelectedValue}
+              >
+                <DropdownMenuRadioItem
+                  value={value}
+                  className="justify-start px-3 text-right text-small text-text-primary"
+                >
+                  {value}
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Input
+            id={fieldId}
+            aria-label={label}
+            defaultValue={value}
+            variant={strong ? "sellerProfileStrong" : "sellerProfile"}
+            dir="auto"
+            lang={/[A-Za-z0-9]/.test(value) ? "en" : "fa"}
+            className="w-full text-right"
           />
         )}
       </span>
-    </label>
+    </div>
   );
 }
 
@@ -277,14 +321,24 @@ export default function SellerProfile() {
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <ProfileCard className="flex min-h-[108px] items-center justify-between gap-4 rounded-xl px-5 py-4 lg:px-6 lg:py-6">
           <div className="flex min-w-0 items-center gap-4">
-            <div className="relative size-[60px] shrink-0 overflow-hidden rounded-full bg-surface-subtle">
+            <div className="relative size-[60px] shrink-0">
               <Image
                 src="/assets/images/seller/profile/store-logo.png"
                 alt="لوگوی فروشگاه"
                 fill
                 sizes="60px"
-                className="object-cover"
+                className="rounded-full object-cover"
               />
+              <button
+                type="button"
+                aria-label="ویرایش تصویر فروشگاه"
+                onClick={() =>
+                  toast.error("ویرایش تصویر فروشگاه فعلاً در دسترس نیست")
+                }
+                className="absolute left-[18px] top-[44px] z-10 flex size-[26px] items-center justify-center rounded-full border border-primary bg-surface text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                <EditIcon size={12} />
+              </button>
             </div>
             <div className="min-w-0 text-right">
               <h2 className="text-h5 font-semibold text-text-primary">
