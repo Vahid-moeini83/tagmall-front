@@ -14,8 +14,10 @@ import {
   TicketSimplePercentIcon,
   SellerLogoutIcon,
   CloseIcon,
+  EditIcon,
 } from "@/icons";
 import { useSellerNavigation } from "../context/SellerNavigationContext";
+import { MESSAGE_SECTIONS } from "../data/messageSections";
 
 /**
  * Sidebar navigation items configuration matching Figma design
@@ -89,6 +91,8 @@ const MENU_ITEMS = [
 
 function SellerSidebar() {
   const pathname = usePathname();
+  const isMessageCenter = pathname?.startsWith("/seller/messages");
+  const messageCategory = pathname?.split("/")[3] || "experts";
   const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
 
   return (
@@ -153,6 +157,7 @@ function SellerSidebar() {
           fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-surface border-l border-border-subtle
           flex flex-col p-8 transition-transform duration-300 ease-in-out
           lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 lg:min-h-screen
+          ${isMessageCenter ? "font-extralight lg:h-dvh lg:min-h-0 lg:border-l-0 lg:ring-1 lg:ring-inset lg:ring-border-default" : ""}
           ${mobileSidebarOpen ? "translate-x-0 shadow-modal" : "translate-x-full lg:translate-x-0"}
         `}
       >
@@ -184,8 +189,12 @@ function SellerSidebar() {
         </div>
 
         {/* User Profile Block */}
-        <div className="flex items-center gap-3 mt-10 mb-8">
-          <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 border border-border-subtle">
+        <div
+          className={`flex items-center gap-3 mt-10 ${isMessageCenter ? "mb-10" : "mb-8"}`}
+        >
+          <div
+            className={`relative w-12 h-12 overflow-hidden shrink-0 border border-border-subtle ${isMessageCenter ? "rounded-md" : "rounded-full"}`}
+          >
             <Image
               src="/assets/images/seller/avatar.png"
               alt="آرمان میمندی نژاد"
@@ -195,14 +204,27 @@ function SellerSidebar() {
             />
           </div>
           <div className="truncate">
-            <p className="text-body font-semibold text-text-primary truncate">
+            <p
+              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : "font-semibold"}`}
+            >
               آرمان میمندی نژاد
             </p>
           </div>
+          {isMessageCenter && messageCategory !== "experts" && (
+            <Link
+              href="/seller/profile"
+              aria-label="ویرایش پروفایل فروشنده"
+              className="mr-auto shrink-0 text-text-primary"
+            >
+              <EditIcon size={24} />
+            </Link>
+          )}
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
+        <nav
+          className={`flex flex-col gap-2 flex-1 overflow-y-auto ${isMessageCenter ? "min-h-0" : ""}`}
+        >
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive =
@@ -210,16 +232,16 @@ function SellerSidebar() {
                 ? pathname === "/seller"
                 : pathname?.startsWith(item.href);
 
-            return (
+            const navigationItem = (
               <Link
                 key={item.id}
                 href={item.href}
                 onClick={closeMobileSidebar}
                 className={`
-                  h-[50px] px-4 rounded-md flex items-center justify-between transition-colors
+                  relative h-[50px] px-4 rounded-md flex items-center justify-between transition-colors ${isMessageCenter ? "shrink-0" : ""}
                   ${
                     isActive
-                      ? "bg-primary-50 text-primary font-medium"
+                      ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : "font-medium"}`
                       : "text-text-primary hover:bg-surface-subtle"
                   }
                 `}
@@ -233,15 +255,48 @@ function SellerSidebar() {
                   >
                     <Icon size={item.iconSize} />
                   </span>
-                  <span className="text-[15px]">{item.label}</span>
+                  <span
+                    className={isMessageCenter ? "text-body" : "text-[15px]"}
+                  >
+                    {item.label}
+                  </span>
                 </div>
 
                 {item.badge && (
-                  <span className="w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium">
+                  <span
+                    className={`w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium ${isMessageCenter ? "absolute right-2 top-1.5" : ""}`}
+                  >
                     {item.badge}
                   </span>
                 )}
               </Link>
+            );
+
+            if (item.id !== "messages" || !isMessageCenter)
+              return navigationItem;
+
+            return (
+              <div key={item.id} className="shrink-0">
+                {navigationItem}
+                <nav
+                  aria-label="بخش‌های مرکز پیام‌ها"
+                  className="mr-6 mt-2 flex h-[149px] flex-col pb-[7px] pt-[6px]"
+                >
+                  {MESSAGE_SECTIONS.map((section) => (
+                    <Link
+                      key={section.id}
+                      href={section.href}
+                      onClick={closeMobileSidebar}
+                      aria-current={
+                        messageCategory === section.id ? "page" : undefined
+                      }
+                      className={`relative flex h-[34px] items-center pr-6 text-small before:absolute before:right-0 before:top-0 before:h-[34px] before:w-3 before:rounded-br-lg before:border-b-2 before:border-r-2 before:border-text-secondary ${messageCategory === section.id ? "text-primary" : "text-text-secondary hover:text-primary"}`}
+                    >
+                      {section.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
             );
           })}
         </nav>
