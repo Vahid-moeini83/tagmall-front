@@ -101,8 +101,16 @@ function SellerOrders() {
       </section>
 
       <div className="flex flex-col gap-6">
-        <section aria-label="جستجو و فیلتر سفارش‌ها" className="flex flex-col gap-3 rounded-xl bg-surface p-4 lg:h-[72px] lg:flex-row lg:items-center lg:gap-3 lg:p-3">
-          <label className="flex h-10 min-w-0 flex-1 items-center gap-3 rounded-lg bg-surface-muted px-4 text-text-muted">
+        <section aria-label="جستجو و فیلتر سفارش‌ها" dir="ltr" className="mx-auto flex w-full flex-col gap-3 rounded-xl bg-surface p-4 lg:h-10 lg:max-w-[1028px] lg:flex-row lg:items-center lg:gap-3 lg:rounded-none lg:bg-transparent lg:p-0">
+          <button type="button" dir="ltr" className="flex h-10 shrink-0 items-center justify-between rounded-[15px] border border-border-default bg-surface px-4 text-small text-text-primary lg:w-[280px]">
+            <ChevronDownIcon size={20} className="text-text-secondary" />
+            <span dir="rtl" className="flex-1 text-right">فیلترهای پیشرفته</span>
+          </button>
+          <button type="button" dir="ltr" className="flex h-10 shrink-0 items-center justify-between rounded-[15px] border border-border-default bg-surface px-4 text-small text-text-primary lg:w-[280px]">
+            <ChevronDownIcon size={20} className="text-text-secondary" />
+            <span dir="rtl" className="flex-1 text-right">مرتب‌سازی: جدیدترین</span>
+          </button>
+          <label dir="rtl" className="flex h-10 min-w-0 flex-1 items-center gap-3 rounded-xl bg-surface-muted px-4 text-text-muted lg:w-[444px] lg:flex-none">
             <SearchIcon size={20} className="shrink-0" />
             <input
               aria-label="جستجو در شماره سفارش یا نام خریدار"
@@ -112,14 +120,6 @@ function SellerOrders() {
               className="min-w-0 flex-1 bg-transparent text-small text-text-primary outline-none placeholder:text-text-muted"
             />
           </label>
-          <button type="button" className="flex h-10 items-center justify-between rounded-lg border border-border-default bg-surface px-4 text-small text-text-primary lg:w-[280px]">
-            <ChevronDownIcon size={20} className="text-text-secondary" />
-            <span>مرتب‌سازی: جدیدترین</span>
-          </button>
-          <button type="button" className="flex h-10 items-center justify-between rounded-lg border border-border-default bg-surface px-4 text-small text-text-primary lg:w-[280px]">
-            <ChevronDownIcon size={20} className="text-text-secondary" />
-            <span>فیلترهای پیشرفته</span>
-          </button>
         </section>
 
         <section aria-label="فهرست سفارش‌ها" className="rounded-2xl border border-border-subtle bg-surface p-4 shadow-card lg:h-[700px] lg:p-6">
@@ -141,7 +141,7 @@ function SellerOrders() {
                     <span className={`inline-flex h-[27px] w-fit items-center justify-center rounded-[8px] px-3 text-caption font-semibold ${STATUS_STYLES[order.status]}`}>
                       {order.status}
                     </span>
-                    <span className="flex items-center gap-2">
+                    <span dir="ltr" className="flex items-center justify-center gap-2">
                       <button type="button" aria-label={`ویرایش سفارش ${order.id}`} className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle text-text-primary hover:bg-surface-muted">
                         <EditIcon size={20} />
                       </button>
@@ -155,17 +155,19 @@ function SellerOrders() {
             </div>
           </div>
 
-          <footer className="mt-5 flex flex-col-reverse items-center justify-between gap-3 text-caption text-text-muted sm:flex-row">
-            <span>نمایش {visibleOrders.length ? "۱" : "۰"} تا {formatNumber(visibleOrders.length)} از ۱۴۸ مورد</span>
-            <nav aria-label="صفحه‌بندی سفارش‌ها" className="flex items-center gap-1">
+          <footer dir="ltr" className="mt-5 flex flex-col-reverse items-center justify-between gap-3 text-caption text-text-muted sm:flex-row">
+            <span dir="rtl">نمایش {visibleOrders.length ? "۱" : "۰"} تا {formatNumber(visibleOrders.length)} از ۱۴۸ مورد</span>
+            <nav dir="ltr" aria-label="صفحه‌بندی سفارش‌ها" className="flex items-center gap-2">
               <button type="button" onClick={() => setPage((value) => Math.max(1, value - 1))} className="h-8 rounded-lg border border-border-default px-3 text-small text-text-primary">قبلی</button>
-              {[1, 2, 3].map((pageNumber) => (
-                <button key={pageNumber} type="button" aria-current={page === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)} className={`h-7 min-w-7 rounded-md px-2 text-caption ${page === pageNumber ? "bg-primary text-white" : "bg-surface-muted text-text-primary"}`}>
-                  {pageNumber === 1 ? "۱" : pageNumber}
-                </button>
-              ))}
-              <span className="px-1">…</span>
-              <button type="button" onClick={() => setPage(15)} className="h-7 min-w-7 rounded-md bg-surface-muted px-2 text-caption text-text-primary">۱۵</button>
+              <span className="flex items-center gap-1">
+                {[1, 2, 3].map((pageNumber) => (
+                  <button key={pageNumber} type="button" aria-current={page === pageNumber ? "page" : undefined} onClick={() => setPage(pageNumber)} className={`h-7 min-w-7 rounded-md px-2 text-caption ${page === pageNumber ? "bg-primary text-white" : "bg-surface-muted text-text-primary"}`}>
+                    {pageNumber === 1 ? "۱" : pageNumber}
+                  </button>
+                ))}
+                <span className="px-1">…</span>
+                <button type="button" onClick={() => setPage(15)} className="h-7 min-w-7 rounded-md bg-surface-muted px-2 text-caption text-text-primary">۱۵</button>
+              </span>
               <button type="button" onClick={() => setPage((value) => Math.min(15, value + 1))} className="h-8 rounded-lg border border-border-default px-3 text-small text-text-primary">بعدی</button>
             </nav>
           </footer>

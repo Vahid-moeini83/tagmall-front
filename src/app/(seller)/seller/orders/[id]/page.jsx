@@ -5,6 +5,8 @@ export const metadata = {
   description: "مشاهده جزئیات سفارش در پنل فروشندگان تگ مال",
 };
 
-export default function SellerOrderDetailPage() {
-  return <SellerOrderDetail />;
+export default async function SellerOrderDetailPage({ params }) {
+  const { id } = await params;
+
+  return <SellerOrderDetail orderId={decodeURIComponent(id)} />;
 }
