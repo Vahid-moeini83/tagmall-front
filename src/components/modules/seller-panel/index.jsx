@@ -12,6 +12,7 @@ export { default as SellerOrderDetail } from "./components/SellerOrderDetail";
 export { default as SellerProducts } from "./components/SellerProducts";
 export { default as SellerProductDetail } from "./components/SellerProductDetail";
 export { default as SellerProductCreate } from "./components/SellerProductCreate";
+export { default as SellerProfile } from "./components/SellerProfile";
 export {
   SellerNavigationProvider,
   useSellerNavigation,

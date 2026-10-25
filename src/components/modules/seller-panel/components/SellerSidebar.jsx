@@ -89,9 +89,17 @@ const MENU_ITEMS = [
   },
 ];
 
+const PROFILE_SECTIONS = [
+  { id: "details", label: "مشخصات", href: "/seller/profile" },
+  { id: "financial", label: "گزارش مالی", href: "/seller/profile#financial" },
+  { id: "sessions", label: "نشست های فعال", href: "/seller/profile#sessions" },
+  { id: "settings", label: "تنظیمات", href: "/seller/profile#settings" },
+];
+
 function SellerSidebar() {
   const pathname = usePathname();
   const isMessageCenter = pathname?.startsWith("/seller/messages");
+  const isSellerProfile = pathname?.startsWith("/seller/profile");
   const messageCategory = pathname?.split("/")[3] || "experts";
   const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
 
@@ -271,6 +279,32 @@ function SellerSidebar() {
                 )}
               </Link>
             );
+
+            if (item.id === "profile" && isSellerProfile) {
+              return (
+                <div key={item.id} className="shrink-0">
+                  {navigationItem}
+                  <nav
+                    aria-label="بخش‌های پروفایل فروشنده"
+                    className="mr-6 flex flex-col border-r-2 border-text-secondary py-1 pr-3"
+                  >
+                    {PROFILE_SECTIONS.map((section) => (
+                      <Link
+                        key={section.id}
+                        href={section.href}
+                        onClick={closeMobileSidebar}
+                        aria-current={
+                          section.id === "details" ? "page" : undefined
+                        }
+                        className="flex h-[29px] items-center text-small text-text-secondary hover:text-primary"
+                      >
+                        {section.label}
+                      </Link>
+                    ))}
+                  </nav>
+                </div>
+              );
+            }
 
             if (item.id !== "messages" || !isMessageCenter)
               return navigationItem;

@@ -71,9 +71,13 @@ function Input({
         className={cn(
           variant === "seller"
             ? "outline-none h-11 rounded-md border border-border-default bg-surface-subtle px-3 transition-colors duration-200 touch-manipulation focus-visible:border-primary"
-            : variant === "plain"
-              ? "outline-none h-11 w-full transition-colors duration-200 touch-manipulation"
-              : "outline-none border-2 h-11 lg:h-12 rounded-lg px-2 transition-colors duration-200 touch-manipulation",
+            : variant === "sellerProfile"
+              ? "outline-none h-12 rounded-lg border border-border-default bg-surface-subtle px-3 text-small text-text-disabled transition-colors duration-200 touch-manipulation focus-visible:border-primary"
+              : variant === "sellerProfileStrong"
+                ? "outline-none h-12 rounded-lg border border-border-default bg-surface-subtle px-3 text-small text-text-primary transition-colors duration-200 touch-manipulation focus-visible:border-primary"
+                : variant === "plain"
+                  ? "outline-none h-11 w-full transition-colors duration-200 touch-manipulation"
+                  : "outline-none border-2 h-11 lg:h-12 rounded-lg px-2 transition-colors duration-200 touch-manipulation",
           error
             ? "border-error-medium"
             : variant === "default"
