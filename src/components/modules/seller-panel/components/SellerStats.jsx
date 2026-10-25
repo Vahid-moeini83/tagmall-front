@@ -3,6 +3,7 @@ import {
   BasketShoppingIcon,
   BarcodeReadIcon,
   CursorClickIcon,
+  BoxUserIcon,
 } from "@/icons";
 
 const STATS_DATA = [
@@ -57,7 +58,76 @@ const STATS_DATA = [
   },
 ];
 
-function SellerStats() {
+const FINANCIAL_STATS = [
+  {
+    title: "کل فروش ( امروز )",
+    value: "۱۲۴,۵۰۰,۰۰۰ تومان",
+    change: "+۱۴.۲٪",
+    icon: CoinFrontSwapIcon,
+    color: "text-secondary bg-secondary-100/50",
+  },
+  {
+    title: "هزینه کلیک ها",
+    value: "۹۸,۲۰۰,۰۰۰ تومان",
+    change: "+۱۸.۵٪",
+    icon: CoinFrontSwapIcon,
+    color: "text-primary bg-primary-600/10",
+  },
+  {
+    title: "تعداد کلیک های معتبر",
+    value: "نرخ کلیک",
+    change: "پلکانی",
+    icon: CursorClickIcon,
+    color: "text-error bg-error/10",
+  },
+  {
+    title: "تعداد تراکنش",
+    value: "۳۴۲ تراکنش",
+    change: "+۸٪",
+    icon: BoxUserIcon,
+    color: "text-secondary bg-secondary-100/50",
+  },
+];
+
+function SellerStats({ variant = "default" }) {
+  if (variant === "financial") {
+    return (
+      <section
+        aria-label="خلاصه گزارش مالی"
+        className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,230px),1fr))] gap-4"
+        dir="ltr"
+      >
+        {FINANCIAL_STATS.map((item) => {
+          const Icon = item.icon;
+          return (
+            <article
+              key={item.title}
+              dir="rtl"
+              className="flex h-[126px] min-w-0 flex-col gap-3 rounded-xl bg-surface p-5"
+            >
+              <div className="flex h-10 items-center justify-between gap-2">
+                <h2 className="text-caption text-text-muted">{item.title}</h2>
+                <span
+                  className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${item.color}`}
+                >
+                  <Icon size={24} />
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-1 whitespace-nowrap">
+                <p className="text-h4 font-bold leading-[34px]">{item.value}</p>
+                <span
+                  dir={item.change === "پلکانی" ? "rtl" : "ltr"}
+                  className={`text-caption ${item.change === "پلکانی" ? "text-text-secondary" : "font-bold text-success-strong"}`}
+                >
+                  {item.change}
+                </span>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+    );
+  }
   const salesItem = STATS_DATA[0];
   const ordersItem = STATS_DATA[1];
   const productsItem = STATS_DATA[2];

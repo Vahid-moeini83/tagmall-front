@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import SellerFinancialReport from "./SellerFinancialReport";
+import useSellerProfileSection from "../hooks/useSellerProfileSection";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -300,10 +302,13 @@ function SellerSocialLinks() {
 }
 
 export default function SellerProfile() {
+  const section = useSellerProfileSection();
   const handleSubmit = (event) => {
     event.preventDefault();
     toast.error("ذخیره اطلاعات پروفایل فعلاً به سرویس متصل نیست");
   };
+
+  if (section === "financial") return <SellerFinancialReport />;
 
   return (
     <main className="mx-auto w-full max-w-[1140px] px-4 pb-10 pt-8 lg:px-10 lg:pt-10">

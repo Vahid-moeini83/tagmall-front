@@ -18,6 +18,7 @@ import {
 } from "@/icons";
 import { useSellerNavigation } from "../context/SellerNavigationContext";
 import { MESSAGE_SECTIONS } from "../data/messageSections";
+import useSellerProfileSection from "../hooks/useSellerProfileSection";
 
 /**
  * Sidebar navigation items configuration matching Figma design
@@ -97,11 +98,18 @@ const PROFILE_SECTIONS = [
 ];
 
 function SellerSidebar() {
+  const profileSection = useSellerProfileSection();
   const pathname = usePathname();
   const isMessageCenter = pathname?.startsWith("/seller/messages");
   const isSellerProfile = pathname?.startsWith("/seller/profile");
   const messageCategory = pathname?.split("/")[3] || "experts";
   const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
+
+  const navigateProfileSection = (event, section) => {
+    event.preventDefault();
+    // Native hash navigation notifies the profile store and preserves browser history.
+    window.location.hash = section === "details" ? "" : section;
+  };
 
   return (
     <>
@@ -245,6 +253,11 @@ function SellerSidebar() {
                 key={item.id}
                 href={item.href}
                 onClick={closeMobileSidebar}
+                onNavigate={
+                  item.id === "profile" && isSellerProfile
+                    ? (event) => navigateProfileSection(event, "details")
+                    : undefined
+                }
                 className={`
                   relative h-[50px] px-4 rounded-md flex items-center justify-between transition-colors ${isMessageCenter ? "shrink-0" : ""}
                   ${
@@ -293,10 +306,13 @@ function SellerSidebar() {
                         key={section.id}
                         href={section.href}
                         onClick={closeMobileSidebar}
-                        aria-current={
-                          section.id === "details" ? "page" : undefined
+                        onNavigate={(event) =>
+                          navigateProfileSection(event, section.id)
                         }
-                        className="flex h-[29px] items-center text-small text-text-secondary hover:text-primary"
+                        aria-current={
+                          section.id === profileSection ? "page" : undefined
+                        }
+                        className={`flex h-[29px] items-center text-small hover:text-primary ${section.id === profileSection ? "text-primary" : "text-text-secondary"}`}
                       >
                         {section.label}
                       </Link>

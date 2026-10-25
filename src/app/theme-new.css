@@ -80,6 +80,7 @@
      ------------------------------------------------------------------------ */
   --color-info: #3b82f6;
   --color-info-light: #eff6ff;
+  --color-success-strong: #108981;
 
   /* ------------------------------------------------------------------------
      6. Shadows
@@ -205,6 +206,15 @@
     transparent 4.5px,
     rgba(26, 26, 46, 0.04) 4.5px,
     rgba(26, 26, 46, 0.04) 5px
+  );
+}
+
+/* The selected financial report uses an orange quarter over a primary ring. */
+@utility bg-revenue-share {
+  background-image: conic-gradient(
+    from 90deg,
+    var(--color-secondary) 0deg 90deg,
+    var(--color-primary) 90deg 360deg
   );
 }
 

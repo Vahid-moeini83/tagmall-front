@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-
 const CHART_DATA = [
   {
     month: "مهر",
@@ -50,9 +49,61 @@ const CHART_DATA = [
 
 const Y_AXIS_STEPS = [200, 150, 100, 50, 0];
 
-
-function SellerSalesChart() {
+function SellerSalesChart({ variant = "default" }) {
   const [hoveredMonth, setHoveredMonth] = useState(null);
+
+  if (variant === "financial") {
+    return (
+      <section
+        aria-labelledby="weekly-revenue-title"
+        className="flex h-[310px] min-w-[min(100%,380px)] flex-[37] flex-col gap-5 rounded-card bg-surface p-6"
+        dir="rtl"
+      >
+        <div className="flex h-[25px] items-center justify-between gap-3">
+          <h2 id="weekly-revenue-title" className="text-body font-semibold">
+            نمودار درآمد هفتگی
+          </h2>
+          <div className="flex flex-row-reverse items-center gap-2 text-caption text-text-secondary">
+            <span className="size-2 rounded-full bg-primary" />
+            درآمد روزانه (تومان)
+          </div>
+        </div>
+        <div className="border-t border-border-subtle" />
+        <div className="flex h-40 items-start justify-center py-5" dir="ltr">
+          <svg
+            viewBox="0 0 450 103"
+            role="img"
+            aria-label="روند درآمد هفتگی از شنبه تا جمعه"
+            className="h-[103px] w-[450px] max-w-full overflow-visible text-primary"
+          >
+            <polyline
+              points="0,100 75,72 150,89 225,33 300,56 375,17 450,0"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+        </div>
+        <div
+          className="flex justify-between text-[11px] leading-[17px] text-text-muted"
+          dir="ltr"
+        >
+          {[
+            "شنبه",
+            "یکشنبه",
+            "دوشنبه",
+            "سه‌شنبه",
+            "چهارشنبه",
+            "پنجشنبه",
+            "جمعه",
+          ].map((day) => (
+            <span key={day}>{day}</span>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="bg-surface rounded-xl border border-border-subtle shadow-card p-4 sm:p-6 lg:pt-7 lg:px-8 lg:pb-6 flex flex-col justify-between h-auto min-h-[332px] lg:h-[399px]">
@@ -60,7 +111,8 @@ function SellerSalesChart() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-body font-bold text-text-primary">
-            نمودار فروش ماهانه <span className="hidden sm:inline">(۶ ماه اخیر)</span>
+            نمودار فروش ماهانه{" "}
+            <span className="hidden sm:inline">(۶ ماه اخیر)</span>
           </h2>
           <p className="text-[12px] text-text-muted sm:hidden mt-0.5">
             ۶ ماه اخیر
@@ -85,7 +137,11 @@ function SellerSalesChart() {
         {/* Horizontal Grid lines with Y-Axis Labels */}
         <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-6">
           {Y_AXIS_STEPS.map((step) => (
-            <div key={step} className="flex items-center gap-2 sm:gap-3 w-full" dir="ltr">
+            <div
+              key={step}
+              className="flex items-center gap-2 sm:gap-3 w-full"
+              dir="ltr"
+            >
               <span className="w-5 sm:w-6 text-[10px] sm:text-[11px] text-text-muted text-left font-normal select-none">
                 {step}
               </span>
@@ -114,7 +170,10 @@ function SellerSalesChart() {
                 )}
 
                 {/* Bars Pair */}
-                <div className="flex items-end gap-1 h-[160px] sm:h-[210px] lg:h-[246px]" dir="ltr">
+                <div
+                  className="flex items-end gap-1 h-[160px] sm:h-[210px] lg:h-[246px]"
+                  dir="ltr"
+                >
                   {/* This Year bar (13px in Figma mobile, 28px on desktop) */}
                   <div
                     style={{ height: `${item.thisYearHeight}%` }}
@@ -132,7 +191,10 @@ function SellerSalesChart() {
         </div>
 
         {/* X-Axis Month Labels */}
-        <div className="flex justify-between items-center pr-7 sm:pr-10 pl-2 sm:pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal" dir="ltr">
+        <div
+          className="flex justify-between items-center pr-7 sm:pr-10 pl-2 sm:pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal"
+          dir="ltr"
+        >
           {CHART_DATA.map((item) => (
             <span key={item.month} className="w-8 sm:w-16 text-center">
               {item.month}
