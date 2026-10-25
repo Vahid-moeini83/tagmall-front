@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { extendTailwindMerge } from "tailwind-merge";
 import SellerFinancialReport from "./SellerFinancialReport";
 import SellerWallet from "./SellerWallet";
 import useSellerProfileSection from "../hooks/useSellerProfileSection";
@@ -24,6 +25,30 @@ import {
   ChevronDownIcon,
   SupportIcon,
 } from "@/icons";
+
+// Register project typography tokens so class merging keeps font sizes and colors distinct.
+export const mergeProfileClasses = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      "font-size": [
+        {
+          text: [
+            "display",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "body",
+            "small",
+            "caption",
+            "label",
+          ],
+        },
+      ],
+    },
+  },
+});
 
 const PROFILE_SECTIONS = [
   {
@@ -64,16 +89,39 @@ const SOCIAL_FIELDS = [
   { label: "وب‌سایت", value: "https://digikit.ir", muted: true },
 ];
 
-function SectionHeader({ title, Icon, action, className = "" }) {
+export function SectionHeader({
+  title,
+  Icon,
+  action,
+  className = "",
+  titleClassName,
+  iconClassName,
+  iconSize = 20,
+}) {
   return (
     <div
-      className={`flex h-10 items-center justify-between gap-3 ${className}`}
+      className={mergeProfileClasses(
+        "flex h-10 items-center justify-between gap-3",
+        className,
+      )}
     >
       <div className="flex items-center gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-text-secondary">
-          <Icon size={20} />
+        <span
+          className={mergeProfileClasses(
+            "flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-text-secondary",
+            iconClassName,
+          )}
+        >
+          <Icon size={iconSize} />
         </span>
-        <h2 className="text-body font-semibold text-text-primary">{title}</h2>
+        <h2
+          className={mergeProfileClasses(
+            "text-body font-semibold text-text-primary",
+            titleClassName,
+          )}
+        >
+          {title}
+        </h2>
       </div>
       {action}
     </div>
@@ -149,9 +197,21 @@ function ProfileField({
   );
 }
 
-function ProfileCard({ children, className = "" }) {
+export function ProfileCard({
+  children,
+  className = "",
+  radiusClassName = "rounded-card",
+  ...props
+}) {
   return (
-    <section className={`rounded-card bg-surface p-5 lg:p-7 ${className}`}>
+    <section
+      className={mergeProfileClasses(
+        radiusClassName,
+        "bg-surface p-5 lg:p-7",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </section>
   );

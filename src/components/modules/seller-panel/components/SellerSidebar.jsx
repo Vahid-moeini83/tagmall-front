@@ -103,6 +103,8 @@ function SellerSidebar() {
   const pathname = usePathname();
   const isMessageCenter = pathname?.startsWith("/seller/messages");
   const isSellerProfile = pathname?.startsWith("/seller/profile");
+  const hasProfileNavigationStyle =
+    isSellerProfile || pathname?.startsWith("/seller/branches");
   const messageCategory = pathname?.split("/")[3] || "experts";
   const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
 
@@ -207,10 +209,10 @@ function SellerSidebar() {
 
         {/* User Profile Block */}
         <div
-          className={`flex items-center gap-3 mt-10 ${isMessageCenter || isSellerProfile ? "mb-10" : "mb-8"}`}
+          className={`flex items-center gap-3 mt-10 ${isMessageCenter || hasProfileNavigationStyle ? "mb-10" : "mb-8"}`}
         >
           <div
-            className={`relative w-12 h-12 overflow-hidden shrink-0 border border-border-subtle ${isMessageCenter || isSellerProfile ? "rounded-md" : "rounded-full"}`}
+            className={`relative w-12 h-12 overflow-hidden shrink-0 border border-border-subtle ${isMessageCenter || hasProfileNavigationStyle ? "rounded-md" : "rounded-full"}`}
           >
             <Image
               src="/assets/images/seller/avatar.png"
@@ -222,7 +224,7 @@ function SellerSidebar() {
           </div>
           <div className="truncate">
             <p
-              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : isSellerProfile ? "font-normal" : "font-semibold"}`}
+              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : hasProfileNavigationStyle ? "font-normal" : "font-semibold"}`}
             >
               آرمان میمندی نژاد
             </p>
@@ -263,7 +265,7 @@ function SellerSidebar() {
                   relative h-[50px] px-4 rounded-md flex items-center justify-between transition-colors ${isMessageCenter ? "shrink-0" : ""}
                   ${
                     isActive
-                      ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : isSellerProfile ? "font-normal" : "font-medium"}`
+                      ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : hasProfileNavigationStyle ? "font-normal" : "font-medium"}`
                       : "text-text-primary hover:bg-surface-subtle"
                   }
                 `}
@@ -279,7 +281,7 @@ function SellerSidebar() {
                   </span>
                   <span
                     className={
-                      isMessageCenter || isSellerProfile
+                      isMessageCenter || hasProfileNavigationStyle
                         ? "text-body"
                         : "text-[15px]"
                     }
@@ -290,7 +292,7 @@ function SellerSidebar() {
 
                 {item.badge && (
                   <span
-                    className={`w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium ${isMessageCenter || isSellerProfile ? "absolute right-2 top-1.5" : ""}`}
+                    className={`w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium ${isMessageCenter || hasProfileNavigationStyle ? "absolute right-2 top-1.5" : ""}`}
                   >
                     {item.badge}
                   </span>

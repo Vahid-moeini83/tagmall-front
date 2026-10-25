@@ -5,7 +5,12 @@ import { Input } from "@/components/ui/input";
 import { HintIcon } from "@/icons";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
+function ProfileBankAccountContent({
+  activeAddressAuth,
+  onSubmit,
+  title = "افزودن آدرس به حساب کاربری:",
+  submitLabel,
+}) {
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,11 +28,10 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
   return (
     <div className="mt-3 lg:mt-0">
       <div className="flex flex-col gap-3">
-        <span className="text-base text-gray-600 font-bold">
-          افزودن آدرس به حساب کاربری:
-        </span>
+        <span className="text-base text-gray-600 font-bold">{title}</span>
         <div className="rounded-lg bg-gray-200 overflow-hidden">
           <textarea
+            aria-label="آدرس"
             placeholder="آدرس"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
@@ -36,6 +40,7 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
             className="w-full outline-none py-9 px-[10px] text-center h-[100px] border-b-2 border-white placeholder:text-gray-400 resize-none overflow-y-auto scroll-hidden"
           ></textarea>
           <Input
+            aria-label="کد پستی"
             placeholder="کد پستی"
             numeric={true}
             value={postalCode}
@@ -67,7 +72,7 @@ function ProfileBankAccountContent({ activeAddressAuth, onSubmit }) {
             : "text-primary border-primary cursor-pointer"
         }`}
       >
-        {activeAddressAuth ? "احراز کد پستی" : "افزودن موقعیت"}
+        {submitLabel || (activeAddressAuth ? "احراز کد پستی" : "افزودن موقعیت")}
       </button>
     </div>
   );
