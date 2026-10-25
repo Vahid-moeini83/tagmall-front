@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-
 const TOP_PRODUCTS = [
   {
     id: 1,
@@ -31,7 +30,6 @@ const TOP_PRODUCTS = [
     image: "/assets/images/seller/poco-4.png",
   },
 ];
-
 
 function SellerTopProducts() {
   return (

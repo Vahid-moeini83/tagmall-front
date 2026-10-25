@@ -85,7 +85,7 @@ function SellerSalesChart() {
         {/* Horizontal Grid lines with Y-Axis Labels */}
         <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-6">
           {Y_AXIS_STEPS.map((step) => (
-            <div key={step} className="flex items-center gap-2 sm:gap-3 w-full">
+            <div key={step} className="flex items-center gap-2 sm:gap-3 w-full" dir="ltr">
               <span className="w-5 sm:w-6 text-[10px] sm:text-[11px] text-text-muted text-left font-normal select-none">
                 {step}
               </span>
@@ -95,7 +95,7 @@ function SellerSalesChart() {
         </div>
 
         {/* Bars Container */}
-        <div className="relative z-10 flex-1 flex items-end justify-between pr-7 sm:pr-9 pl-2 sm:pl-4 pb-6 h-[170px] sm:h-[220px]">
+        <div className="relative z-10 flex-1 flex items-end justify-between pr-7 sm:pr-9 pl-2 sm:pl-4 pb-6 lg:pb-5 h-[170px] sm:h-[220px]">
           {CHART_DATA.map((item) => {
             const isHovered = hoveredMonth === item.month;
 
@@ -114,7 +114,7 @@ function SellerSalesChart() {
                 )}
 
                 {/* Bars Pair */}
-                <div className="flex items-end gap-1 h-[160px] sm:h-[210px]">
+                <div className="flex items-end gap-1 h-[160px] sm:h-[210px] lg:h-[246px]" dir="ltr">
                   {/* This Year bar (13px in Figma mobile, 28px on desktop) */}
                   <div
                     style={{ height: `${item.thisYearHeight}%` }}
@@ -132,7 +132,7 @@ function SellerSalesChart() {
         </div>
 
         {/* X-Axis Month Labels */}
-        <div className="flex justify-between items-center pr-7 sm:pr-10 pl-2 sm:pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal">
+        <div className="flex justify-between items-center pr-7 sm:pr-10 pl-2 sm:pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal" dir="ltr">
           {CHART_DATA.map((item) => (
             <span key={item.month} className="w-8 sm:w-16 text-center">
               {item.month}

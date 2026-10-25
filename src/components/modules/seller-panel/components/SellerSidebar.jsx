@@ -17,7 +17,6 @@ import {
 } from "@/icons";
 import { useSellerNavigation } from "../context/SellerNavigationContext";
 
-
 /**
  * Sidebar navigation items configuration matching Figma design
  */
@@ -88,56 +87,57 @@ const MENU_ITEMS = [
   },
 ];
 
-
 function SellerSidebar() {
   const pathname = usePathname();
   const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
 
   return (
     <>
-      {/* Mobile top app bar matching Figma PWA (44:39308) */}
-      <header className="lg:hidden flex items-center justify-between px-6 py-4 bg-surface border-b border-border-subtle sticky top-0 z-30 h-[76px]">
-        {/* Right side in RTL: Slogan Logo */}
-        <Link href="/seller" className="inline-block shrink-0">
-          <Image
-            src="/assets/images/logo/slogan-logo.svg"
-            alt="تگ مال؛ با هم، برای همه"
-            width={133}
-            height={40}
-            priority
-          />
-        </Link>
-
-        {/* Left side in RTL: Messages button & Seller Avatar */}
-        <div className="flex items-center gap-2">
-          {/* Messages icon button with unread count badge "۳" */}
-          <Link
-            href="/seller/messages"
-            className="relative w-11 h-11 rounded-xl flex items-center justify-center text-text-primary hover:bg-surface-subtle transition-colors"
-            aria-label="پیام‌ها"
-          >
-            <MessageTextIcon size={24} className="text-[#4a4a68]" />
-            <span className="absolute top-1.5 right-1.5 w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] font-medium flex items-center justify-center">
-              ۳
-            </span>
-          </Link>
-
-          {/* Seller Avatar */}
-          <Link
-            href="/seller/profile"
-            className="relative w-11 h-11 rounded-xl overflow-hidden shrink-0 border border-border-subtle inline-block"
-            aria-label="پروفایل فروشنده"
-          >
+      {/* Mobile app bar */}
+      <div className="lg:hidden sticky top-0 z-30 bg-surface">
+        <header className="flex items-center justify-between px-6 py-4 bg-surface border-b border-border-subtle h-[76px]">
+          {/* Right side in RTL: Slogan Logo */}
+          <Link href="/seller" className="inline-block shrink-0">
             <Image
-              src="/assets/images/seller/avatar.png"
-              alt="آرمان میمندی نژاد"
-              fill
-              sizes="44px"
-              className="object-cover"
+              src="/assets/images/logo/slogan-logo.svg"
+              alt="تگ مال؛ با هم، برای همه"
+              width={133}
+              height={40}
+              priority
             />
           </Link>
-        </div>
-      </header>
+
+          {/* Left side in RTL: Messages button & Seller Avatar */}
+          <div className="flex items-center gap-2">
+            {/* Messages icon button with unread count badge "۳" */}
+            <Link
+              href="/seller/messages"
+              className="relative w-11 h-11 rounded-xl flex items-center justify-center text-text-primary hover:bg-surface-subtle transition-colors"
+              aria-label="پیام‌ها"
+            >
+              <MessageTextIcon size={24} className="text-[#4a4a68]" />
+              <span className="absolute top-1.5 right-1.5 w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] font-medium flex items-center justify-center">
+                ۳
+              </span>
+            </Link>
+
+            {/* Seller Avatar */}
+            <Link
+              href="/seller/profile"
+              className="relative w-11 h-11 rounded-xl overflow-hidden shrink-0 border border-border-subtle inline-block"
+              aria-label="پروفایل فروشنده"
+            >
+              <Image
+                src="/assets/images/seller/avatar.png"
+                alt="آرمان میمندی نژاد"
+                fill
+                sizes="44px"
+                className="object-cover"
+              />
+            </Link>
+          </div>
+        </header>
+      </div>
 
       {/* Backdrop for mobile drawer */}
       {mobileSidebarOpen && (
@@ -158,7 +158,11 @@ function SellerSidebar() {
       >
         {/* Drawer header on mobile / Top Logo on desktop */}
         <div className="h-10 flex items-center justify-between">
-          <Link href="/seller" className="inline-block" onClick={closeMobileSidebar}>
+          <Link
+            href="/seller"
+            className="inline-block"
+            onClick={closeMobileSidebar}
+          >
             <Image
               src="/assets/images/logo/slogan-logo.svg"
               alt="تگ مال؛ با هم، برای همه"
