@@ -7,7 +7,9 @@ import { extendTailwindMerge } from "tailwind-merge";
 import SellerFinancialReport from "./SellerFinancialReport";
 import SellerWallet from "./SellerWallet";
 import useSellerProfileSection from "../hooks/useSellerProfileSection";
+import SellerHeader from "./SellerHeader";
 import { Input } from "@/components/ui/input";
+import { Radio } from "@/components/ui/radio";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +26,8 @@ import {
   StoreIcon,
   ChevronDownIcon,
   SupportIcon,
+  CheckCircleIcon,
+  CloseCircleIcon,
 } from "@/icons";
 
 // Register project typography tokens so class merging keeps font sizes and colors distinct.
@@ -97,6 +101,7 @@ export function SectionHeader({
   titleClassName,
   iconClassName,
   iconSize = 20,
+  titleGroupClassName,
 }) {
   return (
     <div
@@ -105,7 +110,12 @@ export function SectionHeader({
         className,
       )}
     >
-      <div className="flex items-center gap-3">
+      <div
+        className={mergeProfileClasses(
+          "flex items-center gap-3",
+          titleGroupClassName,
+        )}
+      >
         <span
           className={mergeProfileClasses(
             "flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-text-secondary",
@@ -362,6 +372,158 @@ function SellerSocialLinks() {
   );
 }
 
+function SellerSettings() {
+  const [settings, setSettings] = useState({
+    storeActive: true,
+    receiveMessages: true,
+  });
+  const rows = [
+    {
+      key: "storeActive",
+      title: "فعالیت و نمایش فروشگاه",
+      icon: StoreIcon,
+      iconSize: 22,
+      settingTitle: "وضعیت فعال بودن فروشگاه",
+      description: "فعال یا غیرفعال بودن فروشگاه را برای کاربران مشخص کنید.",
+    },
+    {
+      key: "receiveMessages",
+      title: "ارتباط با کاربران",
+      icon: MessageTextIcon,
+      iconSize: 24,
+      settingTitle: "امکان دریافت پیام از کاربر",
+      description:
+        "اجازه دهید کاربران برای فروشگاه پیام بفرستند؛ این گزینه مربوط به دریافت پیام است.",
+    },
+  ];
+
+  const submit = (event) => {
+    event.preventDefault();
+    toast.error(
+      "ذخیرهٔ تنظیمات فروشگاه هنوز به سرویس متصل نیست؛ تغییرات فقط در پیش‌نمایش این صفحه هستند.",
+      { className: "theme-new" },
+    );
+  };
+
+  return (
+    <div className="flex-1 bg-surface-muted bg-pattern-diagonal-fine">
+      <div className="mx-auto flex w-full max-w-[1140px] flex-col gap-6 px-4 pb-24 pt-8 lg:min-h-[1032px] lg:px-10 lg:pb-10 lg:pt-10">
+        <SellerHeader />
+        <form
+          onSubmit={submit}
+          className="flex flex-col gap-6"
+          aria-label="تنظیمات فروشگاه"
+        >
+          {rows.map((row) => (
+            <ProfileCard
+              key={row.key}
+              aria-label={row.title}
+              className="flex flex-col gap-4 p-6 lg:p-6"
+            >
+              <SectionHeader
+                title={row.title}
+                Icon={row.icon}
+                iconSize={row.iconSize}
+                iconClassName={`rounded-none bg-transparent text-primary ${row.key === "storeActive" ? "size-[22px]" : "size-6"}`}
+                titleClassName="text-h5 leading-[26px]"
+                titleGroupClassName="gap-2"
+                className={
+                  row.key === "storeActive"
+                    ? "h-auto min-h-7 flex-wrap lg:h-7 lg:flex-nowrap"
+                    : "h-auto min-h-[26px] flex-wrap lg:h-[26px] lg:flex-nowrap"
+                }
+                action={
+                  row.key === "storeActive" ? (
+                    <span
+                      role="status"
+                      dir="ltr"
+                      className={`inline-flex min-h-7 min-w-[142px] items-center justify-center gap-[6px] rounded-md px-[10px] py-[5px] text-caption ${settings.storeActive ? "bg-success-strong/10 text-success-strong" : "bg-error/10 text-error"}`}
+                    >
+                      <span>
+                        {settings.storeActive
+                          ? "فروشگاه فعال است"
+                          : "فروشگاه غیرفعال است"}
+                      </span>
+                      {settings.storeActive ? (
+                        <CheckCircleIcon size={14} />
+                      ) : (
+                        <CloseCircleIcon size={14} />
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-caption text-text-muted">
+                      ۲ تنظیم مستقل
+                    </span>
+                  )
+                }
+              />
+              <div className="h-px bg-border-subtle" />
+              <div className="flex min-h-[52px] flex-col items-start justify-between gap-4 lg:flex-row lg:items-center lg:gap-8">
+                <div className="min-w-0 flex-1">
+                  <h3 id={`seller-setting-${row.key}`} className="text-body">
+                    {row.settingTitle}
+                  </h3>
+                  <p
+                    id={`seller-setting-${row.key}-description`}
+                    className="mt-1 text-small text-text-secondary"
+                  >
+                    {row.description}
+                  </p>
+                </div>
+                <fieldset
+                  aria-labelledby={`seller-setting-${row.key}`}
+                  aria-describedby={`seller-setting-${row.key}-description`}
+                  className="m-0 flex h-10 w-48 shrink-0 items-center gap-1 rounded-lg border border-border-default bg-surface-subtle p-[3px]"
+                >
+                  <legend className="sr-only">{row.settingTitle}</legend>
+                  {[
+                    { value: true, label: "فعال" },
+                    { value: false, label: "غیرفعال" },
+                  ].map((option) => (
+                    <Radio
+                      key={option.label}
+                      variant="segmented"
+                      name={`seller-${row.key}`}
+                      value={String(option.value)}
+                      label={option.label}
+                      checked={settings[row.key] === option.value}
+                      onChange={() =>
+                        setSettings((current) => ({
+                          ...current,
+                          [row.key]: option.value,
+                        }))
+                      }
+                    />
+                  ))}
+                </fieldset>
+              </div>
+            </ProfileCard>
+          ))}
+          <footer className="flex flex-wrap items-center gap-3" dir="ltr">
+            <button
+              type="submit"
+              className="flex h-11 w-[159px] items-center justify-center gap-2 rounded-lg bg-primary px-6 text-small text-text-on-primary transition-colors hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+              dir="rtl"
+            >
+              <CheckCircleIcon size={18} variant="plain" />
+              <span>ذخیره تغییرات</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setSettings({ storeActive: true, receiveMessages: true })
+              }
+              className="h-11 w-[83px] rounded-lg border border-border-default bg-surface px-5 text-small text-text-secondary transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+            >
+              انصراف
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function SellerProfile() {
   const section = useSellerProfileSection();
   const handleSubmit = (event) => {
@@ -371,6 +533,7 @@ export default function SellerProfile() {
 
   if (section === "financial") return <SellerFinancialReport />;
   if (section === "wallet") return <SellerWallet />;
+  if (section === "settings") return <SellerSettings />;
 
   return (
     <main className="mx-auto w-full max-w-[1140px] px-4 pb-10 pt-8 lg:px-10 lg:pt-10">

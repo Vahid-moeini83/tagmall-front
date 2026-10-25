@@ -10,8 +10,33 @@ function Radio({
   className,
   disabled = false,
   radioClassname = "",
+  variant = "default",
   ...props
 }) {
+  if (variant === "segmented") {
+    return (
+      <label
+        className={cn(
+          "relative flex h-8 w-[90px] shrink-0 cursor-pointer",
+          disabled && "cursor-not-allowed opacity-50",
+          className,
+        )}
+      >
+        <input
+          type="radio"
+          checked={checked}
+          onChange={(event) => onChange?.(event.target.checked)}
+          disabled={disabled}
+          className="peer sr-only"
+          {...props}
+        />
+        <span className="flex size-full items-center justify-center rounded-md text-small text-text-muted transition-colors peer-checked:bg-primary peer-checked:text-text-on-primary peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary motion-reduce:transition-none">
+          {label}
+        </span>
+      </label>
+    );
+  }
+
   return (
     <label
       className={cn(
