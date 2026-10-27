@@ -25,10 +25,12 @@
   --color-surface: #ffffff;
   --color-surface-subtle: #f9fafb;
   --color-surface-muted: #f3f4f6;
+  --color-surface-soft: #eceff3;
 
   --color-border-subtle: #f3f4f6;
   --color-border-default: #e5e7eb;
   --color-border-strong: #d1d5db;
+  --color-navigation-connector: #43454d;
 
   /* ------------------------------------------------------------------------
      2. Primary Brand Color Scale (50 - 900)
@@ -79,6 +81,7 @@
      ------------------------------------------------------------------------ */
   --color-info: #3b82f6;
   --color-info-light: #eff6ff;
+  --color-success-strong: #108981;
 
   /* ------------------------------------------------------------------------
      6. Shadows
@@ -99,6 +102,7 @@
      ------------------------------------------------------------------------ */
   --radius-pill: 999px;
   --radius-circle: 50%;
+  --radius-card: 20px;
 
   /* ------------------------------------------------------------------------
      8. Typography Hierarchy (Desktop)
@@ -202,6 +206,25 @@
     transparent 6px,
     rgba(26, 26, 46, 0.04) 6px,
     rgba(26, 26, 46, 0.04) 7px
+  );
+}
+
+@utility bg-pattern-diagonal-fine {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4.5px,
+    rgba(26, 26, 46, 0.04) 4.5px,
+    rgba(26, 26, 46, 0.04) 5px
+  );
+}
+
+/* The selected financial report uses an orange quarter over a primary ring. */
+@utility bg-revenue-share {
+  background-image: conic-gradient(
+    from 90deg,
+    var(--color-secondary) 0deg 90deg,
+    var(--color-primary) 90deg 360deg
   );
 }
 

@@ -23,6 +23,7 @@ function DateRangeFilterContent({
   toDate,
   setToDate,
   showLabel = true,
+  variant = "default",
 }) {
   const dateRangeLabel = formatDateRangeLabel(fromDate, toDate);
 
@@ -56,16 +57,29 @@ function DateRangeFilterContent({
               calendarPosition="bottom-center"
               containerClassName="w-full"
               render={
-                <button
-                  type="button"
-                  className="w-full text-center border-0! h-[50px] border-b-2! border-white rounded-none placeholder:text-gray-400"
-                >
-                  <span
-                    className={fromDate ? "text-gray-800" : "text-gray-400"}
+                variant === "seller" ? (
+                  (value, openCalendar) => (
+                    <button
+                      type="button"
+                      onClick={openCalendar}
+                      className="h-[50px] w-full rounded-md border border-border-default bg-surface-subtle px-10 text-center text-small text-text-secondary"
+                      aria-label="از تاریخ"
+                    >
+                      {value || "از تاریخ"}
+                    </button>
+                  )
+                ) : (
+                  <button
+                    type="button"
+                    className="w-full text-center border-0! h-[50px] border-b-2! border-white rounded-none placeholder:text-gray-400"
                   >
-                    {fromDate ? fromDate.format("YYYY/MM/DD") : "از تاریخ"}
-                  </span>
-                </button>
+                    <span
+                      className={fromDate ? "text-gray-800" : "text-gray-400"}
+                    >
+                      {fromDate ? fromDate.format("YYYY/MM/DD") : "از تاریخ"}
+                    </span>
+                  </button>
+                )
               }
             />
             <button
@@ -95,14 +109,29 @@ function DateRangeFilterContent({
               calendarPosition="bottom-center"
               containerClassName="w-full"
               render={
-                <button
-                  type="button"
-                  className="w-full text-center border-0! h-[50px] border-b-2! border-white rounded-none placeholder:text-gray-400"
-                >
-                  <span className={toDate ? "text-gray-800" : "text-gray-400"}>
-                    {toDate ? toDate.format("YYYY/MM/DD") : "تا تاریخ"}
-                  </span>
-                </button>
+                variant === "seller" ? (
+                  (value, openCalendar) => (
+                    <button
+                      type="button"
+                      onClick={openCalendar}
+                      className="h-[50px] w-full rounded-md border border-border-default bg-surface-subtle px-10 text-center text-small text-text-secondary"
+                      aria-label="تا تاریخ"
+                    >
+                      {value || "تا تاریخ"}
+                    </button>
+                  )
+                ) : (
+                  <button
+                    type="button"
+                    className="w-full text-center border-0! h-[50px] border-b-2! border-white rounded-none placeholder:text-gray-400"
+                  >
+                    <span
+                      className={toDate ? "text-gray-800" : "text-gray-400"}
+                    >
+                      {toDate ? toDate.format("YYYY/MM/DD") : "تا تاریخ"}
+                    </span>
+                  </button>
+                )
               }
             />
             <button

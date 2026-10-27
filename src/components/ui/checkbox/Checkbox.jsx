@@ -8,10 +8,13 @@ function Checkbox({
   onChange,
   label,
   className,
+  variant = "default",
   ...props
 }) {
   return (
-    <label className="flex items-center gap-5 cursor-pointer select-none">
+    <label
+      className={`flex items-center gap-5 cursor-pointer select-none ${variant === "seller" ? "relative has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary" : ""}`}
+    >
       <input
         type="checkbox"
         checked={checked}
@@ -21,11 +24,14 @@ function Checkbox({
       />
       <span
         className={cn(
-          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-[6px] bg-white transition-colors",
-          hasBorder ? "border-2" : "border-none",
-          checked
-            ? "border-primary text-primary"
-            : "border-gray-400 text-transparent",
+          variant === "seller"
+            ? `flex size-5 shrink-0 order-first items-center justify-center rounded border transition-colors ${checked ? "border-primary bg-primary text-text-on-primary" : "border-border-default bg-surface text-transparent"}`
+            : "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-[6px] bg-white transition-colors",
+          variant !== "seller" && (hasBorder ? "border-2" : "border-none"),
+          variant !== "seller" &&
+            (checked
+              ? "border-primary text-primary"
+              : "border-gray-400 text-transparent"),
           className,
         )}
         aria-hidden
