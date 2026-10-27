@@ -88,91 +88,100 @@
   --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.12);
 
   /* ------------------------------------------------------------------------
-     7. Spacing Scale (4px Base Grid Tokens)
-     Generates p-sm, gap-base, m-lg, etc.
+     Spacing: the designer's 4px grid equals Tailwind's numeric scale
+     (p-1 = 4px, p-4 = 16px, ...). Named --spacing-* tokens must NOT be
+     added: max-w-*, w-* and size-* resolve --spacing-* before --container-*,
+     so names like sm/md/lg would silently change max-w-sm/md/lg everywhere.
      ------------------------------------------------------------------------ */
-  --spacing-2xs: 2px;
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-base: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 40px;
-  --spacing-3xl: 48px;
-  --spacing-4xl: 64px;
-  --spacing-5xl: 80px;
-  --spacing-6xl: 96px;
-  --spacing-7xl: 128px;
 
   /* ------------------------------------------------------------------------
-     8. Border Radius (New Non-Conflicting Tokens)
+     7. Border Radius (New Non-Conflicting Tokens)
      ------------------------------------------------------------------------ */
   --radius-pill: 999px;
   --radius-circle: 50%;
 
   /* ------------------------------------------------------------------------
-     9. Typography Hierarchy (Desktop)
+     8. Typography Hierarchy (Desktop)
+     Each class carries size, line-height and weight. An explicit font-*
+     class next to it still wins.
      ------------------------------------------------------------------------ */
   --text-display: 56px;
   --text-display--line-height: 64px;
+  --text-display--font-weight: 800;
 
   --text-h1: 44px;
   --text-h1--line-height: 52px;
+  --text-h1--font-weight: 700;
 
   --text-h2: 36px;
   --text-h2--line-height: 44px;
+  --text-h2--font-weight: 700;
 
   --text-h3: 28px;
   --text-h3--line-height: 36px;
+  --text-h3--font-weight: 600;
 
   --text-h4: 22px;
   --text-h4--line-height: 30px;
+  --text-h4--font-weight: 600;
 
   --text-h5: 18px;
   --text-h5--line-height: 26px;
+  --text-h5--font-weight: 600;
 
   --text-body: 16px;
   --text-body--line-height: 26px;
+  --text-body--font-weight: 400;
 
   --text-small: 14px;
   --text-small--line-height: 22px;
+  --text-small--font-weight: 400;
 
   --text-caption: 12px;
   --text-caption--line-height: 18px;
+  --text-caption--font-weight: 400;
 
   --text-label: 12px;
   --text-label--line-height: 16px;
+  --text-label--font-weight: 600;
 
   /* ------------------------------------------------------------------------
-     10. Typography Hierarchy (Mobile)
+     9. Typography Hierarchy (Mobile)
      ------------------------------------------------------------------------ */
   --text-mobile-display: 36px;
   --text-mobile-display--line-height: 44px;
+  --text-mobile-display--font-weight: 800;
 
   --text-mobile-h1: 32px;
   --text-mobile-h1--line-height: 40px;
+  --text-mobile-h1--font-weight: 700;
 
   --text-mobile-h2: 26px;
   --text-mobile-h2--line-height: 34px;
+  --text-mobile-h2--font-weight: 700;
 
   --text-mobile-h3: 22px;
   --text-mobile-h3--line-height: 30px;
+  --text-mobile-h3--font-weight: 600;
 
   --text-mobile-h4: 18px;
   --text-mobile-h4--line-height: 26px;
+  --text-mobile-h4--font-weight: 600;
 
   --text-mobile-body: 14px;
   --text-mobile-body--line-height: 24px;
+  --text-mobile-body--font-weight: 400;
 
   --text-mobile-caption: 11px;
   --text-mobile-caption--line-height: 16px;
+  --text-mobile-caption--font-weight: 400;
 
   --text-mobile-label: 11px;
   --text-mobile-label--line-height: 14px;
+  --text-mobile-label--font-weight: 600;
 
   /* ------------------------------------------------------------------------
-     11. Background Patterns (Seller Panel & Subdued Textures)
+     10. Background Patterns (Seller Panel & Subdued Textures)
      ------------------------------------------------------------------------ */
   --background-image-pattern-diagonal: repeating-linear-gradient(
     45deg,

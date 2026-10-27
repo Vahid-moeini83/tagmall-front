@@ -432,8 +432,12 @@ function SellerProducts() {
           <button
             type="button"
             onClick={() => {
-              setTempCategory(selectedCategory === "همه" ? "موبایل" : selectedCategory);
-              setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
+              setTempCategory(
+                selectedCategory === "همه" ? "موبایل" : selectedCategory,
+              );
+              setTempStatus(
+                selectedStatus === "همه" ? "تایید شده" : selectedStatus,
+              );
               setIsFilterModalOpen(true);
             }}
             className="w-[100px] h-11 bg-primary/10 border border-primary/20 rounded-lg px-3 flex items-center justify-center gap-1.5 text-primary text-[13px] font-normal hover:bg-primary/20 transition-colors shrink-0"
@@ -446,8 +450,12 @@ function SellerProducts() {
           <button
             type="button"
             onClick={() => {
-              setTempCategory(selectedCategory === "همه" ? "موبایل" : selectedCategory);
-              setTempStatus(selectedStatus === "همه" ? "تایید شده" : selectedStatus);
+              setTempCategory(
+                selectedCategory === "همه" ? "موبایل" : selectedCategory,
+              );
+              setTempStatus(
+                selectedStatus === "همه" ? "تایید شده" : selectedStatus,
+              );
               setIsFilterModalOpen(true);
             }}
             className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[16px] bg-surface hover:border-primary/40 transition-colors"
@@ -462,7 +470,9 @@ function SellerProducts() {
       <div className="flex flex-col gap-3 lg:hidden">
         {/* Result count indicator */}
         <div className="flex items-center justify-between text-[13px] px-1">
-          <span className="font-semibold text-text-primary">لیست محصولات من</span>
+          <span className="font-semibold text-text-primary">
+            لیست محصولات من
+          </span>
           <span className="text-[12px] text-text-muted">۱ تا ۸ از ۴۸ کالا</span>
         </div>
 
@@ -524,9 +534,7 @@ function SellerProducts() {
 
               {/* Stock on LEFT */}
               <div className="flex flex-col gap-0.5 min-w-[70px] text-left">
-                <span className="text-[12px] text-text-muted">
-                  موجودی
-                </span>
+                <span className="text-[12px] text-text-muted">موجودی</span>
                 <span
                   className={`text-[14px] font-normal ${
                     product.isOutOfStock ? "text-error" : "text-text-secondary"
@@ -768,8 +776,8 @@ function SellerProducts() {
                         activeFiltersCount === 2
                           ? "۲"
                           : activeFiltersCount === 1
-                          ? "۱"
-                          : activeFiltersCount
+                            ? "۱"
+                            : activeFiltersCount
                       } فیلتر انتخاب شده`}
                 </span>
               </div>
