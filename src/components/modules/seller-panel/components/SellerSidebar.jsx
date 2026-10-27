@@ -103,8 +103,11 @@ function SellerSidebar() {
   const pathname = usePathname();
   const isMessageCenter = pathname?.startsWith("/seller/messages");
   const isSellerProfile = pathname?.startsWith("/seller/profile");
+  const isCampaignCenter = pathname?.startsWith("/seller/discounts");
   const hasProfileNavigationStyle =
-    isSellerProfile || pathname?.startsWith("/seller/branches");
+    isSellerProfile ||
+    pathname?.startsWith("/seller/branches") ||
+    isCampaignCenter;
   const messageCategory = pathname?.split("/")[3] || "experts";
   const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
 
@@ -286,7 +289,11 @@ function SellerSidebar() {
                         : "text-[15px]"
                     }
                   >
-                    {item.label}
+                    {item.id === "discounts" &&
+                    isCampaignCenter &&
+                    pathname === "/seller/discounts"
+                      ? "کمپین‌های فروش"
+                      : item.label}
                   </span>
                 </div>
 

@@ -48,14 +48,19 @@ function Radio({
         type="radio"
         checked={checked}
         onChange={(e) => onChange?.(e.target.checked)}
-        className="sr-only"
+        className="peer sr-only"
         disabled={disabled}
         {...props}
       />
       <span
         className={cn(
-          "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full transition-colors bg-gray-200 border-0",
-          disabled && "opacity-50 cursor-not-allowed",
+          variant === "card"
+            ? `flex size-[18px] shrink-0 order-first items-center justify-center rounded-full border bg-surface transition-colors ${checked ? "border-primary" : "border-border-default"}`
+            : "flex shrink-0 order-first items-center justify-center w-5 h-5 rounded-full transition-colors bg-gray-200 border-0",
+          disabled &&
+            (variant === "card"
+              ? "cursor-not-allowed"
+              : "opacity-50 cursor-not-allowed"),
           radioClassname,
         )}
         aria-hidden

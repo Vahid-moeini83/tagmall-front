@@ -16,6 +16,8 @@ export { default as SellerProfile } from "./components/SellerProfile";
 export { default as SellerFinancialReport } from "./components/SellerFinancialReport";
 export { default as SellerWallet } from "./components/SellerWallet";
 export { default as SellerBranches } from "./components/SellerBranches";
+export { default as SellerCampaigns } from "./components/SellerCampaigns";
+export { default as SellerCampaignEditor } from "./components/SellerCampaignEditor";
 export {
   SellerNavigationProvider,
   useSellerNavigation,
