@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   SearchIcon,
   ChevronDownIcon,
@@ -13,7 +12,7 @@ import {
   PlusIcon,
   ChartLineDownSquareIcon,
   CheckCircleIcon,
-  VerifyIcon,
+  HintIcon,
 } from "@/icons";
 
 const SEARCH_RESULTS = [
@@ -116,16 +115,16 @@ function SellerProductCreate() {
 
   // Pricing State
   const [pricingType, setPricingType] = useState("free"); // free, printed, regulatory
-  const [sellingPrice, setSellingPrice] = useState("۸۹,۵۰۰,۰۰۰");
+  const [sellingPrice, setSellingPrice] = useState("۸۹٬۵۰۰٬۰۰۰");
 
   // Branches Stock State
   const [branches, setBranches] = useState([
     { id: 1, name: "تهران مرکزی", stock: "۳" },
-    { id: 2, name: "تهران غرب", stock: "۲" },
+    { id: 2, name: "تهران ونک", stock: "۲" },
   ]);
 
   // Delivery & Sale Method State
-  const [saleMethod, setSaleMethod] = useState("both"); // online, in_person, both
+  const [saleMethod, setSaleMethod] = useState("in_person"); // online, in_person, both
   const [inPersonCommitment, setInPersonCommitment] = useState(true);
   const [onlineCommitment, setOnlineCommitment] = useState(true);
 
@@ -149,7 +148,7 @@ function SellerProductCreate() {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-24 lg:pb-12 max-w-[1440px] mx-auto gap-6">
+    <div className="w-full flex-1 flex flex-col px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-24 lg:pb-12 max-w-[1440px] mx-auto gap-6 select-text" dir="rtl">
       {/* Top Header Bar (Desktop - Figma Node: 44:45287) */}
       <header className="hidden lg:flex items-center justify-between">
         <div className="flex flex-col gap-1 text-right">
@@ -161,7 +160,7 @@ function SellerProductCreate() {
           </p>
         </div>
 
-        {/* View Switcher Tabs (For easy demo of both Figma screens) */}
+        {/* View Switcher Tabs (For preview of both Figma screens) */}
         <div className="flex items-center gap-2 bg-surface p-1 rounded-xl border border-border-default text-xs">
           <button
             type="button"
@@ -192,159 +191,186 @@ function SellerProductCreate() {
       {/* SCREEN 1: Search & Select Product (Figma Node: 44:45285) */}
       {/* ========================================================================= */}
       {activeStep === "search" && (
-        <div className="w-full bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-8 shadow-xs">
+        <div className="w-full bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-8 shadow-xs">
           {/* Section 1: Search Header & Input */}
-          <div className="flex flex-col gap-5 text-right">
-            {/* Header: Title + Search Icon */}
+          <div className="flex flex-col text-right">
+            {/* CardHeader (1004x44 @ 0,0 in Figma) */}
             <div className="flex items-center justify-start gap-3">
-              <h2 className="text-[18px] font-semibold text-text-primary">
+              {/* Icon 44x44 on RIGHT in RTL (Figma: Frame 44x44 @ 960,0) */}
+              <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
+                <SearchIcon size={24} />
+              </div>
+
+              {/* Title on the LEFT of Icon in RTL (Figma: TEXT @ 813,9) */}
+              <h2 className="text-[16px] leading-[26px] font-normal text-text-primary">
                 جست‌وجوی محصول
               </h2>
-              <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                <SearchIcon size={20} />
-              </div>
             </div>
 
-            {/* Search Input Bar (Input on Right, Button on Left in RTL) */}
-            <div className="flex items-center gap-3 w-full">
-              <button
-                type="button"
-                className="h-12 px-6 rounded-xl bg-surface-subtle border border-border-default text-text-secondary text-[14px] font-normal hover:bg-surface hover:border-primary/40 transition-colors shrink-0"
-              >
-                جست‌وجو
-              </button>
+            {/* Figma Line Divider (1004x0 @ 0,60 stroke:#f3f4f6) */}
+            <div className="w-full h-px bg-[#f3f4f6] mt-4 mb-5" />
 
+            {/* SearchRow: Input on Right, Button on Left in RTL */}
+            <div className="flex items-center gap-3 w-full">
+              {/* SearchBarContainer (Figma: 903x50 @ 101,0 r:16 fill:#f9fafb) */}
               <div className="relative flex-1">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="نام محصول، برند یا شناسه کالا را وارد کنید..."
-                  className="w-full h-12 rounded-xl bg-surface-subtle border border-border-default px-4 text-right text-[14px] text-text-primary placeholder:text-text-muted focus:outline-hidden focus:border-primary focus:bg-surface transition-colors"
+                  className="w-full h-[50px] rounded-[16px] bg-[#f9fafb] border border-[#f9fafb] px-4 text-right text-[14px] text-text-primary placeholder:text-text-muted focus:outline-hidden focus:border-primary/40 focus:bg-surface transition-colors"
                   dir="rtl"
                 />
               </div>
+
+              {/* Search Button on far left (Figma: Frame 89x50 @ 0,0 r:12 fill:#f9fafb) */}
+              <button
+                type="button"
+                className="w-[89px] h-[50px] rounded-xl bg-[#f9fafb] text-[#7a7a96] text-[16px] font-normal hover:bg-primary-50 hover:text-primary transition-colors shrink-0 flex items-center justify-center cursor-pointer"
+              >
+                جست‌وجو
+              </button>
             </div>
           </div>
 
           {/* Section 2: Search Results Grid (6 Results) */}
           <div className="flex flex-col gap-4">
+            {/* ResultsHeader (Figma: 1004x26) */}
             <div className="flex items-center justify-between">
-              <h3 className="text-[15px] font-semibold text-text-primary">
+              {/* Right: نتایج جست‌وجو (size 16, weight 325, #1a1a2e) */}
+              <h3 className="text-[16px] font-normal text-text-primary">
                 نتایج جست‌وجو
               </h3>
-              <span className="text-[13px] text-text-muted">۶ نتیجه</span>
+
+              {/* Left: ۶ نتیجه (size 14, weight 325, #4a4a68) */}
+              <span className="text-[14px] text-text-secondary">۶ نتیجه</span>
             </div>
 
+            {/* ResultsGrid (Figma: 3 columns, 2 rows, gap 16px) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {SEARCH_RESULTS.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-surface rounded-2xl p-4 border border-border-default/70 flex flex-col justify-between gap-4 hover:border-primary/40 transition-all shadow-xs"
-                >
-                  {/* Top info row: Image on RIGHT in RTL, Text on LEFT */}
-                  <div className="flex items-start gap-3 text-right">
-                    <div className="flex-1 min-w-0 flex flex-col gap-1">
-                      <h4 className="text-[14px] font-semibold text-text-primary leading-snug line-clamp-2">
-                        {product.title}
-                      </h4>
-                      <span className="text-[12px] text-text-muted font-normal">
-                        {product.code}
-                      </span>
-                      <span className="text-[12px] text-text-secondary font-medium">
-                        {product.category}
-                      </span>
+              {SEARCH_RESULTS.map((product) => {
+                const isSelectedBorder = product.buttonType === "primary";
+                return (
+                  <div
+                    key={product.id}
+                    className={`bg-surface rounded-2xl p-4 border flex flex-col justify-between gap-4 transition-all shadow-xs ${
+                      isSelectedBorder
+                        ? "border-[#3d3183]"
+                        : "border-border-default hover:border-primary/40"
+                    }`}
+                  >
+                    {/* Top info row: Image on RIGHT in RTL, Text on LEFT */}
+                    <div className="flex items-start gap-3 text-right">
+                      {/* Image on Right in RTL (Figma: Rectangle 72x72 @ 220,12 r:12) */}
+                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
+                        <Image
+                          src={product.image}
+                          alt={product.title}
+                          fill
+                          sizes="72px"
+                          className="object-contain"
+                        />
+                      </div>
+
+                      {/* Text on Left (Figma: Frame 208x96 @ 0,0) */}
+                      <div className="flex-1 min-w-0 flex flex-col gap-1">
+                        <h4 className="text-[14px] leading-snug font-medium text-text-primary line-clamp-2">
+                          {product.title}
+                        </h4>
+                        <span className="text-[14px] text-text-secondary font-normal">
+                          {product.code}
+                        </span>
+                        <span className="text-[14px] text-text-muted font-normal">
+                          {product.category}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="relative w-18 h-18 rounded-lg overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        fill
-                        sizes="72px"
-                        className="object-contain"
-                      />
-                    </div>
+                    {/* Bottom Action Button */}
+                    {product.buttonType === "primary" ? (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectProduct(product)}
+                        className="w-full h-[46px] rounded-lg bg-[#3d3183] text-white text-[14px] font-normal hover:bg-[#342970] transition-colors cursor-pointer"
+                      >
+                        {product.buttonText}
+                      </button>
+                    ) : product.buttonType === "teal" ? (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectProduct(product)}
+                        className="w-full h-[50px] rounded-xl bg-[#108981] text-white text-[16px] font-normal hover:bg-[#0e7770] transition-colors cursor-pointer"
+                      >
+                        {product.buttonText}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectProduct(product)}
+                        className="w-full h-[46px] rounded-lg bg-[#f3f4f6] text-[#4a4a68] text-[14px] font-normal hover:bg-[#e5e7eb] hover:text-text-primary transition-colors cursor-pointer"
+                      >
+                        {product.buttonText}
+                      </button>
+                    )}
                   </div>
+                );
+              })}
+            </div>
 
-                  {/* Bottom Action Button */}
-                  {product.buttonType === "primary" ? (
-                    <button
-                      type="button"
-                      onClick={() => handleSelectProduct(product)}
-                      className="w-full h-10 rounded-xl bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover transition-colors shadow-xs"
-                    >
-                      {product.buttonText}
-                    </button>
-                  ) : product.buttonType === "teal" ? (
-                    <button
-                      type="button"
-                      onClick={() => handleSelectProduct(product)}
-                      className="w-full h-10 rounded-xl bg-[#108981] text-white text-[13px] font-semibold hover:bg-[#108981]/90 transition-colors shadow-xs"
-                    >
-                      {product.buttonText}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => handleSelectProduct(product)}
-                      className="w-full h-10 rounded-xl bg-surface-subtle text-text-secondary border border-border-default text-[13px] font-normal hover:bg-surface hover:text-primary transition-colors"
-                    >
-                      {product.buttonText}
-                    </button>
-                  )}
+            {/* NoResultState Banner (Figma: 1004x110 @ 0,520 r:16 fill:#f9fafb stroke:#e5e7eb p:24) */}
+            <div className="rounded-2xl bg-[#f9fafb] border border-border-default p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+              {/* Right block: Icon + Texts */}
+              <div className="flex items-center gap-3 text-right">
+                {/* Icon 44x44 on RIGHT (Figma: Frame 44x44 r:12 fill:#eeeff6) */}
+                <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
+                  <HintIcon size={24} />
                 </div>
-              ))}
+
+                <div className="flex flex-col">
+                  <span className="text-[18px] leading-[28px] font-normal text-text-primary">
+                    محصول موردنظر را پیدا نکردید؟
+                  </span>
+                  <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                    محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس شما قرار می‌گیرد
+                  </span>
+                </div>
+              </div>
+
+              {/* Left block: Action Button (Figma: Frame 252x50 r:12 fill:#3d3183) */}
+              <button
+                type="button"
+                className="h-[50px] px-6 rounded-xl bg-[#3d3183] text-white text-[16px] font-normal flex items-center gap-2 hover:bg-[#342970] transition-colors shrink-0 cursor-pointer"
+              >
+                <MessageTextIcon size={24} />
+                <span>درخواست معرفی محصول</span>
+              </button>
             </div>
           </div>
 
-          {/* Section 3: Help / Request Product Banner (Figma Node: 44:45320) */}
-          <div className="rounded-2xl bg-surface-subtle border border-border-subtle p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <button
-              type="button"
-              className="h-11 px-5 rounded-xl bg-[#3d3183] text-white text-[13px] font-semibold flex items-center gap-2 hover:bg-[#342970] transition-colors shrink-0 shadow-xs"
-            >
-              <MessageTextIcon size={18} />
-              <span>درخواست معرفی محصول</span>
-            </button>
-
-            <div className="flex items-center gap-3 text-right">
-              <div className="flex flex-col">
-                <span className="text-[15px] font-semibold text-text-primary">
-                  محصول موردنظر را پیدا نکردید؟
-                </span>
-                <span className="text-[12px] text-text-muted mt-0.5">
-                  محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس شما قرار
-                  می‌گیرد
-                </span>
-              </div>
-
-              <div className="w-10 h-10 rounded-full bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                <VerifyIcon size={20} />
-              </div>
-            </div>
-          </div>
-
-          {/* Section 4: Drafts Section (Figma Node: 44:45329) */}
+          {/* Section 4: Drafts Section (Figma: 1004x258 @ 28,758) */}
           <div className="flex flex-col gap-4 pt-2">
+            {/* Drafts Header */}
             <div className="flex items-center justify-between">
+              {/* Right: Icon 44x44 + "محصولات پیش نویس شده" (size 16, #1a1a2e) */}
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
+                  <NoteIcon size={24} />
+                </div>
+                <h3 className="text-[16px] font-normal text-text-primary">
+                  محصولات پیش نویس شده
+                </h3>
+              </div>
+
+              {/* Left: "مشاهده همه" (size 12, #1a1a2e) with angle-left */}
               <button
                 type="button"
                 onClick={() => setShowDraftsEmpty(!showDraftsEmpty)}
-                className="text-[13px] text-text-muted hover:text-text-primary transition-colors flex items-center gap-1 select-none"
+                className="text-[12px] text-text-primary hover:text-primary transition-colors flex items-center gap-1 select-none cursor-pointer"
               >
                 <span>مشاهده همه</span>
-                <ChevronLeftIcon size={16} />
+                <ChevronLeftIcon size={18} />
               </button>
-
-              <div className="flex items-center gap-2">
-                <h3 className="text-[16px] font-semibold text-text-primary">
-                  محصولات پیش‌نویس شده
-                </h3>
-                <div className="w-8 h-8 rounded-lg bg-surface-subtle text-text-secondary flex items-center justify-center">
-                  <NoteIcon size={18} />
-                </div>
-              </div>
             </div>
 
             {/* Draft Cards */}
@@ -353,22 +379,11 @@ function SellerProductCreate() {
                 {DRAFT_PRODUCTS.map((draft) => (
                   <div
                     key={draft.id}
-                    className="bg-surface rounded-2xl p-4 border border-border-default/70 flex flex-col justify-between gap-4 shadow-xs"
+                    className="bg-surface rounded-2xl p-4 border border-border-default flex flex-col justify-between gap-4 shadow-xs"
                   >
                     <div className="flex items-start gap-3 text-right">
-                      <div className="flex-1 min-w-0 flex flex-col gap-1">
-                        <h4 className="text-[14px] font-semibold text-text-primary leading-snug line-clamp-2">
-                          {draft.title}
-                        </h4>
-                        <span className="text-[12px] text-text-muted font-normal">
-                          {draft.code}
-                        </span>
-                        <span className="text-[12px] text-text-secondary font-medium">
-                          {draft.category}
-                        </span>
-                      </div>
-
-                      <div className="relative w-18 h-18 rounded-lg overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
+                      {/* Image 72x72 on Right */}
+                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
                         <Image
                           src={draft.image}
                           alt={draft.title}
@@ -377,12 +392,26 @@ function SellerProductCreate() {
                           className="object-contain"
                         />
                       </div>
+
+                      {/* Text on Left */}
+                      <div className="flex-1 min-w-0 flex flex-col gap-1">
+                        <h4 className="text-[16px] font-normal text-text-primary leading-snug line-clamp-2">
+                          {draft.title}
+                        </h4>
+                        <span className="text-[14px] text-text-secondary font-normal">
+                          {draft.code}
+                        </span>
+                        <span className="text-[14px] text-text-muted font-normal">
+                          {draft.category}
+                        </span>
+                      </div>
                     </div>
 
+                    {/* Button (Figma: Frame 292x46 r:12 fill:#f3f4f6 text:#1a1a2e size 16) */}
                     <button
                       type="button"
                       onClick={() => handleSelectProduct(draft)}
-                      className="w-full h-10 rounded-xl bg-surface-subtle text-text-secondary border border-border-default text-[13px] font-normal hover:bg-surface hover:text-primary transition-colors"
+                      className="w-full h-[46px] rounded-xl bg-[#f3f4f6] text-text-primary text-[16px] font-normal hover:bg-[#e5e7eb] transition-colors cursor-pointer"
                     >
                       ادامه و تکمیل
                     </button>
@@ -392,7 +421,7 @@ function SellerProductCreate() {
             ) : null}
 
             {/* Empty Drafts State (Figma Node: 44:45374) */}
-            <div className="rounded-2xl border border-dashed border-border-default/80 p-8 flex flex-col items-center justify-center gap-3 bg-surface-subtle/30 text-center mt-2">
+            <div className="rounded-2xl border border-dashed border-border-default p-8 flex flex-col items-center justify-center gap-3 bg-surface-subtle/30 text-center mt-2">
               <div className="relative w-44 h-36">
                 <Image
                   src="/assets/images/seller/new-product/empty_drafts.png"
@@ -415,43 +444,37 @@ function SellerProductCreate() {
       {/* ========================================================================= */}
       {activeStep === "configure" && (
         <div className="w-full flex flex-col gap-6 text-right">
-          {/* Card 0: Selected Product Card (Figma Node: 44:45505) */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
+          {/* ===================================================================== */}
+          {/* Section 1: Product and authenticity (Figma: 1060x665 r:20 fill:#ffffff p:28) */}
+          {/* ===================================================================== */}
+          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+            {/* CardHeader (Figma: 1004x40) */}
             <div className="flex items-center justify-between">
+              {/* Right: Icon 40x40 + "محصول انتخاب‌شده" (size 18, #1a1a2e) */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
+                  <CheckCircleIcon size={20} />
+                </div>
+                <h2 className="text-[18px] font-normal text-text-primary">
+                  محصول انتخاب‌شده
+                </h2>
+              </div>
+
+              {/* Left: Change / Re-search Link */}
               <button
                 type="button"
                 onClick={() => setActiveStep("search")}
-                className="text-[13px] text-primary hover:underline font-medium"
+                className="text-[13px] text-primary hover:underline font-normal cursor-pointer"
               >
                 تغییر یا جست‌وجوی مجدد محصول
               </button>
-
-              <div className="flex items-center gap-2">
-                <h2 className="text-[16px] font-semibold text-text-primary">
-                  محصول انتخاب‌شده
-                </h2>
-                <div className="w-8 h-8 rounded-lg bg-primary-50 text-primary flex items-center justify-center">
-                  <CheckCircleIcon size={18} />
-                </div>
-              </div>
             </div>
 
-            <div className="rounded-2xl border border-border-default p-4 flex items-center justify-between bg-surface-subtle/30">
-              <div className="flex items-center gap-2 text-xs text-text-muted">
-                <span>دسته‌بندی: کالای دیجیتال</span>
-              </div>
-
+            {/* Selected product card (Figma: 1004x120 r:16 fill:#ffffff stroke:#e5e7eb p:24) */}
+            <div className="rounded-2xl border border-border-default p-6 flex items-center justify-between bg-surface">
               <div className="flex items-center gap-4">
-                <div className="flex flex-col gap-1 text-right">
-                  <h3 className="text-[15px] font-bold text-text-primary">
-                    {selectedProduct.title}
-                  </h3>
-                  <span className="text-[12px] text-text-muted">
-                    {selectedProduct.code}
-                  </span>
-                </div>
-
-                <div className="relative w-18 h-18 rounded-xl overflow-hidden shrink-0 bg-surface border border-border-subtle p-1 flex items-center justify-center">
+                {/* Image 72x72 on Right (Figma: Rectangle 72x72 @ 884,0 r:12) */}
+                <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface border border-border-subtle p-1 flex items-center justify-center">
                   <Image
                     src={selectedProduct.image}
                     alt={selectedProduct.title}
@@ -460,59 +483,52 @@ function SellerProductCreate() {
                     className="object-contain"
                   />
                 </div>
+
+                {/* Text Block (Figma: Frame 872x70) */}
+                <div className="flex flex-col gap-1 text-right">
+                  <h3 className="text-[14px] font-normal text-text-primary leading-snug">
+                    {selectedProduct.title}
+                  </h3>
+                  <span className="text-[14px] text-text-secondary font-normal">
+                    {selectedProduct.code}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* STEP 1: انتخاب تنوع محصول */}
-            <div className="flex flex-col gap-5 pt-3">
-              <div className="flex items-start justify-end gap-3">
+            {/* Section Divider (Figma: Section divider 1004x1 fill:#f3f4f6) */}
+            <div className="w-full h-px bg-[#f3f4f6]" />
+
+            {/* STEP 1: انتخاب تنوع محصول (Figma: Section heading 1004x54) */}
+            <div className="flex flex-col gap-5">
+              <div className="flex items-start justify-start gap-3">
+                {/* Section marker 40x40 with "۱" (Figma: r:12 fill:#eeeff6 text:#3d3183 size 16) */}
+                <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
+                  ۱
+                </div>
+
                 <div className="flex flex-col text-right">
-                  <h3 className="text-[16px] font-semibold text-text-primary">
+                  <h3 className="text-[18px] leading-[28px] font-normal text-text-primary">
                     انتخاب تنوع محصول
                   </h3>
-                  <span className="text-[12px] text-text-muted mt-0.5">
-                    اطلاعات این بخش برای خریدار نمایش داده می‌شود. انتخاب اصالت
-                    الزامی است.
+                  <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                    اطلاعات این بخش برای خریدار نمایش داده می‌شود. انتخاب اصالت الزامی است.
                   </span>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-primary-50 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                  ۱
                 </div>
               </div>
 
-              {/* Form Grid: 4 fields */}
+              {/* Form Grid: 4 fields (Figma: Variation fields + Product declarations) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* 1. Color */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] text-text-secondary">رنگ</label>
-                  <div className="relative">
-                    <select
-                      value={color}
-                      onChange={(e) => setColor(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[13px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
-                      dir="rtl"
-                    >
-                      <option value="زرد تیتانیوم">زرد تیتانیوم</option>
-                      <option value="مشکی ذغالی">مشکی ذغالی</option>
-                      <option value="خاکستری تیتانیوم">خاکستری تیتانیوم</option>
-                    </select>
-                    <ChevronDownIcon
-                      size={18}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
-                    />
-                  </div>
-                </div>
-
-                {/* 2. Capacity */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] text-text-secondary">
+                {/* 1. Capacity (Figma: Capacity field @ 514,0 on RIGHT in RTL) */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-[16px] text-text-secondary font-normal">
                     ظرفیت
                   </label>
                   <div className="relative">
                     <select
                       value={capacity}
                       onChange={(e) => setCapacity(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[13px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
                       dir="rtl"
                     >
                       <option value="۲۵۶ گیگابایت">۲۵۶ گیگابایت</option>
@@ -520,56 +536,45 @@ function SellerProductCreate() {
                       <option value="۱ ترابایت">۱ ترابایت</option>
                     </select>
                     <ChevronDownIcon
-                      size={18}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+                      size={20}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
                     />
                   </div>
                 </div>
 
-                {/* 3. Authenticity (Radio) */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] text-text-secondary">
-                    اصالت کالا (الزامی)
+                {/* 2. Color (Figma: Color field @ 0,0 on LEFT in RTL) */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-[16px] text-text-secondary font-normal">
+                    رنگ
                   </label>
-                  <div className="flex items-center justify-end gap-6 h-12 px-4 rounded-xl border border-border-default bg-surface">
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <span className="text-[13px] text-text-primary">
-                        غیر اصل
-                      </span>
-                      <input
-                        type="radio"
-                        name="authenticity"
-                        value="غیر اصل"
-                        checked={authenticity === "غیر اصل"}
-                        onChange={() => setAuthenticity("غیر اصل")}
-                        className="accent-primary w-4 h-4"
-                      />
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <span className="text-[13px] text-text-primary">اصل</span>
-                      <input
-                        type="radio"
-                        name="authenticity"
-                        value="اصل"
-                        checked={authenticity === "اصل"}
-                        onChange={() => setAuthenticity("اصل")}
-                        className="accent-primary w-4 h-4"
-                      />
-                    </label>
+                  <div className="relative">
+                    <select
+                      value={color}
+                      onChange={(e) => setColor(e.target.value)}
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      dir="rtl"
+                    >
+                      <option value="زرد تیتانیوم">زرد تیتانیوم</option>
+                      <option value="مشکی ذغالی">مشکی ذغالی</option>
+                      <option value="خاکستری تیتانیوم">خاکستری تیتانیوم</option>
+                    </select>
+                    <ChevronDownIcon
+                      size={20}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
+                    />
                   </div>
                 </div>
 
-                {/* 4. Warranty */}
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] text-text-secondary">
+                {/* 3. Warranty (Figma: Form field Warranty @ 514,0 on RIGHT in RTL) */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-[16px] text-text-secondary font-normal">
                     گارانتی
                   </label>
                   <div className="relative">
                     <select
                       value={warranty}
                       onChange={(e) => setWarranty(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[13px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
                       dir="rtl"
                     >
                       <option value="۲ ساله آونگ">۲ ساله آونگ</option>
@@ -579,128 +584,108 @@ function SellerProductCreate() {
                       <option value="گارانتی شرکتی">گارانتی شرکتی</option>
                     </select>
                     <ChevronDownIcon
-                      size={18}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+                      size={20}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
                     />
+                  </div>
+                </div>
+
+                {/* 4. Authenticity (Figma: Authenticity @ 0,0 on LEFT in RTL) */}
+                <div className="flex flex-col gap-2">
+                  <label className="text-[16px] text-text-secondary font-normal">
+                    اصالت کالا (الزامی)
+                  </label>
+                  <div className="flex items-center justify-end gap-6 h-12 px-4 rounded-xl border border-border-default bg-surface">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <span className="text-[14px] text-text-primary">
+                        غیر اصل
+                      </span>
+                      <input
+                        type="radio"
+                        name="authenticity"
+                        value="غیر اصل"
+                        checked={authenticity === "غیر اصل"}
+                        onChange={() => setAuthenticity("غیر اصل")}
+                        className="accent-primary w-4 h-4 cursor-pointer"
+                      />
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <span className="text-[14px] text-text-primary">اصل</span>
+                      <input
+                        type="radio"
+                        name="authenticity"
+                        value="اصل"
+                        checked={authenticity === "اصل"}
+                        onChange={() => setAuthenticity("اصل")}
+                        className="accent-primary w-4 h-4 cursor-pointer"
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
 
-              {/* Help box: تنوع محصول مورد نظر را پیدا نکردید؟ */}
-              <div className="rounded-xl bg-surface-subtle border border-border-subtle p-4 flex flex-col sm:flex-row items-center justify-between gap-3 mt-1">
-                <button
-                  type="button"
-                  className="h-10 px-4 rounded-xl bg-[#3d3183] text-white text-[12px] font-semibold flex items-center gap-2 hover:bg-[#342970] transition-colors shrink-0"
-                >
-                  <MessageTextIcon size={16} />
-                  <span>درخواست معرفی تنوع</span>
-                </button>
-
-                <div className="flex items-center gap-2 text-right">
-                  <span className="text-[13px] text-text-secondary">
-                    تنوع محصول مورد نظر را پیدا نکردید ؟
-                  </span>
-                  <div className="w-7 h-7 rounded-full bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                    <VerifyIcon size={16} />
+              {/* Help box: تنوع محصول مورد نظر را پیدا نکردید ؟ (Figma: 1004x110 r:16 fill:#f9fafb) */}
+              <div className="rounded-2xl bg-[#f9fafb] border border-border-default p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+                <div className="flex items-center gap-3 text-right">
+                  <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
+                    <HintIcon size={24} />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[18px] leading-[28px] font-normal text-text-primary">
+                      تنوع محصول مورد نظر را پیدا نکردید ؟
+                    </span>
+                    <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                      تنوع محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس شما قرار می‌گیرد
+                    </span>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  className="h-[50px] px-6 rounded-xl bg-[#3d3183] text-white text-[16px] font-normal flex items-center gap-2 hover:bg-[#342970] transition-colors shrink-0 cursor-pointer"
+                >
+                  <MessageTextIcon size={24} />
+                  <span>درخواست معرفی تنوع</span>
+                </button>
               </div>
             </div>
           </section>
 
-          {/* STEP 2: قیمت‌گذاری (Figma Node: 44:45548) */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
-            <div className="flex items-start justify-end gap-3">
+          {/* ===================================================================== */}
+          {/* Section 2: Form section - قیمت‌گذاری (Figma: 1060x437 r:20 fill:#ffffff p:28) */}
+          {/* ===================================================================== */}
+          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+            <div className="flex items-start justify-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
+                ۲
+              </div>
               <div className="flex flex-col text-right">
-                <h3 className="text-[16px] font-semibold text-text-primary">
+                <h3 className="text-[18px] leading-[28px] font-normal text-text-primary">
                   قیمت‌گذاری
                 </h3>
-                <span className="text-[12px] text-text-muted mt-0.5">
-                  مبنای قیمت‌گذاری را انتخاب کنید؛ سپس قیمت فروش همین تنوع را
-                  وارد کنید. (الزامی)
+                <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                  مبنای قیمت‌گذاری را انتخاب کنید؛ سپس قیمت فروش همین تنوع را وارد کنید. (الزامی)
                 </span>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-primary-50 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                ۲
               </div>
             </div>
 
-            {/* Pricing Types Radio Cards (3 cards) */}
+            {/* Pricing Modes (Figma: 3 cards 327x98, Order in RTL: نظارتی, مصوب روی کالا, آزاد) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {/* Card 1: قیمت‌گذاری آزاد */}
-              <button
-                type="button"
-                onClick={() => setPricingType("free")}
-                className={`p-4 rounded-2xl border text-right flex flex-col gap-2 transition-all ${
-                  pricingType === "free"
-                    ? "bg-primary-50/60 border-primary"
-                    : "border-border-default bg-surface hover:border-border-hover"
-                }`}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span
-                    className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                      pricingType === "free"
-                        ? "border-primary bg-primary"
-                        : "border-border-default bg-surface"
-                    }`}
-                  >
-                    {pricingType === "free" && (
-                      <span className="w-2 h-2 rounded-full bg-white" />
-                    )}
-                  </span>
-                  <span className="text-[14px] font-bold text-text-primary">
-                    قیمت‌گذاری آزاد
-                  </span>
-                </div>
-                <span className="text-[11px] text-text-muted leading-relaxed">
-                  بدون محدودیت قیمت مصوب؛ قیمت فروش را خودتان تعیین کنید.
-                </span>
-              </button>
-
-              {/* Card 2: قیمت مصوب روی کالا */}
-              <button
-                type="button"
-                onClick={() => setPricingType("printed")}
-                className={`p-4 rounded-2xl border text-right flex flex-col gap-2 transition-all ${
-                  pricingType === "printed"
-                    ? "bg-primary-50/60 border-primary"
-                    : "border-border-default bg-surface hover:border-border-hover"
-                }`}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span
-                    className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                      pricingType === "printed"
-                        ? "border-primary bg-primary"
-                        : "border-border-default bg-surface"
-                    }`}
-                  >
-                    {pricingType === "printed" && (
-                      <span className="w-2 h-2 rounded-full bg-white" />
-                    )}
-                  </span>
-                  <span className="text-[14px] font-bold text-text-primary">
-                    قیمت مصوب روی کالا
-                  </span>
-                </div>
-                <span className="text-[11px] text-text-muted leading-relaxed">
-                  قیمت درج‌شده روی کالا را مبنا قرار دهید؛ مبلغ فروش نباید بیشتر
-                  از آن باشد.
-                </span>
-              </button>
-
-              {/* Card 3: قیمت مصوب نظارتی */}
+              {/* Card 1 (Far right in RTL): قیمت مصوب نظارتی */}
               <button
                 type="button"
                 onClick={() => setPricingType("regulatory")}
-                className={`p-4 rounded-2xl border text-right flex flex-col gap-2 transition-all ${
+                className={`p-4 rounded-xl border text-right flex flex-col gap-2 transition-all cursor-pointer ${
                   pricingType === "regulatory"
-                    ? "bg-primary-50/60 border-primary"
+                    ? "bg-primary-50 border-primary"
                     : "border-border-default bg-surface hover:border-border-hover"
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
+                  <span className="text-[16px] font-normal text-text-primary">
+                    قیمت مصوب نظارتی
+                  </span>
                   <span
                     className={`w-5 h-5 rounded-full border flex items-center justify-center ${
                       pricingType === "regulatory"
@@ -709,259 +694,357 @@ function SellerProductCreate() {
                     }`}
                   >
                     {pricingType === "regulatory" && (
-                      <span className="w-2 h-2 rounded-full bg-white" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-white" />
                     )}
                   </span>
-                  <span className="text-[14px] font-bold text-text-primary">
-                    قیمت مصوب نظارتی
+                </div>
+                <span className="text-[12px] text-text-secondary leading-relaxed">
+                  مبلغ مصوب مرجع نظارتی را وارد کنید؛ فروش بالاتر از آن مجاز نیست.
+                </span>
+              </button>
+
+              {/* Card 2 (Center in RTL): قیمت مصوب روی کالا */}
+              <button
+                type="button"
+                onClick={() => setPricingType("printed")}
+                className={`p-4 rounded-xl border text-right flex flex-col gap-2 transition-all cursor-pointer ${
+                  pricingType === "printed"
+                    ? "bg-primary-50 border-primary"
+                    : "border-border-default bg-surface hover:border-border-hover"
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-[16px] font-normal text-text-primary">
+                    قیمت مصوب روی کالا
+                  </span>
+                  <span
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                      pricingType === "printed"
+                        ? "border-primary bg-primary"
+                        : "border-border-default bg-surface"
+                    }`}
+                  >
+                    {pricingType === "printed" && (
+                      <span className="w-2.5 h-2.5 rounded-full bg-white" />
+                    )}
                   </span>
                 </div>
-                <span className="text-[11px] text-text-muted leading-relaxed">
-                  مبلغ مصوب مرجع نظارتی را وارد کنید؛ فروش بالاتر از آن مجاز
-                  نیست.
+                <span className="text-[12px] text-text-secondary leading-relaxed">
+                  قیمت درج‌شده روی کالا را مبنا قرار دهید؛ مبلغ فروش نباید بیشتر از آن باشد.
+                </span>
+              </button>
+
+              {/* Card 3 (Left in RTL): قیمت‌گذاری آزاد (Selected in Figma) */}
+              <button
+                type="button"
+                onClick={() => setPricingType("free")}
+                className={`p-4 rounded-xl border text-right flex flex-col gap-2 transition-all cursor-pointer ${
+                  pricingType === "free"
+                    ? "bg-primary-50 border-[#c3c5df]"
+                    : "border-border-default bg-surface hover:border-border-hover"
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span
+                    className={`text-[16px] font-normal ${
+                      pricingType === "free" ? "text-primary" : "text-text-primary"
+                    }`}
+                  >
+                    قیمت‌گذاری آزاد
+                  </span>
+                  <span
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                      pricingType === "free"
+                        ? "border-primary bg-surface"
+                        : "border-border-default bg-surface"
+                    }`}
+                  >
+                    {pricingType === "free" && (
+                      <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+                    )}
+                  </span>
+                </div>
+                <span className="text-[12px] text-text-secondary leading-relaxed">
+                  بدون محدودیت قیمت مصوب؛ قیمت فروش را خودتان تعیین کنید.
                 </span>
               </button>
             </div>
 
-            {/* Price Input */}
-            <div className="flex flex-col gap-1.5 max-w-md ml-auto w-full">
-              <label className="text-[13px] text-text-secondary">
-                قیمت فروش (الزامی) • تومان
+            {/* Price Input (Figma: Form field 327x108 @ 677,0 on RIGHT in RTL) */}
+            <div className="flex flex-col gap-2 max-w-sm ml-auto w-full">
+              <label className="text-[16px] text-text-secondary font-normal">
+                قیمت فروش (الزامی) · تومان
               </label>
               <input
                 type="text"
                 value={sellingPrice}
                 onChange={(e) => setSellingPrice(e.target.value)}
                 placeholder="مبلغ را به تومان وارد کنید"
-                className="w-full h-12 rounded-xl border border-border-default px-4 text-right text-[14px] text-text-primary font-semibold focus:border-primary focus:outline-hidden"
+                className="w-full h-12 rounded-xl border border-border-default px-4 text-right text-[16px] text-text-primary font-normal focus:border-primary focus:outline-hidden"
                 dir="rtl"
               />
-              <span className="text-[11px] text-text-muted">
+              <span className="text-[12px] text-text-muted">
                 این قیمت برای هر دستگاه از تنوع انتخاب‌شده ثبت می‌شود.
               </span>
             </div>
 
-            {/* Competitor Price Alert Banner (Figma Node: 44:45586) */}
-            <div className="rounded-xl bg-[#e8f7f5] border border-[#a2e5db] p-3.5 flex items-center justify-center gap-2 text-right">
-              <span className="text-[13px] font-medium text-[#0d7870]">
-                کم ترین قیمت اعلام شده توسط سایر فروشندگان ۲۳,۰۰۰,۰۰۰ تومان
+            {/* Pricing divider (Figma: 1004x1 fill:#f3f4f6) */}
+            <div className="w-full h-px bg-[#f3f4f6]" />
+
+            {/* Competitor Price Alert Banner (Figma: status-badge 1004x40 r:8 fill:#108981 with 0.1 opacity) */}
+            <div className="w-full h-10 rounded-lg bg-[#108981]/10 px-4 flex items-center justify-center gap-2 text-right">
+              <ChartLineDownSquareIcon size={24} color="#108981" />
+              <span className="text-[16px] font-normal text-[#108981]">
+                کم ترین قیمت اعلام شده توسط سایر فروشندگان ۲۳.۰۰۰.۰۰۰ تومان
               </span>
-              <ChartLineDownSquareIcon size={18} color="#0d7870" />
             </div>
           </section>
 
-          {/* STEP 3: موجودی در شعب (Figma Node: 44:45588) */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
-            <div className="flex items-start justify-end gap-3">
+          {/* ===================================================================== */}
+          {/* Section 3: Form section - موجودی در شعب (Figma: 1060x478 r:20 fill:#ffffff p:28) */}
+          {/* ===================================================================== */}
+          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+            <div className="flex items-start justify-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
+                ۳
+              </div>
               <div className="flex flex-col text-right">
-                <h3 className="text-[16px] font-semibold text-text-primary">
+                <h3 className="text-[18px] leading-[28px] font-normal text-text-primary">
                   موجودی در شعب
                 </h3>
-                <span className="text-[12px] text-text-muted mt-0.5">
-                  موجودی قابل فروش همین تنوع را برای هر شعبه وارد کنید. حداقل یک
-                  شعبه الزامی است.
+                <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                  موجودی قابل فروش همین تنوع را برای هر شعبه وارد کنید. حداقل یک شعبه الزامی است.
                 </span>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-primary-50 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                ۳
               </div>
             </div>
 
-            {/* Branch Inputs */}
+            {/* Inventory Rows (Figma: Branch inventory 1004x114 r:12 fill:#f9fafb p:16) */}
             <div className="flex flex-col gap-3">
               {branches.map((branch) => (
                 <div
                   key={branch.id}
-                  className="rounded-2xl border border-border-default p-4 flex flex-col sm:flex-row items-center gap-3 bg-surface-subtle/20"
+                  className="rounded-xl bg-[#f9fafb] p-4 flex items-center gap-4"
                 >
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveBranch(branch.id)}
-                    className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors shrink-0"
-                    title="حذف شعبه"
-                  >
-                    <TrashIcon size={18} />
-                  </button>
-
-                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[12px] text-text-muted">
-                        موجودی قابل فروش
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue={branch.stock}
-                        className="h-11 rounded-xl border border-border-default px-3 text-right text-[13px] text-text-primary bg-surface focus:border-primary focus:outline-hidden"
+                  {/* Far Right: Branch field (Figma: 696x82) */}
+                  <div className="flex-1 flex flex-col gap-2">
+                    <label className="text-[16px] text-text-secondary font-normal">
+                      شعبه
+                    </label>
+                    <div className="relative">
+                      <select
+                        defaultValue={branch.name}
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] text-text-primary bg-surface appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
                         dir="rtl"
+                      >
+                        <option value="تهران مرکزی">تهران مرکزی</option>
+                        <option value="تهران ونک">تهران ونک</option>
+                        <option value="تهران غرب">تهران غرب</option>
+                        <option value="اصفهان">اصفهان</option>
+                        <option value="شیراز">شیراز</option>
+                      </select>
+                      <ChevronDownIcon
+                        size={20}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
                       />
                     </div>
+                  </div>
 
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[12px] text-text-muted">
-                        شعبه
-                      </label>
-                      <div className="relative">
-                        <select
-                          defaultValue={branch.name}
-                          className="w-full h-11 rounded-xl border border-border-default px-3 text-[13px] text-text-primary bg-surface appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
-                          dir="rtl"
-                        >
-                          <option value="تهران مرکزی">تهران مرکزی</option>
-                          <option value="تهران غرب">تهران غرب</option>
-                          <option value="اصفهان">اصفهان</option>
-                          <option value="شیراز">شیراز</option>
-                        </select>
-                        <ChevronDownIcon
-                          size={16}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
-                        />
-                      </div>
-                    </div>
+                  {/* Middle: Available stock field (Figma: 220x82) */}
+                  <div className="w-44 sm:w-56 flex flex-col gap-2">
+                    <label className="text-[16px] text-text-secondary font-normal">
+                      موجودی قابل فروش
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={branch.stock}
+                      className="h-12 rounded-xl border border-border-default px-4 text-center text-[16px] text-text-primary bg-surface focus:border-primary focus:outline-hidden"
+                      dir="rtl"
+                    />
+                  </div>
+
+                  {/* Far Left: Trash icon (Figma: trash 16x16 @ 16,50 fill:#ef4444) */}
+                  <div className="pt-7 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveBranch(branch.id)}
+                      className="p-2 text-[#ef4444] hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      title="حذف شعبه"
+                    >
+                      <TrashIcon size={18} />
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Add Branch Button & Total Stock Badge */}
+            {/* Inventory actions (Figma: 1004x50 @ 28,362) */}
             <div className="flex items-center justify-between pt-1">
+              {/* Right: Total stock badge (Figma: Inventory total 255x42 @ 749,4 r:8 fill:#eeeff6) */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-50">
+                <span className="text-[14px] text-text-secondary font-normal">
+                  مجموع موجودی:
+                </span>
+                <span className="text-[16px] font-normal text-primary">
+                  ۵ عدد در ۲ شعبه
+                </span>
+              </div>
+
+              {/* Left: Add Branch Button (Figma: Action 168x50 @ 0,0 r:12 fill:#ffffff stroke:#e5e7eb) */}
               <button
                 type="button"
                 onClick={handleAddBranch}
-                className="h-10 px-4 rounded-xl border border-border-default text-text-secondary text-[13px] font-medium hover:bg-surface-subtle hover:text-primary transition-colors flex items-center gap-1.5"
+                className="h-[50px] px-6 rounded-xl border border-border-default bg-surface text-primary text-[16px] font-normal hover:bg-surface-subtle transition-colors flex items-center gap-2 cursor-pointer"
               >
-                <PlusIcon size={16} />
+                <PlusIcon size={20} />
                 <span>افزودن شعبه</span>
               </button>
-
-              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg bg-primary-50 text-primary text-[12px] font-semibold">
-                مجموع موجودی: ۵ عدد در ۲ شعبه
-              </span>
             </div>
 
-            <p className="text-[11px] text-text-muted">
-              برای شعبه بدون موجودی، عدد صفر وارد کنید یا آن شعبه را حذف کنید.
-              موجودی آنلاین و حضوری مشترک است؛ یک کالا را دو بار نشمارید.
+            <p className="text-[12px] text-text-muted leading-relaxed">
+              برای شعبه بدون موجودی، عدد صفر وارد کنید یا آن شعبه را حذف کنید. موجودی آنلاین و حضوری مشترک است؛ یک کالا را دو بار نشمارید.
             </p>
           </section>
 
-          {/* STEP 4: روش فروش و تعهدات تحویل (Figma Node: 44:45618) */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
-            <div className="flex items-start justify-end gap-3">
+          {/* ===================================================================== */}
+          {/* Section 4: Form section - روش فروش و تعهدات تحویل (Figma: 1060x458 r:20 fill:#ffffff p:28) */}
+          {/* ===================================================================== */}
+          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+            <div className="flex items-start justify-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
+                ۴
+              </div>
               <div className="flex flex-col text-right">
-                <h3 className="text-[16px] font-semibold text-text-primary">
+                <h3 className="text-[18px] leading-[28px] font-normal text-text-primary">
                   روش فروش و تعهدات تحویل
                 </h3>
-                <span className="text-[12px] text-text-muted mt-0.5">
-                  با انتخاب روش فروش، فقط شرایط تحویل مرتبط را تکمیل کنید.
-                  (الزامی)
+                <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                  با انتخاب روش فروش، فقط شرایط تحویل مرتبط را تکمیل کنید. (الزامی)
                 </span>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-primary-50 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                ۴
               </div>
             </div>
 
-            {/* Sale Method Radios: آنلاین، حضوری، آنلاین و حضوری */}
-            <div className="flex items-center justify-end gap-6 py-1">
+            {/* Sales channels: Order in RTL: آنلاین, حضوری, آنلاین و حضوری */}
+            <div className="flex items-center justify-start gap-8 py-1">
               <label className="flex items-center gap-2 cursor-pointer select-none">
-                <span className="text-[13px] text-text-primary">آنلاین</span>
                 <input
                   type="radio"
                   name="saleMethod"
                   value="online"
                   checked={saleMethod === "online"}
                   onChange={() => setSaleMethod("online")}
-                  className="accent-primary w-4 h-4"
+                  className="accent-primary w-4 h-4 cursor-pointer"
                 />
+                <span className="text-[14px] text-text-primary">آنلاین</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer select-none">
-                <span className="text-[13px] text-text-primary">حضوری</span>
                 <input
                   type="radio"
                   name="saleMethod"
                   value="in_person"
                   checked={saleMethod === "in_person"}
                   onChange={() => setSaleMethod("in_person")}
-                  className="accent-primary w-4 h-4"
+                  className="accent-primary w-4 h-4 cursor-pointer"
                 />
+                <span className="text-[14px] text-text-primary">حضوری</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer select-none">
-                <span className="text-[13px] font-semibold text-primary">
-                  آنلاین و حضوری
-                </span>
                 <input
                   type="radio"
                   name="saleMethod"
                   value="both"
                   checked={saleMethod === "both"}
                   onChange={() => setSaleMethod("both")}
-                  className="accent-primary w-4 h-4"
+                  className="accent-primary w-4 h-4 cursor-pointer"
                 />
+                <span className="text-[14px] text-text-primary">
+                  آنلاین و حضوری
+                </span>
               </label>
             </div>
 
-            {/* 2 Subsections: In-Person Delivery + Online Shipping */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-              {/* Box A: فروش حضوری • تحویل در شعبه */}
-              <div className="rounded-2xl border border-border-default/80 p-5 flex flex-col gap-4 bg-surface-subtle/20">
-                <h4 className="text-[14px] font-bold text-text-primary">
-                  فروش حضوری • تحویل در شعبه
+            {/* 2 Subsections: Pickup conditions (Right) + Shipping conditions (Left) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Box A: Pickup conditions (Figma: 492x260 @ 512,0 on RIGHT in RTL) */}
+              <div className="rounded-xl bg-[#f9fafb] p-5 flex flex-col gap-4">
+                <h4 className="text-[18px] font-normal text-text-primary">
+                  فروش حضوری · تحویل در شعبه
                 </h4>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[12px] text-text-secondary">
+                <div className="flex flex-col gap-2">
+                  <label className="text-[16px] text-text-secondary font-normal">
                     زمان آماده‌سازی برای تحویل
                   </label>
                   <div className="relative">
                     <select
-                      className="w-full h-11 rounded-xl border border-border-default px-3 text-[13px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
                       dir="rtl"
                     >
+                      <option>همان روز · در ساعات کاری شعبه</option>
                       <option>آماده‌سازی: ۱ روز کاری</option>
-                      <option>تحویل فوری (۲ ساعت)</option>
                       <option>آماده‌سازی: ۲ روز کاری</option>
                     </select>
                     <ChevronDownIcon
-                      size={16}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+                      size={20}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
                     />
                   </div>
                 </div>
 
-                <span className="text-[11px] text-text-muted">
+                <span className="text-[12px] text-text-muted">
                   تحویل حضوری فقط در شعب دارای موجودی انجام می‌شود.
                 </span>
 
-                <label className="flex items-start gap-2.5 cursor-pointer text-[12px] text-text-secondary leading-relaxed mt-auto select-none">
+                <label className="flex items-start gap-2.5 cursor-pointer text-[14px] text-text-primary leading-relaxed mt-auto select-none">
                   <input
                     type="checkbox"
                     checked={inPersonCommitment}
                     onChange={(e) => setInPersonCommitment(e.target.checked)}
-                    className="accent-primary w-4 h-4 mt-0.5 shrink-0"
+                    className="accent-primary w-4 h-4 mt-1 shrink-0 cursor-pointer"
                   />
                   <span>
-                    متعهد می‌شوم کالا را در زمان اعلام‌شده آماده کنم و در شعبه
-                    منتخب به خریدار تحویل دهم.
+                    متعهد می‌شوم کالا را در زمان اعلام‌شده آماده کنم و در شعبه منتخب به خریدار تحویل دهم.
                   </span>
                 </label>
               </div>
 
-              {/* Box B: فروش آنلاین • ارسال سفارش */}
-              <div className="rounded-2xl border border-border-default/80 p-5 flex flex-col gap-4 bg-surface-subtle/20">
-                <h4 className="text-[14px] font-bold text-text-primary">
-                  فروش آنلاین • ارسال سفارش
+              {/* Box B: Shipping conditions (Figma: 492x260 @ 0,0 on LEFT in RTL) */}
+              <div className="rounded-xl bg-[#f9fafb] p-5 flex flex-col gap-4">
+                <h4 className="text-[18px] font-normal text-text-primary">
+                  فروش آنلاین · ارسال سفارش
                 </h4>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[12px] text-text-secondary">
+                  {/* Right: آماده‌سازی و ارسال */}
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[16px] text-text-secondary font-normal">
+                      آماده‌سازی و ارسال
+                    </label>
+                    <div className="relative">
+                      <select
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        dir="rtl"
+                      >
+                        <option>۱ روز کاری</option>
+                        <option>ارسال تا ۲۴ ساعت</option>
+                        <option>ارسال همان روز</option>
+                      </select>
+                      <ChevronDownIcon
+                        size={20}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Left: روش ارسال */}
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[16px] text-text-secondary font-normal">
                       روش ارسال
                     </label>
                     <div className="relative">
                       <select
-                        className="w-full h-11 rounded-xl border border-border-default px-3 text-[13px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
                         dir="rtl"
                       >
                         <option>پست پیشتاز</option>
@@ -969,148 +1052,137 @@ function SellerProductCreate() {
                         <option>پیک اختصاصی</option>
                       </select>
                       <ChevronDownIcon
-                        size={16}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[12px] text-text-secondary">
-                      آماده‌سازی و ارسال
-                    </label>
-                    <div className="relative">
-                      <select
-                        className="w-full h-11 rounded-xl border border-border-default px-3 text-[13px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden"
-                        dir="rtl"
-                      >
-                        <option>ارسال تا ۲۴ ساعت</option>
-                        <option>ارسال تا ۴۸ ساعت</option>
-                        <option>ارسال همان روز</option>
-                      </select>
-                      <ChevronDownIcon
-                        size={16}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
+                        size={20}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-text-primary pointer-events-none"
                       />
                     </div>
                   </div>
                 </div>
 
-                <span className="text-[11px] text-text-muted">
+                <span className="text-[12px] text-text-muted">
                   این زمان تا تحویل به شرکت حمل است، نه زمان رسیدن به خریدار.
                 </span>
 
-                <label className="flex items-start gap-2.5 cursor-pointer text-[12px] text-text-secondary leading-relaxed mt-auto select-none">
+                <label className="flex items-start gap-2.5 cursor-pointer text-[14px] text-text-primary leading-relaxed mt-auto select-none">
                   <input
                     type="checkbox"
                     checked={onlineCommitment}
                     onChange={(e) => setOnlineCommitment(e.target.checked)}
-                    className="accent-primary w-4 h-4 mt-0.5 shrink-0"
+                    className="accent-primary w-4 h-4 mt-1 shrink-0 cursor-pointer"
                   />
                   <span>
-                    متعهد می‌شوم سفارش را در زمان اعلام‌شده آماده و ارسال کنم و
-                    کد رهگیری را در سفارش ثبت کنم.
+                    متعهد می‌شوم سفارش را در زمان اعلام‌شده آماده و ارسال کنم و کد رهگیری را در سفارش ثبت کنم.
                   </span>
                 </label>
               </div>
             </div>
           </section>
 
-          {/* STEP 5: مرور و ثبت محصول (Figma Node: 44:45656) */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
-            <div className="flex items-start justify-end gap-3">
-              <div className="flex flex-col text-right">
-                <h3 className="text-[16px] font-semibold text-text-primary">
-                  مرور و ثبت محصول
-                </h3>
-                <span className="text-[12px] text-text-muted mt-0.5">
-                  اطلاعات زیر برای تنوع {color}، {capacity} و گارانتی {warranty}{" "}
-                  ثبت می‌شود.
-                </span>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-primary-50 text-primary font-bold text-sm flex items-center justify-center shrink-0">
-                ۵
-              </div>
-            </div>
-
-            {/* Summary Cards Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="p-4 rounded-xl border border-border-default/70 bg-surface-subtle/30 flex flex-col gap-1 text-right">
-                <span className="text-[12px] text-text-muted">
-                  اصالت و گارانتی
-                </span>
-                <span className="text-[13px] font-semibold text-text-primary">
-                  {authenticity} • {warranty}
-                </span>
+          {/* ===================================================================== */}
+          {/* Section 5: Review and submission (Figma: 1060x378) */}
+          {/* ===================================================================== */}
+          <div className="w-full flex flex-col gap-6">
+            {/* Form Section Card (Figma: 1060x308 r:20 fill:#ffffff p:28) */}
+            <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+              <div className="flex items-start justify-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
+                  ۵
+                </div>
+                <div className="flex flex-col text-right">
+                  <h3 className="text-[18px] leading-[28px] font-normal text-text-primary">
+                    مرور و ثبت محصول
+                  </h3>
+                  <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
+                    اطلاعات زیر برای تنوع {color}، {capacity} و گارانتی {warranty} ثبت می‌شود.
+                  </span>
+                </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-border-default/70 bg-surface-subtle/30 flex flex-col gap-1 text-right">
-                <span className="text-[12px] text-text-muted">
-                  قیمت هر دستگاه
-                </span>
-                <span className="text-[13px] font-semibold text-[#108981]">
-                  {sellingPrice} تومان
-                </span>
+              {/* Registration summary (Figma: 1004x90 r:12 fill:#f9fafb p:20, Order in RTL: اصالت, قیمت, موجودی, روش فروش) */}
+              <div className="rounded-xl bg-[#f9fafb] p-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* 1. Far Right: اصالت و گارانتی */}
+                <div className="flex flex-col gap-1 text-right">
+                  <span className="text-[12px] text-text-muted">
+                    اصالت و گارانتی
+                  </span>
+                  <span className="text-[16px] font-normal text-text-primary">
+                    {authenticity} · {warranty}
+                  </span>
+                </div>
+
+                {/* 2. قیمت هر دستگاه */}
+                <div className="flex flex-col gap-1 text-right">
+                  <span className="text-[12px] text-text-muted">
+                    قیمت هر دستگاه · آزاد
+                  </span>
+                  <span className="text-[16px] font-normal text-text-primary">
+                    {sellingPrice} تومان
+                  </span>
+                </div>
+
+                {/* 3. موجودی قابل فروش */}
+                <div className="flex flex-col gap-1 text-right">
+                  <span className="text-[12px] text-text-muted">
+                    موجودی قابل فروش
+                  </span>
+                  <span className="text-[16px] font-normal text-text-primary">
+                    ۵ عدد · ۲ شعبه
+                  </span>
+                </div>
+
+                {/* 4. Far Left: روش فروش */}
+                <div className="flex flex-col gap-1 text-right">
+                  <span className="text-[12px] text-text-muted">روش فروش</span>
+                  <span className="text-[16px] font-normal text-text-primary">
+                    {saleMethod === "both"
+                      ? "آنلاین و حضوری"
+                      : saleMethod === "online"
+                      ? "آنلاین"
+                      : "حضوری"}
+                  </span>
+                </div>
               </div>
 
-              <div className="p-4 rounded-xl border border-border-default/70 bg-surface-subtle/30 flex flex-col gap-1 text-right">
-                <span className="text-[12px] text-text-muted">
-                  موجودی قابل فروش
-                </span>
-                <span className="text-[13px] font-semibold text-text-primary">
-                  ۵ عدد • ۲ شعبه
-                </span>
-              </div>
-
-              <div className="p-4 rounded-xl border border-border-default/70 bg-surface-subtle/30 flex flex-col gap-1 text-right">
-                <span className="text-[12px] text-text-muted">روش فروش</span>
-                <span className="text-[13px] font-semibold text-text-primary">
-                  {saleMethod === "both"
-                    ? "آنلاین و حضوری"
-                    : saleMethod === "online"
-                    ? "آنلاین"
-                    : "حضوری"}
+              {/* Contextual guidance (Figma: 1004x68 r:12 fill:#f9fafb p:12) */}
+              <div className="rounded-xl bg-[#f9fafb] p-3 flex items-start gap-3">
+                <div className="pt-0.5 shrink-0 text-primary">
+                  <HintIcon size={20} />
+                </div>
+                <span className="flex-1 text-right text-[14px] leading-relaxed text-text-secondary">
+                  با ثبت نهایی، این تنوع به محصولات شما اضافه و برای کاربران نمایش داده می‌شود. ویرایش قیمت، موجودی و شرایط فروش بعد از ثبت از بخش «محصولات من ← محصولات تأییدشده» انجام می‌شود.
                 </span>
               </div>
-            </div>
+            </section>
 
-            {/* Final Info Note */}
-            <div className="rounded-xl bg-surface-subtle p-3.5 border border-border-subtle/60 flex items-center gap-2.5 text-[12px] text-text-muted">
-              <span className="flex-1 text-right leading-relaxed">
-                با ثبت نهایی، این تنوع به محصولات شما اضافه و برای کاربران نمایش
-                داده می‌شود. ویرایش قیمت، موجودی و شرایط فروش بعد از ثبت از بخش
-                «محصولات من – محصولات تأیید‌شده» انجام می‌شود.
-              </span>
-              <VerifyIcon size={18} color="#7a7a96" className="shrink-0" />
-            </div>
-
-            {/* Action Buttons Footer (Figma Node: 44:45688) */}
-            <div className="flex items-center justify-between gap-3 pt-4 border-t border-border-subtle">
+            {/* Final Actions Footer (Figma: Final actions 1060x50 @ 0,328 OUTSIDE the card!) */}
+            <div className="flex items-center justify-between w-full pt-1">
+              {/* Right Side (In RTL): Submit and Draft Buttons */}
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="h-12 px-8 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-primary-hover transition-colors shadow-xs"
+                  className="h-[50px] px-6 rounded-xl bg-[#3d3183] text-white text-[16px] font-normal hover:bg-[#342970] transition-colors shadow-xs cursor-pointer"
                 >
                   ثبت نهایی محصول
                 </button>
 
                 <button
                   type="button"
-                  className="h-12 px-6 rounded-xl border border-border-default bg-surface text-text-secondary text-[14px] font-normal hover:bg-surface-subtle transition-colors"
+                  className="h-[50px] px-6 rounded-lg border border-[#3d3183] bg-transparent text-[#3d3183] text-[14px] font-normal hover:bg-primary-50 transition-colors cursor-pointer"
                 >
                   پیش نویس محصول
                 </button>
               </div>
 
+              {/* Left Side (In RTL): Cancel Button (Figma: Frame 97x50 r:12 fill:#ffffff stroke:#e5e7eb) */}
               <button
                 type="button"
                 onClick={() => setActiveStep("search")}
-                className="h-12 px-5 text-text-muted hover:text-text-primary text-[14px] font-normal transition-colors"
+                className="h-[50px] px-6 rounded-xl border border-border-default bg-surface text-text-secondary text-[16px] font-normal hover:bg-[#f3f4f6] transition-colors cursor-pointer"
               >
                 انصراف
               </button>
             </div>
-          </section>
+          </div>
         </div>
       )}
     </div>
