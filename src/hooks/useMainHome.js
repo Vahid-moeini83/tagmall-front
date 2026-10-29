@@ -4,6 +4,10 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import usePublicStore from "@/app/store/publicStore";
 import { formatPrice } from "@/lib/client/utils";
 import { getHomePageData } from "@/lib/server/actions/home";
+import {
+  mockDesktopStores,
+  mockDesktopFeaturedRemainingSeconds,
+} from "@/lib/client/mockDesktopHomeData";
 
 // Shared logic of MainHome; used by both mobile and desktop views
 export function useMainHome(initialData) {
@@ -93,7 +97,9 @@ export function useMainHome(initialData) {
   }, []);
 
   useEffect(() => {
-    const seconds = initialData?.featured_sale_remainings_seconds;
+    const seconds =
+      initialData?.featured_sale_remainings_seconds ||
+      mockDesktopFeaturedRemainingSeconds;
 
     if (!seconds || seconds <= 0) {
       return;
@@ -131,12 +137,28 @@ export function useMainHome(initialData) {
     sellers: transformedSellers,
     storeProducts,
   } = useMemo(() => {
-    if (!dynamicData?.stores || !Array.isArray(dynamicData.stores)) {
+    if (!dynamicData?.stores || !Array.isArray(dynamicData.stores) || dynamicData.stores.length === 0) {
+      // Temporary mock fallback when API is unavailable / offline
+      const special = [];
+      const purchased = [];
+      const sellersData = [];
+
+      mockDesktopStores.forEach((store) => {
+        sellersData.push(store.seller);
+        store.products.forEach((prod) => {
+          if (prod.isSpecialSale) {
+            special.push(prod);
+          } else {
+            purchased.push(prod);
+          }
+        });
+      });
+
       return {
-        specialProducts: [],
-        purchasedProducts: [],
-        sellers: [],
-        storeProducts: [],
+        specialProducts: special,
+        purchasedProducts: purchased,
+        sellers: sellersData,
+        storeProducts: mockDesktopStores,
       };
     }
 
@@ -314,7 +336,7 @@ export function useMainHome(initialData) {
 
   const [activeSellerId, setActiveSellerId] = useState(() => {
     const id = initialData?.stores?.[0]?.store?.id;
-    return id != null ? String(id) : null;
+    return id != null ? String(id) : (mockDesktopStores[0]?.storeId || "1");
   });
   const [viewMode, setViewMode] = useState("slider");
 
@@ -334,6 +356,8 @@ export function useMainHome(initialData) {
           address: activeStore.seller.address,
           workingHours: activeStore.seller.workingHours,
           profileImage: activeStore.seller.profileImage,
+          gallery: activeStore.seller.gallery || [],
+          location: activeStore.seller.location,
         };
       }
     }
@@ -349,6 +373,8 @@ export function useMainHome(initialData) {
         address: firstStore.seller.address,
         workingHours: firstStore.seller.workingHours,
         profileImage: firstStore.seller.profileImage,
+        gallery: firstStore.seller.gallery || [],
+        location: firstStore.seller.location,
       };
     }
 
@@ -381,68 +407,10 @@ export function useMainHome(initialData) {
   // Fetch stores for the visible map viewport — queued to avoid parallel requests
   const handleMapMove = useCallback(
     async (lat, lng, radius) => {
-      const fetchKey = buildFetchKey(lat, lng, radius);
-
-      if (isLoadingRef.current) {
-        pendingMoveRef.current = { lat, lng, radius };
-        return;
-      }
-
-      if (lastFetchParamsRef.current === fetchKey) {
-        return;
-      }
-
-      isLoadingRef.current = true;
-      setIsStoresLoading(true);
-      try {
-        const { homePageRes } = await getHomePageData(lat, lng, radius);
-        if (homePageRes?.data) {
-          lastFetchParamsRef.current = fetchKey;
-          const newData = homePageRes.data;
-          const newStoreIds = newData.stores?.map((s) => s.store?.id) ?? [];
-          const newStoreIdsSet = new Set(newStoreIds);
-
-          const prevIds = prevStoreIdsRef.current;
-          const storesChanged =
-            !prevIds ||
-            prevIds.size !== newStoreIdsSet.size ||
-            newStoreIds.some((id) => !prevIds.has(id));
-
-          setDynamicData(newData);
-
-          if (storesChanged) {
-            prevStoreIdsRef.current = newStoreIdsSet;
-            suppressMapPanRef.current = true;
-            setTimeout(() => {
-              suppressMapPanRef.current = false;
-            }, 500);
-            if (newStoreIds.length > 0) {
-              const normalizedIds = newStoreIds.map((id) => String(id));
-              const normalizedSet = new Set(normalizedIds);
-              setActiveSellerId((prev) => {
-                const prevId = prev != null ? String(prev) : null;
-                return prevId && normalizedSet.has(prevId)
-                  ? prevId
-                  : normalizedIds[0];
-              });
-            } else {
-              setActiveSellerId(null);
-            }
-          }
-        }
-      } catch (err) {
-        console.error("Error fetching stores for map area:", err);
-      } finally {
-        isLoadingRef.current = false;
-        setIsStoresLoading(false);
-        if (pendingMoveRef.current) {
-          const pending = pendingMoveRef.current;
-          pendingMoveRef.current = null;
-          handleMapMoveRef.current?.(pending.lat, pending.lng, pending.radius);
-        }
-      }
+      // Temporarily disabled while server is down / using mock data
+      return;
     },
-    [buildFetchKey],
+    [],
   );
 
   useEffect(() => {
