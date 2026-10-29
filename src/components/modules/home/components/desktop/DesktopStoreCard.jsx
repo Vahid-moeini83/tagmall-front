@@ -3,8 +3,12 @@
 import { useState, useRef, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { VerifyIcon, StarIcon } from "@/icons";
-import { AngleLeftCircleIcon, ReceiptTextIcon } from "./DesktopIcons";
+import {
+  VerifyIcon,
+  StarIcon,
+  AngleLeftCircleIcon,
+  ReceiptTextIcon,
+} from "@/icons";
 import DesktopProductCard from "./DesktopProductCard";
 import { cn } from "@/lib/client/utils";
 

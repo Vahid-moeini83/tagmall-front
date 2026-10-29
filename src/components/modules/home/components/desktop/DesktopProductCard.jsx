@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BasketShoppingIcon } from "@/icons";
-import { BoxIcon, InfoSquareIcon, ArrowsRepeatIcon } from "./DesktopIcons";
+import {
+  BasketShoppingIcon,
+  BoxIcon,
+  InfoSquareIcon,
+  ArrowsRepeatIcon,
+} from "@/icons";
 import { formatPrice } from "@/lib/client/utils";
 import { cn } from "@/lib/client/utils";
 
