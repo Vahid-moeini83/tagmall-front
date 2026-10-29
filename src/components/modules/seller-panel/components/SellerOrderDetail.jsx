@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SellerHeader from "./SellerHeader";
-import { EditIcon, ReceiptIcon, SellerUserIcon, ToteBagIcon } from "@/icons";
+import { EditIcon, SellerUserIcon, ToteBagIcon } from "@/icons";
 
 const ORDER_ITEMS = [
   {
@@ -138,13 +138,7 @@ function SellerOrderDetail({ orderId = "DM-۴۸۱۹" }) {
                     aria-label={`مشاهده لیبل محصول ${index + 1}`}
                     className="flex h-8 w-8 items-center justify-center justify-self-center rounded-lg bg-surface-subtle text-primary"
                   >
-                    <span className="relative flex h-5 w-5 items-center justify-center">
-                      <ReceiptIcon size={18} />
-                      <EditIcon
-                        size={9}
-                        className="absolute -bottom-0.5 -right-0.5 rounded-sm bg-surface-subtle"
-                      />
-                    </span>
+                    <EditIcon size={18} />
                   </button>
                 </div>
               ))}

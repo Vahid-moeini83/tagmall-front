@@ -7,7 +7,7 @@ import {
   PlusSimpleIcon,
   ChevronDownIcon,
   EditIcon,
-  MessageTextIcon,
+  MessagesTextIcon,
   CursorClickIcon,
   CloseIcon,
   ListIcon,
@@ -561,7 +561,7 @@ function SellerProducts() {
                 type="button"
                 className="h-11 flex items-center justify-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-normal"
               >
-                <MessageTextIcon size={18} />
+                <MessagesTextIcon size={18} />
                 <span>پیام‌ها</span>
               </button>
 
@@ -661,7 +661,7 @@ function SellerProducts() {
                   title="پیام‌ها"
                   className="hover:text-primary transition-colors p-1"
                 >
-                  <MessageTextIcon size={18} />
+                  <MessagesTextIcon size={18} />
                 </button>
                 <Link
                   href={`/seller/products/${product.id}`}

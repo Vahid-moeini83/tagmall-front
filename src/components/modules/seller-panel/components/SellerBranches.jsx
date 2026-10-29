@@ -28,7 +28,7 @@ import {
   ChevronDownIcon,
   EditIcon,
   LocationPinLineIcon,
-  MessageTextIcon,
+  MessagesTextIcon,
   PlusSimpleIcon,
   ReceiptIcon,
 } from "@/icons";
@@ -207,7 +207,7 @@ export default function SellerBranches() {
                   "h-[50px] w-full px-6 text-small font-normal lg:w-64 lg:text-body",
                 )}
               >
-                <MessageTextIcon size={24} />
+                <MessagesTextIcon size={24} />
                 <span>درخواست ویرایش اطلاعات</span>
               </button>
             </div>

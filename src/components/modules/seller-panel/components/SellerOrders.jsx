@@ -14,7 +14,7 @@ import {
 import {
   ChevronDownIcon,
   EditIcon,
-  MessageTextIcon,
+  MessagesTextIcon,
   SearchIcon,
 } from "@/icons";
 
@@ -313,7 +313,7 @@ function SellerOrders() {
                         aria-label={`پیام درباره سفارش ${order.id}`}
                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle text-text-primary hover:bg-surface-muted lg:rounded-md"
                       >
-                        <MessageTextIcon size={20} />
+                        <MessagesTextIcon size={20} />
                       </button>
                     </span>
                   </div>
