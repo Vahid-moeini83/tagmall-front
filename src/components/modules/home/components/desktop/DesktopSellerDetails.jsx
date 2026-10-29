@@ -12,12 +12,15 @@ import {
   AngleLeftCircleIcon,
   MessageTextIcon,
 } from "@/icons";
+import DesktopStoreGalleryModal from "./DesktopStoreGalleryModal";
 
 export default function DesktopSellerDetails({
   activeSellerInfo,
   onBackToSlider,
 }) {
   const [activePageIndex, setActivePageIndex] = useState(0);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const galleryRef = useRef(null);
 
   const storeName =
@@ -36,7 +39,13 @@ export default function DesktopSellerDetails({
         "/assets/images/home/sampleMap.jpg",
         "/assets/images/home/sampleMap.jpg",
         "/assets/images/home/sampleMap.jpg",
+        "/assets/images/home/sampleMap.jpg",
       ];
+
+  const handleImageClick = (idx) => {
+    setSelectedImageIndex(idx);
+    setIsGalleryModalOpen(true);
+  };
 
   const scrollGallery = (direction) => {
     if (!galleryRef.current) return;
@@ -136,7 +145,9 @@ export default function DesktopSellerDetails({
             {galleryImages.map((imgSrc, idx) => (
               <div
                 key={idx}
-                className="w-41.25 h-80 shrink-0 rounded-xl overflow-hidden shadow-card border border-border-default bg-surface relative"
+                onClick={() => handleImageClick(idx)}
+                title="مشاهده تصویر در اندازه کامل"
+                className="w-41.25 h-80 shrink-0 rounded-xl overflow-hidden shadow-card border border-border-default bg-surface relative cursor-pointer hover:scale-[1.02] transition-transform"
               >
                 <Image
                   src={imgSrc}
@@ -202,6 +213,15 @@ export default function DesktopSellerDetails({
         <MessageTextIcon size={20} className="text-surface" />
         <span>ارتباط با واحد پشتیبانی</span>
       </Link>
+
+      {/* Fullscreen Store Images Lightbox Modal */}
+      <DesktopStoreGalleryModal
+        isOpen={isGalleryModalOpen}
+        onClose={() => setIsGalleryModalOpen(false)}
+        images={galleryImages}
+        currentIndex={selectedImageIndex}
+        onIndexChange={setSelectedImageIndex}
+      />
     </div>
   );
 }

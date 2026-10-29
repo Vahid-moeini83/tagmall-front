@@ -8,6 +8,7 @@ import {
   BasketShoppingIcon,
   UserIcon,
   CloseCircleIcon,
+  BellNotificationIcon,
 } from "@/icons";
 import DesktopStoreCard from "./DesktopStoreCard";
 import DesktopSellerDetails from "./DesktopSellerDetails";
@@ -74,7 +75,7 @@ export default function DesktopDetailPanel({
           />
         </Link>
 
-        {/* Left side: Profile & Cart Actions */}
+        {/* Left side: Profile, Cart & Notification Actions (Figma 121:19365) */}
         <div className="flex items-center gap-3">
           {/* Profile Button */}
           <button
@@ -97,6 +98,15 @@ export default function DesktopDetailPanel({
               <span className="absolute top-2 right-2 size-3 bg-error rounded-circle" />
             )}
           </Link>
+
+          {/* Notifications Button */}
+          <button
+            type="button"
+            aria-label="اعلان‌ها"
+            className="size-11 rounded-xl bg-surface-subtle border border-border-default flex items-center justify-center text-text-primary hover:bg-surface-muted transition-colors cursor-pointer"
+          >
+            <BellNotificationIcon size={20} />
+          </button>
         </div>
       </header>
 
