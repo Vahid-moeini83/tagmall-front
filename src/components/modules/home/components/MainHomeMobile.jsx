@@ -53,7 +53,7 @@ export default function MainHomeMobile({ initialData, homeMain }) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   return (
-    <div className="h-screen flex flex-row-reverse relative">
+    <div className="h-screen flex flex-row-reverse relative lg:hidden">
       {isDesktop && isProductsListOpen && (
         <ProductsList
           onClose={closeProductsList}

@@ -179,12 +179,31 @@ function MapComponent({
   const buildSellerIcon = (seller, isActive) => {
     if (!LRef.current) return { icon: null, root: null, container: null };
     const L = LRef.current;
+    const isDesktop = isDesktopMapLayout();
 
     const container = document.createElement("div");
     const root = createRoot(container);
-    root.render(<SellerMarker seller={seller} isActive={isActive} />);
-    const iconSize = seller.hasSpecialSale ? [48, 52] : [12, 12];
-    const iconAnchor = seller.hasSpecialSale ? [24, 52] : [6, 6];
+    root.render(
+      <SellerMarker
+        seller={seller}
+        isActive={isActive}
+        variant={isDesktop ? "desktop" : "default"}
+      />,
+    );
+    const iconSize = isDesktop
+      ? isActive
+        ? [150, 105]
+        : [100, 60]
+      : seller.hasSpecialSale
+        ? [48, 52]
+        : [12, 12];
+    const iconAnchor = isDesktop
+      ? isActive
+        ? [75, 60]
+        : [50, 12]
+      : seller.hasSpecialSale
+        ? [24, 52]
+        : [6, 6];
     const icon = L.divIcon({
       className: "custom-marker",
       html: container,
@@ -196,6 +215,7 @@ function MapComponent({
 
   // Re-render marker React trees in place — avoids Leaflet setIcon flicker
   const syncMarkerActiveState = () => {
+    const isDesktop = isDesktopMapLayout();
     markerRootsRef.current.forEach((root, i) => {
       const seller = sellerDataRef.current[i];
       if (!root || !seller) return;
@@ -206,6 +226,7 @@ function MapComponent({
             normalizeStoreId(seller.storeId) ===
             normalizeStoreId(activeSellerIdRef.current)
           }
+          variant={isDesktop ? "desktop" : "default"}
         />,
       );
     });
@@ -328,7 +349,7 @@ function MapComponent({
 
   useEffect(() => {
     if (onMapReady) {
-      onMapReady({ panToSeller, resetMapView });
+      onMapReady({ panToSeller, resetMapView, toggleGps });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onMapReady]);
@@ -352,6 +373,7 @@ function MapComponent({
     if (!mapRef.current || !LRef.current) return;
     const L = LRef.current;
     const map = mapRef.current;
+    const isDesktop = isDesktopMapLayout();
 
     if (!userPosition) {
       if (userMarkerRootRef.current) {
@@ -381,16 +403,20 @@ function MapComponent({
         <UserMarker
           heading={userPosition.heading ?? 0}
           isManual={isManualMode}
+          variant={isDesktop ? "desktop" : "default"}
         />,
       );
     });
     userMarkerRootRef.current = root;
 
+    const iconSize = isDesktop ? [134, 65] : [40, 40];
+    const iconAnchor = isDesktop ? [67, 12] : [20, 20];
+
     const icon = L.divIcon({
       className: "user-marker",
       html: container,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      iconSize,
+      iconAnchor,
     });
 
     if (userMarkerRef.current) {
@@ -543,7 +569,7 @@ function MapComponent({
       onMouseLeave={handleGpsButtonMouseUp}
       className={
         isSmUp
-          ? "absolute left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
+          ? "absolute left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:hidden cursor-pointer"
           : `${MOBILE_GPS_ABOVE_DRAWER_CLASS} cursor-pointer pointer-events-auto`
       }
     >
@@ -570,7 +596,7 @@ function MapComponent({
 
       {/* لوگو */}
       {!isSearchBoxOpen && (
-        <div className="absolute top-6 lg:top-9 right-2.5 lg:left-8 lg:right-[unset] z-1000">
+        <div className="absolute top-6 right-2.5 lg:hidden z-1000">
           <Image
             src="/assets/images/logo/main-logo.svg"
             width={130}
