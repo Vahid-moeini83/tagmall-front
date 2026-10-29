@@ -41,7 +41,9 @@ export default function DesktopDetailPanel({
   const displayedStores = searchQuery.trim()
     ? storeProducts.filter((s) => {
         const storeName = s.seller?.storeName || s.seller?.name || "";
-        const matchesStore = storeName.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStore = storeName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
         const matchesProduct = s.products?.some((p) =>
           p.name?.toLowerCase().includes(searchQuery.toLowerCase()),
         );
@@ -51,8 +53,8 @@ export default function DesktopDetailPanel({
 
   return (
     <aside className="absolute top-5 right-5 bottom-5 w-146.75 z-20 flex flex-col bg-surface border border-border-default rounded-2xl shadow-card p-6 overflow-hidden">
-      {/* Top Header: Logo on right, Actions on left */}
-      <header className="flex items-center justify-between pb-4 border-b border-border-subtle shrink-0">
+      {/* Top Header: Logo on right, Actions on left (Exact Figma 515x84) */}
+      <header className="flex items-center justify-between py-5 border-b border-border-subtle shrink-0">
         {/* Right side: Logo */}
         <Link href="/" className="block">
           <Image
@@ -74,7 +76,7 @@ export default function DesktopDetailPanel({
             aria-label="پروفایل کاربری"
             className="size-11 rounded-xl bg-surface-subtle border border-border-default flex items-center justify-center text-text-primary hover:bg-surface-muted transition-colors cursor-pointer"
           >
-            <UserIcon size={22} />
+            <UserIcon size={24} />
           </button>
 
           {/* Cart Button with Badge */}
@@ -85,41 +87,38 @@ export default function DesktopDetailPanel({
           >
             <BasketShoppingIcon size={20} />
             {cartItemsCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 size-5 bg-error text-surface text-label font-bold rounded-circle flex items-center justify-center">
-                {cartItemsCount > 99 ? "۹۹+" : cartItemsCount}
-              </span>
+              <span className="absolute top-2 right-2 size-3 bg-error rounded-circle" />
             )}
           </Link>
         </div>
       </header>
 
-      {/* Search Bar */}
-      <div className="mt-4 h-16 rounded-xl bg-surface-subtle border border-border-default px-4 flex items-center justify-between gap-3 shrink-0 focus-within:border-primary transition-colors">
+      {/* Search Bar (Exact Figma 515x64, rounded-xl, bg-surface-subtle) */}
+      <div className="mt-4 h-16 rounded-xl bg-surface-subtle border border-border-default px-3 py-3 flex items-center justify-between gap-3 shrink-0 focus-within:border-primary transition-colors">
+        <div className="text-text-primary shrink-0">
+          <SearchIcon size={20} />
+        </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="گروه کالایی، برند، کالا، لوازم جانبی، قطعات"
-          className="flex-1 bg-transparent text-body text-text-primary placeholder:text-text-muted focus:outline-none text-right"
+          className="flex-1 bg-transparent text-small text-text-primary placeholder:text-text-muted focus:outline-none text-right"
         />
-        {searchQuery ? (
+        {searchQuery && (
           <button
             type="button"
             onClick={() => setSearchQuery("")}
-            className="text-text-muted hover:text-text-primary cursor-pointer"
+            className="text-text-muted hover:text-text-primary cursor-pointer shrink-0"
             aria-label="پاک کردن جستجو"
           >
-            <CloseCircleIcon size={18} />
+            <CloseCircleIcon size={20} />
           </button>
-        ) : (
-          <div className="text-text-primary shrink-0">
-            <SearchIcon size={20} />
-          </div>
         )}
       </div>
 
-      {/* Stores List (Vertical Scroll) */}
-      <div className="mt-5 flex-1 min-h-0 overflow-y-auto pr-1 space-y-6 scrollbar-thin">
+      {/* Stores List (Vertical Scroll, 24px gap matching Frame 2147226177) */}
+      <div className="mt-6 flex-1 min-h-0 overflow-y-auto pr-1 space-y-6 scrollbar-thin scrollbar-thumb-primary/30 hover:scrollbar-thumb-primary scrollbar-track-transparent">
         {isStoresLoading ? (
           <HomeSliderSkeleton variant="desktop" />
         ) : displayedStores.length === 0 ? (

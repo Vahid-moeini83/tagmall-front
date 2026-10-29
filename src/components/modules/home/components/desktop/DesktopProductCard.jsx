@@ -3,9 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BasketShoppingIcon } from "@/icons";
+import { BoxIcon, InfoSquareIcon, ArrowsRepeatIcon } from "./DesktopIcons";
 import { formatPrice } from "@/lib/client/utils";
+import { cn } from "@/lib/client/utils";
 
-export default function DesktopProductCard({ product, mode = "special", onAddToCart }) {
+export default function DesktopProductCard({
+  product,
+  mode = "special",
+  onAddToCart,
+}) {
   const isSpecial = mode === "special";
   const formattedPrice =
     product.formattedPrice ||
@@ -14,23 +20,25 @@ export default function DesktopProductCard({ product, mode = "special", onAddToC
   const productSlug = product.id?.split("-").pop() || product.id;
 
   return (
-    <div className="w-60 shrink-0 bg-surface border border-border-default rounded-xl p-3 flex flex-col justify-between shadow-card hover:border-primary-300 transition-colors">
-      <Link
-        href={`/products/${productSlug}`}
-        className="block group"
-      >
+    <div
+      className={cn(
+        "w-60 shrink-0 bg-surface border border-border-default rounded-xl p-3 flex flex-col justify-between shadow-card hover:border-primary-300 transition-colors",
+        isSpecial ? "h-77.75" : "h-85",
+      )}
+    >
+      <Link href={`/products/${productSlug}`} className="block group">
         {/* Product Image Container */}
-        <div className="w-full h-36 bg-surface-subtle rounded-xl flex items-center justify-center p-3 overflow-hidden relative">
+        <div className="w-full h-35.25 bg-surface-subtle rounded-2xl flex items-center justify-center p-3 overflow-hidden relative">
           <Image
             src={product.img || "/assets/images/fallback/no-photo.jpg"}
             alt={product.name || "محصول"}
-            width={120}
-            height={120}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            width={115}
+            height={115}
+            className="size-28.75 object-contain group-hover:scale-105 transition-transform duration-300"
           />
         </div>
 
-        {/* Title */}
+        {/* Product Title (2 lines) */}
         <h4 className="mt-3 text-small text-text-primary line-clamp-2 h-11 text-right font-normal">
           {product.name}
         </h4>
@@ -40,10 +48,10 @@ export default function DesktopProductCard({ product, mode = "special", onAddToC
         <div className="space-y-3">
           {/* Stock Badges */}
           <div className="flex items-center justify-between text-label">
-            <span className="text-error font-semibold">
-              {product.totalSales ? `فقط ۲ عدد باقیمانده` : "موجود"}
+            <span className="text-error font-medium">
+              {product.totalSales ? "فقط ۲ عدد باقیمانده" : "موجود"}
             </span>
-            <span className="text-success font-semibold">موجود</span>
+            <span className="text-success font-medium">موجود</span>
           </div>
 
           {/* Divider */}
@@ -60,12 +68,12 @@ export default function DesktopProductCard({ product, mode = "special", onAddToC
                 onAddToCart?.(product);
               }}
               aria-label="افزودن به سبد خرید"
-              className="size-7.5 rounded-md bg-primary hover:bg-primary-600 transition-colors flex items-center justify-center text-surface cursor-pointer"
+              className="size-7.5 rounded-md bg-primary hover:bg-primary-600 transition-colors flex items-center justify-center text-surface cursor-pointer shrink-0"
             >
               <BasketShoppingIcon size={17} className="text-surface" />
             </button>
 
-            {/* Price */}
+            {/* Price Info */}
             <div className="flex items-center gap-2">
               {product.discountPercent > 0 && (
                 <span className="text-small text-text-disabled line-through">
@@ -73,7 +81,7 @@ export default function DesktopProductCard({ product, mode = "special", onAddToC
                 </span>
               )}
               <div className="flex items-center gap-1">
-                <span className="text-small text-text-secondary font-semibold">
+                <span className="text-small text-text-primary font-semibold">
                   {formattedPrice}
                 </span>
                 <span className="text-caption text-text-muted">تومان</span>
@@ -82,22 +90,37 @@ export default function DesktopProductCard({ product, mode = "special", onAddToC
           </div>
         </div>
       ) : (
-        <div className="space-y-2 text-label">
-          {/* Dashed divider */}
-          <div className="border-b border-dashed border-primary-200 my-1" />
+        <div className="space-y-2">
+          {/* Divider */}
+          <div className="border-b border-border-default my-1" />
 
-          {/* Order Details */}
-          <div className="flex items-center justify-between text-text-primary">
-            <span>{product.quantity || 1} عدد</span>
-            <span className="text-text-muted">تعداد کالا</span>
+          {/* Order Details (3 rows matching Figma exactly) */}
+          <div className="flex items-center justify-between text-small h-5.5">
+            <div className="flex items-center gap-1.5 text-text-muted">
+              <BoxIcon size={18} className="text-text-muted" />
+              <span>تعداد کالا</span>
+            </div>
+            <span className="text-text-primary font-medium">
+              {product.quantity || 2} عدد
+            </span>
           </div>
-          <div className="flex items-center justify-between text-text-primary">
-            <span className="text-success font-medium">آماده تحویل</span>
-            <span className="text-text-muted">وضعیت</span>
+
+          <div className="flex items-center justify-between text-small h-5.5">
+            <div className="flex items-center gap-1.5 text-text-muted">
+              <InfoSquareIcon size={18} className="text-text-muted" />
+              <span>وضعیت</span>
+            </div>
+            <span className="text-success font-medium">
+              {product.orderHistory?.statusLabel || "آماده تحویل"}
+            </span>
           </div>
-          <div className="flex items-center justify-between text-text-primary">
-            <span>۲ روز پیش</span>
-            <span className="text-text-muted">آخرین بروزرسانی</span>
+
+          <div className="flex items-center justify-between text-small h-5.5">
+            <div className="flex items-center gap-1.5 text-text-muted">
+              <ArrowsRepeatIcon size={18} className="text-text-muted" />
+              <span>آخرین بروزرسانی</span>
+            </div>
+            <span className="text-text-primary font-medium">۲ روز پیش</span>
           </div>
         </div>
       )}

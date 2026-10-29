@@ -1,14 +1,10 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  VerifyIcon,
-  StarIcon,
-  AngleLeftIcon,
-  ReceiptIcon,
-} from "@/icons";
+import { VerifyIcon, StarIcon } from "@/icons";
+import { AngleLeftCircleIcon, ReceiptTextIcon } from "./DesktopIcons";
 import DesktopProductCard from "./DesktopProductCard";
 import { cn } from "@/lib/client/utils";
 
@@ -20,6 +16,7 @@ export default function DesktopStoreCard({
   onAddToCart,
 }) {
   const [activeTab, setActiveTab] = useState("special"); // "special" | "orders"
+  const [activePageIndex, setActivePageIndex] = useState(0);
   const sliderRef = useRef(null);
 
   const seller = store.seller;
@@ -43,11 +40,28 @@ export default function DesktopStoreCard({
     [store.products],
   );
 
-  const currentProducts = activeTab === "special" ? specialProducts : purchasedProducts;
+  const currentProducts =
+    activeTab === "special" ? specialProducts : purchasedProducts;
+
+  // Track active slide index on scroll
+  useEffect(() => {
+    const el = sliderRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const scrollPos = Math.abs(el.scrollLeft);
+      const cardWidth = 252; // 240 + 12 gap
+      const index = Math.round(scrollPos / cardWidth);
+      setActivePageIndex(Math.min(index, 3));
+    };
+
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollSlider = (direction) => {
     if (!sliderRef.current) return;
-    const scrollAmount = 260;
+    const scrollAmount = 252;
     sliderRef.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
       behavior: "smooth",
@@ -58,14 +72,14 @@ export default function DesktopStoreCard({
     <div
       onClick={onSelectStore}
       className={cn(
-        "bg-surface-subtle border rounded-xl p-3 flex flex-col gap-3 transition-all duration-300 cursor-pointer",
+        "bg-surface-subtle border rounded-xl p-3 py-4 flex flex-col gap-3 transition-all duration-300 cursor-pointer",
         isActive
           ? "border-primary shadow-card ring-1 ring-primary/20"
           : "border-border-default hover:border-border-strong",
       )}
     >
       {/* Store Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
+      <div className="flex items-center justify-between pb-3 border-b border-border-subtle h-12.5">
         {/* Right side: Store Avatar & Title */}
         <div className="flex items-center gap-3">
           <div className="size-12.5 rounded-xl border border-border-default overflow-hidden relative shrink-0">
@@ -77,35 +91,30 @@ export default function DesktopStoreCard({
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <h3 className="text-h5 font-semibold text-text-primary">
-                {storeName}
-              </h3>
-              {seller.isVerified && <VerifyIcon size={18} />}
-            </div>
-            <span className="text-caption text-text-muted mt-0.5">
-              {seller.workingHours || "ساعات کاری نامشخص"}
-            </span>
+          <div className="flex items-center gap-2">
+            <h3 className="text-h5 font-semibold text-text-primary">
+              {storeName}
+            </h3>
+            {seller.isVerified && <VerifyIcon size={19} />}
           </div>
         </div>
 
         {/* Left side: Badges */}
         <div className="flex items-center gap-2">
           {/* Status badge */}
-          <div className="bg-surface-muted rounded-pill px-2.5 py-1 text-label text-text-secondary">
+          <div className="bg-surface-muted rounded-pill px-2.5 py-1.5 text-label text-text-secondary font-normal">
             باز است
           </div>
           {/* Rating badge */}
-          <div className="bg-surface-muted rounded-pill px-2.5 py-1 text-label text-text-secondary flex items-center gap-1">
-            <StarIcon size={14} className="text-warning" />
+          <div className="bg-surface-muted rounded-pill px-2.5 py-1.5 text-label text-text-secondary font-normal flex items-center gap-1">
+            <StarIcon size={15} className="text-warning" />
             <span className="font-semibold">{ratingText}</span>
           </div>
         </div>
       </div>
 
       {/* Tabs Header */}
-      <div className="bg-surface-muted rounded-xl p-1.5 flex gap-2">
+      <div className="bg-surface-muted rounded-xl p-1.5 flex gap-2 h-12">
         <button
           type="button"
           onClick={(e) => {
@@ -113,9 +122,9 @@ export default function DesktopStoreCard({
             setActiveTab("special");
           }}
           className={cn(
-            "flex-1 py-2 px-3 rounded-lg text-small text-center transition-all cursor-pointer",
+            "flex-1 py-2 px-3 rounded-lg text-small text-center transition-all cursor-pointer font-medium",
             activeTab === "special"
-              ? "bg-surface shadow-card text-primary font-semibold"
+              ? "bg-surface shadow-card text-primary"
               : "text-text-secondary hover:text-text-primary",
           )}
         >
@@ -128,9 +137,9 @@ export default function DesktopStoreCard({
             setActiveTab("orders");
           }}
           className={cn(
-            "flex-1 py-2 px-3 rounded-lg text-small text-center transition-all cursor-pointer",
+            "flex-1 py-2 px-3 rounded-lg text-small text-center transition-all cursor-pointer font-medium",
             activeTab === "orders"
-              ? "bg-surface shadow-card text-primary font-semibold"
+              ? "bg-surface shadow-card text-primary"
               : "text-text-secondary hover:text-text-primary",
           )}
         >
@@ -138,24 +147,33 @@ export default function DesktopStoreCard({
         </button>
       </div>
 
-      {/* Countdown Timer Row (Special sale only) */}
+      {/* Countdown Timer Row (Special sale only, exact Figma structure) */}
       {activeTab === "special" && (
-        <div className="flex items-center justify-between px-2 py-1 bg-surface rounded-lg border border-border-subtle">
+        <div className="flex items-center justify-between px-1 h-8">
           <span className="text-small font-medium text-error">
             مانده تا پایان فروش ویژه:
           </span>
-          <div className="flex items-center gap-1.5" dir="ltr">
-            <div className="size-8 rounded-md bg-error text-surface flex items-center justify-center font-bold text-small">
+          <div className="flex items-center gap-2" dir="rtl">
+            <div className="size-8 rounded-md bg-error text-surface flex items-center justify-center font-bold text-small shrink-0">
               {seconds}
             </div>
-            <span className="text-error font-bold">:</span>
-            <div className="size-8 rounded-md bg-error text-surface flex items-center justify-center font-bold text-small">
+            <span className="text-small text-text-primary font-normal">
+              ثانیه
+            </span>
+            <span className="text-small text-text-primary font-bold">:</span>
+            <div className="size-8 rounded-md bg-error text-surface flex items-center justify-center font-bold text-small shrink-0">
               {minutes}
             </div>
-            <span className="text-error font-bold">:</span>
-            <div className="size-8 rounded-md bg-error text-surface flex items-center justify-center font-bold text-small">
+            <span className="text-small text-text-primary font-normal">
+              دقیقه
+            </span>
+            <span className="text-small text-text-primary font-bold">:</span>
+            <div className="size-8 rounded-md bg-error text-surface flex items-center justify-center font-bold text-small shrink-0">
               {hours}
             </div>
+            <span className="text-small text-text-primary font-normal">
+              ساعت
+            </span>
           </div>
         </div>
       )}
@@ -177,8 +195,8 @@ export default function DesktopStoreCard({
             ))}
           </div>
 
-          {/* Slider navigation & pagination controls */}
-          <div className="flex items-center justify-center gap-4 mt-3">
+          {/* Slider navigation & pagination controls matching Figma */}
+          <div className="flex items-center justify-center gap-3 mt-3 h-6">
             <button
               type="button"
               onClick={(e) => {
@@ -186,17 +204,26 @@ export default function DesktopStoreCard({
                 scrollSlider("right");
               }}
               aria-label="قبلی"
-              className="size-6 rounded-circle bg-surface border border-border-default flex items-center justify-center text-text-muted hover:text-primary hover:border-primary transition-colors cursor-pointer rotate-180"
+              className="text-text-muted hover:text-primary transition-colors cursor-pointer rotate-180 flex items-center justify-center"
             >
-              <AngleLeftIcon size={16} />
+              <AngleLeftCircleIcon size={24} />
             </button>
 
             {/* Pagination dots */}
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-2 rounded-pill bg-primary" />
-              <div className="size-2 rounded-circle bg-primary-200" />
-              <div className="size-2 rounded-circle bg-primary-200" />
-              <div className="size-2 rounded-circle bg-primary-200" />
+              {[0, 1, 2, 3].map((idx) =>
+                idx === activePageIndex ? (
+                  <div
+                    key={idx}
+                    className="w-5 h-2.5 rounded-pill bg-primary transition-all duration-300"
+                  />
+                ) : (
+                  <div
+                    key={idx}
+                    className="size-2.5 rounded-circle bg-border-strong transition-all duration-300"
+                  />
+                ),
+              )}
             </div>
 
             <button
@@ -206,9 +233,9 @@ export default function DesktopStoreCard({
                 scrollSlider("left");
               }}
               aria-label="بعدی"
-              className="size-6 rounded-circle bg-surface border border-border-default flex items-center justify-center text-primary border-primary transition-colors cursor-pointer"
+              className="text-primary hover:text-primary-600 transition-colors cursor-pointer flex items-center justify-center"
             >
-              <AngleLeftIcon size={16} />
+              <AngleLeftCircleIcon size={24} />
             </button>
           </div>
         </div>
@@ -225,9 +252,9 @@ export default function DesktopStoreCard({
         <Link
           href="/receipt"
           onClick={(e) => e.stopPropagation()}
-          className="mt-2 w-full py-2.5 px-4 rounded-xl bg-success text-surface text-small font-medium flex items-center justify-center gap-2 hover:bg-success/90 transition-colors cursor-pointer"
+          className="mt-2 w-full h-11.5 px-8 rounded-xl bg-success text-surface text-small font-normal flex items-center justify-center gap-2 hover:bg-success/90 transition-colors cursor-pointer"
         >
-          <ReceiptIcon size={18} />
+          <ReceiptTextIcon size={20} className="text-surface" />
           <span>رسید تحویل</span>
         </Link>
       )}
