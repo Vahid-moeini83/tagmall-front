@@ -71,7 +71,7 @@ function SellerProductDetail() {
 
   const prevImage = () => {
     setSelectedImage(
-      (prev) => (prev - 1 + PRODUCT_IMAGES.length) % PRODUCT_IMAGES.length
+      (prev) => (prev - 1 + PRODUCT_IMAGES.length) % PRODUCT_IMAGES.length,
     );
   };
 
@@ -118,7 +118,7 @@ function SellerProductDetail() {
       <div className="hidden lg:grid lg:grid-cols-12 gap-6 items-start">
         {/* RIGHT COLUMN (In RTL grid: 7 cols = ~616px) -> Main Product Info Card */}
         <div className="lg:col-span-7 flex flex-col gap-6">
-          <section className="bg-surface rounded-[20px] p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
+          <section className="bg-surface rounded-card p-6 lg:p-8 border border-border-default/60 flex flex-col gap-5 shadow-xs">
             {/* 1. Header: Status badge & last updated on LEFT, Title on RIGHT */}
             <div className="flex items-start justify-between gap-4">
               {/* Product Title on RIGHT */}
@@ -128,7 +128,7 @@ function SellerProductDetail() {
 
               {/* Status & Last Updated on LEFT */}
               <div className="flex flex-col items-start gap-1.5 shrink-0 text-left">
-                <span className="inline-flex items-center px-3 py-1 rounded-lg bg-[#108981]/10 text-[#108981] text-[12px] font-semibold">
+                <span className="inline-flex items-center px-3 py-1 rounded-lg bg-success-strong/10 text-success-strong text-[12px] font-semibold">
                   وضعیت: فعال در ویترین
                 </span>
                 <span className="text-[10px] text-text-muted">
@@ -144,7 +144,7 @@ function SellerProductDetail() {
               {/* Row 1, Col 1 (Right): Main Category */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5 text-text-muted text-[12px]">
-                  <TagSimpleIcon size={16} color="#7a7a96" />
+                  <TagSimpleIcon size={16} className="text-text-muted" />
                   <span>دسته‌بندی اصلی</span>
                 </div>
                 <span className="text-[14px] text-text-primary font-normal">
@@ -155,7 +155,7 @@ function SellerProductDetail() {
               {/* Row 1, Col 2 (Left): SKU */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5 text-text-muted text-[12px]">
-                  <BarcodeReadIcon size={16} color="#7a7a96" />
+                  <BarcodeReadIcon size={16} className="text-text-muted" />
                   <span>کد کالا (SKU)</span>
                 </div>
                 <span className="text-[14px] text-text-primary font-normal tracking-wide">
@@ -166,7 +166,7 @@ function SellerProductDetail() {
               {/* Row 2, Col 1 (Right): Shipping Commitment */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5 text-text-muted text-[12px]">
-                  <BoxShieldIcon size={16} color="#7a7a96" />
+                  <BoxShieldIcon size={16} className="text-text-muted" />
                   <span>تعهد ارسال</span>
                 </div>
                 <span className="text-[14px] text-text-primary font-normal">
@@ -191,7 +191,7 @@ function SellerProductDetail() {
             {/* 3. Branch Inventory Alert Box (Figma Node: 44:44415) */}
             <div className="rounded-lg bg-surface-subtle p-3.5 flex flex-col gap-1.5 border border-border-subtle/50 text-right">
               <div className="flex items-center gap-1.5 text-text-muted text-[12px]">
-                <BoxUserIcon size={16} color="#7a7a96" />
+                <BoxUserIcon size={16} className="text-text-muted" />
                 <span>موجودی در دیگر شعب</span>
               </div>
               <p className="text-[14px] text-primary font-medium">
@@ -208,7 +208,10 @@ function SellerProductDetail() {
                 {/* Title & Promotion deadline on RIGHT */}
                 <div className="flex flex-col gap-1 text-right">
                   <div className="flex items-center gap-1.5 text-text-primary text-[14px] font-medium">
-                    <TicketSimplePercentIcon size={18} color="#3d3183" />
+                    <TicketSimplePercentIcon
+                      size={18}
+                      className="text-primary"
+                    />
                     <span>قیمت فروش با تخفیف تگ ‌مال</span>
                   </div>
                   <span className="text-[11px] text-error font-medium">
@@ -217,7 +220,7 @@ function SellerProductDetail() {
                 </div>
 
                 {/* Price on LEFT */}
-                <div className="text-[20px] font-bold text-[#108981]">
+                <div className="text-[20px] font-bold text-success-strong">
                   ۱۳,۰۶۴,۰۰۰ تومان
                 </div>
               </div>
@@ -225,7 +228,10 @@ function SellerProductDetail() {
               {/* Competitor Price Comparison Row */}
               <div className="flex items-center justify-between px-1 text-[13px] text-text-muted">
                 <div className="flex items-center gap-1.5">
-                  <ChartLineDownSquareIcon size={16} color="#7a7a96" />
+                  <ChartLineDownSquareIcon
+                    size={16}
+                    className="text-text-muted"
+                  />
                   <span>کمترین قیمت سایر فروشندگان</span>
                 </div>
                 <span className="text-text-secondary font-medium">
@@ -280,7 +286,10 @@ function SellerProductDetail() {
             </div>
 
             {/* Carousel Dots Indicator (Figma Node: 44:44342) */}
-            <div className="flex items-center justify-center gap-1.5 py-1" dir="ltr">
+            <div
+              className="flex items-center justify-center gap-1.5 py-1"
+              dir="ltr"
+            >
               {PRODUCT_IMAGES.map((_, idx) => (
                 <button
                   key={idx}
@@ -320,14 +329,14 @@ function SellerProductDetail() {
               ))}
 
               {/* Extra Images Count Box */}
-              <div className="w-[62px] h-[62px] rounded border border-border-default bg-[#eeeff6] flex items-center justify-center text-text-primary text-[14px] font-semibold select-none">
+              <div className="w-[62px] h-[62px] rounded border border-border-default bg-primary-50 flex items-center justify-center text-text-primary text-[14px] font-semibold select-none">
                 +۱۲
               </div>
             </div>
           </section>
 
           {/* Card 2: Variations Card (Figma Node: 44:44351) */}
-          <section className="bg-surface rounded-[20px] p-6 border border-border-default/60 flex flex-col gap-4 shadow-xs text-right">
+          <section className="bg-surface rounded-card p-6 border border-border-default/60 flex flex-col gap-4 shadow-xs text-right">
             <h3 className="text-[15px] font-semibold text-text-primary">
               تنوع محصول
             </h3>
@@ -491,7 +500,7 @@ function SellerProductDetail() {
               </button>
             ))}
 
-            <div className="aspect-square rounded border border-border-default bg-[#eeeff6] flex items-center justify-center text-text-primary text-[13px] font-semibold select-none">
+            <div className="aspect-square rounded border border-border-default bg-primary-50 flex items-center justify-center text-text-primary text-[13px] font-semibold select-none">
               +۱۲
             </div>
           </div>
@@ -505,7 +514,7 @@ function SellerProductDetail() {
             </h2>
 
             <div className="flex items-center justify-start">
-              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-[#108981]/10 text-[#108981] text-[12px] font-semibold">
+              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-success-strong/10 text-success-strong text-[12px] font-semibold">
                 وضعیت: فعال در ویترین
               </span>
             </div>
@@ -519,15 +528,15 @@ function SellerProductDetail() {
         {/* Card 2: Price & Quick Edit (Figma Node: 44:45178) */}
         <section className="bg-surface rounded-2xl p-4 border border-border-default/60 flex flex-col gap-4 shadow-xs">
           {/* Discount Box */}
-          <div className="rounded-lg bg-[#f9fafb] border border-[#eeeff6] p-3.5 flex flex-col gap-2 text-right">
+          <div className="rounded-lg bg-surface-subtle border border-primary-50 p-3.5 flex flex-col gap-2 text-right">
             <div className="flex items-center gap-1.5 text-text-primary text-[13px] font-medium">
-              <TicketSimplePercentIcon size={18} color="#3d3183" />
+              <TicketSimplePercentIcon size={18} className="text-primary" />
               <span>قیمت فروش با تخفیف تگ مال</span>
             </div>
             <span className="text-[11px] text-error font-medium">
               فروش ویژه تا ۱۵ مهرماه
             </span>
-            <span className="text-[20px] font-bold text-[#108981]">
+            <span className="text-[20px] font-bold text-success-strong">
               ۱۳,۰۶۴,۰۰۰ تومان
             </span>
           </div>

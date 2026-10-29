@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { AngleLeftIcon } from "@/icons";
 
-
 const RECENT_ORDERS = [
   {
     id: "DKC-۸۹۳۷۴۹۲",
@@ -77,7 +76,6 @@ const RECENT_ORDERS = [
   },
 ];
 
-
 function SellerRecentOrders() {
   return (
     <section className="flex flex-col gap-4 lg:gap-0 lg:bg-surface lg:rounded-xl lg:p-6 lg:border lg:border-border-subtle lg:shadow-card">
@@ -126,7 +124,7 @@ function SellerRecentOrders() {
             </div>
 
             {/* Row 4: Divider */}
-            <div className="border-t border-[#f3f4f6]" />
+            <div className="border-t border-border-subtle" />
 
             {/* Row 5: Total Amount */}
             <div className="flex items-center justify-between">
@@ -187,9 +185,7 @@ function SellerRecentOrders() {
                     </span>
 
                     {/* Registration Date */}
-                    <span className="text-text-secondary">
-                      {order.date}
-                    </span>
+                    <span className="text-text-secondary">{order.date}</span>
 
                     {/* Order Status Badge */}
                     <div className="flex justify-center">

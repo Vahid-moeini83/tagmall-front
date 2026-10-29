@@ -141,7 +141,7 @@ function SellerSidebar() {
               className="relative w-11 h-11 rounded-xl flex items-center justify-center text-text-primary hover:bg-surface-subtle transition-colors"
               aria-label="پیام‌ها"
             >
-              <MessageTextIcon size={24} className="text-[#4a4a68]" />
+              <MessageTextIcon size={24} className="text-text-secondary" />
               <span className="absolute top-1.5 right-1.5 w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] font-medium flex items-center justify-center">
                 ۳
               </span>

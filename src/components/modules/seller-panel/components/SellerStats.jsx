@@ -5,6 +5,7 @@ import {
   CursorClickIcon,
   BoxUserIcon,
   ReceiptIcon,
+  StrokeArrowLeftIcon,
 } from "@/icons";
 
 const STATS_DATA = [
@@ -15,7 +16,7 @@ const STATS_DATA = [
     unit: "تومان",
     desktopValue: "۴۸,۵۰۰,۰۰۰ تومان",
     change: "+۱۸.۵%",
-    mobileChange: "۱۸.۵٪+ ↑",
+    mobileChange: "۱۸.۵٪+",
     icon: CoinFrontSwapIcon,
     iconSize: 24,
     iconColor: "text-primary",
@@ -26,7 +27,7 @@ const STATS_DATA = [
     title: "تعداد سفارشات",
     value: "۳۴ سفارش",
     change: "+۱۲%",
-    mobileChange: "۱۲٪+ ↑",
+    mobileChange: "۱۲٪+",
     icon: BasketShoppingIcon,
     iconSize: 20,
     mobileIconSize: 18,
@@ -38,7 +39,7 @@ const STATS_DATA = [
     title: "محصولات فعال",
     value: "۴۸ کالا",
     change: "+۱۲%",
-    mobileChange: "۱۲٪+ ↑",
+    mobileChange: "۱۲٪+",
     icon: BarcodeReadIcon,
     iconSize: 24,
     mobileIconSize: 18,
@@ -50,7 +51,7 @@ const STATS_DATA = [
     title: "بازدید امروز",
     value: "۱,۲۴۰ بار",
     change: "+۴.۲%",
-    mobileChange: "۴.۲٪+ ↑",
+    mobileChange: "۴.۲٪+",
     icon: CursorClickIcon,
     iconSize: 24,
     mobileIconSize: 22,
@@ -222,8 +223,8 @@ function SellerStats({ variant = "default" }) {
               className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
               dir="ltr"
             >
-              <span>{salesItem.mobileChange.replace(" ↑", "")}</span>
-              <span className="text-[13px] leading-none">↑</span>
+              <span>{salesItem.mobileChange}</span>
+              <StrokeArrowLeftIcon size={12} className="rotate-90" />
             </div>
           </div>
         </div>
@@ -250,8 +251,8 @@ function SellerStats({ variant = "default" }) {
                 className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
                 dir="ltr"
               >
-                <span>{ordersItem.mobileChange.replace(" ↑", "")}</span>
-                <span className="text-[12px] leading-none">↑</span>
+                <span>{ordersItem.mobileChange}</span>
+                <StrokeArrowLeftIcon size={12} className="rotate-90" />
               </div>
             </div>
           </div>
@@ -276,8 +277,8 @@ function SellerStats({ variant = "default" }) {
                 className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
                 dir="ltr"
               >
-                <span>{productsItem.mobileChange.replace(" ↑", "")}</span>
-                <span className="text-[12px] leading-none">↑</span>
+                <span>{productsItem.mobileChange}</span>
+                <StrokeArrowLeftIcon size={12} className="rotate-90" />
               </div>
             </div>
           </div>
@@ -305,8 +306,8 @@ function SellerStats({ variant = "default" }) {
             className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
             dir="ltr"
           >
-            <span>{viewsItem.mobileChange.replace(" ↑", "")}</span>
-            <span className="text-[13px] leading-none">↑</span>
+            <span>{viewsItem.mobileChange}</span>
+            <StrokeArrowLeftIcon size={12} className="rotate-90" />
           </div>
         </div>
       </div>
