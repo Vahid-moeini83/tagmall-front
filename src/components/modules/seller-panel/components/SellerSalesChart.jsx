@@ -85,19 +85,8 @@ function SellerSalesChart({ variant = "default" }) {
             />
           </svg>
         </div>
-        <div
-          className="flex justify-between text-[11px] leading-[17px] text-text-muted"
-          dir="ltr"
-        >
-          {[
-            "شنبه",
-            "یکشنبه",
-            "دوشنبه",
-            "سه‌شنبه",
-            "چهارشنبه",
-            "پنجشنبه",
-            "جمعه",
-          ].map((day) => (
+        <div className="flex justify-between text-[11px] leading-[17px] text-text-muted" dir="ltr">
+          {["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"].map((day) => (
             <span key={day}>{day}</span>
           ))}
         </div>
@@ -111,12 +100,9 @@ function SellerSalesChart({ variant = "default" }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-body font-bold text-text-primary">
-            نمودار فروش ماهانه{" "}
-            <span className="hidden sm:inline">(۶ ماه اخیر)</span>
+            نمودار فروش ماهانه <span className="hidden sm:inline">(۶ ماه اخیر)</span>
           </h2>
-          <p className="text-[12px] text-text-muted sm:hidden mt-0.5">
-            ۶ ماه اخیر
-          </p>
+          <p className="text-[12px] text-text-muted sm:hidden mt-0.5">۶ ماه اخیر</p>
         </div>
 
         {/* Legend */}
@@ -137,11 +123,7 @@ function SellerSalesChart({ variant = "default" }) {
         {/* Horizontal Grid lines with Y-Axis Labels */}
         <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-6">
           {Y_AXIS_STEPS.map((step) => (
-            <div
-              key={step}
-              className="flex items-center gap-2 sm:gap-3 w-full"
-              dir="ltr"
-            >
+            <div key={step} className="flex items-center gap-2 sm:gap-3 w-full" dir="ltr">
               <span className="w-5 sm:w-6 text-[10px] sm:text-[11px] text-text-muted text-left font-normal select-none">
                 {step}
               </span>
@@ -151,7 +133,7 @@ function SellerSalesChart({ variant = "default" }) {
         </div>
 
         {/* Bars Container */}
-        <div className="relative z-10 flex-1 flex items-end justify-between pr-7 sm:pr-4 pl-2 sm:pl-8 pb-6 lg:pb-5 h-[170px] sm:h-[220px]">
+        <div className="relative z-10 flex-1 flex items-end justify-between pr-6 sm:pr-4 pl-10 sm:pl-8 pb-6 lg:pb-5 h-[170px] sm:h-[220px]">
           {CHART_DATA.map((item) => {
             const isHovered = hoveredMonth === item.month;
 
@@ -170,10 +152,7 @@ function SellerSalesChart({ variant = "default" }) {
                 )}
 
                 {/* Bars Pair */}
-                <div
-                  className="flex items-end gap-1 h-[160px] sm:h-[210px] lg:h-[246px]"
-                  dir="ltr"
-                >
+                <div className="flex items-end gap-1 h-[160px] sm:h-[210px] lg:h-[246px]" dir="ltr">
                   {/* This Year bar (13px in Figma mobile, 28px on desktop) */}
                   <div
                     style={{ height: `${item.thisYearHeight}%` }}
@@ -192,7 +171,7 @@ function SellerSalesChart({ variant = "default" }) {
 
         {/* X-Axis Month Labels */}
         <div
-          className="flex justify-between items-center pr-7 sm:pr-10 pl-2 sm:pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal"
+          className="flex justify-between items-center pr-6 sm:pr-10 pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal"
           dir="ltr"
         >
           {CHART_DATA.map((item) => (

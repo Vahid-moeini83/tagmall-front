@@ -101,9 +101,7 @@ function SellerProductCreate() {
   const [activeStep, setActiveStep] = useState("search");
 
   // Search state
-  const [searchQuery, setSearchQuery] = useState(
-    "گوشی موبایل سامسونگ Galaxy S24 Ultra",
-  );
+  const [searchQuery, setSearchQuery] = useState("گوشی موبایل سامسونگ Galaxy S24 Ultra");
   const [showDraftsEmpty, setShowDraftsEmpty] = useState(false);
 
   // Configure Form State (Screen 2)
@@ -135,10 +133,7 @@ function SellerProductCreate() {
   };
 
   const handleAddBranch = () => {
-    setBranches((prev) => [
-      ...prev,
-      { id: Date.now(), name: "شعبه جدید", stock: "۰" },
-    ]);
+    setBranches((prev) => [...prev, { id: Date.now(), name: "شعبه جدید", stock: "۰" }]);
   };
 
   const handleRemoveBranch = (id) => {
@@ -242,9 +237,7 @@ function SellerProductCreate() {
             {/* ResultsHeader (Figma: 1004x26) */}
             <div className="flex items-center justify-between">
               {/* Right: نتایج جست‌وجو (size 16, weight 325, #1a1a2e) */}
-              <h3 className="text-[16px] font-normal text-text-primary">
-                نتایج جست‌وجو
-              </h3>
+              <h3 className="text-[16px] font-normal text-text-primary">نتایج جست‌وجو</h3>
 
               {/* Left: ۶ نتیجه (size 14, weight 325, #4a4a68) */}
               <span className="text-[14px] text-text-secondary">۶ نتیجه</span>
@@ -335,8 +328,7 @@ function SellerProductCreate() {
                     محصول موردنظر را پیدا نکردید؟
                   </span>
                   <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                    محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس شما قرار
-                    می‌گیرد
+                    محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس شما قرار می‌گیرد
                   </span>
                 </div>
               </div>
@@ -361,16 +353,14 @@ function SellerProductCreate() {
                 <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
                   <NoteIcon size={24} />
                 </div>
-                <h3 className="text-[16px] font-normal text-text-primary">
-                  محصولات پیش نویس شده
-                </h3>
+                <h3 className="text-[16px] font-normal text-text-primary">محصولات پیش نویس شده</h3>
               </div>
 
-              {/* Left: "مشاهده همه" (size 12, #1a1a2e) with angle-left */}
+              {/* The view-all action uses the primary link color. */}
               <button
                 type="button"
                 onClick={() => setShowDraftsEmpty(!showDraftsEmpty)}
-                className="text-[12px] text-text-primary hover:text-primary transition-colors flex items-center gap-1 select-none cursor-pointer"
+                className="text-[12px] text-primary hover:text-primary-600 transition-colors flex items-center gap-1 select-none cursor-pointer"
               >
                 <span>مشاهده همه</span>
                 <ChevronLeftIcon size={18} />
@@ -459,9 +449,7 @@ function SellerProductCreate() {
                 <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
                   <CheckCircleIcon size={20} />
                 </div>
-                <h2 className="text-[18px] font-normal text-text-primary">
-                  محصول انتخاب‌شده
-                </h2>
+                <h2 className="text-[18px] font-normal text-text-primary">محصول انتخاب‌شده</h2>
               </div>
 
               {/* Left: Change / Re-search Link */}
@@ -516,8 +504,7 @@ function SellerProductCreate() {
                     انتخاب تنوع محصول
                   </h3>
                   <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                    اطلاعات این بخش برای خریدار نمایش داده می‌شود. انتخاب اصالت
-                    الزامی است.
+                    اطلاعات این بخش برای خریدار نمایش داده می‌شود. انتخاب اصالت الزامی است.
                   </span>
                 </div>
               </div>
@@ -526,9 +513,7 @@ function SellerProductCreate() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* 1. Capacity (Figma: Capacity field @ 514,0 on RIGHT in RTL) */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[16px] text-text-secondary font-normal">
-                    ظرفیت
-                  </label>
+                  <label className="text-[16px] text-text-secondary font-normal">ظرفیت</label>
                   <div className="relative">
                     <select
                       value={capacity}
@@ -549,9 +534,7 @@ function SellerProductCreate() {
 
                 {/* 2. Color (Figma: Color field @ 0,0 on LEFT in RTL) */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[16px] text-text-secondary font-normal">
-                    رنگ
-                  </label>
+                  <label className="text-[16px] text-text-secondary font-normal">رنگ</label>
                   <div className="relative">
                     <select
                       value={color}
@@ -572,9 +555,7 @@ function SellerProductCreate() {
 
                 {/* 3. Warranty (Figma: Form field Warranty @ 514,0 on RIGHT in RTL) */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[16px] text-text-secondary font-normal">
-                    گارانتی
-                  </label>
+                  <label className="text-[16px] text-text-secondary font-normal">گارانتی</label>
                   <div className="relative">
                     <select
                       value={warranty}
@@ -583,9 +564,7 @@ function SellerProductCreate() {
                       dir="rtl"
                     >
                       <option value="۲ ساله آونگ">۲ ساله آونگ</option>
-                      <option value="۱۸ماهه شرکت آوای پارس">
-                        ۱۸ماهه شرکت آوای پارس
-                      </option>
+                      <option value="۱۸ماهه شرکت آوای پارس">۱۸ماهه شرکت آوای پارس</option>
                       <option value="گارانتی شرکتی">گارانتی شرکتی</option>
                     </select>
                     <ChevronDownIcon
@@ -602,9 +581,7 @@ function SellerProductCreate() {
                   </label>
                   <div className="flex items-center justify-end gap-6 h-12 px-4 rounded-xl border border-border-default bg-surface">
                     <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <span className="text-[14px] text-text-primary">
-                        غیر اصل
-                      </span>
+                      <span className="text-[14px] text-text-primary">غیر اصل</span>
                       <input
                         type="radio"
                         name="authenticity"
@@ -641,8 +618,7 @@ function SellerProductCreate() {
                       تنوع محصول مورد نظر را پیدا نکردید ؟
                     </span>
                     <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                      تنوع محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس
-                      شما قرار می‌گیرد
+                      تنوع محصول پس از بررسی، برای تکمیل اطلاعات فروش در دسترس شما قرار می‌گیرد
                     </span>
                   </div>
                 </div>
@@ -671,8 +647,7 @@ function SellerProductCreate() {
                   قیمت‌گذاری
                 </h3>
                 <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                  مبنای قیمت‌گذاری را انتخاب کنید؛ سپس قیمت فروش همین تنوع را
-                  وارد کنید. (الزامی)
+                  مبنای قیمت‌گذاری را انتخاب کنید؛ سپس قیمت فروش همین تنوع را وارد کنید. (الزامی)
                 </span>
               </div>
             </div>
@@ -706,8 +681,7 @@ function SellerProductCreate() {
                   </span>
                 </div>
                 <span className="text-[12px] text-text-secondary leading-relaxed">
-                  مبلغ مصوب مرجع نظارتی را وارد کنید؛ فروش بالاتر از آن مجاز
-                  نیست.
+                  مبلغ مصوب مرجع نظارتی را وارد کنید؛ فروش بالاتر از آن مجاز نیست.
                 </span>
               </button>
 
@@ -738,8 +712,7 @@ function SellerProductCreate() {
                   </span>
                 </div>
                 <span className="text-[12px] text-text-secondary leading-relaxed">
-                  قیمت درج‌شده روی کالا را مبنا قرار دهید؛ مبلغ فروش نباید بیشتر
-                  از آن باشد.
+                  قیمت درج‌شده روی کالا را مبنا قرار دهید؛ مبلغ فروش نباید بیشتر از آن باشد.
                 </span>
               </button>
 
@@ -756,9 +729,7 @@ function SellerProductCreate() {
                 <div className="flex items-center justify-between w-full">
                   <span
                     className={`text-[16px] font-normal ${
-                      pricingType === "free"
-                        ? "text-primary"
-                        : "text-text-primary"
+                      pricingType === "free" ? "text-primary" : "text-text-primary"
                     }`}
                   >
                     قیمت‌گذاری آزاد
@@ -824,8 +795,7 @@ function SellerProductCreate() {
                   موجودی در شعب
                 </h3>
                 <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                  موجودی قابل فروش همین تنوع را برای هر شعبه وارد کنید. حداقل یک
-                  شعبه الزامی است.
+                  موجودی قابل فروش همین تنوع را برای هر شعبه وارد کنید. حداقل یک شعبه الزامی است.
                 </span>
               </div>
             </div>
@@ -839,9 +809,7 @@ function SellerProductCreate() {
                 >
                   {/* Far Right: Branch field (Figma: 696x82) */}
                   <div className="flex-1 flex flex-col gap-2">
-                    <label className="text-[16px] text-text-secondary font-normal">
-                      شعبه
-                    </label>
+                    <label className="text-[16px] text-text-secondary font-normal">شعبه</label>
                     <div className="relative">
                       <select
                         defaultValue={branch.name}
@@ -893,12 +861,8 @@ function SellerProductCreate() {
             <div className="flex items-center justify-between pt-1">
               {/* Right: Total stock badge (Figma: Inventory total 255x42 @ 749,4 r:8 fill:#eeeff6) */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-50">
-                <span className="text-[14px] text-text-secondary font-normal">
-                  مجموع موجودی:
-                </span>
-                <span className="text-[16px] font-normal text-primary">
-                  ۵ عدد در ۲ شعبه
-                </span>
+                <span className="text-[14px] text-text-secondary font-normal">مجموع موجودی:</span>
+                <span className="text-[16px] font-normal text-primary">۵ عدد در ۲ شعبه</span>
               </div>
 
               {/* Left: Add Branch Button (Figma: Action 168x50 @ 0,0 r:12 fill:#ffffff stroke:#e5e7eb) */}
@@ -913,8 +877,8 @@ function SellerProductCreate() {
             </div>
 
             <p className="text-[12px] text-text-muted leading-relaxed">
-              برای شعبه بدون موجودی، عدد صفر وارد کنید یا آن شعبه را حذف کنید.
-              موجودی آنلاین و حضوری مشترک است؛ یک کالا را دو بار نشمارید.
+              برای شعبه بدون موجودی، عدد صفر وارد کنید یا آن شعبه را حذف کنید. موجودی آنلاین و حضوری
+              مشترک است؛ یک کالا را دو بار نشمارید.
             </p>
           </section>
 
@@ -931,8 +895,7 @@ function SellerProductCreate() {
                   روش فروش و تعهدات تحویل
                 </h3>
                 <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                  با انتخاب روش فروش، فقط شرایط تحویل مرتبط را تکمیل کنید.
-                  (الزامی)
+                  با انتخاب روش فروش، فقط شرایط تحویل مرتبط را تکمیل کنید. (الزامی)
                 </span>
               </div>
             </div>
@@ -972,9 +935,7 @@ function SellerProductCreate() {
                   onChange={() => setSaleMethod("both")}
                   className="accent-primary w-4 h-4 cursor-pointer"
                 />
-                <span className="text-[14px] text-text-primary">
-                  آنلاین و حضوری
-                </span>
+                <span className="text-[14px] text-text-primary">آنلاین و حضوری</span>
               </label>
             </div>
 
@@ -1018,8 +979,8 @@ function SellerProductCreate() {
                     className="accent-primary w-4 h-4 mt-1 shrink-0 cursor-pointer"
                   />
                   <span>
-                    متعهد می‌شوم کالا را در زمان اعلام‌شده آماده کنم و در شعبه
-                    منتخب به خریدار تحویل دهم.
+                    متعهد می‌شوم کالا را در زمان اعلام‌شده آماده کنم و در شعبه منتخب به خریدار تحویل
+                    دهم.
                   </span>
                 </label>
               </div>
@@ -1054,9 +1015,7 @@ function SellerProductCreate() {
 
                   {/* Left: روش ارسال */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[16px] text-text-secondary font-normal">
-                      روش ارسال
-                    </label>
+                    <label className="text-[16px] text-text-secondary font-normal">روش ارسال</label>
                     <div className="relative">
                       <select
                         className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
@@ -1086,8 +1045,8 @@ function SellerProductCreate() {
                     className="accent-primary w-4 h-4 mt-1 shrink-0 cursor-pointer"
                   />
                   <span>
-                    متعهد می‌شوم سفارش را در زمان اعلام‌شده آماده و ارسال کنم و
-                    کد رهگیری را در سفارش ثبت کنم.
+                    متعهد می‌شوم سفارش را در زمان اعلام‌شده آماده و ارسال کنم و کد رهگیری را در
+                    سفارش ثبت کنم.
                   </span>
                 </label>
               </div>
@@ -1109,8 +1068,7 @@ function SellerProductCreate() {
                     مرور و ثبت محصول
                   </h3>
                   <span className="text-[14px] leading-[22px] text-text-secondary mt-0.5">
-                    اطلاعات زیر برای تنوع {color}، {capacity} و گارانتی{" "}
-                    {warranty} ثبت می‌شود.
+                    اطلاعات زیر برای تنوع {color}، {capacity} و گارانتی {warranty} ثبت می‌شود.
                   </span>
                 </div>
               </div>
@@ -1119,9 +1077,7 @@ function SellerProductCreate() {
               <div className="rounded-xl bg-surface-subtle p-5 grid grid-cols-2 md:grid-cols-4 gap-4">
                 {/* 1. Far Right: اصالت و گارانتی */}
                 <div className="flex flex-col gap-1 text-right">
-                  <span className="text-[12px] text-text-muted">
-                    اصالت و گارانتی
-                  </span>
+                  <span className="text-[12px] text-text-muted">اصالت و گارانتی</span>
                   <span className="text-[16px] font-normal text-text-primary">
                     {authenticity} · {warranty}
                   </span>
@@ -1129,9 +1085,7 @@ function SellerProductCreate() {
 
                 {/* 2. قیمت هر دستگاه */}
                 <div className="flex flex-col gap-1 text-right">
-                  <span className="text-[12px] text-text-muted">
-                    قیمت هر دستگاه · آزاد
-                  </span>
+                  <span className="text-[12px] text-text-muted">قیمت هر دستگاه · آزاد</span>
                   <span className="text-[16px] font-normal text-text-primary">
                     {sellingPrice} تومان
                   </span>
@@ -1139,12 +1093,8 @@ function SellerProductCreate() {
 
                 {/* 3. موجودی قابل فروش */}
                 <div className="flex flex-col gap-1 text-right">
-                  <span className="text-[12px] text-text-muted">
-                    موجودی قابل فروش
-                  </span>
-                  <span className="text-[16px] font-normal text-text-primary">
-                    ۵ عدد · ۲ شعبه
-                  </span>
+                  <span className="text-[12px] text-text-muted">موجودی قابل فروش</span>
+                  <span className="text-[16px] font-normal text-text-primary">۵ عدد · ۲ شعبه</span>
                 </div>
 
                 {/* 4. Far Left: روش فروش */}
@@ -1166,9 +1116,9 @@ function SellerProductCreate() {
                   <HintIcon size={20} />
                 </div>
                 <span className="flex-1 text-right text-[14px] leading-relaxed text-text-secondary">
-                  با ثبت نهایی، این تنوع به محصولات شما اضافه و برای کاربران
-                  نمایش داده می‌شود. ویرایش قیمت، موجودی و شرایط فروش بعد از ثبت
-                  از بخش «محصولات من ← محصولات تأییدشده» انجام می‌شود.
+                  با ثبت نهایی، این تنوع به محصولات شما اضافه و برای کاربران نمایش داده می‌شود.
+                  ویرایش قیمت، موجودی و شرایط فروش بعد از ثبت از بخش «محصولات من ← محصولات تأییدشده»
+                  انجام می‌شود.
                 </span>
               </div>
             </section>

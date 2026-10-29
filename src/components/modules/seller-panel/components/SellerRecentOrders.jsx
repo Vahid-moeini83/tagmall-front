@@ -81,12 +81,10 @@ function SellerRecentOrders() {
     <section className="flex flex-col gap-4 lg:gap-0 lg:bg-surface lg:rounded-xl lg:p-6 lg:border lg:border-border-subtle lg:shadow-card">
       {/* Header: Matches both Figma mobile (44:39482) and desktop */}
       <div className="flex items-center justify-between">
-        <h2 className="text-body sm:text-h5 font-bold text-text-primary">
-          سفارشات اخیر
-        </h2>
+        <h2 className="text-body sm:text-h5 font-bold text-text-primary">سفارشات اخیر</h2>
         <Link
           href="/seller/orders"
-          className="flex items-center gap-1 text-[12px] sm:text-caption text-primary lg:text-text-muted hover:text-text-primary transition-colors font-normal"
+          className="flex items-center gap-1 text-[12px] sm:text-caption text-primary hover:text-primary-600 transition-colors font-normal"
         >
           <span>مشاهده همه سفارشات</span>
           <AngleLeftIcon size={16} />
@@ -102,9 +100,7 @@ function SellerRecentOrders() {
           >
             {/* Row 1: Order ID & Status Badge */}
             <div className="flex items-center justify-between">
-              <span className="text-[13px] font-medium text-text-primary">
-                {order.id}
-              </span>
+              <span className="text-[13px] font-medium text-text-primary">{order.id}</span>
               <span
                 className={`h-[26px] w-[100px] rounded-md flex items-center justify-center text-[12px] font-medium ${order.status.bg} ${order.status.color}`}
               >
@@ -165,24 +161,16 @@ function SellerRecentOrders() {
                     className="h-[58px] px-6 grid grid-cols-6 items-center text-[13px] hover:bg-surface-subtle/50 transition-colors"
                   >
                     {/* Order Number */}
-                    <span className="font-medium text-text-primary">
-                      {order.id}
-                    </span>
+                    <span className="font-medium text-text-primary">{order.id}</span>
 
                     {/* Delivery Method */}
-                    <span className="text-text-secondary">
-                      {order.deliveryMethod}
-                    </span>
+                    <span className="text-text-secondary">{order.deliveryMethod}</span>
 
                     {/* Products Count */}
-                    <span className="text-text-secondary">
-                      {order.productsCount}
-                    </span>
+                    <span className="text-text-secondary">{order.productsCount}</span>
 
                     {/* Total Amount */}
-                    <span className="font-medium text-text-primary">
-                      {order.totalAmount}
-                    </span>
+                    <span className="font-medium text-text-primary">{order.totalAmount}</span>
 
                     {/* Registration Date */}
                     <span className="text-text-secondary">{order.date}</span>
