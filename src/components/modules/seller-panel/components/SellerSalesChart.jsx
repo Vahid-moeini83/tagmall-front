@@ -151,7 +151,7 @@ function SellerSalesChart({ variant = "default" }) {
         </div>
 
         {/* Bars Container */}
-        <div className="relative z-10 flex-1 flex items-end justify-between pr-7 sm:pr-9 pl-2 sm:pl-4 pb-6 lg:pb-5 h-[170px] sm:h-[220px]">
+        <div className="relative z-10 flex-1 flex items-end justify-between pr-7 sm:pr-4 pl-2 sm:pl-8 pb-6 lg:pb-5 h-[170px] sm:h-[220px]">
           {CHART_DATA.map((item) => {
             const isHovered = hoveredMonth === item.month;
 

@@ -106,7 +106,7 @@ function SellerRecentOrders() {
                 {order.id}
               </span>
               <span
-                className={`h-[26px] px-3 rounded-md flex items-center justify-center text-[12px] font-medium ${order.status.bg} ${order.status.color}`}
+                className={`h-[26px] w-[100px] rounded-md flex items-center justify-center text-[12px] font-medium ${order.status.bg} ${order.status.color}`}
               >
                 {order.status.label}
               </span>
@@ -191,7 +191,7 @@ function SellerRecentOrders() {
                     <div className="flex justify-center">
                       <span
                         className={`
-                          h-[26px] px-3.5 rounded-md flex items-center justify-center text-caption font-medium
+                          h-[26px] w-[100px] rounded-md flex items-center justify-center text-caption font-medium
                           ${order.status.bg} ${order.status.color}
                         `}
                       >
