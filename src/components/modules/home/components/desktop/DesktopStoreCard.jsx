@@ -18,6 +18,7 @@ export default function DesktopStoreCard({
   remainingTime,
   onSelectStore,
   onAddToCart,
+  onSellerNameClick,
 }) {
   const [activeTab, setActiveTab] = useState("special"); // "special" | "orders"
   const [activePageIndex, setActivePageIndex] = useState(0);
@@ -85,7 +86,14 @@ export default function DesktopStoreCard({
       {/* Store Header */}
       <div className="flex items-center justify-between pb-3 border-b border-border-subtle h-12.5">
         {/* Right side: Store Avatar & Title */}
-        <div className="flex items-center gap-3">
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onSellerNameClick?.(store.storeId);
+          }}
+          className="flex items-center gap-3 hover:opacity-85 transition-opacity cursor-pointer"
+          title="مشاهده جزئیات فروشگاه"
+        >
           <div className="size-12.5 rounded-xl border border-border-default overflow-hidden relative shrink-0">
             <Image
               src={seller.profileImage || "/assets/images/fallback/no-photo.jpg"}

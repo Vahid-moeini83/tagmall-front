@@ -10,6 +10,7 @@ import {
   CloseCircleIcon,
 } from "@/icons";
 import DesktopStoreCard from "./DesktopStoreCard";
+import DesktopSellerDetails from "./DesktopSellerDetails";
 import usePublicStore from "@/app/store/publicStore";
 import { ProfileModal } from "@/components/modules/profile";
 import { HomeSliderSkeleton, HomeSliderEmptyState } from "@/components/ui/loading";
@@ -19,8 +20,12 @@ export default function DesktopDetailPanel({
   activeSellerId,
   remainingTime,
   isStoresLoading,
+  viewMode = "slider",
+  activeSellerInfo,
   onSelectStore,
   onAddToCart,
+  onSellerNameClick,
+  onBackToSlider,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -50,6 +55,8 @@ export default function DesktopDetailPanel({
         return matchesStore || matchesProduct;
       })
     : storeProducts;
+
+  const isSellerDetails = viewMode === "seller-details";
 
   return (
     <aside className="absolute top-5 right-5 bottom-5 w-146.75 z-20 flex flex-col bg-surface border border-border-default rounded-2xl shadow-card p-6 overflow-hidden">
@@ -93,49 +100,59 @@ export default function DesktopDetailPanel({
         </div>
       </header>
 
-      {/* Search Bar (Exact Figma 515x64, rounded-xl, bg-surface-subtle) */}
-      <div className="mt-4 h-16 rounded-xl bg-surface-subtle border border-border-default px-3 py-3 flex items-center justify-between gap-3 shrink-0 focus-within:border-primary transition-colors">
-        <div className="text-text-primary shrink-0">
-          <SearchIcon size={20} />
-        </div>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="گروه کالایی، برند، کالا، لوازم جانبی، قطعات"
-          className="flex-1 bg-transparent text-small text-text-primary placeholder:text-text-muted focus:outline-none text-right"
+      {isSellerDetails ? (
+        <DesktopSellerDetails
+          activeSellerInfo={activeSellerInfo}
+          onBackToSlider={onBackToSlider}
         />
-        {searchQuery && (
-          <button
-            type="button"
-            onClick={() => setSearchQuery("")}
-            className="text-text-muted hover:text-text-primary cursor-pointer shrink-0"
-            aria-label="پاک کردن جستجو"
-          >
-            <CloseCircleIcon size={20} />
-          </button>
-        )}
-      </div>
-
-      {/* Stores List (Vertical Scroll, 24px gap matching Frame 2147226177) */}
-      <div className="mt-6 flex-1 min-h-0 overflow-y-auto pr-1 space-y-6 scrollbar-thin scrollbar-thumb-primary/30 hover:scrollbar-thumb-primary scrollbar-track-transparent">
-        {isStoresLoading ? (
-          <HomeSliderSkeleton variant="desktop" />
-        ) : displayedStores.length === 0 ? (
-          <HomeSliderEmptyState variant="desktop" />
-        ) : (
-          displayedStores.map((store) => (
-            <DesktopStoreCard
-              key={store.storeId}
-              store={store}
-              isActive={String(store.storeId) === String(activeSellerId)}
-              remainingTime={remainingTime}
-              onSelectStore={() => onSelectStore?.(store.storeId)}
-              onAddToCart={onAddToCart}
+      ) : (
+        <>
+          {/* Search Bar (Exact Figma 515x64, rounded-xl, bg-surface-subtle) */}
+          <div className="mt-4 h-16 rounded-xl bg-surface-subtle border border-border-default px-3 py-3 flex items-center justify-between gap-3 shrink-0 focus-within:border-primary transition-colors">
+            <div className="text-text-primary shrink-0">
+              <SearchIcon size={20} />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="گروه کالایی، برند، کالا، لوازم جانبی، قطعات"
+              className="flex-1 bg-transparent text-small text-text-primary placeholder:text-text-muted focus:outline-none text-right"
             />
-          ))
-        )}
-      </div>
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="text-text-muted hover:text-text-primary cursor-pointer shrink-0"
+                aria-label="پاک کردن جستجو"
+              >
+                <CloseCircleIcon size={20} />
+              </button>
+            )}
+          </div>
+
+          {/* Stores List (Vertical Scroll, 24px gap matching Frame 2147226177) */}
+          <div className="mt-6 flex-1 min-h-0 overflow-y-auto pr-1 space-y-6 scrollbar-thin scrollbar-thumb-primary/30 hover:scrollbar-thumb-primary scrollbar-track-transparent">
+            {isStoresLoading ? (
+              <HomeSliderSkeleton variant="desktop" />
+            ) : displayedStores.length === 0 ? (
+              <HomeSliderEmptyState variant="desktop" />
+            ) : (
+              displayedStores.map((store) => (
+                <DesktopStoreCard
+                  key={store.storeId}
+                  store={store}
+                  isActive={String(store.storeId) === String(activeSellerId)}
+                  remainingTime={remainingTime}
+                  onSelectStore={() => onSelectStore?.(store.storeId)}
+                  onAddToCart={onAddToCart}
+                  onSellerNameClick={onSellerNameClick}
+                />
+              ))
+            )}
+          </div>
+        </>
+      )}
 
       {/* Profile Modal when opened */}
       {isProfileOpen && (

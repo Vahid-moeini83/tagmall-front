@@ -17,11 +17,14 @@ export default function MainHomeDesktop({ initialData, homeMain }) {
     transformedSellers,
     storeProducts,
     activeSellerId,
+    viewMode,
+    activeSellerInfo,
     mapActionsRef,
     handleMapMove,
     handleSellerSelect,
-    handleProductChange,
     handleSellerGoToMap,
+    handleSellerNameClick,
+    handleBackToSlider,
   } = homeMain;
 
   const handleFabClick = () => {
@@ -66,10 +69,13 @@ export default function MainHomeDesktop({ initialData, homeMain }) {
         activeSellerId={activeSellerId}
         remainingTime={remainingTime}
         isStoresLoading={isStoresLoading}
+        viewMode={viewMode}
+        activeSellerInfo={activeSellerInfo}
         onSelectStore={handleStoreSelect}
         onAddToCart={handleAddToCart}
+        onSellerNameClick={handleSellerNameClick}
+        onBackToSlider={handleBackToSlider}
       />
     </div>
   );
 }
-
