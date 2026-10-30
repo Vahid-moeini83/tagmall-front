@@ -189,11 +189,11 @@
      10. Background Patterns (Seller Panel & Subdued Textures)
      ------------------------------------------------------------------------ */
   --background-image-pattern-diagonal: repeating-linear-gradient(
-    45deg,
+    -45deg,
     transparent,
-    transparent 6px,
-    rgba(26, 26, 46, 0.04) 6px,
-    rgba(26, 26, 46, 0.04) 7px
+    transparent 4.5px,
+    rgba(26, 26, 46, 0.025) 4.5px,
+    rgba(26, 26, 46, 0.025) 5px
   );
 }
 
@@ -202,11 +202,11 @@
    ========================================================================== */
 @utility bg-pattern-diagonal {
   background-image: repeating-linear-gradient(
-    45deg,
+    -45deg,
     transparent,
-    transparent 6px,
-    rgba(26, 26, 46, 0.04) 6px,
-    rgba(26, 26, 46, 0.04) 7px
+    transparent 4.5px,
+    rgba(26, 26, 46, 0.025) 4.5px,
+    rgba(26, 26, 46, 0.025) 5px
   );
 }
 
@@ -215,9 +215,27 @@
     -45deg,
     transparent,
     transparent 4.5px,
-    rgba(26, 26, 46, 0.04) 4.5px,
-    rgba(26, 26, 46, 0.04) 5px
+    rgba(26, 26, 46, 0.025) 4.5px,
+    rgba(26, 26, 46, 0.025) 5px
   );
+}
+
+.theme-new .seller-recent-orders-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-400) var(--color-primary-50);
+}
+
+.theme-new .seller-recent-orders-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.theme-new .seller-recent-orders-scroll::-webkit-scrollbar-track {
+  background: var(--color-primary-50);
+}
+
+.theme-new .seller-recent-orders-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-primary-400);
+  border-radius: 999px;
 }
 
 /* The selected financial report uses an orange quarter over a primary ring. */

@@ -74,6 +74,30 @@ const RECENT_ORDERS = [
       color: "text-warning",
     },
   },
+  {
+    id: "DKC-۸۹۳۷۴۹۳",
+    deliveryMethod: "ارسال توسط فروشنده",
+    productsCount: "۳ محصول",
+    totalAmount: "۲,۱۴۰,۰۰۰ تومان",
+    date: "۲۹ مرداد ۱۴۰۵",
+    status: {
+      label: "تحویل داده شده",
+      bg: "bg-info-light",
+      color: "text-info",
+    },
+  },
+  {
+    id: "DKC-۸۹۳۷۴۹۴",
+    deliveryMethod: "مراجعه به فروشگاه",
+    productsCount: "۱ محصول",
+    totalAmount: "۹۴۰,۰۰۰ تومان",
+    date: "۲۸ مرداد ۱۴۰۵",
+    status: {
+      label: "ارسال شده",
+      bg: "bg-primary-50",
+      color: "text-primary",
+    },
+  },
 ];
 
 function SellerRecentOrders() {
@@ -84,7 +108,7 @@ function SellerRecentOrders() {
         <h2 className="text-body sm:text-h5 font-bold text-text-primary">سفارشات اخیر</h2>
         <Link
           href="/seller/orders"
-          className="flex items-center gap-1 text-[12px] sm:text-caption text-primary hover:text-primary-600 transition-colors font-normal"
+          className="flex items-center gap-1 text-[12px] sm:text-caption text-text-muted hover:text-text-secondary transition-colors font-normal"
         >
           <span>مشاهده همه سفارشات</span>
           <AngleLeftIcon size={16} />
@@ -93,7 +117,7 @@ function SellerRecentOrders() {
 
       {/* Mobile Card List (Figma Node: 44:39487) */}
       <div className="flex flex-col gap-3 lg:hidden">
-        {RECENT_ORDERS.map((order, idx) => (
+        {RECENT_ORDERS.slice(0, 6).map((order, idx) => (
           <div
             key={`mobile-${order.id}-${idx}`}
             className="bg-surface rounded-lg p-3.5 border border-border-subtle flex flex-col gap-2.5 shadow-card"
@@ -136,7 +160,7 @@ function SellerRecentOrders() {
       {/* Desktop Responsive Table (Figma Node: 44:39024) */}
       <div className="hidden lg:block mt-6">
         <div className="overflow-x-auto">
-          <div className="min-w-[900px]">
+          <div className="min-w-[840px]">
             {/* Table Header */}
             <div className="bg-surface-subtle rounded-lg h-[42px] px-6 grid grid-cols-6 items-center text-caption text-text-secondary font-normal">
               <span>شماره سفارش</span>
@@ -147,13 +171,8 @@ function SellerRecentOrders() {
               <span className="text-center">وضعیت سفارش</span>
             </div>
 
-            {/* Table Body with side line indicator */}
-            <div className="relative mt-6">
-              {/* Left vertical timeline line matching Figma */}
-              <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-primary-50 rounded-full">
-                <div className="h-[94px] w-full bg-primary-400 rounded-full" />
-              </div>
-
+            {/* The narrow rail at the left is the table's real scroll bar. */}
+            <div className="seller-recent-orders-scroll mt-6 max-h-[428px] overflow-y-auto" tabIndex={0} aria-label="سفارش‌های اخیر، قابل پیمایش">
               <div className="flex flex-col gap-4">
                 {RECENT_ORDERS.map((order, idx) => (
                   <div

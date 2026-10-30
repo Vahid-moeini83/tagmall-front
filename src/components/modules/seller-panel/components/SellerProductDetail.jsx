@@ -177,9 +177,6 @@ function SellerProductDetail() {
               {/* Row 2, Col 2 (Left): Total Stock */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5 text-text-muted text-[12px]">
-                  <span className="w-4 h-4 rounded-full bg-border-default/80 flex items-center justify-center text-[10px] text-text-muted">
-                    📦
-                  </span>
                   <span>موجودی کل</span>
                 </div>
                 <span className="text-[14px] text-text-primary font-normal">
@@ -189,12 +186,12 @@ function SellerProductDetail() {
             </div>
 
             {/* 3. Branch Inventory Alert Box (Figma Node: 44:44415) */}
-            <div className="rounded-lg bg-surface-subtle p-3.5 flex flex-col gap-1.5 border border-border-subtle/50 text-right">
+            <div className="rounded-lg p-2 flex flex-col gap-1.5 text-right">
               <div className="flex items-center gap-1.5 text-text-muted text-[12px]">
                 <BoxUserIcon size={16} className="text-text-muted" />
                 <span>موجودی در دیگر شعب</span>
               </div>
-              <p className="text-[14px] text-primary font-medium">
+              <p className="text-[12px] text-info font-normal">
                 تهران مرکزی: ۱۶ عدد • تهران غرب: ۸ عدد
               </p>
             </div>
@@ -204,7 +201,7 @@ function SellerProductDetail() {
             {/* 4. Pricing & Competitor Section (Figma Nodes: 44:44421 / 44:44428) */}
             <div className="flex flex-col gap-3">
               {/* Discount Box */}
-              <div className="rounded-lg bg-primary-50/70 border border-primary/15 p-4 flex items-center justify-between">
+              <div className="rounded-lg bg-surface-subtle border border-primary-50 px-3 py-2 flex items-center justify-between">
                 {/* Title & Promotion deadline on RIGHT */}
                 <div className="flex flex-col gap-1 text-right">
                   <div className="flex items-center gap-1.5 text-text-primary text-[14px] font-medium">
@@ -226,7 +223,7 @@ function SellerProductDetail() {
               </div>
 
               {/* Competitor Price Comparison Row */}
-              <div className="flex items-center justify-between px-1 text-[13px] text-text-muted">
+              <div className="flex items-center justify-start gap-1.5 text-[12px] text-text-muted">
                 <div className="flex items-center gap-1.5">
                   <ChartLineDownSquareIcon
                     size={16}
@@ -234,18 +231,18 @@ function SellerProductDetail() {
                   />
                   <span>کمترین قیمت سایر فروشندگان</span>
                 </div>
-                <span className="text-text-secondary font-medium">
+                <span className="text-text-muted font-normal">
                   ۱۲,۹۰۰,۰۰۰ تومان
                 </span>
               </div>
             </div>
 
             {/* 5. Action Buttons (Figma Node: 44:44431) - Edit on RIGHT, Deactivate in MIDDLE, Delete on LEFT */}
-            <div className="flex items-center justify-between gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-2">
               {/* Right side in RTL: Edit Product (Figma Node: 44:44439 - no icon on desktop) */}
               <button
                 type="button"
-                className="h-[46px] px-6 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-primary-hover transition-colors shadow-xs"
+                className="h-[46px] min-w-0 flex-1 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-primary-hover transition-colors shadow-xs"
               >
                 ویرایش اطلاعات محصول
               </button>
@@ -254,13 +251,13 @@ function SellerProductDetail() {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="h-[46px] px-5 rounded-xl border border-border-default bg-surface text-text-secondary text-[14px] font-normal hover:bg-surface-subtle transition-colors"
+                  className="h-[46px] w-[149px] rounded-xl border border-border-default bg-surface text-text-secondary text-[14px] font-normal hover:bg-surface-subtle transition-colors"
                 >
                   غیرفعال‌سازی موقت
                 </button>
                 <button
                   type="button"
-                  className="h-[46px] px-6 rounded-xl bg-error text-white text-[14px] font-medium hover:bg-error/90 transition-colors shadow-xs"
+                  className="h-[46px] w-[127px] rounded-xl bg-error text-white text-[14px] font-medium hover:bg-error/90 transition-colors shadow-xs"
                 >
                   حذف محصول
                 </button>
@@ -307,13 +304,16 @@ function SellerProductDetail() {
 
             {/* Thumbnails Row (Figma Node: 44:44334) */}
             <div className="w-full flex items-center justify-center gap-2">
-              {PRODUCT_IMAGES.map((img, idx) => (
+              <div className="w-[62px] h-[62px] rounded bg-primary-50 flex items-center justify-center text-text-primary text-[14px] font-semibold select-none">
+                +۱۲
+              </div>
+              {[...PRODUCT_IMAGES].reverse().map((img) => (
                 <button
                   key={img.id}
                   type="button"
-                  onClick={() => setSelectedImage(idx)}
+                  onClick={() => setSelectedImage(img.id - 1)}
                   className={`relative w-[62px] h-[62px] rounded border transition-all overflow-hidden ${
-                    selectedImage === idx
+                    selectedImage === img.id - 1
                       ? "border-primary ring-2 ring-primary/20"
                       : "border-border-default hover:border-border-hover opacity-80 hover:opacity-100"
                   }`}
@@ -328,15 +328,11 @@ function SellerProductDetail() {
                 </button>
               ))}
 
-              {/* Extra Images Count Box */}
-              <div className="w-[62px] h-[62px] rounded border border-border-default bg-primary-50 flex items-center justify-center text-text-primary text-[14px] font-semibold select-none">
-                +۱۲
-              </div>
             </div>
           </section>
 
           {/* Card 2: Variations Card (Figma Node: 44:44351) */}
-          <section className="bg-surface rounded-card p-6 border border-border-default/60 flex flex-col gap-4 shadow-xs text-right">
+          <section className="bg-surface rounded-card p-6 flex flex-col gap-4 text-right">
             <h3 className="text-[15px] font-semibold text-text-primary">
               تنوع محصول
             </h3>
@@ -344,7 +340,7 @@ function SellerProductDetail() {
             <div className="h-px bg-border-subtle" />
 
             {/* Color Variations */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <span className="text-[13px] text-text-muted">رنگبندی</span>
               <div className="flex flex-wrap items-center gap-2.5">
                 {COLOR_OPTIONS.map((color) => {
@@ -356,7 +352,7 @@ function SellerProductDetail() {
                       onClick={() => setSelectedColor(color.id)}
                       className={`h-[38px] px-3 rounded-lg border text-[13px] flex items-center gap-2 transition-all ${
                         isSelected
-                          ? "bg-primary-50 border-primary text-primary font-semibold"
+                          ? "bg-primary-50 border-transparent text-primary font-medium"
                           : "border-border-default text-text-primary hover:border-border-hover bg-surface"
                       }`}
                     >
@@ -372,7 +368,7 @@ function SellerProductDetail() {
             </div>
 
             {/* Capacity Variations */}
-            <div className="flex flex-col gap-2 pt-1">
+            <div className="flex flex-col gap-4">
               <span className="text-[13px] text-text-muted">ظرفیت</span>
               <div className="flex flex-wrap items-center gap-2.5">
                 {CAPACITY_OPTIONS.map((cap) => {
@@ -384,7 +380,7 @@ function SellerProductDetail() {
                       onClick={() => setSelectedCapacity(cap.id)}
                       className={`h-[38px] px-3.5 rounded-lg border text-[13px] transition-all ${
                         isSelected
-                          ? "bg-primary-50 border-primary text-primary font-semibold"
+                          ? "bg-primary-50 border-transparent text-primary font-medium"
                           : "border-border-default text-text-primary hover:border-border-hover bg-surface"
                       }`}
                     >
@@ -396,7 +392,7 @@ function SellerProductDetail() {
             </div>
 
             {/* Warranty Variations */}
-            <div className="flex flex-col gap-2 pt-1">
+            <div className="flex flex-col gap-4">
               <span className="text-[13px] text-text-muted">گارانتی</span>
               <div className="flex flex-wrap items-center gap-2.5">
                 {WARRANTY_OPTIONS.map((war) => {
@@ -408,7 +404,7 @@ function SellerProductDetail() {
                       onClick={() => setSelectedWarranty(war.id)}
                       className={`h-[38px] px-3.5 rounded-lg border text-[13px] transition-all ${
                         isSelected
-                          ? "bg-primary-50 border-primary text-primary font-semibold"
+                          ? "bg-primary-50 border-transparent text-primary font-medium"
                           : "border-border-default text-text-primary hover:border-border-hover bg-surface"
                       }`}
                     >

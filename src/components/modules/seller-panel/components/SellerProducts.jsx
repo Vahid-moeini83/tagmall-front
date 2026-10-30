@@ -648,25 +648,25 @@ function SellerProducts() {
               </div>
 
               {/* Operations (3 icons matching Figma: cursor-click on RIGHT (x=88), messages-text in MIDDLE (x=44), pen-line on LEFT (x=0)) */}
-              <div className="flex items-center justify-center gap-3 text-text-muted">
+              <div className="flex items-center justify-center gap-3 text-text-primary">
                 <button
                   type="button"
                   title="آمار بازدید"
-                  className="hover:text-primary transition-colors p-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle hover:text-primary transition-colors"
                 >
                   <CursorClickIcon size={18} />
                 </button>
                 <button
                   type="button"
                   title="پیام‌ها"
-                  className="hover:text-primary transition-colors p-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle hover:text-primary transition-colors"
                 >
                   <MessagesTextIcon size={18} />
                 </button>
                 <Link
                   href={`/seller/products/${product.id}`}
                   title="ویرایش محصول"
-                  className="hover:text-primary transition-colors p-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle hover:text-primary transition-colors"
                 >
                   <EditIcon size={18} />
                 </Link>
@@ -676,12 +676,12 @@ function SellerProducts() {
         </div>
 
         {/* 5. Pagination Bar (Figma Node: 44:44222) */}
-        <div className="flex items-center justify-between pt-6 mt-4 border-t border-border-subtle">
-          <span className="text-[13px] text-text-muted">
+        <div dir="ltr" className="flex items-center justify-between pt-6 mt-4 border-t border-border-subtle">
+          <span dir="rtl" className="text-[13px] text-text-muted">
             نمایش ۱ تا ۸ از ۴۸ کالا
           </span>
 
-          <div className="flex items-center gap-1.5 select-none shrink-0">
+          <div dir="rtl" className="flex items-center gap-1.5 select-none shrink-0">
             <button
               type="button"
               className="border border-border-default rounded-lg px-3.5 h-9 text-[13px] text-text-secondary hover:border-primary/50 transition-colors shrink-0"
