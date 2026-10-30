@@ -1,4 +1,5 @@
 export { default as SellerDashboard } from "./components/SellerDashboard";
+export { default as SellerPageSkeleton } from "./components/SellerPageSkeleton";
 export { default as SellerSidebar } from "./components/SellerSidebar";
 export { default as SellerBottomNav } from "./components/SellerBottomNav";
 export { default as SellerHeader } from "./components/SellerHeader";
