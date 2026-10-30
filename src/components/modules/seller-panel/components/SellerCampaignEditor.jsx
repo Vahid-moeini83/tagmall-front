@@ -15,6 +15,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import {
+  CampaignCalendarIcon,
   ReceiptIcon,
   ChartLineDownSquareIcon,
   SearchIcon,
@@ -184,7 +185,7 @@ function PricingRows({
             </span>
           </div>
           <p
-            className={`mt-1.5 text-caption ${selected && discount > 0 ? "text-success-strong" : "text-text-muted"}`}
+            className={`mt-1.5 pr-2 text-right text-caption ${selected && discount > 0 ? "text-success-strong" : "text-text-muted"}`}
           >
             {selected
               ? `${number(discount)}٪ تخفیف`
@@ -245,7 +246,7 @@ export default function SellerCampaignEditor({
   const [request, setRequest] = useState("");
   const [values, setValues] = useState(() =>
     Object.fromEntries(
-      CAMPAIGN_PRODUCTS.slice(0, 4).map((product, index) => [
+      CAMPAIGN_PRODUCTS.map((product, index) => [
         product.id,
         {
           selected: index < 3,
@@ -267,7 +268,7 @@ export default function SellerCampaignEditor({
             ? CAMPAIGN_EVENTS[3]
             : CAMPAIGN_EVENTS[2],
         ];
-  const products = CAMPAIGN_PRODUCTS.slice(0, 4)
+  const products = CAMPAIGN_PRODUCTS
     .filter(
       (product) =>
         !search.trim() ||
@@ -317,7 +318,7 @@ export default function SellerCampaignEditor({
     setDateDialog(false);
   };
   const submit = (draft = false) => {
-    const selected = CAMPAIGN_PRODUCTS.slice(0, 4).filter(
+    const selected = CAMPAIGN_PRODUCTS.filter(
       (product) => values[product.id].selected,
     );
     if (!draft && !selected.length) {
@@ -397,7 +398,7 @@ export default function SellerCampaignEditor({
                   onClick={() => setDateDialog(true)}
                   className={`${CAMPAIGN_CONTROL} min-h-10 border border-border-default bg-surface px-3 text-text-secondary`}
                 >
-                  <ReceiptIcon size={18} />
+                  <CampaignCalendarIcon />
                   {dateLabel ||
                     (readOnly ? "بازه زمانی ۲۹ آذر ۱۴۰۵" : "انتخاب بازه زمانی")}
                 </button>
@@ -623,8 +624,9 @@ export default function SellerCampaignEditor({
           </form>
           <div className="overflow-x-auto">
             <div
-              className={`min-w-[960px] ${!grouped ? "relative pl-[18px] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-primary-50 after:absolute after:top-0 after:left-0 after:h-[94px] after:w-0.5 after:bg-primary-400" : ""}`}
+              className={`min-w-[960px] ${!grouped ? "seller-panel-scroll max-h-[436px] overflow-y-auto" : ""}`}
               role="table"
+              tabIndex={!grouped ? 0 : undefined}
               aria-label="انتخاب و قیمت‌گذاری کالاهای کمپین"
             >
               {!readOnly && (
