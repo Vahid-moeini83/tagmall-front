@@ -39,6 +39,8 @@ function MapComponent({
   sellers,
   onMapMove,
   skipInitialAreaFetch = false,
+  initialUserPosition = null,
+  routeLine = null,
 }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -48,6 +50,7 @@ function MapComponent({
   const prevVisibleSellerIdsRef = useRef(null);
   const userMarkerRef = useRef(null);
   const userMarkerRootRef = useRef(null);
+  const routePolylineRef = useRef(null);
   const watchIdRef = useRef(null);
   const LRef = useRef(null);
   const isProgrammaticMoveRef = useRef(false);
@@ -58,7 +61,7 @@ function MapComponent({
   const skipInitialAreaFetchRef = useRef(skipInitialAreaFetch);
 
   const [isGpsEnabled, setIsGpsEnabled] = useState(false);
-  const [userPosition, setUserPosition] = useState(null);
+  const [userPosition, setUserPosition] = useState(initialUserPosition);
   const [isManualMode, setIsManualMode] = useState(false);
   const [isLeafletLoaded, setIsLeafletLoaded] = useState(false);
 
@@ -438,9 +441,15 @@ function MapComponent({
     if (mapRef.current) return;
 
     const L = LRef.current;
+    const isDesktop = isDesktopMapLayout();
+    const defaultCenter = isDesktop && initialUserPosition
+      ? [initialUserPosition.lat, initialUserPosition.lng]
+      : [HOME_MAP_INITIAL_CENTER.lat, HOME_MAP_INITIAL_CENTER.lng];
+    const defaultZoom = isDesktop ? 15 : HOME_MAP_INITIAL_ZOOM;
+
     const map = L.map(mapContainerRef.current).setView(
-      [HOME_MAP_INITIAL_CENTER.lat, HOME_MAP_INITIAL_CENTER.lng],
-      HOME_MAP_INITIAL_ZOOM,
+      defaultCenter,
+      defaultZoom,
     );
     mapRef.current = map;
 
@@ -561,6 +570,35 @@ function MapComponent({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSellerId]);
+
+  // Render navigation route line between user and active seller
+  useEffect(() => {
+    if (!mapRef.current || !LRef.current) return;
+    const map = mapRef.current;
+    const L = LRef.current;
+
+    if (routePolylineRef.current) {
+      map.removeLayer(routePolylineRef.current);
+      routePolylineRef.current = null;
+    }
+
+    if (routeLine?.from && routeLine?.to) {
+      const latlngs = [
+        [routeLine.from.lat, routeLine.from.lng],
+        [routeLine.to.lat, routeLine.to.lng],
+      ];
+
+      // Dashed orange line matching Figma node 121:19491
+      const polyline = L.polyline(latlngs, {
+        color: "#f58220",
+        weight: 4,
+        dashArray: "12, 12",
+        opacity: 0.9,
+      }).addTo(map);
+
+      routePolylineRef.current = polyline;
+    }
+  }, [routeLine]);
 
   const gpsButton = (
     <div

@@ -57,6 +57,19 @@ export default function MainHomeDesktop({ initialData, homeMain }) {
           }}
           onMapMove={handleMapMove}
           skipInitialAreaFetch={Boolean(initialData?.stores?.length)}
+          initialUserPosition={{
+            lat: 35.6892,
+            lng: 51.389,
+            heading: 0,
+          }}
+          routeLine={
+            activeSellerInfo?.location
+              ? {
+                  from: { lat: 35.6892, lng: 51.389 },
+                  to: activeSellerInfo.location,
+                }
+              : null
+          }
         />
       </div>
 
