@@ -252,6 +252,8 @@ function SellerSidebar() {
             const isActive =
               item.href === "/seller"
                 ? pathname === "/seller"
+                : item.id === "products"
+                  ? pathname?.startsWith(item.href) && !pathname?.startsWith("/seller/products/new")
                 : pathname?.startsWith(item.href);
 
             const navigationItem = (
