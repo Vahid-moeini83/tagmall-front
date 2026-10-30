@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SellerHeader from "./SellerHeader";
-import { EditIcon, SellerUserIcon, ToteBagIcon } from "@/icons";
+import { SellerUserIcon, ToteBagIcon } from "@/icons";
 
 const ORDER_ITEMS = [
   {
@@ -85,7 +85,7 @@ function SellerOrderDetail({ orderId = "DM-۴۸۱۹" }) {
             <div className="mt-4 flex flex-col gap-2 text-small leading-[26px] text-text-primary">
               <p className="flex items-center gap-3">
                 <span>شماره سفارش: {orderId}</span>
-                <span className="rounded-lg bg-secondary-100 px-3 py-1 text-caption font-semibold text-secondary">
+                <span className="flex h-[30px] w-[107px] items-center justify-center rounded-md bg-secondary-50 text-[14px] font-normal text-secondary">
                   در انتظار تأیید
                 </span>
               </p>
@@ -138,7 +138,7 @@ function SellerOrderDetail({ orderId = "DM-۴۸۱۹" }) {
                     aria-label={`مشاهده لیبل محصول ${index + 1}`}
                     className="flex h-8 w-8 items-center justify-center justify-self-center rounded-lg bg-surface-subtle text-primary"
                   >
-                    <EditIcon size={18} />
+                    <Image src="/assets/icons/seller/order-label.svg" alt="" width={20} height={20} />
                   </button>
                 </div>
               ))}
@@ -165,7 +165,7 @@ function SellerOrderDetail({ orderId = "DM-۴۸۱۹" }) {
             </button>
             <button
               type="button"
-              className="h-[46px] rounded-xl bg-success px-6 text-small font-semibold text-white"
+              className="h-[46px] rounded-xl bg-success-strong px-6 text-small font-semibold text-white"
             >
               ثبت کد رهگیری
             </button>
