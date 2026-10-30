@@ -250,6 +250,29 @@
   background: var(--color-primary-400);
 }
 
+/* One continuous connector with a curved branch for each seller submenu link. */
+.theme-new .seller-submenu-tree::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 17px;
+  width: 2px;
+  background: var(--color-navigation-connector);
+}
+
+.theme-new .seller-submenu-tree > a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 18px;
+  border-right: 2px solid var(--color-navigation-connector);
+  border-bottom: 2px solid var(--color-navigation-connector);
+  border-bottom-right-radius: 10px;
+}
+
 /* The selected financial report uses an orange quarter over a primary ring. */
 @utility bg-revenue-share {
   background-image: conic-gradient(
