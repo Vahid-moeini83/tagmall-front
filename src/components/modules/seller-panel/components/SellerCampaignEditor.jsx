@@ -784,7 +784,7 @@ export default function SellerCampaignEditor({
           <DialogContent
             dir="rtl"
             overlayClassName="theme-new"
-            className="theme-new max-h-[80dvh] overflow-y-auto bg-surface [&>button]:top-3 [&>button]:left-3 [&>button]:size-8"
+            className="theme-new seller-panel-scroll max-h-[80dvh] overflow-y-auto bg-surface [&>button]:top-3 [&>button]:left-3 [&>button]:size-8"
             onOpenAutoFocus={(event) => event.preventDefault()}
           >
             <DialogHeader>

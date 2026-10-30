@@ -480,7 +480,7 @@ export default function SellerBranches() {
           }}
         >
           <DialogContent
-            className="theme-new max-h-[80dvh] overflow-y-auto bg-surface [&>button]:left-3 [&>button]:top-3 [&>button]:size-8 [&>button]:rounded-md"
+            className="theme-new seller-panel-scroll max-h-[80dvh] overflow-y-auto bg-surface [&>button]:left-3 [&>button]:top-3 [&>button]:size-8 [&>button]:rounded-md"
             overlayClassName="theme-new"
             dir="rtl"
           >

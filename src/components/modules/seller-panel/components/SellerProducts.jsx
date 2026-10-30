@@ -336,7 +336,7 @@ function SellerProducts() {
               </span>
             </button>
             {desktopCategoryOpen && (
-              <div className="absolute top-full mt-1.5 right-0 w-48 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
+              <div className="seller-panel-scroll absolute top-full mt-1.5 right-0 w-48 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
@@ -382,7 +382,7 @@ function SellerProducts() {
               </span>
             </button>
             {desktopStatusOpen && (
-              <div className="absolute top-full mt-1.5 right-0 w-44 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
+              <div className="seller-panel-scroll absolute top-full mt-1.5 right-0 w-44 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
                 {STATUSES.map((st) => (
                   <button
                     key={st}
@@ -809,7 +809,7 @@ function SellerProducts() {
 
                 {/* Category Dropdown Menu */}
                 {categoryDropdownOpen && (
-                  <div className="absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
+                  <div className="seller-panel-scroll absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
                     {CATEGORIES.map((cat) => (
                       <button
                         key={cat}
@@ -861,7 +861,7 @@ function SellerProducts() {
 
                 {/* Status Dropdown Menu */}
                 {statusDropdownOpen && (
-                  <div className="absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
+                  <div className="seller-panel-scroll absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
                     {STATUSES.map((st) => (
                       <button
                         key={st}

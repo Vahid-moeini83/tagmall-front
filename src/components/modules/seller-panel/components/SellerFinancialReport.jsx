@@ -273,7 +273,7 @@ export default function SellerFinancialReport() {
         <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
           <DialogContent
             onOpenAutoFocus={(event) => event.preventDefault()}
-            className="theme-new max-h-[80dvh] overflow-y-auto bg-surface"
+            className="theme-new seller-panel-scroll max-h-[80dvh] overflow-y-auto bg-surface"
             overlayClassName="theme-new"
             dir="rtl"
           >

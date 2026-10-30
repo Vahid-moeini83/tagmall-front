@@ -245,7 +245,7 @@ function SellerSidebar() {
 
         {/* Navigation Items */}
         <nav
-          className={`flex flex-col gap-2 flex-1 overflow-y-auto ${isMessageCenter ? "min-h-0" : ""}`}
+          className={`seller-panel-scroll flex flex-col gap-2 flex-1 overflow-y-auto ${isMessageCenter ? "min-h-0" : ""}`}
         >
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;

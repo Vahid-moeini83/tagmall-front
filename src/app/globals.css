@@ -134,14 +134,14 @@
   }
 
   /* مهم: هر المنتی که overflow-y دارد LTR شود */
-  *[style*="overflow-y"],
-  *[class*="overflow-y"] {
+  *[style*="overflow-y"]:not(.seller-panel-scroll),
+  *[class*="overflow-y"]:not(.seller-panel-scroll) {
     direction: ltr !important;
   }
 
   /* محتوا دوباره RTL */
-  *[style*="overflow-y"] > *,
-  *[class*="overflow-y"] > * {
+  *[style*="overflow-y"]:not(.seller-panel-scroll) > *,
+  *[class*="overflow-y"]:not(.seller-panel-scroll) > * {
     direction: rtl !important;
   }
 
