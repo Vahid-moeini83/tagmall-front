@@ -50,12 +50,12 @@ export default function DesktopProductCard({
 
       {isSpecial ? (
         <div className="space-y-3">
-          {/* Stock Badges */}
+          {/* Stock Badges (RTL: right is "موجود", left is "فقط ۲ عدد باقیمانده") */}
           <div className="flex items-center justify-between text-caption font-semibold">
+            <span className="text-success-strong">موجود</span>
             <span className="text-error">
               {product.totalSales ? "فقط ۲ عدد باقیمانده" : "موجود"}
             </span>
-            <span className="text-success-strong">موجود</span>
           </div>
 
           {/* Divider */}
@@ -63,7 +63,19 @@ export default function DesktopProductCard({
 
           {/* Price & Cart Action */}
           <div className="flex items-center justify-between h-7.5">
-            {/* Cart Button */}
+            {/* Price Info (Right side in RTL) */}
+            <div className="flex items-center gap-3">
+              <span className="text-small text-text-secondary font-normal">
+                {formattedPrice}
+              </span>
+              {product.discountPercent > 0 && (
+                <span className="text-small text-text-disabled line-through font-normal">
+                  {formatPrice(Math.round(product.price * (1 + product.discountPercent / 100)))}
+                </span>
+              )}
+            </div>
+
+            {/* Cart Button (Left side in RTL) */}
             <button
               type="button"
               onClick={(e) => {
@@ -76,18 +88,6 @@ export default function DesktopProductCard({
             >
               <BasketShoppingIcon size={19} className="text-text-on-primary" />
             </button>
-
-            {/* Price Info */}
-            <div className="flex items-center gap-3">
-              {product.discountPercent > 0 && (
-                <span className="text-small text-text-disabled line-through font-normal">
-                  {formatPrice(Math.round(product.price * (1 + product.discountPercent / 100)))}
-                </span>
-              )}
-              <span className="text-small text-text-secondary font-normal">
-                {formattedPrice}
-              </span>
-            </div>
           </div>
         </div>
       ) : (
