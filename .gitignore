@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.venv-perfection/
+/.perfection/
 /.pnp
 .pnp.*
 .yarn/*

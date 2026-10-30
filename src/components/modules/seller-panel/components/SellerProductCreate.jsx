@@ -3,11 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import {
-  SearchIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   MessageTextIcon,
-  NoteIcon,
   TrashIcon,
   PlusIcon,
   ChartLineDownSquareIcon,
@@ -49,8 +47,8 @@ const SEARCH_RESULTS = [
     code: "شناسه محصول: SM-S928B/DS",
     category: "گوشی موبایل",
     image: "/assets/images/seller/new-product/s24_ultra.png",
-    buttonType: "outline",
-    buttonText: "ثبت محصول",
+    buttonType: "teal",
+    buttonText: "ثبت مجوز فروش",
   },
   {
     id: 5,
@@ -67,8 +65,8 @@ const SEARCH_RESULTS = [
     code: "شناسه محصول: SM-S928B/DS",
     category: "گوشی موبایل",
     image: "/assets/images/seller/new-product/s24_ultra.png",
-    buttonType: "teal",
-    buttonText: "ثبت مجوز فروش",
+    buttonType: "outline",
+    buttonText: "ثبت محصول",
   },
 ];
 
@@ -158,45 +156,20 @@ function SellerProductCreate() {
           </p>
         </div>
 
-        {/* View Switcher Tabs (For preview of both Figma screens) */}
-        <div className="flex items-center gap-2 bg-surface p-1 rounded-xl border border-border-default text-xs">
-          <button
-            type="button"
-            onClick={() => setActiveStep("search")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors font-medium ${
-              activeStep === "search"
-                ? "bg-primary text-white shadow-xs"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
-          >
-            مرحله ۱: جست‌وجو و انتخاب
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveStep("configure")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors font-medium ${
-              activeStep === "configure"
-                ? "bg-primary text-white shadow-xs"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
-          >
-            مرحله ۲: قیمت‌گذاری و تنوع
-          </button>
-        </div>
       </header>
 
       {/* ========================================================================= */}
       {/* SCREEN 1: Search & Select Product (Figma Node: 44:45285) */}
       {/* ========================================================================= */}
       {activeStep === "search" && (
-        <div className="w-full bg-surface rounded-card p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-8 shadow-xs">
+        <div className="w-full bg-surface rounded-card p-6 lg:p-[28px] flex flex-col gap-4">
           {/* Section 1: Search Header & Input */}
           <div className="flex flex-col text-right">
             {/* CardHeader (1004x44 @ 0,0 in Figma) */}
             <div className="flex items-center justify-start gap-3">
               {/* Icon 44x44 on RIGHT in RTL (Figma: Frame 44x44 @ 960,0) */}
               <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                <SearchIcon size={24} />
+                <Image src="/assets/icons/seller/box-front-search.svg" alt="" width={24} height={24} />
               </div>
 
               {/* Title on the LEFT of Icon in RTL (Figma: TEXT @ 813,9) */}
@@ -206,7 +179,7 @@ function SellerProductCreate() {
             </div>
 
             {/* Figma Line Divider (1004x0 @ 0,60 stroke:#f3f4f6) */}
-            <div className="w-full h-px bg-surface-muted mt-4 mb-5" />
+            <div className="w-full h-px bg-surface-muted mt-4 mb-4" />
 
             {/* SearchRow: Input on Right, Button on Left in RTL */}
             <div className="flex items-center gap-3 w-full">
@@ -214,10 +187,11 @@ function SellerProductCreate() {
               <div className="relative flex-1">
                 <input
                   type="text"
+                  aria-label="جست‌وجوی محصول"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="نام محصول، برند یا شناسه کالا را وارد کنید..."
-                  className="w-full h-[50px] rounded-xl bg-surface-subtle border border-surface-subtle px-4 text-right text-[14px] text-text-primary placeholder:text-text-muted focus:outline-hidden focus:border-primary/40 focus:bg-surface transition-colors"
+                  className="w-full h-[50px] rounded-xl bg-surface-subtle border border-surface-subtle px-4 text-right text-[14px] text-text-primary placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 focus:border-primary/40 focus:bg-surface transition-colors"
                   dir="rtl"
                 />
               </div>
@@ -250,16 +224,16 @@ function SellerProductCreate() {
                 return (
                   <div
                     key={product.id}
-                    className={`bg-surface rounded-2xl p-4 border flex flex-col justify-between gap-4 transition-all shadow-xs ${
+                    className={`bg-surface rounded-2xl p-4 border flex flex-col justify-between gap-3 min-h-[190px] transition-colors ${
                       isSelectedBorder
                         ? "border-primary"
                         : "border-border-default hover:border-primary/40"
                     }`}
                   >
                     {/* Top info row: Image on RIGHT in RTL, Text on LEFT */}
-                    <div className="flex items-start gap-3 text-right">
+                    <div className="flex items-start gap-3 min-h-[96px] text-right">
                       {/* Image on Right in RTL (Figma: Rectangle 72x72 @ 220,12 r:12) */}
-                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
+                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                         <Image
                           src={product.image}
                           alt={product.title}
@@ -271,7 +245,7 @@ function SellerProductCreate() {
 
                       {/* Text on Left (Figma: Frame 208x96 @ 0,0) */}
                       <div className="flex-1 min-w-0 flex flex-col gap-1">
-                        <h4 className="text-[14px] leading-snug font-medium text-text-primary line-clamp-2">
+                        <h4 className="text-[14px] leading-snug font-normal text-text-primary line-clamp-2">
                           {product.title}
                         </h4>
                         <span className="text-[14px] text-text-secondary font-normal">
@@ -315,12 +289,12 @@ function SellerProductCreate() {
             </div>
 
             {/* NoResultState Banner (Figma: 1004x110 @ 0,520 r:16 fill:#f9fafb stroke:#e5e7eb p:24) */}
-            <div className="rounded-2xl bg-surface-subtle border border-border-default p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+            <div className="rounded-2xl bg-surface-subtle border border-dashed border-border-default p-6 min-h-[110px] flex flex-col sm:flex-row items-center justify-between gap-4">
               {/* Right block: Icon + Texts */}
               <div className="flex items-center gap-3 text-right">
                 {/* Icon 44x44 on RIGHT (Figma: Frame 44x44 r:12 fill:#eeeff6) */}
                 <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                  <HintIcon size={24} />
+                  <Image src="/assets/icons/seller/search-info.svg" alt="" width={24} height={24} />
                 </div>
 
                 <div className="flex flex-col">
@@ -345,13 +319,13 @@ function SellerProductCreate() {
           </div>
 
           {/* Section 4: Drafts Section (Figma: 1004x258 @ 28,758) */}
-          <div className="flex flex-col gap-4 pt-2">
+          <div className="flex flex-col gap-4 mt-2">
             {/* Drafts Header */}
             <div className="flex items-center justify-between">
               {/* Right: Icon 44x44 + "محصولات پیش نویس شده" (size 16, #1a1a2e) */}
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                  <NoteIcon size={24} />
+                  <Image src="/assets/icons/seller/receipt-pen.svg" alt="" width={24} height={24} />
                 </div>
                 <h3 className="text-[16px] font-normal text-text-primary">محصولات پیش نویس شده</h3>
               </div>
@@ -360,7 +334,7 @@ function SellerProductCreate() {
               <button
                 type="button"
                 onClick={() => setShowDraftsEmpty(!showDraftsEmpty)}
-                className="text-[12px] text-primary hover:text-primary-600 transition-colors flex items-center gap-1 select-none cursor-pointer"
+                className="min-h-11 text-[12px] text-text-primary hover:text-primary transition-colors flex items-center gap-1 select-none cursor-pointer"
               >
                 <span>مشاهده همه</span>
                 <ChevronLeftIcon size={18} />
@@ -369,15 +343,15 @@ function SellerProductCreate() {
 
             {/* Draft Cards */}
             {!showDraftsEmpty ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {DRAFT_PRODUCTS.map((draft) => (
                   <div
                     key={draft.id}
-                    className="bg-surface rounded-2xl p-4 border border-border-default flex flex-col justify-between gap-4 shadow-xs"
+                    className="bg-surface rounded-2xl p-4 border border-border-default flex flex-col md:flex-row lg:flex-col md:items-center lg:items-stretch justify-between gap-4 min-h-[198px] md:min-h-[104px] lg:min-h-[198px]"
                   >
-                    <div className="flex items-start gap-3 text-right">
+                    <div className="flex items-start md:items-center lg:items-start gap-3 text-right md:flex-1 min-w-0">
                       {/* Image 72x72 on Right */}
-                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
+                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                         <Image
                           src={draft.image}
                           alt={draft.title}
@@ -405,7 +379,7 @@ function SellerProductCreate() {
                     <button
                       type="button"
                       onClick={() => handleSelectProduct(draft)}
-                      className="w-full h-[46px] rounded-xl bg-surface-muted text-text-primary text-[16px] font-normal hover:bg-border-default transition-colors cursor-pointer"
+                      className="w-full md:w-40 lg:w-full h-[46px] rounded-xl bg-surface-muted text-text-primary text-[16px] font-normal hover:bg-border-default transition-colors cursor-pointer shrink-0"
                     >
                       ادامه و تکمیل
                     </button>
@@ -415,12 +389,19 @@ function SellerProductCreate() {
             ) : null}
 
             {/* Empty Drafts State (Figma Node: 44:45374) */}
-            <div className="rounded-2xl border border-dashed border-border-default p-8 flex flex-col items-center justify-center gap-3 bg-surface-subtle/30 text-center mt-2">
+            <div className="flex items-center gap-3 mt-2">
+              <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                <Image src="/assets/icons/seller/receipt-pen.svg" alt="" width={24} height={24} />
+              </div>
+              <h3 className="text-[16px] font-normal text-text-primary">محصولات پیش نویس شده</h3>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-3 text-center">
               <div className="relative w-44 h-36">
                 <Image
                   src="/assets/images/seller/new-product/empty_drafts.png"
                   alt="محصولات پیش‌نویس شده وجود ندارد"
                   fill
+                  loading="eager"
                   sizes="176px"
                   className="object-contain"
                 />
@@ -482,7 +463,7 @@ function SellerProductCreate() {
                     {selectedProduct.title}
                   </h3>
                   <span className="text-[14px] text-text-secondary font-normal">
-                    {selectedProduct.code}
+                    شناسه محصول: <bdi dir="ltr" className="inline-block whitespace-nowrap">{selectedProduct.code.split(": ")[1]}</bdi>
                   </span>
                 </div>
               </div>
@@ -516,9 +497,10 @@ function SellerProductCreate() {
                   <label className="text-[16px] text-text-secondary font-normal">ظرفیت</label>
                   <div className="relative">
                     <select
+                      aria-label="ظرفیت"
                       value={capacity}
                       onChange={(e) => setCapacity(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     >
                       <option value="۲۵۶ گیگابایت">۲۵۶ گیگابایت</option>
@@ -537,9 +519,10 @@ function SellerProductCreate() {
                   <label className="text-[16px] text-text-secondary font-normal">رنگ</label>
                   <div className="relative">
                     <select
+                      aria-label="رنگ"
                       value={color}
                       onChange={(e) => setColor(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     >
                       <option value="زرد تیتانیوم">زرد تیتانیوم</option>
@@ -558,9 +541,10 @@ function SellerProductCreate() {
                   <label className="text-[16px] text-text-secondary font-normal">گارانتی</label>
                   <div className="relative">
                     <select
+                      aria-label="گارانتی"
                       value={warranty}
                       onChange={(e) => setWarranty(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     >
                       <option value="۲ ساله آونگ">۲ ساله آونگ</option>
@@ -759,10 +743,11 @@ function SellerProductCreate() {
               </label>
               <input
                 type="text"
+                aria-label="قیمت فروش به تومان"
                 value={sellingPrice}
                 onChange={(e) => setSellingPrice(e.target.value)}
                 placeholder="مبلغ را به تومان وارد کنید"
-                className="w-full h-12 rounded-xl border border-border-default px-4 text-right text-[16px] text-text-primary font-normal focus:border-primary focus:outline-hidden"
+                className="w-full h-12 rounded-xl border border-border-default px-4 text-right text-[16px] text-text-primary font-normal focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                 dir="rtl"
               />
               <span className="text-[12px] text-text-muted">
@@ -812,8 +797,9 @@ function SellerProductCreate() {
                     <label className="text-[16px] text-text-secondary font-normal">شعبه</label>
                     <div className="relative">
                       <select
+                        aria-label="شعبه"
                         defaultValue={branch.name}
-                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] text-text-primary bg-surface appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] text-text-primary bg-surface appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                         dir="rtl"
                       >
                         <option value="تهران مرکزی">تهران مرکزی</option>
@@ -835,9 +821,10 @@ function SellerProductCreate() {
                       موجودی قابل فروش
                     </label>
                     <input
+                      aria-label={`موجودی قابل فروش در ${branch.name}`}
                       type="text"
                       defaultValue={branch.stock}
-                      className="h-12 rounded-xl border border-border-default px-4 text-center text-[16px] text-text-primary bg-surface focus:border-primary focus:outline-hidden"
+                      className="h-12 rounded-xl border border-border-default px-4 text-center text-[16px] text-text-primary bg-surface focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     />
                   </div>
@@ -953,7 +940,8 @@ function SellerProductCreate() {
                   </label>
                   <div className="relative">
                     <select
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                      aria-label="زمان آماده‌سازی برای تحویل"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                       dir="rtl"
                     >
                       <option>همان روز · در ساعات کاری شعبه</option>
@@ -999,7 +987,8 @@ function SellerProductCreate() {
                     </label>
                     <div className="relative">
                       <select
-                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        aria-label="آماده‌سازی و ارسال"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                         dir="rtl"
                       >
                         <option>۱ روز کاری</option>
@@ -1018,7 +1007,8 @@ function SellerProductCreate() {
                     <label className="text-[16px] text-text-secondary font-normal">روش ارسال</label>
                     <div className="relative">
                       <select
-                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        aria-label="روش ارسال"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                         dir="rtl"
                       >
                         <option>پست پیشتاز</option>
