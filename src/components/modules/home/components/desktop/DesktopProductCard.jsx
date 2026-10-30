@@ -43,7 +43,7 @@ export default function DesktopProductCard({
         </div>
 
         {/* Product Title (2 lines) */}
-        <h4 className="mt-3 text-small text-text-primary line-clamp-2 h-11 text-right font-normal">
+        <h4 className="mt-3 text-small text-text-primary line-clamp-2 h-11 text-right font-normal leading-snug">
           {product.name}
         </h4>
       </Link>
@@ -51,18 +51,18 @@ export default function DesktopProductCard({
       {isSpecial ? (
         <div className="space-y-3">
           {/* Stock Badges */}
-          <div className="flex items-center justify-between text-label">
-            <span className="text-error font-medium">
+          <div className="flex items-center justify-between text-caption font-semibold">
+            <span className="text-error">
               {product.totalSales ? "فقط ۲ عدد باقیمانده" : "موجود"}
             </span>
-            <span className="text-success font-medium">موجود</span>
+            <span className="text-success-strong">موجود</span>
           </div>
 
           {/* Divider */}
-          <div className="border-b border-border-subtle" />
+          <div className="border-b border-primary-100" />
 
           {/* Price & Cart Action */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between h-7.5">
             {/* Cart Button */}
             <button
               type="button"
@@ -72,24 +72,21 @@ export default function DesktopProductCard({
                 onAddToCart?.(product);
               }}
               aria-label="افزودن به سبد خرید"
-              className="size-7.5 rounded-md bg-primary hover:bg-primary-600 transition-colors flex items-center justify-center text-surface cursor-pointer shrink-0"
+              className="size-7.5 rounded-md bg-primary hover:bg-primary-600 transition-colors flex items-center justify-center text-text-on-primary cursor-pointer shrink-0"
             >
-              <BasketShoppingIcon size={17} className="text-surface" />
+              <BasketShoppingIcon size={19} className="text-text-on-primary" />
             </button>
 
             {/* Price Info */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {product.discountPercent > 0 && (
-                <span className="text-small text-text-disabled line-through">
-                  {formatPrice(product.price * 1.2)}
+                <span className="text-small text-text-disabled line-through font-normal">
+                  {formatPrice(Math.round(product.price * (1 + product.discountPercent / 100)))}
                 </span>
               )}
-              <div className="flex items-center gap-1">
-                <span className="text-small text-text-primary font-semibold">
-                  {formattedPrice}
-                </span>
-                <span className="text-caption text-text-muted">تومان</span>
-              </div>
+              <span className="text-small text-text-secondary font-normal">
+                {formattedPrice}
+              </span>
             </div>
           </div>
         </div>
