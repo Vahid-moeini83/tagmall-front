@@ -18,10 +18,11 @@ import {
   isDesktopMapLayout,
 } from "@/lib/client/homeMapViewport";
 
+// Temporary fallback to OpenStreetMap while Neshan API key limit is exceeded
 const CUSTOM_TILE_URL =
-  "https://api.neshan.org/tile/raster/basemap/{z}/{x}/{y}?style=neshan&Api-key=service.cfd22467b9064762be3c1beec3756c47";
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OSM contributors</a>';
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // Mobile GPS sits 5px above drawer (40px button + 5px gap); visible only when drawer is closed
 const MOBILE_GPS_ABOVE_DRAWER_CLASS =
