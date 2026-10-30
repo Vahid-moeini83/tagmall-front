@@ -221,21 +221,11 @@
 }
 
 .theme-new .seller-recent-orders-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-primary-400) var(--color-primary-50);
+  scrollbar-width: none;
 }
 
 .theme-new .seller-recent-orders-scroll::-webkit-scrollbar {
-  width: 3px;
-}
-
-.theme-new .seller-recent-orders-scroll::-webkit-scrollbar-track {
-  background: var(--color-primary-50);
-}
-
-.theme-new .seller-recent-orders-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-primary-400);
-  border-radius: 999px;
+  display: none;
 }
 
 /* The selected financial report uses an orange quarter over a primary ring. */

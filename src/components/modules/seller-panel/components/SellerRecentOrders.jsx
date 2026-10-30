@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { AngleLeftIcon } from "@/icons";
 
@@ -101,6 +104,32 @@ const RECENT_ORDERS = [
 ];
 
 function SellerRecentOrders() {
+  const ordersScrollRef = useRef(null);
+  const dragStartRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const syncScroll = () => {
+    const element = ordersScrollRef.current;
+    if (!element) return;
+    const available = element.scrollHeight - element.clientHeight;
+    setScrollProgress(available > 0 ? element.scrollTop / available : 0);
+  };
+
+  const startRailDrag = (event) => {
+    const element = ordersScrollRef.current;
+    if (!element) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragStartRef.current = { y: event.clientY, scrollTop: element.scrollTop };
+  };
+
+  const moveRailDrag = (event) => {
+    const element = ordersScrollRef.current;
+    if (!element || !dragStartRef.current) return;
+    const scrollRange = element.scrollHeight - element.clientHeight;
+    element.scrollTop = dragStartRef.current.scrollTop +
+      ((event.clientY - dragStartRef.current.y) / (428 - 94)) * scrollRange;
+  };
+
   return (
     <section className="flex flex-col gap-4 lg:gap-0 lg:bg-surface lg:rounded-xl lg:p-6 lg:border lg:border-border-subtle lg:shadow-card">
       {/* Header: Matches both Figma mobile (44:39482) and desktop */}
@@ -171,8 +200,37 @@ function SellerRecentOrders() {
               <span className="text-center">وضعیت سفارش</span>
             </div>
 
-            {/* The narrow rail at the left is the table's real scroll bar. */}
-            <div className="seller-recent-orders-scroll mt-6 max-h-[428px] overflow-y-auto" tabIndex={0} aria-label="سفارش‌های اخیر، قابل پیمایش">
+            <div className="relative mt-6 pl-4">
+              <div
+                role="scrollbar"
+                aria-controls="seller-recent-orders-list"
+                aria-label="پیمایش سفارش‌های اخیر"
+                aria-orientation="vertical"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(scrollProgress * 100)}
+                tabIndex={0}
+                onPointerDown={startRailDrag}
+                onPointerMove={moveRailDrag}
+                onPointerUp={() => { dragStartRef.current = null; }}
+                onPointerCancel={() => { dragStartRef.current = null; }}
+                onKeyDown={(event) => {
+                  const element = ordersScrollRef.current;
+                  if (!element) return;
+                  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                    event.preventDefault();
+                    element.scrollTop += event.key === "ArrowDown" ? 58 : -58;
+                  }
+                }}
+                className="absolute left-0 top-0 h-[428px] w-3 cursor-grab touch-none"
+              >
+                <span className="absolute left-0 top-0 h-full w-[2px] bg-primary-50" />
+                <span
+                  className="absolute left-0 w-[2px] h-[94px] bg-primary-400"
+                  style={{ top: `${scrollProgress * (428 - 94)}px` }}
+                />
+              </div>
+              <div id="seller-recent-orders-list" ref={ordersScrollRef} onScroll={syncScroll} className="seller-recent-orders-scroll h-[428px] overflow-y-auto" tabIndex={0} aria-label="سفارش‌های اخیر، قابل پیمایش">
               <div className="flex flex-col gap-4">
                 {RECENT_ORDERS.map((order, idx) => (
                   <div
@@ -207,6 +265,7 @@ function SellerRecentOrders() {
                     </div>
                   </div>
                 ))}
+              </div>
               </div>
             </div>
           </div>
