@@ -28,7 +28,7 @@ import {
   ChevronDownIcon,
   EditIcon,
   LocationPinLineIcon,
-  MessageTextIcon,
+  MessagesTextIcon,
   PlusSimpleIcon,
   ReceiptIcon,
 } from "@/icons";
@@ -207,7 +207,7 @@ export default function SellerBranches() {
                   "h-[50px] w-full px-6 text-small font-normal lg:w-64 lg:text-body",
                 )}
               >
-                <MessageTextIcon size={24} />
+                <MessagesTextIcon size={24} />
                 <span>درخواست ویرایش اطلاعات</span>
               </button>
             </div>
@@ -480,7 +480,7 @@ export default function SellerBranches() {
           }}
         >
           <DialogContent
-            className="theme-new max-h-[80dvh] overflow-y-auto bg-surface [&>button]:left-3 [&>button]:top-3 [&>button]:size-8 [&>button]:rounded-md"
+            className="theme-new seller-panel-scroll max-h-[80dvh] overflow-y-auto bg-surface [&>button]:left-3 [&>button]:top-3 [&>button]:size-8 [&>button]:rounded-md"
             overlayClassName="theme-new"
             dir="rtl"
           >

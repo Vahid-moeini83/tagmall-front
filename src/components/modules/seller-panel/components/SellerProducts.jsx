@@ -7,11 +7,14 @@ import {
   PlusSimpleIcon,
   ChevronDownIcon,
   EditIcon,
-  MessageTextIcon,
+  MessagesTextIcon,
   CursorClickIcon,
   CloseIcon,
+  ListIcon,
+  HintIcon,
 } from "@/icons";
-import { SlidersHorizontal, Info } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import SellerHeader from "./SellerHeader";
 
 /**
  * 8 products matching Figma node 44:44034 & 44:44999
@@ -28,8 +31,8 @@ const PRODUCTS_LIST = [
     stockCount: 14,
     status: {
       label: "فعال",
-      bg: "bg-[#108981]/10",
-      color: "text-[#108981]",
+      bg: "bg-success-strong/10",
+      color: "text-success-strong",
     },
     image: "/assets/images/seller/products/iphone-13.png",
   },
@@ -77,8 +80,8 @@ const PRODUCTS_LIST = [
     stockCount: 45,
     status: {
       label: "فعال",
-      bg: "bg-[#108981]/10",
-      color: "text-[#108981]",
+      bg: "bg-success-strong/10",
+      color: "text-success-strong",
     },
     image: "/assets/images/seller/products/nike-tshirt.png",
   },
@@ -94,7 +97,7 @@ const PRODUCTS_LIST = [
     status: {
       label: "در انتظار تأیید",
       bg: "bg-warning-light",
-      color: "text-[#D97706]",
+      color: "text-warning",
     },
     image: "/assets/images/seller/products/xiaomi-backpack.png",
   },
@@ -125,8 +128,8 @@ const PRODUCTS_LIST = [
     stockCount: 60,
     status: {
       label: "فعال",
-      bg: "bg-[#108981]/10",
-      color: "text-[#108981]",
+      bg: "bg-success-strong/10",
+      color: "text-success-strong",
     },
     image: "/assets/images/seller/products/anker-powerbank.png",
   },
@@ -141,8 +144,8 @@ const PRODUCTS_LIST = [
     stockCount: 12,
     status: {
       label: "مرجوع شده",
-      bg: "bg-[#FEF9C3]",
-      color: "text-[#854D0E]",
+      bg: "bg-warning-light",
+      color: "text-warning",
     },
     image: "/assets/images/seller/products/razer-keyboard.png",
   },
@@ -224,14 +227,9 @@ function SellerProducts() {
       {/* 1. Header (Desktop: title + date / Mobile: title + items count + Add button) */}
       <div className="flex flex-col gap-4">
         {/* Desktop top title & date (Figma Node 44:44037) */}
-        <header className="hidden lg:flex flex-col gap-1 text-right">
-          <h1 className="text-[22px] lg:text-h4 font-semibold text-text-primary">
-            پنل فروشگاه تگ مال
-          </h1>
-          <p className="text-caption text-text-muted">
-            امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
-          </p>
-        </header>
+        <div className="hidden lg:block">
+          <SellerHeader />
+        </div>
 
         {/* Action row (Title + Add product button) */}
         <div className="flex items-center justify-between">
@@ -260,12 +258,13 @@ function SellerProducts() {
       <div className="hidden lg:flex bg-surface rounded-2xl p-4 border border-border-subtle shadow-card items-center justify-between gap-3">
         {/* Right side in RTL: Search Input (Figma Node: 44:44052 x=636) */}
         <div className="relative w-[420px]">
-          <input
+          <Input
+            variant="plain"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="جست و جو در گروه کالایی، برند ها، محصولات، شناسه محصولات"
-            className="w-full h-11 bg-surface-subtle rounded-xl px-4 text-[12px] text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all text-right"
+            className="w-full h-11 bg-surface-subtle rounded-xl px-4 text-caption text-text-primary placeholder:text-text-muted focus-visible:ring-1 focus-visible:ring-primary/30 text-right"
           />
         </div>
 
@@ -280,7 +279,7 @@ function SellerProducts() {
                 setDesktopCategoryOpen(false);
                 setDesktopStatusOpen(false);
               }}
-              className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
+              className="h-11 px-4 border border-border-default rounded-field flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
             >
               <ChevronDownIcon
                 size={18}
@@ -322,7 +321,7 @@ function SellerProducts() {
                 setDesktopSortOpen(false);
                 setDesktopStatusOpen(false);
               }}
-              className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
+              className="h-11 px-4 border border-border-default rounded-field flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
             >
               <ChevronDownIcon
                 size={18}
@@ -337,7 +336,7 @@ function SellerProducts() {
               </span>
             </button>
             {desktopCategoryOpen && (
-              <div className="absolute top-full mt-1.5 right-0 w-48 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
+              <div className="seller-panel-scroll absolute top-full mt-1.5 right-0 w-48 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
@@ -368,7 +367,7 @@ function SellerProducts() {
                 setDesktopSortOpen(false);
                 setDesktopCategoryOpen(false);
               }}
-              className="h-11 px-4 border border-border-default rounded-[15px] flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
+              className="h-11 px-4 border border-border-default rounded-field flex items-center justify-between gap-3 text-text-primary text-[14px] bg-surface hover:border-primary/40 transition-colors"
             >
               <ChevronDownIcon
                 size={18}
@@ -383,7 +382,7 @@ function SellerProducts() {
               </span>
             </button>
             {desktopStatusOpen && (
-              <div className="absolute top-full mt-1.5 right-0 w-44 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
+              <div className="seller-panel-scroll absolute top-full mt-1.5 right-0 w-44 bg-surface border border-border-default rounded-xl shadow-card z-30 py-1 max-h-56 overflow-y-auto">
                 {STATUSES.map((st) => (
                   <button
                     key={st}
@@ -411,12 +410,13 @@ function SellerProducts() {
       <div className="lg:hidden bg-surface rounded-xl p-3 border border-border-subtle shadow-card flex flex-col gap-2.5">
         {/* Row 1: Search Input */}
         <div className="relative">
-          <input
+          <Input
+            variant="plain"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="جست و جو در محصولات"
-            className="w-full h-12 bg-surface-subtle rounded-lg px-3 text-right text-[14px] text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
+            className="w-full h-12 bg-surface-subtle rounded-lg px-3 text-right text-small text-text-primary placeholder:text-text-muted focus-visible:ring-1 focus-visible:ring-primary/30"
           />
         </div>
 
@@ -443,7 +443,7 @@ function SellerProducts() {
             className="w-[100px] h-11 bg-primary/10 border border-primary/20 rounded-lg px-3 flex items-center justify-center gap-1.5 text-primary text-[13px] font-normal hover:bg-primary/20 transition-colors shrink-0"
           >
             <span>فیلترها</span>
-            <SlidersHorizontal size={16} />
+            <ListIcon size={16} />
           </button>
 
           {/* 2. Dropdown button on the LEFT in RTL (Figma Node: 44:45038) */}
@@ -458,7 +458,7 @@ function SellerProducts() {
               );
               setIsFilterModalOpen(true);
             }}
-            className="flex-1 h-11 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-text-primary text-[16px] bg-surface hover:border-primary/40 transition-colors"
+            className="flex-1 h-11 border border-border-default rounded-field px-4 flex items-center justify-between text-text-primary text-[16px] bg-surface hover:border-primary/40 transition-colors"
           >
             <span>تهران</span>
             <ChevronDownIcon size={18} className="text-text-muted shrink-0" />
@@ -561,7 +561,7 @@ function SellerProducts() {
                 type="button"
                 className="h-11 flex items-center justify-center gap-1.5 text-text-muted hover:text-text-primary transition-colors text-[12px] font-normal"
               >
-                <MessageTextIcon size={18} />
+                <MessagesTextIcon size={18} />
                 <span>پیام‌ها</span>
               </button>
 
@@ -579,16 +579,9 @@ function SellerProducts() {
       </div>
 
       {/* 4. Desktop Products Table (Figma Node: 44:44055) */}
-      <div className="hidden lg:block bg-surface rounded-[24px] p-6 border border-border-subtle shadow-card">
+      <div className="hidden lg:block bg-surface rounded-2xl p-6 border border-border-subtle shadow-card">
         {/* Table Header */}
-        <div
-          className="bg-surface-subtle rounded-xl h-12 px-6 items-center text-[13px] font-bold text-text-muted select-none"
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "minmax(280px, 1fr) 140px 160px 100px 120px 120px",
-          }}
-        >
+        <div className="grid grid-cols-[minmax(280px,1fr)_140px_160px_100px_120px_120px] items-center h-12 rounded-xl bg-surface-subtle px-6 text-[13px] font-bold text-text-muted select-none">
           <div className="text-right pr-2">نام محصول و کد کالا</div>
           <div className="text-center">گروه کالایی</div>
           <div className="text-center">بازه قیمتی (تومان)</div>
@@ -602,12 +595,7 @@ function SellerProducts() {
           {filteredProducts.map((product) => (
             <div
               key={`desktop-${product.id}`}
-              className="h-[72px] px-6 items-center hover:bg-surface-subtle/40 transition-colors"
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "minmax(280px, 1fr) 140px 160px 100px 120px 120px",
-              }}
+              className="grid grid-cols-[minmax(280px,1fr)_140px_160px_100px_120px_120px] h-[72px] items-center px-6 transition-colors hover:bg-surface-subtle/40"
             >
               {/* Product Info & Thumb */}
               <div className="flex items-center gap-3 overflow-hidden pr-2">
@@ -660,25 +648,25 @@ function SellerProducts() {
               </div>
 
               {/* Operations (3 icons matching Figma: cursor-click on RIGHT (x=88), messages-text in MIDDLE (x=44), pen-line on LEFT (x=0)) */}
-              <div className="flex items-center justify-center gap-3 text-text-muted">
+              <div className="flex items-center justify-center gap-3 text-text-primary">
                 <button
                   type="button"
                   title="آمار بازدید"
-                  className="hover:text-primary transition-colors p-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle hover:text-primary transition-colors"
                 >
                   <CursorClickIcon size={18} />
                 </button>
                 <button
                   type="button"
                   title="پیام‌ها"
-                  className="hover:text-primary transition-colors p-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle hover:text-primary transition-colors"
                 >
-                  <MessageTextIcon size={18} />
+                  <MessagesTextIcon size={18} />
                 </button>
                 <Link
                   href={`/seller/products/${product.id}`}
                   title="ویرایش محصول"
-                  className="hover:text-primary transition-colors p-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-subtle hover:text-primary transition-colors"
                 >
                   <EditIcon size={18} />
                 </Link>
@@ -688,12 +676,12 @@ function SellerProducts() {
         </div>
 
         {/* 5. Pagination Bar (Figma Node: 44:44222) */}
-        <div className="flex items-center justify-between pt-6 mt-4 border-t border-border-subtle">
-          <span className="text-[13px] text-text-muted">
+        <div dir="ltr" className="flex items-center justify-between pt-6 mt-4 border-t border-border-subtle">
+          <span dir="rtl" className="text-[13px] text-text-muted">
             نمایش ۱ تا ۸ از ۴۸ کالا
           </span>
 
-          <div className="flex items-center gap-1.5 select-none shrink-0">
+          <div dir="rtl" className="flex items-center gap-1.5 select-none shrink-0">
             <button
               type="button"
               className="border border-border-default rounded-lg px-3.5 h-9 text-[13px] text-text-secondary hover:border-primary/50 transition-colors shrink-0"
@@ -804,7 +792,7 @@ function SellerProducts() {
                     setCategoryDropdownOpen(!categoryDropdownOpen);
                     setStatusDropdownOpen(false);
                   }}
-                  className="w-full h-12 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-[14px] text-text-primary bg-surface hover:border-primary/40 transition-colors"
+                  className="w-full h-12 border border-border-default rounded-field px-4 flex items-center justify-between text-[14px] text-text-primary bg-surface hover:border-primary/40 transition-colors"
                 >
                   <span className="truncate">
                     {tempCategory === "همه"
@@ -821,7 +809,7 @@ function SellerProducts() {
 
                 {/* Category Dropdown Menu */}
                 {categoryDropdownOpen && (
-                  <div className="absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
+                  <div className="seller-panel-scroll absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
                     {CATEGORIES.map((cat) => (
                       <button
                         key={cat}
@@ -856,7 +844,7 @@ function SellerProducts() {
                     setStatusDropdownOpen(!statusDropdownOpen);
                     setCategoryDropdownOpen(false);
                   }}
-                  className="w-full h-12 border border-border-default rounded-[15px] px-4 flex items-center justify-between text-[14px] text-text-primary bg-surface hover:border-primary/40 transition-colors"
+                  className="w-full h-12 border border-border-default rounded-field px-4 flex items-center justify-between text-[14px] text-text-primary bg-surface hover:border-primary/40 transition-colors"
                 >
                   <span className="truncate">
                     {tempStatus === "همه"
@@ -873,7 +861,7 @@ function SellerProducts() {
 
                 {/* Status Dropdown Menu */}
                 {statusDropdownOpen && (
-                  <div className="absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
+                  <div className="seller-panel-scroll absolute top-full mt-1 inset-x-0 bg-surface border border-border-default rounded-xl shadow-lg z-20 max-h-48 overflow-y-auto py-1">
                     {STATUSES.map((st) => (
                       <button
                         key={st}
@@ -898,7 +886,7 @@ function SellerProducts() {
 
             {/* Info Alert (Figma Node: 44:44675) - Info icon on RIGHT (x=320), Text on LEFT (x=12) */}
             <div className="bg-surface-subtle rounded-xl p-3 flex items-center gap-2.5 border border-border-subtle/80 text-right">
-              <Info size={18} className="text-[#3d3183] shrink-0" />
+              <HintIcon size={18} className="shrink-0 text-primary" />
               <span className="text-[12px] text-text-muted">
                 برای دیدن همه کالاها، فیلترها را پاک کنید.
               </span>

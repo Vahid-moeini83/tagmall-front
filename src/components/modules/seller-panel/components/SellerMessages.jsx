@@ -164,18 +164,10 @@ export default function SellerMessages({ category = "experts" }) {
         )}
 
         <div
-          className={`relative min-h-0 flex-1 ${category === "reviews" ? "" : "pl-4 lg:max-h-[820px]"}`}
+          className={`relative min-h-0 flex-1 ${category === "reviews" ? "" : "lg:max-h-[820px]"}`}
         >
-          {category !== "reviews" && (
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-0 left-0 top-0 w-0.5 bg-primary-50"
-            >
-              <div className="h-[180px] bg-primary-400" />
-            </div>
-          )}
           <div
-            className="h-full overflow-y-auto scroll-hidden"
+            className={`seller-panel-scroll h-full overflow-y-auto ${category === "reviews" ? "" : "pl-4"}`}
             aria-label="فهرست گفتگوها"
           >
             <div

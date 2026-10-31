@@ -15,7 +15,7 @@ import {
 import {
   ChevronDownIcon,
   EditIcon,
-  MessageTextIcon,
+  MessagesTextIcon,
   PlusSimpleIcon,
   SearchIcon,
 } from "@/icons";
@@ -283,7 +283,7 @@ export default function SellerCampaigns() {
                             }
                             className={`${CAMPAIGN_CONTROL} size-8 bg-surface-subtle text-text-secondary hover:bg-primary-50`}
                           >
-                            <MessageTextIcon size={24} />
+                            <MessagesTextIcon size={24} />
                           </button>
                         </div>
                       </td>

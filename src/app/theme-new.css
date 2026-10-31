@@ -103,6 +103,7 @@
   --radius-pill: 999px;
   --radius-circle: 50%;
   --radius-card: 20px;
+  --radius-field: 15px;
 
   /* ------------------------------------------------------------------------
      8. Typography Hierarchy (Desktop)
@@ -188,11 +189,11 @@
      10. Background Patterns (Seller Panel & Subdued Textures)
      ------------------------------------------------------------------------ */
   --background-image-pattern-diagonal: repeating-linear-gradient(
-    45deg,
+    -45deg,
     transparent,
-    transparent 6px,
-    rgba(26, 26, 46, 0.04) 6px,
-    rgba(26, 26, 46, 0.04) 7px
+    transparent 4.5px,
+    rgba(26, 26, 46, 0.025) 4.5px,
+    rgba(26, 26, 46, 0.025) 5px
   );
 }
 
@@ -201,11 +202,11 @@
    ========================================================================== */
 @utility bg-pattern-diagonal {
   background-image: repeating-linear-gradient(
-    45deg,
+    -45deg,
     transparent,
-    transparent 6px,
-    rgba(26, 26, 46, 0.04) 6px,
-    rgba(26, 26, 46, 0.04) 7px
+    transparent 4.5px,
+    rgba(26, 26, 46, 0.025) 4.5px,
+    rgba(26, 26, 46, 0.025) 5px
   );
 }
 
@@ -214,9 +215,62 @@
     -45deg,
     transparent,
     transparent 4.5px,
-    rgba(26, 26, 46, 0.04) 4.5px,
-    rgba(26, 26, 46, 0.04) 5px
+    rgba(26, 26, 46, 0.025) 4.5px,
+    rgba(26, 26, 46, 0.025) 5px
   );
+}
+
+.theme-new .seller-recent-orders-scroll {
+  scrollbar-width: none;
+}
+
+.theme-new .seller-recent-orders-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thin, draggable scrollbar for seller panel scroll regions. */
+.theme-new .seller-panel-scroll,
+.theme-new.seller-panel-scroll {
+  direction: rtl;
+  scrollbar-width: auto;
+}
+
+.theme-new .seller-panel-scroll::-webkit-scrollbar,
+.theme-new.seller-panel-scroll::-webkit-scrollbar {
+  width: 2px;
+}
+
+.theme-new .seller-panel-scroll::-webkit-scrollbar-track,
+.theme-new.seller-panel-scroll::-webkit-scrollbar-track {
+  background: var(--color-primary-50);
+}
+
+.theme-new .seller-panel-scroll::-webkit-scrollbar-thumb,
+.theme-new.seller-panel-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-primary-400);
+}
+
+/* One continuous connector with a curved branch for each seller submenu link. */
+.theme-new .seller-submenu-tree::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 17px;
+  width: 2px;
+  background: var(--color-navigation-connector);
+}
+
+.theme-new .seller-submenu-tree > a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 18px;
+  border-right: 2px solid var(--color-navigation-connector);
+  border-bottom: 2px solid var(--color-navigation-connector);
+  border-bottom-right-radius: 10px;
 }
 
 /* The selected financial report uses an orange quarter over a primary ring. */

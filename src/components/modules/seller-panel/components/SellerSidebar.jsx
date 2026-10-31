@@ -141,7 +141,7 @@ function SellerSidebar() {
               className="relative w-11 h-11 rounded-xl flex items-center justify-center text-text-primary hover:bg-surface-subtle transition-colors"
               aria-label="پیام‌ها"
             >
-              <MessageTextIcon size={24} className="text-[#4a4a68]" />
+              <MessageTextIcon size={24} className="text-text-secondary" />
               <span className="absolute top-1.5 right-1.5 w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] font-medium flex items-center justify-center">
                 ۳
               </span>
@@ -178,7 +178,7 @@ function SellerSidebar() {
         className={`
           fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-surface border-l border-border-subtle
           flex flex-col p-8 transition-transform duration-300 ease-in-out
-          lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 ${isSellerProfile ? "lg:h-[1032px] lg:min-h-0 lg:self-start" : "lg:min-h-screen"}
+          lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 lg:min-h-screen lg:self-stretch
           ${isMessageCenter ? "font-extralight lg:h-dvh lg:min-h-0 lg:border-l-0 lg:ring-1 lg:ring-inset lg:ring-border-default" : ""}
           ${mobileSidebarOpen ? "translate-x-0 shadow-modal" : "translate-x-full lg:translate-x-0"}
         `}
@@ -245,13 +245,15 @@ function SellerSidebar() {
 
         {/* Navigation Items */}
         <nav
-          className={`flex flex-col gap-2 flex-1 overflow-y-auto ${isMessageCenter ? "min-h-0" : ""}`}
+          className={`flex flex-col gap-2 flex-1 overflow-y-auto ${isMessageCenter ? "min-h-0" : "seller-panel-scroll"}`}
         >
           {MENU_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive =
               item.href === "/seller"
                 ? pathname === "/seller"
+                : item.id === "products"
+                  ? pathname?.startsWith(item.href) && !pathname?.startsWith("/seller/products/new")
                 : pathname?.startsWith(item.href);
 
             const navigationItem = (
@@ -313,7 +315,7 @@ function SellerSidebar() {
                   {navigationItem}
                   <nav
                     aria-label="بخش‌های پروفایل فروشنده"
-                    className="relative mr-6 mt-2 flex h-[168px] flex-col pt-[3px] before:absolute before:right-0 before:top-0 before:h-[160px] before:w-[2px] before:bg-navigation-connector"
+                    className="seller-submenu-tree relative mr-6 mt-2 flex flex-col pt-[3px]"
                   >
                     {PROFILE_SECTIONS.map((section) => (
                       <Link
@@ -326,7 +328,7 @@ function SellerSidebar() {
                         aria-current={
                           section.id === profileSection ? "page" : undefined
                         }
-                        className={`relative flex h-[35px] shrink-0 items-center pr-[25px] text-small hover:text-primary focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-primary after:absolute after:right-0 after:top-0 after:h-[18px] after:w-[14px] after:rounded-br-lg after:border-b-2 after:border-r-2 after:border-navigation-connector ${section.id === profileSection ? "text-primary/80" : "text-text-secondary"}`}
+                        className={`relative flex h-[35px] shrink-0 items-center pr-[25px] text-small hover:text-primary focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-primary ${section.id === profileSection ? "text-primary/80" : "text-text-secondary"}`}
                       >
                         {section.label}
                       </Link>
@@ -344,7 +346,7 @@ function SellerSidebar() {
                 {navigationItem}
                 <nav
                   aria-label="بخش‌های مرکز پیام‌ها"
-                  className="mr-6 mt-2 flex h-[149px] flex-col pb-[7px] pt-[6px]"
+                  className="seller-submenu-tree relative mr-6 mt-2 flex flex-col pt-[6px]"
                 >
                   {MESSAGE_SECTIONS.map((section) => (
                     <Link
@@ -354,7 +356,7 @@ function SellerSidebar() {
                       aria-current={
                         messageCategory === section.id ? "page" : undefined
                       }
-                      className={`relative flex h-[34px] items-center pr-6 text-small before:absolute before:right-0 before:top-0 before:h-[34px] before:w-3 before:rounded-br-lg before:border-b-2 before:border-r-2 before:border-text-secondary ${messageCategory === section.id ? "text-primary" : "text-text-secondary hover:text-primary"}`}
+                      className={`relative flex h-[34px] items-center pr-6 text-small ${messageCategory === section.id ? "text-primary" : "text-text-secondary hover:text-primary"}`}
                     >
                       {section.label}
                     </Link>

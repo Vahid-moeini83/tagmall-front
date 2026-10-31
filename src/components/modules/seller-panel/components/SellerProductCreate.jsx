@@ -3,11 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import {
-  SearchIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   MessageTextIcon,
-  NoteIcon,
   TrashIcon,
   PlusIcon,
   ChartLineDownSquareIcon,
@@ -49,8 +47,8 @@ const SEARCH_RESULTS = [
     code: "شناسه محصول: SM-S928B/DS",
     category: "گوشی موبایل",
     image: "/assets/images/seller/new-product/s24_ultra.png",
-    buttonType: "outline",
-    buttonText: "ثبت محصول",
+    buttonType: "teal",
+    buttonText: "ثبت مجوز فروش",
   },
   {
     id: 5,
@@ -67,8 +65,8 @@ const SEARCH_RESULTS = [
     code: "شناسه محصول: SM-S928B/DS",
     category: "گوشی موبایل",
     image: "/assets/images/seller/new-product/s24_ultra.png",
-    buttonType: "teal",
-    buttonText: "ثبت مجوز فروش",
+    buttonType: "outline",
+    buttonText: "ثبت محصول",
   },
 ];
 
@@ -101,9 +99,7 @@ function SellerProductCreate() {
   const [activeStep, setActiveStep] = useState("search");
 
   // Search state
-  const [searchQuery, setSearchQuery] = useState(
-    "گوشی موبایل سامسونگ Galaxy S24 Ultra"
-  );
+  const [searchQuery, setSearchQuery] = useState("گوشی موبایل سامسونگ Galaxy S24 Ultra");
   const [showDraftsEmpty, setShowDraftsEmpty] = useState(false);
 
   // Configure Form State (Screen 2)
@@ -135,10 +131,7 @@ function SellerProductCreate() {
   };
 
   const handleAddBranch = () => {
-    setBranches((prev) => [
-      ...prev,
-      { id: Date.now(), name: "شعبه جدید", stock: "۰" },
-    ]);
+    setBranches((prev) => [...prev, { id: Date.now(), name: "شعبه جدید", stock: "۰" }]);
   };
 
   const handleRemoveBranch = (id) => {
@@ -148,7 +141,10 @@ function SellerProductCreate() {
   };
 
   return (
-    <div className="w-full flex-1 flex flex-col px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-24 lg:pb-12 max-w-[1440px] mx-auto gap-6 select-text" dir="rtl">
+    <div
+      className="w-full flex-1 flex flex-col px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-24 lg:pb-12 max-w-[1440px] mx-auto gap-6 select-text"
+      dir="rtl"
+    >
       {/* Top Header Bar (Desktop - Figma Node: 44:45287) */}
       <header className="hidden lg:flex items-center justify-between">
         <div className="flex flex-col gap-1 text-right">
@@ -160,45 +156,20 @@ function SellerProductCreate() {
           </p>
         </div>
 
-        {/* View Switcher Tabs (For preview of both Figma screens) */}
-        <div className="flex items-center gap-2 bg-surface p-1 rounded-xl border border-border-default text-xs">
-          <button
-            type="button"
-            onClick={() => setActiveStep("search")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors font-medium ${
-              activeStep === "search"
-                ? "bg-primary text-white shadow-xs"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
-          >
-            مرحله ۱: جست‌وجو و انتخاب
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveStep("configure")}
-            className={`px-3.5 py-1.5 rounded-lg transition-colors font-medium ${
-              activeStep === "configure"
-                ? "bg-primary text-white shadow-xs"
-                : "text-text-secondary hover:text-text-primary"
-            }`}
-          >
-            مرحله ۲: قیمت‌گذاری و تنوع
-          </button>
-        </div>
       </header>
 
       {/* ========================================================================= */}
       {/* SCREEN 1: Search & Select Product (Figma Node: 44:45285) */}
       {/* ========================================================================= */}
       {activeStep === "search" && (
-        <div className="w-full bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-8 shadow-xs">
+        <div className="w-full bg-surface rounded-card p-6 lg:p-[28px] flex flex-col gap-4">
           {/* Section 1: Search Header & Input */}
           <div className="flex flex-col text-right">
             {/* CardHeader (1004x44 @ 0,0 in Figma) */}
             <div className="flex items-center justify-start gap-3">
               {/* Icon 44x44 on RIGHT in RTL (Figma: Frame 44x44 @ 960,0) */}
               <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                <SearchIcon size={24} />
+                <Image src="/assets/icons/seller/box-front-search.svg" alt="" width={24} height={24} />
               </div>
 
               {/* Title on the LEFT of Icon in RTL (Figma: TEXT @ 813,9) */}
@@ -208,7 +179,7 @@ function SellerProductCreate() {
             </div>
 
             {/* Figma Line Divider (1004x0 @ 0,60 stroke:#f3f4f6) */}
-            <div className="w-full h-px bg-[#f3f4f6] mt-4 mb-5" />
+            <div className="w-full h-px bg-surface-muted mt-4 mb-4" />
 
             {/* SearchRow: Input on Right, Button on Left in RTL */}
             <div className="flex items-center gap-3 w-full">
@@ -216,10 +187,11 @@ function SellerProductCreate() {
               <div className="relative flex-1">
                 <input
                   type="text"
+                  aria-label="جست‌وجوی محصول"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="نام محصول، برند یا شناسه کالا را وارد کنید..."
-                  className="w-full h-[50px] rounded-[16px] bg-[#f9fafb] border border-[#f9fafb] px-4 text-right text-[14px] text-text-primary placeholder:text-text-muted focus:outline-hidden focus:border-primary/40 focus:bg-surface transition-colors"
+                  className="w-full h-[50px] rounded-xl bg-surface-subtle border border-surface-subtle px-4 text-right text-[14px] text-text-primary placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 focus:border-primary/40 focus:bg-surface transition-colors"
                   dir="rtl"
                 />
               </div>
@@ -227,7 +199,7 @@ function SellerProductCreate() {
               {/* Search Button on far left (Figma: Frame 89x50 @ 0,0 r:12 fill:#f9fafb) */}
               <button
                 type="button"
-                className="w-[89px] h-[50px] rounded-xl bg-[#f9fafb] text-[#7a7a96] text-[16px] font-normal hover:bg-primary-50 hover:text-primary transition-colors shrink-0 flex items-center justify-center cursor-pointer"
+                className="w-[89px] h-[50px] rounded-xl bg-surface-subtle text-text-muted text-[16px] font-normal hover:bg-primary-50 hover:text-primary transition-colors shrink-0 flex items-center justify-center cursor-pointer"
               >
                 جست‌وجو
               </button>
@@ -239,9 +211,7 @@ function SellerProductCreate() {
             {/* ResultsHeader (Figma: 1004x26) */}
             <div className="flex items-center justify-between">
               {/* Right: نتایج جست‌وجو (size 16, weight 325, #1a1a2e) */}
-              <h3 className="text-[16px] font-normal text-text-primary">
-                نتایج جست‌وجو
-              </h3>
+              <h3 className="text-[16px] font-normal text-text-primary">نتایج جست‌وجو</h3>
 
               {/* Left: ۶ نتیجه (size 14, weight 325, #4a4a68) */}
               <span className="text-[14px] text-text-secondary">۶ نتیجه</span>
@@ -254,16 +224,16 @@ function SellerProductCreate() {
                 return (
                   <div
                     key={product.id}
-                    className={`bg-surface rounded-2xl p-4 border flex flex-col justify-between gap-4 transition-all shadow-xs ${
+                    className={`bg-surface rounded-2xl p-4 border flex flex-col justify-between gap-3 min-h-[190px] transition-colors ${
                       isSelectedBorder
-                        ? "border-[#3d3183]"
+                        ? "border-primary"
                         : "border-border-default hover:border-primary/40"
                     }`}
                   >
                     {/* Top info row: Image on RIGHT in RTL, Text on LEFT */}
-                    <div className="flex items-start gap-3 text-right">
+                    <div className="flex items-start gap-3 min-h-[96px] text-right">
                       {/* Image on Right in RTL (Figma: Rectangle 72x72 @ 220,12 r:12) */}
-                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
+                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                         <Image
                           src={product.image}
                           alt={product.title}
@@ -275,7 +245,7 @@ function SellerProductCreate() {
 
                       {/* Text on Left (Figma: Frame 208x96 @ 0,0) */}
                       <div className="flex-1 min-w-0 flex flex-col gap-1">
-                        <h4 className="text-[14px] leading-snug font-medium text-text-primary line-clamp-2">
+                        <h4 className="text-[14px] leading-snug font-normal text-text-primary line-clamp-2">
                           {product.title}
                         </h4>
                         <span className="text-[14px] text-text-secondary font-normal">
@@ -292,7 +262,7 @@ function SellerProductCreate() {
                       <button
                         type="button"
                         onClick={() => handleSelectProduct(product)}
-                        className="w-full h-[46px] rounded-lg bg-[#3d3183] text-white text-[14px] font-normal hover:bg-[#342970] transition-colors cursor-pointer"
+                        className="w-full h-[46px] rounded-lg bg-primary text-white text-[14px] font-normal hover:bg-primary-600 transition-colors cursor-pointer"
                       >
                         {product.buttonText}
                       </button>
@@ -300,7 +270,7 @@ function SellerProductCreate() {
                       <button
                         type="button"
                         onClick={() => handleSelectProduct(product)}
-                        className="w-full h-[50px] rounded-xl bg-[#108981] text-white text-[16px] font-normal hover:bg-[#0e7770] transition-colors cursor-pointer"
+                        className="w-full h-[50px] rounded-xl bg-success-strong text-white text-[16px] font-normal hover:bg-success transition-colors cursor-pointer"
                       >
                         {product.buttonText}
                       </button>
@@ -308,7 +278,7 @@ function SellerProductCreate() {
                       <button
                         type="button"
                         onClick={() => handleSelectProduct(product)}
-                        className="w-full h-[46px] rounded-lg bg-[#f3f4f6] text-[#4a4a68] text-[14px] font-normal hover:bg-[#e5e7eb] hover:text-text-primary transition-colors cursor-pointer"
+                        className="w-full h-[46px] rounded-lg bg-surface-muted text-text-secondary text-[14px] font-normal hover:bg-border-default hover:text-text-primary transition-colors cursor-pointer"
                       >
                         {product.buttonText}
                       </button>
@@ -319,12 +289,12 @@ function SellerProductCreate() {
             </div>
 
             {/* NoResultState Banner (Figma: 1004x110 @ 0,520 r:16 fill:#f9fafb stroke:#e5e7eb p:24) */}
-            <div className="rounded-2xl bg-[#f9fafb] border border-border-default p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+            <div className="rounded-2xl bg-surface-subtle border border-dashed border-border-default p-6 min-h-[110px] flex flex-col sm:flex-row items-center justify-between gap-4">
               {/* Right block: Icon + Texts */}
               <div className="flex items-center gap-3 text-right">
                 {/* Icon 44x44 on RIGHT (Figma: Frame 44x44 r:12 fill:#eeeff6) */}
                 <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                  <HintIcon size={24} />
+                  <Image src="/assets/icons/seller/search-info.svg" alt="" width={24} height={24} />
                 </div>
 
                 <div className="flex flex-col">
@@ -340,7 +310,7 @@ function SellerProductCreate() {
               {/* Left block: Action Button (Figma: Frame 252x50 r:12 fill:#3d3183) */}
               <button
                 type="button"
-                className="h-[50px] px-6 rounded-xl bg-[#3d3183] text-white text-[16px] font-normal flex items-center gap-2 hover:bg-[#342970] transition-colors shrink-0 cursor-pointer"
+                className="h-[50px] px-6 rounded-xl bg-primary text-white text-[16px] font-normal flex items-center gap-2 hover:bg-primary-600 transition-colors shrink-0 cursor-pointer"
               >
                 <MessageTextIcon size={24} />
                 <span>درخواست معرفی محصول</span>
@@ -349,24 +319,22 @@ function SellerProductCreate() {
           </div>
 
           {/* Section 4: Drafts Section (Figma: 1004x258 @ 28,758) */}
-          <div className="flex flex-col gap-4 pt-2">
+          <div className="flex flex-col gap-4 mt-2">
             {/* Drafts Header */}
             <div className="flex items-center justify-between">
               {/* Right: Icon 44x44 + "محصولات پیش نویس شده" (size 16, #1a1a2e) */}
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
-                  <NoteIcon size={24} />
+                  <Image src="/assets/icons/seller/receipt-pen.svg" alt="" width={24} height={24} />
                 </div>
-                <h3 className="text-[16px] font-normal text-text-primary">
-                  محصولات پیش نویس شده
-                </h3>
+                <h3 className="text-[16px] font-normal text-text-primary">محصولات پیش نویس شده</h3>
               </div>
 
-              {/* Left: "مشاهده همه" (size 12, #1a1a2e) with angle-left */}
+              {/* The view-all action uses the primary link color. */}
               <button
                 type="button"
                 onClick={() => setShowDraftsEmpty(!showDraftsEmpty)}
-                className="text-[12px] text-text-primary hover:text-primary transition-colors flex items-center gap-1 select-none cursor-pointer"
+                className="min-h-11 text-[12px] text-text-primary hover:text-primary transition-colors flex items-center gap-1 select-none cursor-pointer"
               >
                 <span>مشاهده همه</span>
                 <ChevronLeftIcon size={18} />
@@ -375,15 +343,15 @@ function SellerProductCreate() {
 
             {/* Draft Cards */}
             {!showDraftsEmpty ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {DRAFT_PRODUCTS.map((draft) => (
                   <div
                     key={draft.id}
-                    className="bg-surface rounded-2xl p-4 border border-border-default flex flex-col justify-between gap-4 shadow-xs"
+                    className="bg-surface rounded-2xl p-4 border border-border-default flex flex-col md:flex-row lg:flex-col md:items-center lg:items-stretch justify-between gap-4 min-h-[198px] md:min-h-[104px] lg:min-h-[198px]"
                   >
-                    <div className="flex items-start gap-3 text-right">
+                    <div className="flex items-start md:items-center lg:items-start gap-3 text-right md:flex-1 min-w-0">
                       {/* Image 72x72 on Right */}
-                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 bg-surface-subtle border border-border-subtle p-1 flex items-center justify-center">
+                      <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                         <Image
                           src={draft.image}
                           alt={draft.title}
@@ -411,7 +379,7 @@ function SellerProductCreate() {
                     <button
                       type="button"
                       onClick={() => handleSelectProduct(draft)}
-                      className="w-full h-[46px] rounded-xl bg-[#f3f4f6] text-text-primary text-[16px] font-normal hover:bg-[#e5e7eb] transition-colors cursor-pointer"
+                      className="w-full md:w-40 lg:w-full h-[46px] rounded-xl bg-surface-muted text-text-primary text-[16px] font-normal hover:bg-border-default transition-colors cursor-pointer shrink-0"
                     >
                       ادامه و تکمیل
                     </button>
@@ -421,12 +389,19 @@ function SellerProductCreate() {
             ) : null}
 
             {/* Empty Drafts State (Figma Node: 44:45374) */}
-            <div className="rounded-2xl border border-dashed border-border-default p-8 flex flex-col items-center justify-center gap-3 bg-surface-subtle/30 text-center mt-2">
+            <div className="flex items-center gap-3 mt-2">
+              <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                <Image src="/assets/icons/seller/receipt-pen.svg" alt="" width={24} height={24} />
+              </div>
+              <h3 className="text-[16px] font-normal text-text-primary">محصولات پیش نویس شده</h3>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-3 text-center">
               <div className="relative w-44 h-36">
                 <Image
                   src="/assets/images/seller/new-product/empty_drafts.png"
                   alt="محصولات پیش‌نویس شده وجود ندارد"
                   fill
+                  loading="eager"
                   sizes="176px"
                   className="object-contain"
                 />
@@ -447,7 +422,7 @@ function SellerProductCreate() {
           {/* ===================================================================== */}
           {/* Section 1: Product and authenticity (Figma: 1060x665 r:20 fill:#ffffff p:28) */}
           {/* ===================================================================== */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+          <section className="bg-surface rounded-card p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
             {/* CardHeader (Figma: 1004x40) */}
             <div className="flex items-center justify-between">
               {/* Right: Icon 40x40 + "محصول انتخاب‌شده" (size 18, #1a1a2e) */}
@@ -455,9 +430,7 @@ function SellerProductCreate() {
                 <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
                   <CheckCircleIcon size={20} />
                 </div>
-                <h2 className="text-[18px] font-normal text-text-primary">
-                  محصول انتخاب‌شده
-                </h2>
+                <h2 className="text-[18px] font-normal text-text-primary">محصول انتخاب‌شده</h2>
               </div>
 
               {/* Left: Change / Re-search Link */}
@@ -490,14 +463,14 @@ function SellerProductCreate() {
                     {selectedProduct.title}
                   </h3>
                   <span className="text-[14px] text-text-secondary font-normal">
-                    {selectedProduct.code}
+                    شناسه محصول: <bdi dir="ltr" className="inline-block whitespace-nowrap">{selectedProduct.code.split(": ")[1]}</bdi>
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Section Divider (Figma: Section divider 1004x1 fill:#f3f4f6) */}
-            <div className="w-full h-px bg-[#f3f4f6]" />
+            <div className="w-full h-px bg-surface-muted" />
 
             {/* STEP 1: انتخاب تنوع محصول (Figma: Section heading 1004x54) */}
             <div className="flex flex-col gap-5">
@@ -521,14 +494,13 @@ function SellerProductCreate() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* 1. Capacity (Figma: Capacity field @ 514,0 on RIGHT in RTL) */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[16px] text-text-secondary font-normal">
-                    ظرفیت
-                  </label>
+                  <label className="text-[16px] text-text-secondary font-normal">ظرفیت</label>
                   <div className="relative">
                     <select
+                      aria-label="ظرفیت"
                       value={capacity}
                       onChange={(e) => setCapacity(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     >
                       <option value="۲۵۶ گیگابایت">۲۵۶ گیگابایت</option>
@@ -544,14 +516,13 @@ function SellerProductCreate() {
 
                 {/* 2. Color (Figma: Color field @ 0,0 on LEFT in RTL) */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[16px] text-text-secondary font-normal">
-                    رنگ
-                  </label>
+                  <label className="text-[16px] text-text-secondary font-normal">رنگ</label>
                   <div className="relative">
                     <select
+                      aria-label="رنگ"
                       value={color}
                       onChange={(e) => setColor(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     >
                       <option value="زرد تیتانیوم">زرد تیتانیوم</option>
@@ -567,20 +538,17 @@ function SellerProductCreate() {
 
                 {/* 3. Warranty (Figma: Form field Warranty @ 514,0 on RIGHT in RTL) */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-[16px] text-text-secondary font-normal">
-                    گارانتی
-                  </label>
+                  <label className="text-[16px] text-text-secondary font-normal">گارانتی</label>
                   <div className="relative">
                     <select
+                      aria-label="گارانتی"
                       value={warranty}
                       onChange={(e) => setWarranty(e.target.value)}
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus:outline-hidden"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none cursor-pointer focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     >
                       <option value="۲ ساله آونگ">۲ ساله آونگ</option>
-                      <option value="۱۸ماهه شرکت آوای پارس">
-                        ۱۸ماهه شرکت آوای پارس
-                      </option>
+                      <option value="۱۸ماهه شرکت آوای پارس">۱۸ماهه شرکت آوای پارس</option>
                       <option value="گارانتی شرکتی">گارانتی شرکتی</option>
                     </select>
                     <ChevronDownIcon
@@ -597,9 +565,7 @@ function SellerProductCreate() {
                   </label>
                   <div className="flex items-center justify-end gap-6 h-12 px-4 rounded-xl border border-border-default bg-surface">
                     <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <span className="text-[14px] text-text-primary">
-                        غیر اصل
-                      </span>
+                      <span className="text-[14px] text-text-primary">غیر اصل</span>
                       <input
                         type="radio"
                         name="authenticity"
@@ -626,7 +592,7 @@ function SellerProductCreate() {
               </div>
 
               {/* Help box: تنوع محصول مورد نظر را پیدا نکردید ؟ (Figma: 1004x110 r:16 fill:#f9fafb) */}
-              <div className="rounded-2xl bg-[#f9fafb] border border-border-default p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+              <div className="rounded-2xl bg-surface-subtle border border-border-default p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
                 <div className="flex items-center gap-3 text-right">
                   <div className="w-11 h-11 rounded-xl bg-primary-50 text-primary flex items-center justify-center shrink-0">
                     <HintIcon size={24} />
@@ -643,7 +609,7 @@ function SellerProductCreate() {
 
                 <button
                   type="button"
-                  className="h-[50px] px-6 rounded-xl bg-[#3d3183] text-white text-[16px] font-normal flex items-center gap-2 hover:bg-[#342970] transition-colors shrink-0 cursor-pointer"
+                  className="h-[50px] px-6 rounded-xl bg-primary text-white text-[16px] font-normal flex items-center gap-2 hover:bg-primary-600 transition-colors shrink-0 cursor-pointer"
                 >
                   <MessageTextIcon size={24} />
                   <span>درخواست معرفی تنوع</span>
@@ -655,7 +621,7 @@ function SellerProductCreate() {
           {/* ===================================================================== */}
           {/* Section 2: Form section - قیمت‌گذاری (Figma: 1060x437 r:20 fill:#ffffff p:28) */}
           {/* ===================================================================== */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+          <section className="bg-surface rounded-card p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
             <div className="flex items-start justify-start gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
                 ۲
@@ -740,7 +706,7 @@ function SellerProductCreate() {
                 onClick={() => setPricingType("free")}
                 className={`p-4 rounded-xl border text-right flex flex-col gap-2 transition-all cursor-pointer ${
                   pricingType === "free"
-                    ? "bg-primary-50 border-[#c3c5df]"
+                    ? "bg-primary-50 border-primary-200"
                     : "border-border-default bg-surface hover:border-border-hover"
                 }`}
               >
@@ -777,10 +743,11 @@ function SellerProductCreate() {
               </label>
               <input
                 type="text"
+                aria-label="قیمت فروش به تومان"
                 value={sellingPrice}
                 onChange={(e) => setSellingPrice(e.target.value)}
                 placeholder="مبلغ را به تومان وارد کنید"
-                className="w-full h-12 rounded-xl border border-border-default px-4 text-right text-[16px] text-text-primary font-normal focus:border-primary focus:outline-hidden"
+                className="w-full h-12 rounded-xl border border-border-default px-4 text-right text-[16px] text-text-primary font-normal focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                 dir="rtl"
               />
               <span className="text-[12px] text-text-muted">
@@ -789,12 +756,12 @@ function SellerProductCreate() {
             </div>
 
             {/* Pricing divider (Figma: 1004x1 fill:#f3f4f6) */}
-            <div className="w-full h-px bg-[#f3f4f6]" />
+            <div className="w-full h-px bg-surface-muted" />
 
             {/* Competitor Price Alert Banner (Figma: status-badge 1004x40 r:8 fill:#108981 with 0.1 opacity) */}
-            <div className="w-full h-10 rounded-lg bg-[#108981]/10 px-4 flex items-center justify-center gap-2 text-right">
+            <div className="w-full h-10 rounded-lg bg-success-strong/10 px-4 flex items-center justify-center gap-2 text-right">
               <ChartLineDownSquareIcon size={24} color="#108981" />
-              <span className="text-[16px] font-normal text-[#108981]">
+              <span className="text-[16px] font-normal text-success-strong">
                 کم ترین قیمت اعلام شده توسط سایر فروشندگان ۲۳.۰۰۰.۰۰۰ تومان
               </span>
             </div>
@@ -803,7 +770,7 @@ function SellerProductCreate() {
           {/* ===================================================================== */}
           {/* Section 3: Form section - موجودی در شعب (Figma: 1060x478 r:20 fill:#ffffff p:28) */}
           {/* ===================================================================== */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+          <section className="bg-surface rounded-card p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
             <div className="flex items-start justify-start gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
                 ۳
@@ -823,17 +790,16 @@ function SellerProductCreate() {
               {branches.map((branch) => (
                 <div
                   key={branch.id}
-                  className="rounded-xl bg-[#f9fafb] p-4 flex items-center gap-4"
+                  className="rounded-xl bg-surface-subtle p-4 flex items-center gap-4"
                 >
                   {/* Far Right: Branch field (Figma: 696x82) */}
                   <div className="flex-1 flex flex-col gap-2">
-                    <label className="text-[16px] text-text-secondary font-normal">
-                      شعبه
-                    </label>
+                    <label className="text-[16px] text-text-secondary font-normal">شعبه</label>
                     <div className="relative">
                       <select
+                        aria-label="شعبه"
                         defaultValue={branch.name}
-                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] text-text-primary bg-surface appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] text-text-primary bg-surface appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                         dir="rtl"
                       >
                         <option value="تهران مرکزی">تهران مرکزی</option>
@@ -855,9 +821,10 @@ function SellerProductCreate() {
                       موجودی قابل فروش
                     </label>
                     <input
+                      aria-label={`موجودی قابل فروش در ${branch.name}`}
                       type="text"
                       defaultValue={branch.stock}
-                      className="h-12 rounded-xl border border-border-default px-4 text-center text-[16px] text-text-primary bg-surface focus:border-primary focus:outline-hidden"
+                      className="h-12 rounded-xl border border-border-default px-4 text-center text-[16px] text-text-primary bg-surface focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       dir="rtl"
                     />
                   </div>
@@ -867,7 +834,7 @@ function SellerProductCreate() {
                     <button
                       type="button"
                       onClick={() => handleRemoveBranch(branch.id)}
-                      className="p-2 text-[#ef4444] hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-2 text-error hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                       title="حذف شعبه"
                     >
                       <TrashIcon size={18} />
@@ -881,12 +848,8 @@ function SellerProductCreate() {
             <div className="flex items-center justify-between pt-1">
               {/* Right: Total stock badge (Figma: Inventory total 255x42 @ 749,4 r:8 fill:#eeeff6) */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-50">
-                <span className="text-[14px] text-text-secondary font-normal">
-                  مجموع موجودی:
-                </span>
-                <span className="text-[16px] font-normal text-primary">
-                  ۵ عدد در ۲ شعبه
-                </span>
+                <span className="text-[14px] text-text-secondary font-normal">مجموع موجودی:</span>
+                <span className="text-[16px] font-normal text-primary">۵ عدد در ۲ شعبه</span>
               </div>
 
               {/* Left: Add Branch Button (Figma: Action 168x50 @ 0,0 r:12 fill:#ffffff stroke:#e5e7eb) */}
@@ -901,14 +864,15 @@ function SellerProductCreate() {
             </div>
 
             <p className="text-[12px] text-text-muted leading-relaxed">
-              برای شعبه بدون موجودی، عدد صفر وارد کنید یا آن شعبه را حذف کنید. موجودی آنلاین و حضوری مشترک است؛ یک کالا را دو بار نشمارید.
+              برای شعبه بدون موجودی، عدد صفر وارد کنید یا آن شعبه را حذف کنید. موجودی آنلاین و حضوری
+              مشترک است؛ یک کالا را دو بار نشمارید.
             </p>
           </section>
 
           {/* ===================================================================== */}
           {/* Section 4: Form section - روش فروش و تعهدات تحویل (Figma: 1060x458 r:20 fill:#ffffff p:28) */}
           {/* ===================================================================== */}
-          <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+          <section className="bg-surface rounded-card p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
             <div className="flex items-start justify-start gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
                 ۴
@@ -958,16 +922,14 @@ function SellerProductCreate() {
                   onChange={() => setSaleMethod("both")}
                   className="accent-primary w-4 h-4 cursor-pointer"
                 />
-                <span className="text-[14px] text-text-primary">
-                  آنلاین و حضوری
-                </span>
+                <span className="text-[14px] text-text-primary">آنلاین و حضوری</span>
               </label>
             </div>
 
             {/* 2 Subsections: Pickup conditions (Right) + Shipping conditions (Left) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Box A: Pickup conditions (Figma: 492x260 @ 512,0 on RIGHT in RTL) */}
-              <div className="rounded-xl bg-[#f9fafb] p-5 flex flex-col gap-4">
+              <div className="rounded-xl bg-surface-subtle p-5 flex flex-col gap-4">
                 <h4 className="text-[18px] font-normal text-text-primary">
                   فروش حضوری · تحویل در شعبه
                 </h4>
@@ -978,7 +940,8 @@ function SellerProductCreate() {
                   </label>
                   <div className="relative">
                     <select
-                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                      aria-label="زمان آماده‌سازی برای تحویل"
+                      className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                       dir="rtl"
                     >
                       <option>همان روز · در ساعات کاری شعبه</option>
@@ -1004,13 +967,14 @@ function SellerProductCreate() {
                     className="accent-primary w-4 h-4 mt-1 shrink-0 cursor-pointer"
                   />
                   <span>
-                    متعهد می‌شوم کالا را در زمان اعلام‌شده آماده کنم و در شعبه منتخب به خریدار تحویل دهم.
+                    متعهد می‌شوم کالا را در زمان اعلام‌شده آماده کنم و در شعبه منتخب به خریدار تحویل
+                    دهم.
                   </span>
                 </label>
               </div>
 
               {/* Box B: Shipping conditions (Figma: 492x260 @ 0,0 on LEFT in RTL) */}
-              <div className="rounded-xl bg-[#f9fafb] p-5 flex flex-col gap-4">
+              <div className="rounded-xl bg-surface-subtle p-5 flex flex-col gap-4">
                 <h4 className="text-[18px] font-normal text-text-primary">
                   فروش آنلاین · ارسال سفارش
                 </h4>
@@ -1023,7 +987,8 @@ function SellerProductCreate() {
                     </label>
                     <div className="relative">
                       <select
-                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        aria-label="آماده‌سازی و ارسال"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                         dir="rtl"
                       >
                         <option>۱ روز کاری</option>
@@ -1039,12 +1004,11 @@ function SellerProductCreate() {
 
                   {/* Left: روش ارسال */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[16px] text-text-secondary font-normal">
-                      روش ارسال
-                    </label>
+                    <label className="text-[16px] text-text-secondary font-normal">روش ارسال</label>
                     <div className="relative">
                       <select
-                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus:outline-hidden cursor-pointer"
+                        aria-label="روش ارسال"
+                        className="w-full h-12 rounded-xl border border-border-default px-4 text-[16px] bg-surface text-text-primary appearance-none focus:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 cursor-pointer"
                         dir="rtl"
                       >
                         <option>پست پیشتاز</option>
@@ -1071,7 +1035,8 @@ function SellerProductCreate() {
                     className="accent-primary w-4 h-4 mt-1 shrink-0 cursor-pointer"
                   />
                   <span>
-                    متعهد می‌شوم سفارش را در زمان اعلام‌شده آماده و ارسال کنم و کد رهگیری را در سفارش ثبت کنم.
+                    متعهد می‌شوم سفارش را در زمان اعلام‌شده آماده و ارسال کنم و کد رهگیری را در
+                    سفارش ثبت کنم.
                   </span>
                 </label>
               </div>
@@ -1083,7 +1048,7 @@ function SellerProductCreate() {
           {/* ===================================================================== */}
           <div className="w-full flex flex-col gap-6">
             {/* Form Section Card (Figma: 1060x308 r:20 fill:#ffffff p:28) */}
-            <section className="bg-surface rounded-[20px] p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
+            <section className="bg-surface rounded-card p-6 lg:p-[28px] border border-border-default/60 flex flex-col gap-6 shadow-xs">
               <div className="flex items-start justify-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary font-medium text-[16px] flex items-center justify-center shrink-0">
                   ۵
@@ -1099,12 +1064,10 @@ function SellerProductCreate() {
               </div>
 
               {/* Registration summary (Figma: 1004x90 r:12 fill:#f9fafb p:20, Order in RTL: اصالت, قیمت, موجودی, روش فروش) */}
-              <div className="rounded-xl bg-[#f9fafb] p-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="rounded-xl bg-surface-subtle p-5 grid grid-cols-2 md:grid-cols-4 gap-4">
                 {/* 1. Far Right: اصالت و گارانتی */}
                 <div className="flex flex-col gap-1 text-right">
-                  <span className="text-[12px] text-text-muted">
-                    اصالت و گارانتی
-                  </span>
+                  <span className="text-[12px] text-text-muted">اصالت و گارانتی</span>
                   <span className="text-[16px] font-normal text-text-primary">
                     {authenticity} · {warranty}
                   </span>
@@ -1112,9 +1075,7 @@ function SellerProductCreate() {
 
                 {/* 2. قیمت هر دستگاه */}
                 <div className="flex flex-col gap-1 text-right">
-                  <span className="text-[12px] text-text-muted">
-                    قیمت هر دستگاه · آزاد
-                  </span>
+                  <span className="text-[12px] text-text-muted">قیمت هر دستگاه · آزاد</span>
                   <span className="text-[16px] font-normal text-text-primary">
                     {sellingPrice} تومان
                   </span>
@@ -1122,12 +1083,8 @@ function SellerProductCreate() {
 
                 {/* 3. موجودی قابل فروش */}
                 <div className="flex flex-col gap-1 text-right">
-                  <span className="text-[12px] text-text-muted">
-                    موجودی قابل فروش
-                  </span>
-                  <span className="text-[16px] font-normal text-text-primary">
-                    ۵ عدد · ۲ شعبه
-                  </span>
+                  <span className="text-[12px] text-text-muted">موجودی قابل فروش</span>
+                  <span className="text-[16px] font-normal text-text-primary">۵ عدد · ۲ شعبه</span>
                 </div>
 
                 {/* 4. Far Left: روش فروش */}
@@ -1137,19 +1094,21 @@ function SellerProductCreate() {
                     {saleMethod === "both"
                       ? "آنلاین و حضوری"
                       : saleMethod === "online"
-                      ? "آنلاین"
-                      : "حضوری"}
+                        ? "آنلاین"
+                        : "حضوری"}
                   </span>
                 </div>
               </div>
 
               {/* Contextual guidance (Figma: 1004x68 r:12 fill:#f9fafb p:12) */}
-              <div className="rounded-xl bg-[#f9fafb] p-3 flex items-start gap-3">
+              <div className="rounded-xl bg-surface-subtle p-3 flex items-start gap-3">
                 <div className="pt-0.5 shrink-0 text-primary">
                   <HintIcon size={20} />
                 </div>
                 <span className="flex-1 text-right text-[14px] leading-relaxed text-text-secondary">
-                  با ثبت نهایی، این تنوع به محصولات شما اضافه و برای کاربران نمایش داده می‌شود. ویرایش قیمت، موجودی و شرایط فروش بعد از ثبت از بخش «محصولات من ← محصولات تأییدشده» انجام می‌شود.
+                  با ثبت نهایی، این تنوع به محصولات شما اضافه و برای کاربران نمایش داده می‌شود.
+                  ویرایش قیمت، موجودی و شرایط فروش بعد از ثبت از بخش «محصولات من ← محصولات تأییدشده»
+                  انجام می‌شود.
                 </span>
               </div>
             </section>
@@ -1160,14 +1119,14 @@ function SellerProductCreate() {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="h-[50px] px-6 rounded-xl bg-[#3d3183] text-white text-[16px] font-normal hover:bg-[#342970] transition-colors shadow-xs cursor-pointer"
+                  className="h-[50px] px-6 rounded-xl bg-primary text-white text-[16px] font-normal hover:bg-primary-600 transition-colors shadow-xs cursor-pointer"
                 >
                   ثبت نهایی محصول
                 </button>
 
                 <button
                   type="button"
-                  className="h-[50px] px-6 rounded-lg border border-[#3d3183] bg-transparent text-[#3d3183] text-[14px] font-normal hover:bg-primary-50 transition-colors cursor-pointer"
+                  className="h-[50px] px-6 rounded-lg border border-primary bg-transparent text-primary text-[14px] font-normal hover:bg-primary-50 transition-colors cursor-pointer"
                 >
                   پیش نویس محصول
                 </button>
@@ -1177,7 +1136,7 @@ function SellerProductCreate() {
               <button
                 type="button"
                 onClick={() => setActiveStep("search")}
-                className="h-[50px] px-6 rounded-xl border border-border-default bg-surface text-text-secondary text-[16px] font-normal hover:bg-[#f3f4f6] transition-colors cursor-pointer"
+                className="h-[50px] px-6 rounded-xl border border-border-default bg-surface text-text-secondary text-[16px] font-normal hover:bg-surface-muted transition-colors cursor-pointer"
               >
                 انصراف
               </button>

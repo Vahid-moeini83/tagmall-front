@@ -15,7 +15,7 @@ const STATS_DATA = [
     unit: "تومان",
     desktopValue: "۴۸,۵۰۰,۰۰۰ تومان",
     change: "+۱۸.۵%",
-    mobileChange: "۱۸.۵٪+ ↑",
+    mobileChange: "۱۸.۵٪+",
     icon: CoinFrontSwapIcon,
     iconSize: 24,
     iconColor: "text-primary",
@@ -26,7 +26,7 @@ const STATS_DATA = [
     title: "تعداد سفارشات",
     value: "۳۴ سفارش",
     change: "+۱۲%",
-    mobileChange: "۱۲٪+ ↑",
+    mobileChange: "۱۲٪+",
     icon: BasketShoppingIcon,
     iconSize: 20,
     mobileIconSize: 18,
@@ -38,7 +38,7 @@ const STATS_DATA = [
     title: "محصولات فعال",
     value: "۴۸ کالا",
     change: "+۱۲%",
-    mobileChange: "۱۲٪+ ↑",
+    mobileChange: "۱۲٪+",
     icon: BarcodeReadIcon,
     iconSize: 24,
     mobileIconSize: 18,
@@ -50,7 +50,7 @@ const STATS_DATA = [
     title: "بازدید امروز",
     value: "۱,۲۴۰ بار",
     change: "+۴.۲%",
-    mobileChange: "۴.۲٪+ ↑",
+    mobileChange: "۴.۲٪+",
     icon: CursorClickIcon,
     iconSize: 24,
     mobileIconSize: 22,
@@ -124,15 +124,11 @@ function SellerStats({ variant = "default" }) {
             dir="rtl"
           >
             <div className="flex items-center justify-between gap-3">
-              <h3 className="text-[13px] leading-[21px] text-text-muted">
-                {title}
-              </h3>
+              <h3 className="text-[13px] leading-[21px] text-text-muted">{title}</h3>
               <Icon size={20} className="text-primary" />
             </div>
             <p className="flex items-baseline gap-2">
-              <span className="text-[25px] font-normal leading-[41px]">
-                {value}
-              </span>
+              <span className="text-[25px] font-normal leading-[41px]">{value}</span>
               <span className="text-[13px] text-text-muted">{unit}</span>
             </p>
           </article>
@@ -196,9 +192,7 @@ function SellerStats({ variant = "default" }) {
         <div className="bg-surface rounded-xl p-4 sm:p-5 flex flex-col justify-between h-[164px] border border-border-subtle shadow-card">
           {/* Top row: Title and Icon */}
           <div className="flex items-center justify-between">
-            <span className="text-small text-text-secondary font-normal">
-              {salesItem.title}
-            </span>
+            <span className="text-small text-text-secondary font-normal">{salesItem.title}</span>
             <div
               className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${salesItem.iconBg} ${salesItem.iconColor}`}
             >
@@ -211,19 +205,19 @@ function SellerStats({ variant = "default" }) {
             <span className="text-[28px] font-bold text-primary leading-tight">
               {salesItem.value}
             </span>
-            <span className="text-small text-text-secondary font-normal">
-              {salesItem.unit}
-            </span>
+            <span className="text-small text-text-secondary font-normal">{salesItem.unit}</span>
           </div>
 
           {/* Bottom row: Growth badge (Arrow on right side of number in Figma) */}
           <div className="flex items-center justify-start">
             <div
-              className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
+              className="inline-flex items-center gap-1 text-[13px] font-medium text-success-strong"
               dir="ltr"
             >
-              <span>{salesItem.mobileChange.replace(" ↑", "")}</span>
-              <span className="text-[13px] leading-none">↑</span>
+              <span>{salesItem.mobileChange}</span>
+              <span aria-hidden="true" className="text-small font-normal leading-none">
+                ↑
+              </span>
             </div>
           </div>
         </div>
@@ -247,11 +241,13 @@ function SellerStats({ variant = "default" }) {
             </div>
             <div className="flex items-center justify-start">
               <div
-                className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
+                className="inline-flex items-center gap-1 text-[12px] font-medium text-success-strong"
                 dir="ltr"
               >
-                <span>{ordersItem.mobileChange.replace(" ↑", "")}</span>
-                <span className="text-[12px] leading-none">↑</span>
+                <span>{ordersItem.mobileChange}</span>
+                <span aria-hidden="true" className="text-small font-normal leading-none">
+                  ↑
+                </span>
               </div>
             </div>
           </div>
@@ -273,11 +269,13 @@ function SellerStats({ variant = "default" }) {
             </div>
             <div className="flex items-center justify-start">
               <div
-                className="inline-flex items-center gap-1 text-[12px] font-medium text-success"
+                className="inline-flex items-center gap-1 text-[12px] font-medium text-success-strong"
                 dir="ltr"
               >
-                <span>{productsItem.mobileChange.replace(" ↑", "")}</span>
-                <span className="text-[12px] leading-none">↑</span>
+                <span>{productsItem.mobileChange}</span>
+                <span aria-hidden="true" className="text-small font-normal leading-none">
+                  ↑
+                </span>
               </div>
             </div>
           </div>
@@ -292,9 +290,7 @@ function SellerStats({ variant = "default" }) {
               <ViewsIcon size={viewsItem.mobileIconSize} />
             </div>
             <div className="flex flex-col">
-              <span className="text-[12px] text-text-secondary font-normal">
-                {viewsItem.title}
-              </span>
+              <span className="text-[12px] text-text-secondary font-normal">{viewsItem.title}</span>
               <span className="text-[18px] font-semibold text-text-primary leading-tight">
                 {viewsItem.value}
               </span>
@@ -302,11 +298,13 @@ function SellerStats({ variant = "default" }) {
           </div>
 
           <div
-            className="inline-flex items-center gap-1 text-[13px] font-medium text-success"
+            className="inline-flex items-center gap-1 text-[13px] font-medium text-success-strong"
             dir="ltr"
           >
-            <span>{viewsItem.mobileChange.replace(" ↑", "")}</span>
-            <span className="text-[13px] leading-none">↑</span>
+            <span>{viewsItem.mobileChange}</span>
+            <span aria-hidden="true" className="text-small font-normal leading-none">
+              ↑
+            </span>
           </div>
         </div>
       </div>
@@ -323,9 +321,7 @@ function SellerStats({ variant = "default" }) {
             >
               {/* Top row: Icon and Title */}
               <div className="flex items-center justify-between">
-                <span className="text-small text-text-secondary font-normal">
-                  {item.title}
-                </span>
+                <span className="text-small text-text-secondary font-normal">{item.title}</span>
                 <div
                   className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${item.iconBg} ${item.iconColor}`}
                 >

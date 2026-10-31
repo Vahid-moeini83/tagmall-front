@@ -386,7 +386,7 @@ export default function SellerWallet() {
           }}
         >
           <DialogContent
-            className="theme-new max-h-[80dvh] overflow-y-auto bg-surface"
+            className="theme-new seller-panel-scroll max-h-[80dvh] overflow-y-auto bg-surface"
             overlayClassName="theme-new"
             dir="rtl"
             onOpenAutoFocus={(event) => event.preventDefault()}
