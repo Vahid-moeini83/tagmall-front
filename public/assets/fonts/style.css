@@ -39,3 +39,68 @@
   src: url("/assets/fonts/iransansdnbold.woff2") format("truetype");
   font-display: swap;
 }
+
+/* Yekan Bakh — seller panel + redesigned desktop only (applied via theme-new) */
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 200;
+  src: url("/assets/fonts/YekanBakh/YekanBakh-Light.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 300;
+  src: url("/assets/fonts/YekanBakh/YekanBakh-Light.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 400;
+  src: url("/assets/fonts/YekanBakh/YekanBakh-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 500;
+  src: url("/assets/fonts/YekanBakh/YekanBakhFaMedium.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 600;
+  src: url("/assets/fonts/YekanBakh/YekanBakhFaMedium.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 700;
+  src: url("/assets/fonts/YekanBakh/YekanBakh-Bold.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 800;
+  src: url("/assets/fonts/YekanBakh/YekanBakh-Fat.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: YekanBakh;
+  font-style: normal;
+  font-weight: 900;
+  src: url("/assets/fonts/YekanBakh/YekanBakh-Fat.ttf") format("truetype");
+  font-display: swap;
+}

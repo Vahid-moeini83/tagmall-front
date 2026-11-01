@@ -114,14 +114,14 @@
 
 @layer base {
   * {
-    font-family: Dana;
+    font-family: var(--font-dana);
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
 
   body {
-    font-family: Dana;
+    font-family: var(--font-dana);
   }
 
   /* Prevent iOS Safari auto-zoom on focus (requires font-size >= 16px) */
@@ -335,11 +335,11 @@
 
 @layer utilities {
   .font-iransans {
-    font-family: IranSans !important;
+    font-family: var(--font-iransans) !important;
   }
 
   .font-dana {
-    font-family: Dana !important;
+    font-family: var(--font-dana) !important;
   }
 
   /* Z-index utilities for nested modals */

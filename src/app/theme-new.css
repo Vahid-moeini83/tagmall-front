@@ -290,6 +290,10 @@
   /* Marker property: Tailwind rejects an empty @utility. Keep it. */
   --theme-new: 1;
 
+  /* Yekan Bakh only inside theme-new (seller panel + redesigned desktop). */
+  --font-dana: YekanBakh;
+  --font-iransans: YekanBakh;
+
   /* Primary Brand Base */
   --color-primary: #3d3183;
 
