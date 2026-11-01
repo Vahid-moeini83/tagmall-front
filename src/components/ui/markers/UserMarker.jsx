@@ -1,4 +1,29 @@
-function UserMarker({ heading = 0, isManual = false }) {
+function UserMarker({ heading = 0, isManual = false, variant = "default" }) {
+  if (variant === "desktop") {
+    return (
+      <div className="relative flex flex-col items-center justify-center select-none pointer-events-none">
+        {/* User Heading Radial Arc if available */}
+        {heading !== undefined && heading !== 0 && (
+          <div
+            className="absolute size-20 pointer-events-none -top-6"
+            style={{
+              transform: `rotate(${heading}deg)`,
+              background:
+                "radial-gradient(circle, rgba(245, 130, 32, 0.4) 0%, rgba(245, 130, 32, 0) 70%)",
+            }}
+          />
+        )}
+        {/* Orange center dot with soft orange ring */}
+        <div className="relative size-6 rounded-circle bg-secondary border-[6px] border-secondary-100 shadow-card flex items-center justify-center" />
+        {/* Tooltip 'شما اینجا هستید' */}
+        <div className="mt-1 bg-surface border border-secondary text-secondary px-2.5 py-1 rounded-md shadow-card whitespace-nowrap">
+          <span className="text-small font-semibold">شما اینجا هستید</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Default (Mobile) Behavior - Frozen and Unchanged
   if (isManual) {
     return (
       <div className="flex flex-col-reverse items-center justify-end">

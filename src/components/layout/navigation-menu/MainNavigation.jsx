@@ -333,10 +333,10 @@ function MainNavigation({ isHomePage = false, hasSearchBox = false }) {
         </div>
       )}
 
-      {/* Desktop: fixed sidebar on the right */}
+      {/* Desktop: fixed sidebar on the right (hidden on new desktop home layout) */}
       {isHomePage && (
         <div
-          className={`hidden lg:flex lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 lg:px-6 xl:px-16 flex-col items-center justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
+          className={`hidden lg:hidden lg:fixed lg:right-0 lg:top-0 lg:bottom-0 lg:w-24 lg:px-6 xl:px-16 flex-col items-center justify-end pb-8 z-10 bg-gray-200/50 backdrop-blur-sm`}
         >
           <button
             type="button"

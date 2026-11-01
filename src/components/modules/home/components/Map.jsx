@@ -18,10 +18,11 @@ import {
   isDesktopMapLayout,
 } from "@/lib/client/homeMapViewport";
 
+// Temporary fallback to OpenStreetMap while Neshan API key limit is exceeded
 const CUSTOM_TILE_URL =
-  "https://api.neshan.org/tile/raster/basemap/{z}/{x}/{y}?style=neshan&Api-key=service.cfd22467b9064762be3c1beec3756c47";
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OSM contributors</a>';
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // Mobile GPS sits 5px above drawer (40px button + 5px gap); visible only when drawer is closed
 const MOBILE_GPS_ABOVE_DRAWER_CLASS =
@@ -38,6 +39,8 @@ function MapComponent({
   sellers,
   onMapMove,
   skipInitialAreaFetch = false,
+  initialUserPosition = null,
+  routeLine = null,
 }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -47,6 +50,7 @@ function MapComponent({
   const prevVisibleSellerIdsRef = useRef(null);
   const userMarkerRef = useRef(null);
   const userMarkerRootRef = useRef(null);
+  const routePolylineRef = useRef(null);
   const watchIdRef = useRef(null);
   const LRef = useRef(null);
   const isProgrammaticMoveRef = useRef(false);
@@ -57,7 +61,7 @@ function MapComponent({
   const skipInitialAreaFetchRef = useRef(skipInitialAreaFetch);
 
   const [isGpsEnabled, setIsGpsEnabled] = useState(false);
-  const [userPosition, setUserPosition] = useState(null);
+  const [userPosition, setUserPosition] = useState(initialUserPosition);
   const [isManualMode, setIsManualMode] = useState(false);
   const [isLeafletLoaded, setIsLeafletLoaded] = useState(false);
 
@@ -179,12 +183,31 @@ function MapComponent({
   const buildSellerIcon = (seller, isActive) => {
     if (!LRef.current) return { icon: null, root: null, container: null };
     const L = LRef.current;
+    const isDesktop = isDesktopMapLayout();
 
     const container = document.createElement("div");
     const root = createRoot(container);
-    root.render(<SellerMarker seller={seller} isActive={isActive} />);
-    const iconSize = seller.hasSpecialSale ? [48, 52] : [12, 12];
-    const iconAnchor = seller.hasSpecialSale ? [24, 52] : [6, 6];
+    root.render(
+      <SellerMarker
+        seller={seller}
+        isActive={isActive}
+        variant={isDesktop ? "desktop" : "default"}
+      />,
+    );
+    const iconSize = isDesktop
+      ? isActive
+        ? [150, 105]
+        : [100, 60]
+      : seller.hasSpecialSale
+        ? [48, 52]
+        : [12, 12];
+    const iconAnchor = isDesktop
+      ? isActive
+        ? [75, 60]
+        : [50, 12]
+      : seller.hasSpecialSale
+        ? [24, 52]
+        : [6, 6];
     const icon = L.divIcon({
       className: "custom-marker",
       html: container,
@@ -196,6 +219,7 @@ function MapComponent({
 
   // Re-render marker React trees in place — avoids Leaflet setIcon flicker
   const syncMarkerActiveState = () => {
+    const isDesktop = isDesktopMapLayout();
     markerRootsRef.current.forEach((root, i) => {
       const seller = sellerDataRef.current[i];
       if (!root || !seller) return;
@@ -206,6 +230,7 @@ function MapComponent({
             normalizeStoreId(seller.storeId) ===
             normalizeStoreId(activeSellerIdRef.current)
           }
+          variant={isDesktop ? "desktop" : "default"}
         />,
       );
     });
@@ -328,7 +353,7 @@ function MapComponent({
 
   useEffect(() => {
     if (onMapReady) {
-      onMapReady({ panToSeller, resetMapView });
+      onMapReady({ panToSeller, resetMapView, toggleGps });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onMapReady]);
@@ -352,6 +377,7 @@ function MapComponent({
     if (!mapRef.current || !LRef.current) return;
     const L = LRef.current;
     const map = mapRef.current;
+    const isDesktop = isDesktopMapLayout();
 
     if (!userPosition) {
       if (userMarkerRootRef.current) {
@@ -381,16 +407,20 @@ function MapComponent({
         <UserMarker
           heading={userPosition.heading ?? 0}
           isManual={isManualMode}
+          variant={isDesktop ? "desktop" : "default"}
         />,
       );
     });
     userMarkerRootRef.current = root;
 
+    const iconSize = isDesktop ? [134, 65] : [40, 40];
+    const iconAnchor = isDesktop ? [67, 12] : [20, 20];
+
     const icon = L.divIcon({
       className: "user-marker",
       html: container,
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      iconSize,
+      iconAnchor,
     });
 
     if (userMarkerRef.current) {
@@ -411,9 +441,15 @@ function MapComponent({
     if (mapRef.current) return;
 
     const L = LRef.current;
+    const isDesktop = isDesktopMapLayout();
+    const defaultCenter = isDesktop && initialUserPosition
+      ? [initialUserPosition.lat, initialUserPosition.lng]
+      : [HOME_MAP_INITIAL_CENTER.lat, HOME_MAP_INITIAL_CENTER.lng];
+    const defaultZoom = isDesktop ? 15 : HOME_MAP_INITIAL_ZOOM;
+
     const map = L.map(mapContainerRef.current).setView(
-      [HOME_MAP_INITIAL_CENTER.lat, HOME_MAP_INITIAL_CENTER.lng],
-      HOME_MAP_INITIAL_ZOOM,
+      defaultCenter,
+      defaultZoom,
     );
     mapRef.current = map;
 
@@ -535,6 +571,35 @@ function MapComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSellerId]);
 
+  // Render navigation route line between user and active seller
+  useEffect(() => {
+    if (!mapRef.current || !LRef.current) return;
+    const map = mapRef.current;
+    const L = LRef.current;
+
+    if (routePolylineRef.current) {
+      map.removeLayer(routePolylineRef.current);
+      routePolylineRef.current = null;
+    }
+
+    if (routeLine?.from && routeLine?.to) {
+      const latlngs = [
+        [routeLine.from.lat, routeLine.from.lng],
+        [routeLine.to.lat, routeLine.to.lng],
+      ];
+
+      // Dashed orange line matching Figma node 121:19491
+      const polyline = L.polyline(latlngs, {
+        color: "#f58220",
+        weight: 4,
+        dashArray: "12, 12",
+        opacity: 0.9,
+      }).addTo(map);
+
+      routePolylineRef.current = polyline;
+    }
+  }, [routeLine]);
+
   const gpsButton = (
     <div
       onClick={toggleGps}
@@ -543,7 +608,7 @@ function MapComponent({
       onMouseLeave={handleGpsButtonMouseUp}
       className={
         isSmUp
-          ? "absolute left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:top-auto lg:bottom-12 lg:left-8 cursor-pointer"
+          ? "absolute left-4 z-1000 sm:bottom-auto sm:top-4 sm:left-4 lg:hidden cursor-pointer"
           : `${MOBILE_GPS_ABOVE_DRAWER_CLASS} cursor-pointer pointer-events-auto`
       }
     >
@@ -570,7 +635,7 @@ function MapComponent({
 
       {/* لوگو */}
       {!isSearchBoxOpen && (
-        <div className="absolute top-6 lg:top-9 right-2.5 lg:left-8 lg:right-[unset] z-1000">
+        <div className="absolute top-6 right-2.5 lg:hidden z-1000">
           <Image
             src="/assets/images/logo/main-logo.svg"
             width={130}

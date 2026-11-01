@@ -1,0 +1,130 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import {
+  BasketShoppingIcon,
+  BoxIcon,
+  InfoSquareIcon,
+  ArrowsRepeatIcon,
+} from "@/icons";
+import { formatPrice } from "@/lib/client/utils";
+import { cn } from "@/lib/client/utils";
+
+export default function DesktopProductCard({
+  product,
+  mode = "special",
+  onAddToCart,
+}) {
+  const isSpecial = mode === "special";
+  const formattedPrice =
+    product.formattedPrice ||
+    (product.price ? formatPrice(product.price) : "۰");
+
+  const productSlug = product.id?.split("-").pop() || product.id;
+
+  return (
+    <div
+      className={cn(
+        "w-60 shrink-0 bg-surface border border-border-default rounded-xl p-3 flex flex-col justify-between shadow-card hover:border-primary-300 transition-colors",
+        isSpecial ? "h-77.75" : "h-85",
+      )}
+    >
+      <Link href={`/products/${productSlug}`} className="block group">
+        {/* Product Image Container */}
+        <div className="w-full h-35.25 bg-surface-subtle rounded-2xl flex items-center justify-center p-3 overflow-hidden relative">
+          <Image
+            src={product.img || "/assets/images/fallback/no-photo.jpg"}
+            alt={product.name || "محصول"}
+            width={115}
+            height={115}
+            className="size-28.75 object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        {/* Product Title (2 lines) */}
+        <h4 className="mt-3 text-small text-text-primary line-clamp-2 h-11 text-right font-normal leading-snug">
+          {product.name}
+        </h4>
+      </Link>
+
+      {isSpecial ? (
+        <div className="space-y-3">
+          {/* Stock Badges (RTL: right is "موجود", left is "فقط ۲ عدد باقیمانده") */}
+          <div className="flex items-center justify-between text-caption font-semibold">
+            <span className="text-success-strong">موجود</span>
+            <span className="text-error">
+              {product.totalSales ? "فقط ۲ عدد باقیمانده" : "موجود"}
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div className="border-b border-primary-100" />
+
+          {/* Price & Cart Action */}
+          <div className="flex items-center justify-between h-7.5">
+            {/* Price Info (Right side in RTL) */}
+            <div className="flex items-center gap-3">
+              <span className="text-small text-text-secondary font-normal">
+                {formattedPrice}
+              </span>
+              {product.discountPercent > 0 && (
+                <span className="text-small text-text-disabled line-through font-normal">
+                  {formatPrice(Math.round(product.price * (1 + product.discountPercent / 100)))}
+                </span>
+              )}
+            </div>
+
+            {/* Cart Button (Left side in RTL) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onAddToCart?.(product);
+              }}
+              aria-label="افزودن به سبد خرید"
+              className="size-7.5 rounded-md bg-primary hover:bg-primary-600 transition-colors flex items-center justify-center text-text-on-primary cursor-pointer shrink-0"
+            >
+              <BasketShoppingIcon size={19} className="text-text-on-primary" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {/* Divider */}
+          <div className="border-b border-border-default my-1" />
+
+          {/* Order Details (3 rows matching Figma exactly) */}
+          <div className="flex items-center justify-between text-small h-5.5">
+            <div className="flex items-center gap-1.5 text-text-muted">
+              <BoxIcon size={18} className="text-text-muted" />
+              <span>تعداد کالا</span>
+            </div>
+            <span className="text-text-primary font-medium">
+              {product.quantity || 2} عدد
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between text-small h-5.5">
+            <div className="flex items-center gap-1.5 text-text-muted">
+              <InfoSquareIcon size={18} className="text-text-muted" />
+              <span>وضعیت</span>
+            </div>
+            <span className="text-success font-medium">
+              {product.orderHistory?.statusLabel || "آماده تحویل"}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between text-small h-5.5">
+            <div className="flex items-center gap-1.5 text-text-muted">
+              <ArrowsRepeatIcon size={18} className="text-text-muted" />
+              <span>آخرین بروزرسانی</span>
+            </div>
+            <span className="text-text-primary font-medium">۲ روز پیش</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
