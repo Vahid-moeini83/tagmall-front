@@ -1,0 +1,185 @@
+- generic:
+  - generic [aria-hidden]:
+    - complementary:
+      - generic:
+        - link:
+          - /url: /seller
+      - generic:
+        - generic:
+          - paragraph: آرمان میمندی نژاد
+      - navigation:
+        - link:
+          - /url: /seller
+          - generic: داشبورد
+        - link:
+          - /url: /seller/messages
+          - generic: پیام‌ها
+          - generic: ۳
+        - link:
+          - /url: /seller/orders
+          - generic: سفارشات
+        - generic:
+          - link:
+            - /url: /seller/profile
+            - generic: پروفایل فروشنده
+          - navigation:
+            - link:
+              - /url: /seller/profile
+              - text: مشخصات
+            - link:
+              - /url: /seller/profile#financial
+              - text: گزارش مالی
+            - link:
+              - /url: /seller/profile#wallet
+              - text: کیف پول اعتباری
+            - link:
+              - /url: /seller/profile#sessions
+              - text: نشست های فعال
+            - link:
+              - /url: /seller/profile#settings
+              - text: تنظیمات
+        - link:
+          - /url: /seller/branches
+          - generic: شعبه ها
+        - link:
+          - /url: /seller/products
+          - generic: محصولات من
+        - link:
+          - /url: /seller/products/new
+          - generic: ثبت کالا
+        - link:
+          - /url: /seller/discounts
+          - generic: تخفیف‌های فعال
+        - link:
+          - /url: /seller/logout
+          - generic: خروج
+    - main:
+      - generic:
+        - generic:
+          - generic:
+            - heading [level=1]: پنل فروشگاه تگ مال
+            - paragraph: امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
+          - region:
+            - button:
+              - generic: فیلترهای پیشرفته
+            - group:
+              - button [pressed]: امروز
+              - button: این هفته
+              - button: این ماه
+              - button: ۳ ماه اخیر
+              - button: سفارشی
+          - region:
+            - article:
+              - generic:
+                - heading [level=2]: کل فروش ( امروز )
+              - generic:
+                - paragraph: ۱۲۴,۵۰۰,۰۰۰ تومان
+                - generic: +۱۴.۲٪
+            - article:
+              - generic:
+                - heading [level=2]: هزینه کلیک ها
+              - generic:
+                - paragraph: ۹۸,۲۰۰,۰۰۰ تومان
+                - generic: +۱۸.۵٪
+            - article:
+              - generic:
+                - heading [level=2]: تعداد کلیک های معتبر
+              - generic:
+                - paragraph: نرخ کلیک
+                - generic: پلکانی
+            - article:
+              - generic:
+                - heading [level=2]: تعداد تراکنش
+              - generic:
+                - paragraph: ۳۴۲ تراکنش
+                - generic: +۸٪
+          - generic:
+            - region:
+              - generic:
+                - heading [level=2]: نمودار درآمد هفتگی
+                - generic: درآمد روزانه (تومان)
+              - generic:
+                - generic: شنبه
+                - generic: یکشنبه
+                - generic: دوشنبه
+                - generic: سه‌شنبه
+                - generic: چهارشنبه
+                - generic: پنجشنبه
+                - generic: جمعه
+            - region:
+              - heading [level=2]: درآمد بر اساس دسته‌بندی
+              - generic:
+                - generic:
+                  - generic: دیجیتال (۵۵٪)
+                  - generic: پوشاک (۲۵٪)
+                  - generic: خانه و آشپزخانه (۲۰٪)
+                - paragraph: سهم فروش
+          - region:
+            - generic:
+              - heading [level=2]: ریزشبک تراکنش‌ها
+              - paragraph: نمایش ۱۰ تراکنش اخیر
+            - generic:
+              - table:
+                - caption: تراکنش‌های مالی فروشگاه در بازه انتخاب‌شده
+                - rowgroup:
+                  - row:
+                    - columnheader: تاریخ
+                    - columnheader: شرح تراکنش
+                    - columnheader: مبلغ تراکنش
+                    - columnheader: مانده پس از تراکنش
+                - rowgroup:
+                  - row [aria-hidden]:
+                    - cell
+                  - row:
+                    - cell: ۳۰ مرداد ۱۴۰۵
+                    - cell: تسویه بابت سفارش DM-۴۸۱۹
+                    - cell:
+                      - generic:
+                        - generic: تومان
+                        - generic: ۱,۴۹۰,۰۰۰+
+                    - cell: ۹۸,۲۰۰,۰۰۰ تومان
+                  - row [aria-hidden]:
+                    - cell
+                  - row:
+                    - cell: ۳۰ مرداد ۱۴۰۵
+                    - cell: سهم پلتفرم بابت سفارش DM-۴۸۱۹
+                    - cell:
+                      - generic:
+                        - generic: تومان
+                        - generic: ۱۳۴,۰۰۰−
+                    - cell: ۹۶,۷۱۰,۰۰۰ تومان
+  - button "Open Next.js Dev Tools" [ref=f15e247] [cursor=pointer]
+  - alert
+  - dialog "فیلترهای گزارش مالی" [ref=f15e253]:
+    - generic [ref=f15e254]:
+      - heading "فیلترهای گزارش مالی" [level=2] [ref=f15e255]
+      - paragraph [ref=f15e256]: بازه زمانی و نوع تراکنش را انتخاب کنید.
+    - generic [ref=f15e257]:
+      - generic [ref=f15e258]:
+        - generic [ref=f15e259]: "بازه زمانی:"
+        - generic [ref=f15e262]:
+          - generic [ref=f15e263]:
+            - button "از تاریخ" [ref=f15e266]
+            - button "پاک کردن از تاریخ" [ref=f15e267] [cursor=pointer]
+          - generic [ref=f15e272]:
+            - button "تا تاریخ" [ref=f15e275]
+            - button "پاک کردن تا تاریخ" [ref=f15e276] [cursor=pointer]
+      - generic [ref=f15e281]:
+        - generic [ref=f15e282]: نوع تراکنش
+        - generic [ref=f15e283]:
+          - button "نوع تراکنش" [expanded] [active] [ref=f15e284]:
+            - generic [ref=f15e286]: همه تراکنش‌ها
+          - listbox [ref=f15e294]:
+            - option "همه تراکنش‌ها همه تراکنش‌ها" [selected] [ref=f15e295]:
+              - generic [ref=f15e296]: همه تراکنش‌ها
+              - radio "همه تراکنش‌ها" [checked] [ref=f15e297]
+            - option "واریز واریز" [ref=f15e298]:
+              - generic [ref=f15e299]: واریز
+              - radio "واریز" [ref=f15e300]
+            - option "برداشت برداشت" [ref=f15e301]:
+              - generic [ref=f15e302]: برداشت
+              - radio "برداشت" [ref=f15e303]
+      - generic [ref=f15e287]:
+        - button "اعمال فیلترها" [ref=f15e288]
+        - button "حذف فیلترها" [ref=f15e289]
+    - button "بستن" [ref=f15e290] [cursor=pointer]

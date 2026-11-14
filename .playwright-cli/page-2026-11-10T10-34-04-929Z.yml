@@ -1,0 +1,155 @@
+- generic [active] [ref=f7e1]:
+  - main [ref=f7e142]:
+    - generic [ref=f7e143]:
+      - generic [ref=f7e146]:
+        - generic:
+          - generic:
+            - button "فروشگاه گرین کالا فروشگاه گرین کالا" [ref=f7e147] [cursor=pointer]:
+              - generic [ref=f7e149]:
+                - img "فروشگاه گرین کالا" [ref=f7e152]
+                - generic [ref=f7e154]: فروشگاه گرین کالا
+            - button "فروشگاه اوکالا" [ref=f7e155] [cursor=pointer]
+        - generic [ref=f7e163]:
+          - link "Leaflet" [ref=f7e164] [cursor=pointer]:
+            - /url: https://leafletjs.com
+          - text: "| ©"
+          - link "OpenStreetMap" [ref=f7e169] [cursor=pointer]:
+            - /url: https://www.openstreetmap.org/copyright
+          - text: contributors
+      - button "موقعیت‌یابی" [ref=f7e170] [cursor=pointer]
+      - complementary [ref=f7e174]:
+        - generic [ref=f7e175]:
+          - link [ref=f7e176] [cursor=pointer]:
+            - /url: /
+            - img "تگ‌مال" [ref=f7e177]
+          - generic [ref=f7e178]:
+            - button "پروفایل کاربری" [ref=f7e179] [cursor=pointer]
+            - link "سبد خرید" [ref=f7e183] [cursor=pointer]:
+              - /url: /cart
+            - button "اعلان‌ها" [ref=f7e189] [cursor=pointer]
+        - textbox "گروه کالایی، برند، کالا، لوازم جانبی، قطعات" [ref=f7e198]
+        - generic [ref=f7e199]:
+          - generic [ref=f7e200] [cursor=pointer]:
+            - generic [ref=f7e201]:
+              - generic "مشاهده جزئیات فروشگاه" [ref=f7e202]:
+                - img "فروشگاه گرین کالا" [ref=f7e204]
+                - heading "فروشگاه گرین کالا" [level=3] [ref=f7e206]
+              - generic [ref=f7e210]:
+                - generic [ref=f7e211]: باز است
+                - generic [ref=f7e212]: 4.9/۵
+            - generic [ref=f7e216]:
+              - button "فروش ویژه این فروشگاه" [ref=f7e217]
+              - button "سفارشات جاری شما" [ref=f7e218]
+            - generic [ref=f7e219]:
+              - generic [ref=f7e220]: "مانده تا پایان فروش ویژه:"
+              - generic [ref=f7e221]:
+                - generic [ref=f7e222]: "14"
+                - generic [ref=f7e223]: ثانیه
+                - generic [ref=f7e224]: ":"
+                - generic [ref=f7e225]: "02"
+                - generic [ref=f7e226]: دقیقه
+                - generic [ref=f7e227]: ":"
+                - generic [ref=f7e228]: "05"
+                - generic [ref=f7e229]: ساعت
+            - generic [ref=f7e230]:
+              - generic [ref=f7e231]:
+                - generic [ref=f7e232]:
+                  - link [ref=f7e233]:
+                    - /url: /products/1
+                    - img "مک بوک نئو 13 اینچ A18 Pro (6C-5C) ظرفیت 512/8 گیگابایت" [ref=f7e235]
+                    - heading "مک بوک نئو 13 اینچ A18 Pro (6C-5C) ظرفیت 512/8 گیگابایت" [level=4] [ref=f7e236]
+                  - generic [ref=f7e237]:
+                    - generic [ref=f7e238]:
+                      - generic [ref=f7e239]: موجود
+                      - generic [ref=f7e240]: فقط ۲ عدد باقیمانده
+                    - generic [ref=f7e242]:
+                      - generic [ref=f7e243]:
+                        - generic [ref=f7e244]: ۳.۱۹۹.۰۰۰
+                        - generic [ref=f7e245]: ۳٬۹۶۶٬۷۶۰
+                      - button "افزودن به سبد خرید" [ref=f7e246]
+                - generic [ref=f7e252]:
+                  - link [ref=f7e253]:
+                    - /url: /products/2
+                    - img "استند شارژ بیسیم چند کاره Maxco مدل MW07" [ref=f7e255]
+                    - heading "استند شارژ بیسیم چند کاره Maxco مدل MW07" [level=4] [ref=f7e256]
+                  - generic [ref=f7e257]:
+                    - generic [ref=f7e258]:
+                      - generic [ref=f7e259]: موجود
+                      - generic [ref=f7e260]: موجود
+                    - generic [ref=f7e262]:
+                      - generic [ref=f7e263]: ۱.۸۵۰.۰۰۰
+                      - button "افزودن به سبد خرید" [ref=f7e265]
+                - generic [ref=f7e271]:
+                  - link [ref=f7e272]:
+                    - /url: /products/3
+                    - img "ساعت هوشمند اپل واچ سری 9 مدل 45 میلی‌متری" [ref=f7e274]
+                    - heading "ساعت هوشمند اپل واچ سری 9 مدل 45 میلی‌متری" [level=4] [ref=f7e275]
+                  - generic [ref=f7e276]:
+                    - generic [ref=f7e277]:
+                      - generic [ref=f7e278]: موجود
+                      - generic [ref=f7e279]: فقط ۲ عدد باقیمانده
+                    - generic [ref=f7e281]:
+                      - generic [ref=f7e282]:
+                        - generic [ref=f7e283]: ۲۴.۵۰۰.۰۰۰
+                        - generic [ref=f7e284]: ۲۷٬۴۴۰٬۰۰۰
+                      - button "افزودن به سبد خرید" [ref=f7e285]
+              - generic [ref=f7e291]:
+                - button "قبلی" [ref=f7e292]
+                - button "بعدی" [ref=f7e301]
+          - generic [ref=f7e305] [cursor=pointer]:
+            - generic [ref=f7e306]:
+              - generic "مشاهده جزئیات فروشگاه" [ref=f7e307]:
+                - img "فروشگاه اوکالا" [ref=f7e309]
+                - heading "فروشگاه اوکالا" [level=3] [ref=f7e311]
+              - generic [ref=f7e315]:
+                - generic [ref=f7e316]: باز است
+                - generic [ref=f7e317]: 4.8/۵
+            - generic [ref=f7e321]:
+              - button "فروش ویژه این فروشگاه" [ref=f7e322]
+              - button "سفارشات جاری شما" [ref=f7e323]
+            - generic [ref=f7e324]:
+              - generic [ref=f7e325]: "مانده تا پایان فروش ویژه:"
+              - generic [ref=f7e326]:
+                - generic [ref=f7e327]: "14"
+                - generic [ref=f7e328]: ثانیه
+                - generic [ref=f7e329]: ":"
+                - generic [ref=f7e330]: "02"
+                - generic [ref=f7e331]: دقیقه
+                - generic [ref=f7e332]: ":"
+                - generic [ref=f7e333]: "05"
+                - generic [ref=f7e334]: ساعت
+            - generic [ref=f7e335]:
+              - generic [ref=f7e336]:
+                - generic [ref=f7e337]:
+                  - link [ref=f7e338]:
+                    - /url: /products/1
+                    - img "گوشی موبایل شیائومی مدل Poco X6 Pro 5G ظرفیت 512" [ref=f7e340]
+                    - heading "گوشی موبایل شیائومی مدل Poco X6 Pro 5G ظرفیت 512" [level=4] [ref=f7e341]
+                  - generic [ref=f7e342]:
+                    - generic [ref=f7e343]:
+                      - generic [ref=f7e344]: موجود
+                      - generic [ref=f7e345]: فقط ۲ عدد باقیمانده
+                    - generic [ref=f7e347]:
+                      - generic [ref=f7e348]:
+                        - generic [ref=f7e349]: ۱۹.۸۰۰.۰۰۰
+                        - generic [ref=f7e350]: ۲۱٬۳۸۴٬۰۰۰
+                      - button "افزودن به سبد خرید" [ref=f7e351]
+                - generic [ref=f7e357]:
+                  - link [ref=f7e358]:
+                    - /url: /products/2
+                    - img "دوربین عکاسی بدون آینه سونی مدل Alpha 7 IV" [ref=f7e360]
+                    - heading "دوربین عکاسی بدون آینه سونی مدل Alpha 7 IV" [level=4] [ref=f7e361]
+                  - generic [ref=f7e362]:
+                    - generic [ref=f7e363]:
+                      - generic [ref=f7e364]: موجود
+                      - generic [ref=f7e365]: فقط ۲ عدد باقیمانده
+                    - generic [ref=f7e367]:
+                      - generic [ref=f7e368]:
+                        - generic [ref=f7e369]: ۱۱۲.۰۰۰.۰۰۰
+                        - generic [ref=f7e370]: ۱۲۸٬۸۰۰٬۰۰۰
+                      - button "افزودن به سبد خرید" [ref=f7e371]
+              - generic [ref=f7e377]:
+                - button "قبلی" [ref=f7e378]
+                - button "بعدی" [ref=f7e387]
+  - button "Open Next.js Dev Tools" [ref=f7e46] [cursor=pointer]
+  - alert [ref=f7e391]: "60750292"

@@ -1,0 +1,209 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e2]:
+    - banner [ref=f7e4]:
+      - link [ref=f7e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=f7e6]
+      - button "باز کردن منو" [ref=f7e8]
+    - complementary [ref=f7e11]:
+      - generic [ref=f7e12]:
+        - link [ref=f7e13] [cursor=pointer]:
+          - /url: /seller
+          - img "تگ مال؛ با هم، برای همه" [ref=f7e14]
+        - button "بستن منو" [ref=f7e15]
+      - generic [ref=f7e18]:
+        - img "آرمان میمندی نژاد" [ref=f7e20]
+        - paragraph [ref=f7e22]: آرمان میمندی نژاد
+      - navigation [ref=f7e23]:
+        - link "داشبورد" [ref=f7e24] [cursor=pointer]:
+          - /url: /seller
+        - link "پیام‌ها ۳" [ref=f7e34] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f7e35]: پیام‌ها
+          - generic [ref=f7e42]: ۳
+        - link "سفارشات" [ref=f7e43] [cursor=pointer]:
+          - /url: /seller/orders
+        - link "پروفایل فروشنده" [ref=f7e51] [cursor=pointer]:
+          - /url: /seller/profile
+        - link "شعبه ها" [ref=f7e58] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=f7e65] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=f7e78] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "تخفیف‌های فعال" [ref=f7e84] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=f7e93] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=f7e100]:
+      - generic [ref=f7e101]:
+        - generic [ref=f7e102]:
+          - generic [ref=f7e103]:
+            - heading "پنل فروشگاه تگ مال" [level=1] [ref=f7e104]
+            - paragraph [ref=f7e105]: امروز ۳۰ مرداد ماه ۱۴۰۵
+          - generic [ref=f7e107]:
+            - generic [ref=f7e108]:
+              - generic [ref=f7e109]: کل فروش (ماه)
+              - generic [ref=f7e116]:
+                - generic [ref=f7e117]: ۴۸,۵۰۰,۰۰۰
+                - generic [ref=f7e118]: تومان
+              - generic [ref=f7e120]:
+                - generic [ref=f7e121]: ۱۸.۵٪+
+                - generic [aria-hidden] [ref=f7e122]: ↑
+            - generic [ref=f7e123]:
+              - generic [ref=f7e124]:
+                - generic [ref=f7e125]: تعداد سفارشات
+                - generic [ref=f7e133]: ۳۴ سفارش
+                - generic [ref=f7e135]:
+                  - generic [ref=f7e136]: ۱۲٪+
+                  - generic [aria-hidden] [ref=f7e137]: ↑
+              - generic [ref=f7e138]:
+                - generic [ref=f7e139]: محصولات فعال
+                - generic [ref=f7e151]: ۴۸ کالا
+                - generic [ref=f7e153]:
+                  - generic [ref=f7e154]: ۱۲٪+
+                  - generic [aria-hidden] [ref=f7e155]: ↑
+            - generic [ref=f7e156]:
+              - generic [ref=f7e166]:
+                - generic [ref=f7e167]: بازدید امروز
+                - generic [ref=f7e168]: ۱,۲۴۰ بار
+              - generic [ref=f7e169]:
+                - generic [ref=f7e170]: ۴.۲٪+
+                - generic [aria-hidden] [ref=f7e171]: ↑
+        - generic [ref=f7e172]:
+          - generic [ref=f7e174]:
+            - generic [ref=f7e175]:
+              - generic [ref=f7e176]:
+                - heading "نمودار فروش ماهانه" [level=2] [ref=f7e177]
+                - paragraph [ref=f7e178]: ۶ ماه اخیر
+              - generic [ref=f7e179]:
+                - generic [ref=f7e180]: امسال
+                - generic [ref=f7e183]: سال گذشته
+            - generic [ref=f7e186]:
+              - generic [ref=f7e187]:
+                - generic [ref=f7e188]: ۲۰۰
+                - generic [ref=f7e189]: ۱۵۰
+                - generic [ref=f7e190]: ۱۰۰
+                - generic [ref=f7e191]: ۵۰
+                - generic [ref=f7e192]: ۰
+              - generic [ref=f7e193]:
+                - generic [ref=f7e195]:
+                  - generic [ref=f7e196] [cursor=pointer]
+                  - generic [ref=f7e200] [cursor=pointer]
+                  - generic [ref=f7e204] [cursor=pointer]
+                  - generic [ref=f7e208] [cursor=pointer]
+                  - generic [ref=f7e212] [cursor=pointer]
+                  - generic [ref=f7e216] [cursor=pointer]
+                - generic [ref=f7e220]:
+                  - generic [ref=f7e221]: اسفند
+                  - generic [ref=f7e222]: بهمن
+                  - generic [ref=f7e223]: دی
+                  - generic [ref=f7e224]: آذر
+                  - generic [ref=f7e225]: آبان
+                  - generic [ref=f7e226]: مهر
+          - generic [ref=f7e228]:
+            - generic [ref=f7e229]:
+              - heading "پرفروش‌ترین محصولات" [level=2] [ref=f7e230]
+              - generic [ref=f7e231] [cursor=pointer]: پرفروش‌ترین کالاها
+            - generic [ref=f7e232]:
+              - generic [ref=f7e233]:
+                - img "گوشی شیائومی پوکو X6 پرو ۵G" [ref=f7e235]
+                - generic [ref=f7e236]:
+                  - generic [ref=f7e237]: گوشی شیائومی پوکو X6 پرو ۵G
+                  - generic [ref=f7e238]:
+                    - generic [ref=f7e239]: ۱۲۴ فروش
+                    - generic [ref=f7e240]: ۱۷,۴۹۰,۰۰۰ تومان
+              - generic [ref=f7e241]:
+                - img "گوشی شیائومی پوکو X6 پرو ۵G" [ref=f7e243]
+                - generic [ref=f7e244]:
+                  - generic [ref=f7e245]: گوشی شیائومی پوکو X6 پرو ۵G
+                  - generic [ref=f7e246]:
+                    - generic [ref=f7e247]: ۱۲۴ فروش
+                    - generic [ref=f7e248]: ۱۷,۴۹۰,۰۰۰ تومان
+              - generic [ref=f7e249]:
+                - img "گوشی شیائومی پوکو X6 پرو ۵G" [ref=f7e251]
+                - generic [ref=f7e252]:
+                  - generic [ref=f7e253]: گوشی شیائومی پوکو X6 پرو ۵G
+                  - generic [ref=f7e254]:
+                    - generic [ref=f7e255]: ۱۲۴ فروش
+                    - generic [ref=f7e256]: ۱۷,۴۹۰,۰۰۰ تومان
+              - generic [ref=f7e257]:
+                - img "گوشی شیائومی پوکو X6 پرو ۵G" [ref=f7e259]
+                - generic [ref=f7e260]:
+                  - generic [ref=f7e261]: گوشی شیائومی پوکو X6 پرو ۵G
+                  - generic [ref=f7e262]:
+                    - generic [ref=f7e263]: ۱۲۴ فروش
+                    - generic [ref=f7e264]: ۱۷,۴۹۰,۰۰۰ تومان
+        - generic [ref=f7e266]:
+          - generic [ref=f7e267]:
+            - heading "سفارشات اخیر" [level=2] [ref=f7e268]
+            - link "مشاهده همه سفارشات" [ref=f7e269] [cursor=pointer]:
+              - /url: /seller/orders
+          - generic [ref=f7e273]:
+            - generic [ref=f7e274]:
+              - generic [ref=f7e275]:
+                - generic [ref=f7e276]: DKC-۸۹۳۷۴۹۲
+                - generic [ref=f7e277]: در انتظار تایید
+              - generic [ref=f7e278]:
+                - generic [ref=f7e279]: یک روز قبل
+                - generic [ref=f7e280]: ۲ محصول
+              - generic [ref=f7e281]: ارسال توسط فروشنده
+              - generic [ref=f7e283]:
+                - generic [ref=f7e284]: مبلغ کل
+                - generic [ref=f7e285]: ۱,۴۹۰,۰۰۰ تومان
+            - generic [ref=f7e286]:
+              - generic [ref=f7e287]:
+                - generic [ref=f7e288]: DKC-۸۹۳۷۴۹۲
+                - generic [ref=f7e289]: تایید شده
+              - generic [ref=f7e290]:
+                - generic [ref=f7e291]: ۲۴ دقیقه قبل
+                - generic [ref=f7e292]: ۴ محصول
+              - generic [ref=f7e293]: مراجعه به فروشگاه
+              - generic [ref=f7e295]:
+                - generic [ref=f7e296]: مبلغ کل
+                - generic [ref=f7e297]: ۱,۴۹۰,۰۰۰ تومان
+            - generic [ref=f7e298]:
+              - generic [ref=f7e299]:
+                - generic [ref=f7e300]: DKC-۸۹۳۷۴۹۲
+                - generic [ref=f7e301]: لغو شده
+              - generic [ref=f7e302]:
+                - generic [ref=f7e303]: ۳۰ مرداد ۱۴۰۵
+                - generic [ref=f7e304]: ۵ محصول
+              - generic [ref=f7e305]: ارسال توسط فروشنده
+              - generic [ref=f7e307]:
+                - generic [ref=f7e308]: مبلغ کل
+                - generic [ref=f7e309]: ۱,۴۹۰,۰۰۰ تومان
+            - generic [ref=f7e310]:
+              - generic [ref=f7e311]:
+                - generic [ref=f7e312]: DKC-۸۹۳۷۴۹۲
+                - generic [ref=f7e313]: ارسال شده
+              - generic [ref=f7e314]:
+                - generic [ref=f7e315]: ۱۲ ساعت قبل
+                - generic [ref=f7e316]: ۱۰ محصول
+              - generic [ref=f7e317]: مراجعه به فروشگاه
+              - generic [ref=f7e319]:
+                - generic [ref=f7e320]: مبلغ کل
+                - generic [ref=f7e321]: ۱,۴۹۰,۰۰۰ تومان
+            - generic [ref=f7e322]:
+              - generic [ref=f7e323]:
+                - generic [ref=f7e324]: DKC-۸۹۳۷۴۹۲
+                - generic [ref=f7e325]: تحویل داده شده
+              - generic [ref=f7e326]:
+                - generic [ref=f7e327]: ۳۰ مرداد ۱۴۰۵
+                - generic [ref=f7e328]: ۶ محصول
+              - generic [ref=f7e329]: ارسال توسط فروشنده
+              - generic [ref=f7e331]:
+                - generic [ref=f7e332]: مبلغ کل
+                - generic [ref=f7e333]: ۱,۴۹۰,۰۰۰ تومان
+            - generic [ref=f7e334]:
+              - generic [ref=f7e335]:
+                - generic [ref=f7e336]: DKC-۸۹۳۷۴۹۲
+                - generic [ref=f7e337]: مرجوع شده
+              - generic [ref=f7e338]:
+                - generic [ref=f7e339]: ۳۰ مرداد ۱۴۰۵
+                - generic [ref=f7e340]: ۱۵ محصول
+              - generic [ref=f7e341]: مراجعه به فروشگاه
+              - generic [ref=f7e343]:
+                - generic [ref=f7e344]: مبلغ کل
+                - generic [ref=f7e345]: ۱,۴۹۰,۰۰۰ تومان
+  - button "Open Next.js Dev Tools" [ref=f7e351] [cursor=pointer]

@@ -13,6 +13,8 @@ const RECENT_ORDERS = [
     date: "یک روز قبل",
     status: {
       label: "در انتظار تایید",
+      mobileWidth: "w-[87px]",
+      desktopWidth: "lg:w-[95px]",
       bg: "bg-secondary-50",
       color: "text-secondary",
     },
@@ -25,8 +27,10 @@ const RECENT_ORDERS = [
     date: "۲۴ دقیقه قبل",
     status: {
       label: "تایید شده",
-      bg: "bg-success-light",
-      color: "text-success",
+      mobileWidth: "w-[67px]",
+      desktopWidth: "lg:w-[100px]",
+      bg: "bg-[#108981]/10",
+      color: "text-[#108981]",
     },
   },
   {
@@ -37,8 +41,10 @@ const RECENT_ORDERS = [
     date: "۳۰ مرداد ۱۴۰۵",
     status: {
       label: "لغو شده",
-      bg: "bg-error-light",
-      color: "text-error",
+      mobileWidth: "w-[60px]",
+      desktopWidth: "lg:w-[100px]",
+      bg: "bg-[#fee2e2]",
+      color: "text-[#ef4444]",
     },
   },
   {
@@ -49,6 +55,8 @@ const RECENT_ORDERS = [
     date: "۱۲ ساعت قبل",
     status: {
       label: "ارسال شده",
+      mobileWidth: "w-[72px]",
+      desktopWidth: "lg:w-[100px]",
       bg: "bg-primary-50",
       color: "text-primary",
     },
@@ -61,8 +69,10 @@ const RECENT_ORDERS = [
     date: "۳۰ مرداد ۱۴۰۵",
     status: {
       label: "تحویل داده شده",
-      bg: "bg-info-light",
-      color: "text-info",
+      mobileWidth: "w-[102px]",
+      desktopWidth: "lg:w-[100px]",
+      bg: "bg-[#dbeafe]",
+      color: "text-[#3b82f6]",
     },
   },
   {
@@ -73,8 +83,10 @@ const RECENT_ORDERS = [
     date: "۳۰ مرداد ۱۴۰۵",
     status: {
       label: "مرجوع شده",
-      bg: "bg-warning-light",
-      color: "text-warning",
+      mobileWidth: "w-[75px]",
+      desktopWidth: "lg:w-[100px]",
+      bg: "bg-[#fef3c7]",
+      color: "text-[#f59e0b]",
     },
   },
   {
@@ -131,16 +143,16 @@ function SellerRecentOrders() {
   };
 
   return (
-    <section className="flex flex-col gap-4 lg:gap-0 lg:bg-surface lg:rounded-xl lg:p-6 lg:border lg:border-border-subtle lg:shadow-card">
+    <section className="flex flex-col gap-3 lg:gap-0 lg:bg-surface lg:rounded-xl lg:p-6">
       {/* Header: Matches both Figma mobile (44:39482) and desktop */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-body sm:text-h5 font-bold text-text-primary">سفارشات اخیر</h2>
+      <div className="flex h-11 items-center justify-between lg:h-[25px]">
+        <h2 className="text-[18px] leading-[26px] [font-weight:450] text-text-primary lg:text-[16px] lg:leading-[25px] lg:[font-weight:600]">سفارشات اخیر</h2>
         <Link
           href="/seller/orders"
-          className="flex items-center gap-1 text-[12px] sm:text-caption text-text-muted hover:text-text-secondary transition-colors font-normal"
+          className="flex h-11 items-center gap-1 text-[12px] leading-[18px] [font-weight:325] text-primary transition-colors hover:text-text-secondary"
         >
           <span>مشاهده همه سفارشات</span>
-          <AngleLeftIcon size={16} />
+          <AngleLeftIcon size={14} strokeWidth={0} />
         </Link>
       </div>
 
@@ -149,26 +161,26 @@ function SellerRecentOrders() {
         {RECENT_ORDERS.slice(0, 6).map((order, idx) => (
           <div
             key={`mobile-${order.id}-${idx}`}
-            className="bg-surface rounded-lg p-3.5 border border-border-subtle flex flex-col gap-2.5 shadow-card"
+            className="bg-surface h-[157px] rounded-lg border border-[#eeeff6] p-[13px] flex flex-col gap-2.5"
           >
             {/* Row 1: Order ID & Status Badge */}
             <div className="flex items-center justify-between">
-              <span className="text-[13px] font-medium text-text-primary">{order.id}</span>
+              <span className="text-[14px] leading-[22px] [font-weight:325] text-text-primary">{order.id}</span>
               <span
-                className={`h-[26px] w-[100px] rounded-md flex items-center justify-center text-[12px] font-medium ${order.status.bg} ${order.status.color}`}
+                className={`h-[26px] ${order.status.mobileWidth} sm:w-[100px] ${order.status.desktopWidth} shrink-0 whitespace-nowrap rounded-md px-2 py-1 sm:px-3 flex items-center justify-center text-[12px] leading-[18px] [font-weight:325] ${order.status.bg} ${order.status.color}`}
               >
                 {order.status.label}
               </span>
             </div>
 
             {/* Row 2: Date & Product Count */}
-            <div className="flex items-center justify-between text-[12px] text-text-secondary">
-              <span>{order.date}</span>
-              <span>{order.productsCount}</span>
+            <div className="flex h-[18px] items-center justify-between text-[12px] leading-[18px] [font-weight:325]">
+              <span className="text-text-muted">{order.date}</span>
+              <span className="text-text-secondary">{order.productsCount}</span>
             </div>
 
             {/* Row 3: Delivery Method */}
-            <div className="text-[12px] text-text-secondary text-right">
+            <div className="text-[14px] leading-[22px] [font-weight:325] text-text-secondary text-right">
               <span>{order.deliveryMethod}</span>
             </div>
 
@@ -177,8 +189,8 @@ function SellerRecentOrders() {
 
             {/* Row 5: Total Amount */}
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-text-secondary">مبلغ کل</span>
-              <span className="text-[14px] font-semibold text-text-primary">
+              <span className="text-[12px] leading-[18px] [font-weight:325] text-text-muted">مبلغ کل</span>
+              <span className="text-[14px] leading-[22px] [font-weight:325] text-text-primary">
                 {order.totalAmount}
               </span>
             </div>
@@ -189,15 +201,15 @@ function SellerRecentOrders() {
       {/* Desktop Responsive Table (Figma Node: 44:39024) */}
       <div className="hidden lg:block mt-6">
         <div className="overflow-x-auto">
-          <div className="min-w-[840px]">
+          <div className="min-w-[1012px]">
             {/* Table Header */}
-            <div className="bg-surface-subtle rounded-lg h-[42px] px-6 grid grid-cols-6 items-center text-caption text-text-secondary font-normal">
-              <span>شماره سفارش</span>
-              <span>روش تحویل</span>
-              <span>محصولات</span>
-              <span>مبلغ کل</span>
-              <span>تاریخ ثبت</span>
-              <span className="text-center">وضعیت سفارش</span>
+            <div className="relative h-[42px] min-w-[1012px] rounded-lg bg-surface-subtle text-caption leading-[18px] [font-weight:325] text-text-secondary">
+              <span className="absolute left-[821.333px] top-3 h-[18px] w-[166.667px] text-right">شماره سفارش</span>
+              <span className="absolute left-[677px] top-3 h-[18px] w-[166.667px] text-center">روش تحویل</span>
+              <span className="absolute left-[553px] top-3 h-[18px] w-[49px] text-center">محصولات</span>
+              <span className="absolute left-[390px] top-3 h-[18px] w-[41px] text-center">مبلغ کل</span>
+              <span className="absolute left-[183px] top-3 h-[18px] w-[149px] text-center">تاریخ ثبت</span>
+              <span className="absolute left-6 top-3 h-[18px] w-[100px] text-center">وضعیت سفارش</span>
             </div>
 
             <div className="relative mt-6 pl-4">
@@ -235,34 +247,39 @@ function SellerRecentOrders() {
                 {RECENT_ORDERS.map((order, idx) => (
                   <div
                     key={`desktop-${order.id}-${idx}`}
-                    className="h-[58px] px-6 grid grid-cols-6 items-center text-[13px] hover:bg-surface-subtle/50 transition-colors"
+                    className="relative flex h-[58px] w-full items-center justify-between px-6 text-[14px] leading-[22px] [font-weight:325] transition-colors hover:bg-surface-subtle/50"
+                    dir="rtl"
                   >
                     {/* Order Number */}
-                    <span className="font-medium text-text-primary">{order.id}</span>
+                    <span className="w-[89px] shrink-0 whitespace-nowrap text-right text-text-primary">{order.id}</span>
 
                     {/* Delivery Method */}
-                    <span className="text-text-secondary">{order.deliveryMethod}</span>
+                    <span className="w-[130px] shrink-0 whitespace-nowrap text-center text-text-secondary">{order.deliveryMethod}</span>
 
                     {/* Products Count */}
-                    <span className="text-text-secondary">{order.productsCount}</span>
+                    <span className="w-[80px] shrink-0 whitespace-nowrap text-center text-text-secondary">{order.productsCount}</span>
 
                     {/* Total Amount */}
-                    <span className="font-medium text-text-primary">{order.totalAmount}</span>
+                    <span className="w-[95px] shrink-0 whitespace-nowrap text-center text-text-primary">{order.totalAmount}</span>
 
                     {/* Registration Date */}
-                    <span className="text-text-secondary">{order.date}</span>
+                    <span className="w-[90px] shrink-0 whitespace-nowrap text-center text-text-secondary">{order.date}</span>
 
                     {/* Order Status Badge */}
-                    <div className="flex justify-center">
+                    <div className="flex w-[100px] shrink-0 justify-start" dir="ltr">
                       <span
                         className={`
-                          h-[26px] w-[100px] rounded-md flex items-center justify-center text-caption font-medium
+                          h-[26px] ${order.status.desktopWidth || "lg:w-[100px]"} rounded-md flex items-center justify-center text-caption [font-weight:325]
                           ${order.status.bg} ${order.status.color}
                         `}
                       >
                         {order.status.label}
                       </span>
                     </div>
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[#f3f4f6]"
+                    />
                   </div>
                 ))}
               </div>

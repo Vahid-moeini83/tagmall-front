@@ -1,0 +1,935 @@
+[   14984ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   15079ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1562:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   15105ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   15695ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   15730ms] [LOG] [Fast Refresh] done in 140ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   15871ms] [WARNING] Image with src "/assets/images/products/powerbank.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   15927ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    ...
+      <div ref={{current:null}} className="min-h-0 fl...">
+        ...
+          <Collapsible data-orientation="vertical" data-state="open" __scopeCollapsible={{...}} data-slot="accordion-..." ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_m..." open={true} ...>
+              <Primitive.div data-state="open" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="open" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="open" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_m..." aria-expanded={true} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_mcp5qandlb_"
+-                                   aria-controls="radix-_R_2pj4n9indlb_"
+                                    aria-expanded={true}
+                                    data-state="open"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_6cp5qandlb_"
+-                                   id="radix-_R_pj4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_6..." data-orientation="vertical" ...>
+                        <Presence present={true}>
+                          <Primitive.div data-state="open" data-disabled={undefined} id="radix-_R_m..." hidden={false} ...>
+                            <div
+                              data-state="open"
+                              data-disabled={undefined}
++                             id="radix-_R_mcp5qandlb_"
+-                             id="radix-_R_2pj4n9indlb_"
+                              hidden={false}
+                              role="region"
++                             aria-labelledby="radix-_R_6cp5qandlb_"
+-                             aria-labelledby="radix-_R_pj4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+        <div>
+        ...
+          <Collapsible data-orientation="vertical" data-state="closed" __scopeCollapsible={{...}} ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_u..." open={false} ...>
+              <Primitive.div data-state="closed" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="closed" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="closed" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_u..." aria-expanded={false} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_ucp5qandlb_"
+-                                   aria-controls="radix-_R_3pj4n9indlb_"
+                                    aria-expanded={false}
+                                    data-state="closed"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_ecp5qandlb_"
+-                                   id="radix-_R_1pj4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_e..." data-orientation="vertical" ...>
+                        <Presence present={false}>
+                          <Primitive.div data-state="closed" data-disabled={undefined} id="radix-_R_u..." hidden={true} ...>
+                            <div
+                              data-state="closed"
+                              data-disabled={undefined}
++                             id="radix-_R_ucp5qandlb_"
+-                             id="radix-_R_3pj4n9indlb_"
+                              hidden={true}
+                              role="region"
++                             aria-labelledby="radix-_R_ecp5qandlb_"
+-                             aria-labelledby="radix-_R_1pj4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+    ...
+      <div ref={{current:null}} className="min-h-0 fl...">
+        ...
+          <Collapsible data-orientation="vertical" data-state="open" __scopeCollapsible={{...}} data-slot="accordion-..." ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_m..." open={true} ...>
+              <Primitive.div data-state="open" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="open" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="open" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_m..." aria-expanded={true} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_md95qandlb_"
+-                                   aria-controls="radix-_R_2pl4n9indlb_"
+                                    aria-expanded={true}
+                                    data-state="open"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_6d95qandlb_"
+-                                   id="radix-_R_pl4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_6..." data-orientation="vertical" ...>
+                        <Presence present={true}>
+                          <Primitive.div data-state="open" data-disabled={undefined} id="radix-_R_m..." hidden={false} ...>
+                            <div
+                              data-state="open"
+                              data-disabled={undefined}
++                             id="radix-_R_md95qandlb_"
+-                             id="radix-_R_2pl4n9indlb_"
+                              hidden={false}
+                              role="region"
++                             aria-labelledby="radix-_R_6d95qandlb_"
+-                             aria-labelledby="radix-_R_pl4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+        <div>
+        ...
+          <Collapsible data-orientation="vertical" data-state="closed" __scopeCollapsible={{...}} ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_u..." open={false} ...>
+              <Primitive.div data-state="closed" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="closed" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="closed" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_u..." aria-expanded={false} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_ud95qandlb_"
+-                                   aria-controls="radix-_R_3pl4n9indlb_"
+                                    aria-expanded={false}
+                                    data-state="closed"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_ed95qandlb_"
+-                                   id="radix-_R_1pl4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_e..." data-orientation="vertical" ...>
+                        <Presence present={false}>
+                          <Primitive.div data-state="closed" data-disabled={undefined} id="radix-_R_u..." hidden={true} ...>
+                            <div
+                              data-state="closed"
+                              data-disabled={undefined}
++                             id="radix-_R_ud95qandlb_"
+-                             id="radix-_R_3pl4n9indlb_"
+                              hidden={true}
+                              role="region"
++                             aria-labelledby="radix-_R_ed95qandlb_"
+-                             aria-labelledby="radix-_R_1pl4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+ @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3128
+[   16016ms] TypeError: Cannot read properties of undefined (reading 'profileImage')
+    at ProductCardSellerHeader (http://127.0.0.1:3000/_next/static/chunks/src_ea08d81b._.js:3050:31)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14826:24)
+    at renderWithHooks (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4651:24)
+    at updateFunctionComponent (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6112:21)
+    at beginWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6708:24)
+    at runWithFiberInDEV (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9456:40)
+    at renderRootSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9440:13)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:186)
+    at performSyncWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10238:9)
+    at flushSyncWorkAcrossRoots_impl (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10154:316)
+    at flushSpawnedWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9914:13)
+    at commitRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9720:432)
+    at commitRootWhenReady (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9194:9)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9166:25)
+    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[   24493ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1562:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   34961ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   35072ms] [LOG] [Fast Refresh] done in 216ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   67273ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   67945ms] [LOG] [Fast Refresh] done in 778ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   81741ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   81747ms] [LOG] [Fast Refresh] done in 118ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  126051ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  126233ms] [LOG] [Fast Refresh] done in 292ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  138009ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  138020ms] [LOG] [Fast Refresh] done in 124ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  138147ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  138156ms] [LOG] [Fast Refresh] done in 120ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  156966ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  157607ms] [LOG] [Fast Refresh] done in 744ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  158194ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  158203ms] [LOG] [Fast Refresh] done in 114ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  158318ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  158553ms] [LOG] [Fast Refresh] done in 349ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  161243ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  161483ms] [LOG] [Fast Refresh] done in 347ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  161651ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  162329ms] [LOG] [Fast Refresh] done in 786ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  290921ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  291089ms] [LOG] [Fast Refresh] done in 290ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  292366ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  292525ms] [LOG] [Fast Refresh] done in 264ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  292742ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  293133ms] [LOG] [Fast Refresh] done in 495ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  331285ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  331365ms] [LOG] [Fast Refresh] done in 186ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  355336ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  355399ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  393512ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  393606ms] [LOG] [Fast Refresh] done in 200ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  432367ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  432508ms] [LOG] [Fast Refresh] done in 248ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  466120ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  466288ms] [LOG] [Fast Refresh] done in 273ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  466603ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  467023ms] [LOG] [Fast Refresh] done in 522ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  563305ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  563383ms] [LOG] [Fast Refresh] done in 181ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  563570ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  563744ms] [LOG] [Fast Refresh] done in 280ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  577446ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  577635ms] [LOG] [Fast Refresh] done in 296ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  577805ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  578463ms] [LOG] [Fast Refresh] done in 762ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  604806ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  604917ms] [LOG] [Fast Refresh] done in 218ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  605087ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  605276ms] [LOG] [Fast Refresh] done in 294ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  612013ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  612077ms] [LOG] [Fast Refresh] done in 171ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  657160ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  657270ms] [LOG] [Fast Refresh] done in 217ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  657425ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  657520ms] [LOG] [Fast Refresh] done in 198ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  658286ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  658900ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  658918ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  658969ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  659892ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  659893ms] [LOG] [Fast Refresh] done in 1709ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  660017ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  660290ms] [LOG] [Fast Refresh] done in 375ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  660419ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  660765ms] [LOG] [Fast Refresh] done in 460ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  667767ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  667953ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  667958ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  668397ms] [LOG] [Fast Refresh] done in 296ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  668535ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  669198ms] [LOG] [Fast Refresh] done in 768ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  673938ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  673974ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1573:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  673993ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  674603ms] Error: Module [project]/src/lib/server/actions/data:1cad49 [app-client] (ecmascript) <text/javascript> was instantiated because it was required from module [project]/src/components/modules/login/components/LoginEnterPhone.jsx [app-client] (ecmascript), but the module factory is not available. It might have been deleted in an HMR update.
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:845:15)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.esmImport [as i] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:238:20)
+    at module evaluation (http://127.0.0.1:3000/_next/static/chunks/src_components_modules_ad21461e._.js:3067:200)
+    at http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:879:13
+    at runModuleExecutionHooks (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:904:13)
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:877:9)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.esmImport [as i] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:238:20)
+    at module evaluation (http://127.0.0.1:3000/_next/static/chunks/src_components_modules_ad21461e._.js:3262:200)
+    at http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:879:13
+    at runModuleExecutionHooks (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:904:13)
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:877:9)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.esmImport [as i] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:238:20)
+    at module evaluation (http://127.0.0.1:3000/_next/static/chunks/src_components_modules_ad21461e._.js:4036:246)
+    at http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:879:13
+    at runModuleExecutionHooks (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:904:13)
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:877:9)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.esmImport [as i] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:238:20)
+    at module evaluation (http://127.0.0.1:3000/_next/static/chunks/src_components_modules_ad21461e._.js:4242:197)
+    at http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:879:13
+    at runModuleExecutionHooks (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:904:13)
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:877:9)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.esmImport [as i] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:238:20)
+    at module evaluation (http://127.0.0.1:3000/_next/static/chunks/src_components_layout_f26e1105._.js:768:192)
+    at http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:879:13
+    at runModuleExecutionHooks (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:904:13)
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:877:9)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.esmImport [as i] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:238:20)
+    at module evaluation (http://127.0.0.1:3000/_next/static/chunks/src_components_layout_f26e1105._.js:884:174)
+    at http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:879:13
+    at runModuleExecutionHooks (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:904:13)
+    at instantiateModule (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:877:9)
+    at getOrInstantiateModuleFromParent (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:830:12)
+    at DevContext.commonJsRequire [as r] (http://127.0.0.1:3000/_next/static/chunks/turbopack-_23a915ee._.js:259:12)
+    at requireModule (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:85:84)
+    at initializeModuleChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1078:25)
+    at readChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:818:17)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14890:20)
+    at resolveLazy (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:3895:20)
+    at beginWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6687:77)
+    at runWithFiberInDEV (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopConcurrentByScheduler (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9558:58)
+    at renderRootConcurrent (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9541:71)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:150)
+[  674649ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:3000/favicon.ico:1
+[  728757ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  728762ms] [LOG] [Fast Refresh] done in 117ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  748037ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  748275ms] [LOG] [Fast Refresh] done in 346ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  748536ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  749856ms] [LOG] [Fast Refresh] done in 1422ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  786412ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  786553ms] [LOG] [Fast Refresh] done in 244ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  792463ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  792559ms] [LOG] [Fast Refresh] done in 202ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  792759ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  792887ms] [LOG] [Fast Refresh] done in 231ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  844913ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  845006ms] [LOG] [Fast Refresh] done in 202ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  845131ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  845323ms] [LOG] [Fast Refresh] done in 297ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  868790ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  868900ms] [LOG] [Fast Refresh] done in 215ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  954122ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[  954202ms] [LOG] [Fast Refresh] done in 184ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1019635ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1019745ms] [LOG] [Fast Refresh] done in 217ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056007ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056318ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056325ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056341ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056342ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056348ms] [LOG] [Fast Refresh] done in 438ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1056493ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1057572ms] [LOG] [Fast Refresh] done in 1181ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1058049ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1058083ms] [LOG] [Fast Refresh] done in 137ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1058190ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1058469ms] [LOG] [Fast Refresh] done in 385ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1058629ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1058691ms] [LOG] [Fast Refresh] done in 168ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1072318ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1072408ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1575:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1072453ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1073745ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1074095ms] [LOG] [Fast Refresh] done in 460ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1074767ms] TypeError: Cannot read properties of undefined (reading 'profileImage')
+    at ProductCardSellerHeader (http://127.0.0.1:3000/_next/static/chunks/src_ea08d81b._.js:3050:31)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14826:24)
+    at renderWithHooks (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4651:24)
+    at updateFunctionComponent (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6112:21)
+    at beginWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6708:24)
+    at runWithFiberInDEV (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9456:40)
+    at renderRootSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9440:13)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:186)
+    at performSyncWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10238:9)
+    at flushSyncWorkAcrossRoots_impl (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10154:316)
+    at flushSpawnedWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9914:13)
+    at commitRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9720:432)
+    at commitRootWhenReady (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9194:9)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9166:25)
+    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[ 1075170ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1075818ms] [LOG] [Fast Refresh] done in 760ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1087150ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1575:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1091346ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1091412ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1091442ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1091545ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1092463ms] [LOG] [Fast Refresh] done in 1020ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1093900ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1094117ms] [LOG] [Fast Refresh] done in 325ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1094471ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1095290ms] [LOG] [Fast Refresh] done in 927ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1102092ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1102130ms] [LOG] [Fast Refresh] done in 140ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1104390ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1104415ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1575:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1104441ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1105152ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    ...
+      <div ref={{current:null}} className="min-h-0 fl...">
+        ...
+          <Collapsible data-orientation="vertical" data-state="open" __scopeCollapsible={{...}} data-slot="accordion-..." ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_m..." open={true} ...>
+              <Primitive.div data-state="open" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="open" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="open" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_m..." aria-expanded={true} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_mcp5qandlb_"
+-                                   aria-controls="radix-_R_2pj4n9indlb_"
+                                    aria-expanded={true}
+                                    data-state="open"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_6cp5qandlb_"
+-                                   id="radix-_R_pj4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_6..." data-orientation="vertical" ...>
+                        <Presence present={true}>
+                          <Primitive.div data-state="open" data-disabled={undefined} id="radix-_R_m..." hidden={false} ...>
+                            <div
+                              data-state="open"
+                              data-disabled={undefined}
++                             id="radix-_R_mcp5qandlb_"
+-                             id="radix-_R_2pj4n9indlb_"
+                              hidden={false}
+                              role="region"
++                             aria-labelledby="radix-_R_6cp5qandlb_"
+-                             aria-labelledby="radix-_R_pj4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+        <div>
+        ...
+          <Collapsible data-orientation="vertical" data-state="closed" __scopeCollapsible={{...}} ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_u..." open={false} ...>
+              <Primitive.div data-state="closed" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="closed" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="closed" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_u..." aria-expanded={false} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_ucp5qandlb_"
+-                                   aria-controls="radix-_R_3pj4n9indlb_"
+                                    aria-expanded={false}
+                                    data-state="closed"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_ecp5qandlb_"
+-                                   id="radix-_R_1pj4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_e..." data-orientation="vertical" ...>
+                        <Presence present={false}>
+                          <Primitive.div data-state="closed" data-disabled={undefined} id="radix-_R_u..." hidden={true} ...>
+                            <div
+                              data-state="closed"
+                              data-disabled={undefined}
++                             id="radix-_R_ucp5qandlb_"
+-                             id="radix-_R_3pj4n9indlb_"
+                              hidden={true}
+                              role="region"
++                             aria-labelledby="radix-_R_ecp5qandlb_"
+-                             aria-labelledby="radix-_R_1pj4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+    ...
+      <div ref={{current:null}} className="min-h-0 fl...">
+        ...
+          <Collapsible data-orientation="vertical" data-state="open" __scopeCollapsible={{...}} data-slot="accordion-..." ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_m..." open={true} ...>
+              <Primitive.div data-state="open" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="open" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="open" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_m..." aria-expanded={true} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_md95qandlb_"
+-                                   aria-controls="radix-_R_2pl4n9indlb_"
+                                    aria-expanded={true}
+                                    data-state="open"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_6d95qandlb_"
+-                                   id="radix-_R_pl4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_6..." data-orientation="vertical" ...>
+                        <Presence present={true}>
+                          <Primitive.div data-state="open" data-disabled={undefined} id="radix-_R_m..." hidden={false} ...>
+                            <div
+                              data-state="open"
+                              data-disabled={undefined}
++                             id="radix-_R_md95qandlb_"
+-                             id="radix-_R_2pl4n9indlb_"
+                              hidden={false}
+                              role="region"
++                             aria-labelledby="radix-_R_6d95qandlb_"
+-                             aria-labelledby="radix-_R_pl4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+        <div>
+        ...
+          <Collapsible data-orientation="vertical" data-state="closed" __scopeCollapsible={{...}} ...>
+            <CollapsibleProvider scope={{...}} disabled={undefined} contentId="radix-_R_u..." open={false} ...>
+              <Primitive.div data-state="closed" data-disabled={undefined} data-orientation="vertical" ...>
+                <div data-state="closed" data-disabled={undefined} data-orientation="vertical" data-slot="accordion-..." ...>
+                  ...
+                    <h3 data-orientation="vertical" data-state="closed" data-disabled={undefined} className="flex" ...>
+                      <AccordionTrigger data-slot="accordion-..." className="focus-visi..." disabled={false}>
+                        <AccordionCollectionItemSlot scope={undefined}>
+                          <AccordionCollectionItemSlot.Slot data-radix-collection-item="" ref={function}>
+                            <AccordionCollectionItemSlot.SlotClone data-radix-collection-item="" ref={function}>
+                              <CollapsibleTrigger aria-disabled={undefined} data-orientation="vertical" ...>
+                                <Primitive.button type="button" aria-controls="radix-_R_u..." aria-expanded={false} ...>
+                                  <button
+                                    type="button"
++                                   aria-controls="radix-_R_ud95qandlb_"
+-                                   aria-controls="radix-_R_3pl4n9indlb_"
+                                    aria-expanded={false}
+                                    data-state="closed"
+                                    data-disabled={undefined}
+                                    disabled={false}
+                                    aria-disabled={undefined}
+                                    data-orientation="vertical"
++                                   id="radix-_R_ed95qandlb_"
+-                                   id="radix-_R_1pl4n9indlb_"
+                                    data-slot="accordion-trigger"
+                                    className="focus-visible:ring-ring/50 focus-visible:border-ring focus-visible:afte..."
+                                    data-radix-collection-item=""
+                                    onClick={function handleEvent}
+                                    ref={function}
+                                  >
+                  <AccordionContent>
+                    <AccordionContent data-slot="accordion-..." className="overflow-h...">
+                      <CollapsibleContent role="region" aria-labelledby="radix-_R_e..." data-orientation="vertical" ...>
+                        <Presence present={false}>
+                          <Primitive.div data-state="closed" data-disabled={undefined} id="radix-_R_u..." hidden={true} ...>
+                            <div
+                              data-state="closed"
+                              data-disabled={undefined}
++                             id="radix-_R_ud95qandlb_"
+-                             id="radix-_R_3pl4n9indlb_"
+                              hidden={true}
+                              role="region"
++                             aria-labelledby="radix-_R_ed95qandlb_"
+-                             aria-labelledby="radix-_R_1pl4n9indlb_"
+                              data-orientation="vertical"
+                              data-slot="accordion-content"
+                              className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-..."
+                              style={{--radix-collapsible-content-height:undefined,--radix-collapsible-content-width:undefined, ...}}
+                              ref={function}
+                            >
+ @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3128
+[ 1105284ms] TypeError: Cannot read properties of undefined (reading 'profileImage')
+    at ProductCardSellerHeader (http://127.0.0.1:3000/_next/static/chunks/src_ea08d81b._.js:3050:31)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14826:24)
+    at renderWithHooks (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4651:24)
+    at updateFunctionComponent (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6112:21)
+    at beginWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6708:24)
+    at runWithFiberInDEV (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9456:40)
+    at renderRootSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9440:13)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:186)
+    at performSyncWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10238:9)
+    at flushSyncWorkAcrossRoots_impl (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10154:316)
+    at flushSpawnedWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9914:13)
+    at commitRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9720:432)
+    at commitRootWhenReady (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9194:9)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9166:25)
+    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[ 1113883ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1575:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1132853ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1133027ms] [LOG] [Fast Refresh] done in 279ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1334620ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1335009ms] [LOG] [Fast Refresh] done in 494ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1335116ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1335443ms] [LOG] [Fast Refresh] done in 429ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1382416ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1382511ms] [LOG] [Fast Refresh] done in 201ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1516338ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1516788ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1516812ms] [LOG] [Fast Refresh] done in 550ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1517013ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1518099ms] [LOG] [Fast Refresh] done in 1186ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1519189ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1519306ms] [LOG] [Fast Refresh] done in 221ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1532275ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1532299ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1575:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1532313ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1533150ms] TypeError: Cannot read properties of undefined (reading 'profileImage')
+    at ProductCardSellerHeader (http://127.0.0.1:3000/_next/static/chunks/src_ea08d81b._.js:3050:31)
+    at Object.react_stack_bottom_frame (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14826:24)
+    at renderWithHooks (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4651:24)
+    at updateFunctionComponent (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6112:21)
+    at beginWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6708:24)
+    at runWithFiberInDEV (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9456:40)
+    at renderRootSync (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9440:13)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:186)
+    at performSyncWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10238:9)
+    at flushSyncWorkAcrossRoots_impl (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10154:316)
+    at flushSpawnedWork (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9914:13)
+    at commitRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9720:432)
+    at commitRootWhenReady (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9194:9)
+    at performWorkOnRoot (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9166:25)
+    at performWorkOnRootViaSchedulerTask (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[ 1542169ms] [LOG] %c%s%c Error getting home page data:  background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   AxiosError: Request failed with status code 503
+    at  getHomePageData (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__5489e317._.js?5:1575:26)
+    at  Home (about://React/Server/D:%5CWorkspace%5Ctagmal%5Ctagmall-front%5C.next%5Cdev%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__e7f4f5fa._.js?6:405:29)
+    at resolveErrorDev (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1881:106)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1434:28)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1548:50)
+    at Object.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at getOutlinedModel (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1372:17)
+    at parseModelString (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1602:50)
+    at Array.<anonymous> (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2472:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:1053:30)
+    at resolveConsoleEntry (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2007:96)
+    at processFullStringRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2408:17)
+    at processFullBinaryRow (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2348:9)
+    at processBinaryChunk (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2457:221)
+    at progress (http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_9212ccad._.js:2625:13) @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1665574ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1666554ms] [LOG] [Fast Refresh] done in 1080ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1666775ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1666819ms] [LOG] [Fast Refresh] done in 158ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1682364ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1682428ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1682783ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1683022ms] [LOG] [Fast Refresh] done in 349ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1683125ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1683236ms] [LOG] [Fast Refresh] done in 213ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1683358ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1683501ms] [LOG] [Fast Refresh] done in 244ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1715010ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1715105ms] [LOG] [Fast Refresh] done in 199ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1876308ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1876417ms] [LOG] [Fast Refresh] done in 215ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1921180ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1921256ms] [LOG] [Fast Refresh] done in 191ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1938237ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[ 1938256ms] [LOG] [Fast Refresh] done in 130ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298

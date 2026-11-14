@@ -1,0 +1,21 @@
+- generic [active] [ref=f4e1]:
+  - main [ref=f4e2]:
+    - heading "پیش‌نمایش موقت کامپوننت‌های Figma" [level=1] [ref=f4e3]
+    - generic [ref=f4e4]:
+      - generic [ref=f4e5]:
+        - heading "Figma Search — پیش‌فرض" [level=2] [ref=f4e6]
+        - searchbox "جستجو در تگ مال..." [ref=f4e8]
+      - generic [ref=f4e10]:
+        - heading "Figma Search — پرشده / پاک‌کردن" [level=2] [ref=f4e11]
+        - generic [ref=f4e12]:
+          - button "پاک کردن جستجو" [ref=f4e13]
+          - searchbox "جستجو در تگ مال..." [ref=f4e15]: کیف چرمی زنانه
+      - generic [ref=f4e17]:
+        - heading "Figma Dropdown — پیش‌فرض" [level=2] [ref=f4e18]
+        - button "استان خود را انتخاب کنید" [ref=f4e20]
+      - generic [ref=f4e23]:
+        - heading "Figma Dropdown — انتخاب‌شده / منو" [level=2] [ref=f4e24]
+        - button "همه فروشنده ها" [ref=f4e26]
+    - paragraph [ref=f4e29]: برای دیدن منوی Dropdown روی فیلد انتخاب‌شده کلیک کن؛ برای پاک‌کردن Search از دکمهٔ × استفاده کن.
+  - button "Open Next.js Dev Tools" [ref=f4e35] [cursor=pointer]
+  - alert [ref=f4e39]

@@ -83,12 +83,25 @@
   --color-info-light: #eff6ff;
   --color-success-strong: #108981;
 
+  /* Exact colors used by the isolated Figma component namespaces. */
+  --color-figma-auth-title: #392e80;
+  --color-figma-auth-description: #707070;
+  --color-figma-auth-placeholder: #bdbdbd;
+  --color-figma-auth-timer-border: #e3e3e3;
+  --color-figma-input-option: #4d4d4d;
+  --color-figma-input-strong: #1e1e1e;
+  --color-figma-modal-border: #eaeaea;
+  --color-figma-error: #ef4444;
+  --color-figma-success-surface: #1089811a;
+
   /* ------------------------------------------------------------------------
      6. Shadows
      ------------------------------------------------------------------------ */
   --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
   --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.08);
   --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --shadow-figma-dropdown: 0 8px 16px rgba(0, 0, 0, 0.062745);
+  --shadow-figma-input-focus: 0 0 8px 0 rgba(61, 49, 131, 0.12549);
 
   /* ------------------------------------------------------------------------
      Spacing: the designer's 4px grid equals Tailwind's numeric scale
@@ -226,6 +239,18 @@
 
 .theme-new .seller-recent-orders-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* Mobile PWA layouts use the full device width; a desktop preview's thin
+   document scrollbar must not consume part of the 390px Figma viewport. */
+@media (max-width: 1023px) {
+  html:has(.theme-new) {
+    scrollbar-width: none;
+  }
+
+  html:has(.theme-new)::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Thin, draggable scrollbar for seller panel scroll regions. */

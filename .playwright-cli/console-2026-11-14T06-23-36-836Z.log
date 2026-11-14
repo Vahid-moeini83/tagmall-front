@@ -1,0 +1,52 @@
+[     118ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[     625ms] [LOG] [Fast Refresh] done in 609ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[     852ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[     932ms] [LOG] [HMR] connected @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[    1378ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <Popper __scopePopper={{Menu:[...], ...}}>
+      <PopperProvider scope={{Menu:[...], ...}} anchor={null} onAnchorChange={function bound dispatchSetState}>
+        <MenuProvider scope={{Menu:[...], ...}} open={false} onOpenChange={function useCallbackRef.useMemo} ...>
+          <MenuProvider scope={{Menu:[...], ...}} onClose={function Menu.useCallback} ...>
+            <DropdownMenuTrigger className="flex h-6 w..." aria-label="گزینه‌های ...">
+              <DropdownMenuTrigger data-slot="dropdown-m..." className="flex h-6 w..." aria-label="گزینه‌های ...">
+                <MenuAnchor asChild={true} __scopeMenu={{Menu:[...], ...}}>
+                  <PopperAnchor __scopePopper={{Menu:[...], ...}} asChild={true} ref={null}>
+                    <Primitive.div asChild={true} ref={function}>
+                      <Primitive.div.Slot ref={function}>
+                        <Primitive.div.SlotClone ref={function}>
+                          <Primitive.button type="button" id="radix-_R_2..." aria-haspopup="menu" aria-expanded={false} ...>
+                            <button
+                              type="button"
++                             id="radix-_R_25inebn9esndlb_"
+-                             id="radix-_R_8matpet9esndlb_"
+                              aria-haspopup="menu"
+                              aria-expanded={false}
+                              aria-controls={undefined}
+                              data-state="closed"
+                              data-disabled={undefined}
+                              disabled={false}
+                              data-slot="dropdown-menu-trigger"
+                              className="flex h-6 w-6 items-center justify-center rounded-sm text-text-secondary focus..."
+                              aria-label="گزینه‌های پیام‌ها"
+                              onPointerDown={function handleEvent}
+                              onKeyDown={function handleEvent}
+                              ref={function}
+                            >
+            ...
+ @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3128
+[    1404ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[    1582ms] [LOG] [Fast Refresh] done in 283ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   36893ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298
+[   37098ms] [LOG] [Fast Refresh] done in 310ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2298

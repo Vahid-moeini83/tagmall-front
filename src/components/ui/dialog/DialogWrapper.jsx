@@ -11,6 +11,7 @@ function DialogWrapper({
   hideInMobile = false,
   children,
   showCloseButton = true,
+  ariaTitle,
   onBack,
   className,
   titleClassName,
@@ -32,14 +33,11 @@ function DialogWrapper({
       >
         {title && (
           <DialogHeader>
-            <DialogTitle className="text-primary text-right">
-              {title}
-            </DialogTitle>
+            <DialogTitle className="text-primary text-right">{title}</DialogTitle>
           </DialogHeader>
         )}
-        <div className={`text-sm lg:text-base ${title ? "mt-2 lg:mt-4" : ""}`}>
-          {children}
-        </div>
+        {!title && <DialogTitle className="sr-only">{ariaTitle || "پنجره گفتگو"}</DialogTitle>}
+        <div className={`text-sm lg:text-base ${title ? "mt-2 lg:mt-4" : ""}`}>{children}</div>
       </DialogContent>
     </Dialog>
   );

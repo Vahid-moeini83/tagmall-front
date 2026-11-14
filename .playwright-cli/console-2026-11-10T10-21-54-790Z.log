@@ -1,0 +1,8 @@
+[    2884ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[    3157ms] [LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[    3249ms] [WARNING] Image with src "/assets/figma-seller-auth/legal-seller-logo.svg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   93147ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   95304ms] [LOG] [Fast Refresh] done in 2159ms @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[  178553ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[  178775ms] [LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28

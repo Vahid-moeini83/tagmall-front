@@ -1,0 +1,134 @@
+- generic [active] [ref=f15e1]:
+  - generic [ref=f15e2]:
+    - complementary [ref=f15e3]:
+      - link [ref=f15e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=f15e6]
+      - generic [ref=f15e7]:
+        - img "آرمان میمندی نژاد" [ref=f15e9]
+        - paragraph [ref=f15e11]: آرمان میمندی نژاد
+      - navigation [ref=f15e12]:
+        - link "داشبورد" [ref=f15e13] [cursor=pointer]:
+          - /url: /seller
+        - link "پیام‌ها ۳" [ref=f15e23] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f15e24]: پیام‌ها
+          - generic [ref=f15e31]: ۳
+        - link "سفارشات" [ref=f15e32] [cursor=pointer]:
+          - /url: /seller/orders
+        - generic [ref=f15e40]:
+          - link "پروفایل فروشنده" [ref=f15e41] [cursor=pointer]:
+            - /url: /seller/profile
+          - navigation "بخش‌های پروفایل فروشنده" [ref=f15e48]:
+            - link "مشخصات" [ref=f15e49] [cursor=pointer]:
+              - /url: /seller/profile
+            - link "گزارش مالی" [ref=f15e50] [cursor=pointer]:
+              - /url: /seller/profile#financial
+            - link "کیف پول اعتباری" [ref=f15e51] [cursor=pointer]:
+              - /url: /seller/profile#wallet
+            - link "نشست های فعال" [ref=f15e52] [cursor=pointer]:
+              - /url: /seller/profile#sessions
+            - link "تنظیمات" [ref=f15e53] [cursor=pointer]:
+              - /url: /seller/profile#settings
+        - link "شعبه ها" [ref=f15e54] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=f15e61] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=f15e74] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "تخفیف‌های فعال" [ref=f15e80] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=f15e89] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=f15e96]:
+      - generic [ref=f15e98]:
+        - generic [ref=f15e99]:
+          - heading "پنل فروشگاه تگ مال" [level=1] [ref=f15e100]
+          - paragraph [ref=f15e101]: امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
+        - region "بازه زمانی گزارش مالی" [ref=f15e102]:
+          - button "فیلترهای پیشرفته" [ref=f15e103]
+          - group "انتخاب بازه زمانی" [ref=f15e112]:
+            - button "امروز" [pressed] [ref=f15e113]
+            - button "این هفته" [ref=f15e114]
+            - button "این ماه" [ref=f15e115]
+            - button "۳ ماه اخیر" [ref=f15e116]
+            - button "سفارشی" [ref=f15e117]
+        - region "خلاصه گزارش مالی" [ref=f15e118]:
+          - article [ref=f15e119]:
+            - heading "کل فروش ( امروز )" [level=2] [ref=f15e121]
+            - generic [ref=f15e127]:
+              - paragraph [ref=f15e128]: ۱۲۴,۵۰۰,۰۰۰ تومان
+              - generic [ref=f15e129]: +۱۴.۲٪
+          - article [ref=f15e130]:
+            - heading "هزینه کلیک ها" [level=2] [ref=f15e132]
+            - generic [ref=f15e138]:
+              - paragraph [ref=f15e139]: ۹۸,۲۰۰,۰۰۰ تومان
+              - generic [ref=f15e140]: +۱۸.۵٪
+          - article [ref=f15e141]:
+            - heading "تعداد کلیک های معتبر" [level=2] [ref=f15e143]
+            - generic [ref=f15e152]:
+              - paragraph [ref=f15e153]: نرخ کلیک
+              - generic [ref=f15e154]: پلکانی
+          - article [ref=f15e155]:
+            - heading "تعداد تراکنش" [level=2] [ref=f15e157]
+            - generic [ref=f15e165]:
+              - paragraph [ref=f15e166]: ۳۴۲ تراکنش
+              - generic [ref=f15e167]: +۸٪
+        - generic [ref=f15e168]:
+          - region "نمودار درآمد هفتگی" [ref=f15e169]:
+            - generic [ref=f15e170]:
+              - heading "نمودار درآمد هفتگی" [level=2] [ref=f15e171]
+              - generic [ref=f15e172]: درآمد روزانه (تومان)
+            - img "روند درآمد هفتگی از شنبه تا جمعه" [ref=f15e176]
+            - generic [ref=f15e178]:
+              - generic [ref=f15e179]: شنبه
+              - generic [ref=f15e180]: یکشنبه
+              - generic [ref=f15e181]: دوشنبه
+              - generic [ref=f15e182]: سه‌شنبه
+              - generic [ref=f15e183]: چهارشنبه
+              - generic [ref=f15e184]: پنجشنبه
+              - generic [ref=f15e185]: جمعه
+          - region "درآمد بر اساس دسته‌بندی" [ref=f15e186]:
+            - heading "درآمد بر اساس دسته‌بندی" [level=2] [ref=f15e187]
+            - generic [ref=f15e189]:
+              - generic [ref=f15e190]:
+                - generic [ref=f15e191]: دیجیتال (۵۵٪)
+                - generic [ref=f15e194]: پوشاک (۲۵٪)
+                - generic [ref=f15e197]: خانه و آشپزخانه (۲۰٪)
+              - img "نمودار سهم فروش دسته‌بندی‌ها" [ref=f15e200]
+              - paragraph [ref=f15e202]: سهم فروش
+        - region "ریزشبک تراکنش‌ها" [ref=f15e203]:
+          - generic [ref=f15e204]:
+            - heading "ریزشبک تراکنش‌ها" [level=2] [ref=f15e205]
+            - paragraph [ref=f15e206]: نمایش ۱۰ تراکنش اخیر
+          - table "تراکنش‌های مالی فروشگاه در بازه انتخاب‌شده" [ref=f15e208]:
+            - caption [ref=f15e209]: تراکنش‌های مالی فروشگاه در بازه انتخاب‌شده
+            - rowgroup [ref=f15e215]:
+              - row [ref=f15e216]:
+                - columnheader "تاریخ" [ref=f15e217]
+                - columnheader "شرح تراکنش" [ref=f15e218]
+                - columnheader "مبلغ تراکنش" [ref=f15e219]
+                - columnheader "مانده پس از تراکنش" [ref=f15e220]
+            - rowgroup [ref=f15e221]:
+              - row [aria-hidden] [ref=f15e222]:
+                - cell [ref=f15e223]
+              - row [ref=f15e224]:
+                - cell "۳۰ مرداد ۱۴۰۵" [ref=f15e225]
+                - cell "تسویه بابت سفارش DM-۴۸۱۹" [ref=f15e226]
+                - cell "تومان ۱,۴۹۰,۰۰۰+" [ref=f15e227]:
+                  - generic [ref=f15e228]:
+                    - generic [ref=f15e229]: تومان
+                    - generic [ref=f15e230]: ۱,۴۹۰,۰۰۰+
+                - cell "۹۸,۲۰۰,۰۰۰ تومان" [ref=f15e231]
+              - row [aria-hidden] [ref=f15e232]:
+                - cell [ref=f15e233]
+              - row [ref=f15e234]:
+                - cell "۳۰ مرداد ۱۴۰۵" [ref=f15e235]
+                - cell "سهم پلتفرم بابت سفارش DM-۴۸۱۹" [ref=f15e236]
+                - cell "تومان ۱۳۴,۰۰۰−" [ref=f15e237]:
+                  - generic [ref=f15e238]:
+                    - generic [ref=f15e239]: تومان
+                    - generic [ref=f15e240]: ۱۳۴,۰۰۰−
+                - cell "۹۶,۷۱۰,۰۰۰ تومان" [ref=f15e241]
+  - button "Open Next.js Dev Tools" [ref=f15e247] [cursor=pointer]
+  - alert [ref=f15e251]

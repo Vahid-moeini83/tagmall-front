@@ -1,0 +1,206 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link [ref=e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=e6]
+      - generic [ref=e7]:
+        - img "آرمان میمندی نژاد" [ref=e9]
+        - paragraph [ref=e11]: آرمان میمندی نژاد
+      - navigation [ref=e12]:
+        - link "داشبورد" [ref=e13] [cursor=pointer]:
+          - /url: /seller
+        - link "پیام‌ها ۳" [ref=e23] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=e24]: پیام‌ها
+          - generic [ref=e31]: ۳
+        - link "سفارشات" [ref=e32] [cursor=pointer]:
+          - /url: /seller/orders
+        - link "پروفایل فروشنده" [ref=e40] [cursor=pointer]:
+          - /url: /seller/profile
+        - link "شعبه ها" [ref=e47] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=e54] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=e67] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "تخفیف‌های فعال" [ref=e73] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=e82] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=e89]:
+      - generic [ref=e90]:
+        - generic [ref=e92]:
+          - heading "پنل فروشگاه تگ مال" [level=1] [ref=e93]
+          - paragraph [ref=e94]: امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
+        - region "وضعیت سفارش‌ها" [ref=e95]:
+          - button "۱۴۸ همه سفارشات" [pressed] [ref=e96]:
+            - generic [ref=e97]: ۱۴۸
+            - text: همه سفارشات
+          - button "۱۲ در انتظار تأیید" [ref=e98]:
+            - generic [ref=e99]: ۱۲
+            - text: در انتظار تأیید
+          - button "۲۴ در حال پردازش" [ref=e100]:
+            - generic [ref=e101]: ۲۴
+            - text: در حال پردازش
+          - button "۸۵ ارسال شده" [ref=e102]:
+            - generic [ref=e103]: ۸۵
+            - text: ارسال شده
+          - button "۲۲ تحویل داده شده" [ref=e104]:
+            - generic [ref=e105]: ۲۲
+            - text: تحویل داده شده
+          - button "۵ لغو شده" [ref=e106]:
+            - generic [ref=e107]: ۵
+            - text: لغو شده
+        - generic [ref=e108]:
+          - region "جستجو و فیلتر سفارش‌ها" [ref=e109]:
+            - button "شهر مبدأ" [ref=e111]:
+              - generic [ref=e113]: تهران
+            - button "شهر مقصد" [ref=e115]:
+              - generic [ref=e117]: تهران
+            - textbox "جستجو در شماره سفارش یا نام خریدار" [ref=e122]:
+              - /placeholder: جستجو در شماره سفارش، نام خریدار
+          - region "فهرست سفارش‌ها" [ref=e123]:
+            - generic [ref=e125]:
+              - generic [ref=e126]:
+                - generic [ref=e127]: شماره سفارش
+                - generic [ref=e128]: تاریخ ثبت
+                - generic [ref=e129]: نام خریدار
+                - generic [ref=e130]: تعداد اقلام
+                - generic [ref=e131]: روش تحویل
+                - generic [ref=e132]: تعهد ارسال / تحویل
+                - generic [ref=e133]: وضعیت
+                - generic [ref=e134]: عملیات
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - link "DM-۴۸۱۹" [ref=e137] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B9
+                  - generic [ref=e138]: ۵ دقیقه پیش
+                  - generic [ref=e139]: سهراب سپهری
+                  - generic [ref=e140]: ۳ کالا
+                  - generic [ref=e141]: پرداخت آنلاین
+                  - generic [ref=e142]: ۱ روز کاری
+                  - generic [ref=e143]: در انتظار تأیید
+                  - generic [ref=e144]:
+                    - button "ویرایش سفارش DM-۴۸۱۹" [ref=e145]
+                    - button "پیام درباره سفارش DM-۴۸۱۹" [ref=e149]
+                - generic [ref=e155]:
+                  - link "DM-۴۸۱۸" [ref=e156] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B8
+                  - generic [ref=e157]: ۱۵ دقیقه پیش
+                  - generic [ref=e158]: نیما یوشیج
+                  - generic [ref=e159]: ۱ کالا
+                  - generic [ref=e160]: کارت به کارت
+                  - generic [ref=e161]: کارت به کارت
+                  - generic [ref=e162]: ارسال شده
+                  - generic [ref=e163]:
+                    - button "ویرایش سفارش DM-۴۸۱۸" [ref=e164]
+                    - button "پیام درباره سفارش DM-۴۸۱۸" [ref=e168]
+                - generic [ref=e174]:
+                  - link "DM-۴۸۱۷" [ref=e175] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B7
+                  - generic [ref=e176]: ۲ ساعت پیش
+                  - generic [ref=e177]: سیمین بهبهانی
+                  - generic [ref=e178]: ۵ کالا
+                  - generic [ref=e179]: کیف پول
+                  - generic [ref=e180]: کیف پول
+                  - generic [ref=e181]: تحویل داده شده
+                  - generic [ref=e182]:
+                    - button "ویرایش سفارش DM-۴۸۱۷" [ref=e183]
+                    - button "پیام درباره سفارش DM-۴۸۱۷" [ref=e187]
+                - generic [ref=e193]:
+                  - link "DM-۴۸۱۶" [ref=e194] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B6
+                  - generic [ref=e195]: دیروز
+                  - generic [ref=e196]: پروین اعتصامی
+                  - generic [ref=e197]: ۲ کالا
+                  - generic [ref=e198]: پرداخت آنلاین
+                  - generic [ref=e199]: پرداخت آنلاین
+                  - generic [ref=e200]: لغو شده
+                  - generic [ref=e201]:
+                    - button "ویرایش سفارش DM-۴۸۱۶" [ref=e202]
+                    - button "پیام درباره سفارش DM-۴۸۱۶" [ref=e206]
+                - generic [ref=e212]:
+                  - link "DM-۴۸۱۵" [ref=e213] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B5
+                  - generic [ref=e214]: ۲۸ مرداد ۱۴۰۵
+                  - generic [ref=e215]: جلال آل احمد
+                  - generic [ref=e216]: ۴ کالا
+                  - generic [ref=e217]: پرداخت آنلاین
+                  - generic [ref=e218]: پرداخت آنلاین
+                  - generic [ref=e219]: در حال پردازش
+                  - generic [ref=e220]:
+                    - button "ویرایش سفارش DM-۴۸۱۵" [ref=e221]
+                    - button "پیام درباره سفارش DM-۴۸۱۵" [ref=e225]
+                - generic [ref=e231]:
+                  - link "DM-۴۸۱۴" [ref=e232] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B4
+                  - generic [ref=e233]: ۲۷ مرداد ۱۴۰۵
+                  - generic [ref=e234]: فروغ فرخزاد
+                  - generic [ref=e235]: ۱ کالا
+                  - generic [ref=e236]: پرداخت آنلاین
+                  - generic [ref=e237]: پرداخت آنلاین
+                  - generic [ref=e238]: تحویل داده شده
+                  - generic [ref=e239]:
+                    - button "ویرایش سفارش DM-۴۸۱۴" [ref=e240]
+                    - button "پیام درباره سفارش DM-۴۸۱۴" [ref=e244]
+                - generic [ref=e250]:
+                  - link "DM-۴۸۱۳" [ref=e251] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B3
+                  - generic [ref=e252]: ۲۷ مرداد ۱۴۰۵
+                  - generic [ref=e253]: هوشنگ ابتهاج
+                  - generic [ref=e254]: ۲ کالا
+                  - generic [ref=e255]: کارت به کارت
+                  - generic [ref=e256]: کارت به کارت
+                  - generic [ref=e257]: در حال پردازش
+                  - generic [ref=e258]:
+                    - button "ویرایش سفارش DM-۴۸۱۳" [ref=e259]
+                    - button "پیام درباره سفارش DM-۴۸۱۳" [ref=e263]
+                - generic [ref=e269]:
+                  - link "DM-۴۸۱۲" [ref=e270] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B2
+                  - generic [ref=e271]: ۲۶ مرداد ۱۴۰۵
+                  - generic [ref=e272]: مهدی اخوان ثالث
+                  - generic [ref=e273]: ۸ کالا
+                  - generic [ref=e274]: کیف پول
+                  - generic [ref=e275]: کیف پول
+                  - generic [ref=e276]: ارسال شده
+                  - generic [ref=e277]:
+                    - button "ویرایش سفارش DM-۴۸۱۲" [ref=e278]
+                    - button "پیام درباره سفارش DM-۴۸۱۲" [ref=e282]
+                - generic [ref=e288]:
+                  - link "DM-۴۸۱۱" [ref=e289] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B1
+                  - generic [ref=e290]: ۲۵ مرداد ۱۴۰۵
+                  - generic [ref=e291]: احمد شاملو
+                  - generic [ref=e292]: ۳ کالا
+                  - generic [ref=e293]: پرداخت آنلاین
+                  - generic [ref=e294]: پرداخت آنلاین
+                  - generic [ref=e295]: تحویل داده شده
+                  - generic [ref=e296]:
+                    - button "ویرایش سفارش DM-۴۸۱۱" [ref=e297]
+                    - button "پیام درباره سفارش DM-۴۸۱۱" [ref=e301]
+                - generic [ref=e307]:
+                  - link "DM-۴۸۱۰" [ref=e308] [cursor=pointer]:
+                    - /url: /seller/orders/DM-%DB%B4%DB%B8%DB%B1%DB%B0
+                  - generic [ref=e309]: ۲۴ مرداد ۱۴۰۵
+                  - generic [ref=e310]: شهریار تبریزی
+                  - generic [ref=e311]: ۱ کالا
+                  - generic [ref=e312]: پرداخت آنلاین
+                  - generic [ref=e313]: پرداخت آنلاین
+                  - generic [ref=e314]: لغو شده
+                  - generic [ref=e315]:
+                    - button "ویرایش سفارش DM-۴۸۱۰" [ref=e316]
+                    - button "پیام درباره سفارش DM-۴۸۱۰" [ref=e320]
+            - generic [ref=e326]:
+              - generic [ref=e327]: نمایش ۱ تا ۱۰ از ۱۴۸ مورد
+              - navigation "صفحه‌بندی سفارش‌ها" [ref=e328]:
+                - button "قبلی" [ref=e329]
+                - generic [ref=e330]:
+                  - button "۱" [ref=e331]
+                  - button "2" [ref=e332]
+                  - button "3" [ref=e333]
+                  - generic [ref=e334]: …
+                  - button "۱۵" [ref=e335]
+                - button "بعدی" [ref=e336]
+  - button "Open Next.js Dev Tools" [ref=e342] [cursor=pointer]

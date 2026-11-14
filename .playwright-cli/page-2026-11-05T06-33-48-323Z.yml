@@ -1,0 +1,35 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - heading "پیش‌نمایش موقت کامپوننت‌های Figma" [level=1] [ref=e3]
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - heading "Figma Search — پیش‌فرض" [level=2] [ref=e6]
+        - searchbox "جستجو در تگ مال..." [ref=e8]
+      - generic [ref=e10]:
+        - heading "Figma Search — پرشده / پاک‌کردن" [level=2] [ref=e11]
+        - generic [ref=e12]:
+          - button "پاک کردن جستجو" [ref=e13]
+          - searchbox "جستجو در تگ مال..." [ref=e15]: کیف چرمی زنانه
+      - generic [ref=e17]:
+        - heading "Figma Dropdown — پیش‌فرض" [level=2] [ref=e18]
+        - button "استان خود را انتخاب کنید" [ref=e20]
+      - generic [ref=e23]:
+        - heading "Figma Dropdown — انتخاب‌شده / منو" [level=2] [ref=e24]
+        - generic [ref=e25]:
+          - button "همه فروشنده ها" [expanded] [active] [ref=e40]
+          - listbox [ref=e41]:
+            - option "همه فروشنده ها همه فروشنده ها" [selected] [ref=e42]:
+              - generic [ref=e43]: همه فروشنده ها
+              - radio "همه فروشنده ها" [checked] [ref=e44]
+            - option "فروشگاه رسمی فروشگاه رسمی" [ref=e45]:
+              - generic [ref=e46]: فروشگاه رسمی
+              - radio "فروشگاه رسمی" [ref=e47]
+            - option "فروشگاه برگزیده فروشگاه برگزیده" [ref=e48]:
+              - generic [ref=e49]: فروشگاه برگزیده
+              - radio "فروشگاه برگزیده" [ref=e50]
+            - option "فروشندگان بومی فروشندگان بومی" [ref=e51]:
+              - generic [ref=e52]: فروشندگان بومی
+              - radio "فروشندگان بومی" [ref=e53]
+    - paragraph [ref=e29]: برای دیدن منوی Dropdown روی فیلد انتخاب‌شده کلیک کن؛ برای پاک‌کردن Search از دکمهٔ × استفاده کن.
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]
+  - alert [ref=e30]

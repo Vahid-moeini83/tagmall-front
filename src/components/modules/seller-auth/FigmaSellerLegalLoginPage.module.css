@@ -1,0 +1,495 @@
+.page {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  min-height: 720px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f3f4f6;
+  isolation: isolate;
+}
+
+.backgroundPattern {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: url("/assets/figma-seller-auth/pattern-tile.png");
+  background-repeat: repeat;
+  background-size: 13.7312px 13.7312px;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.announcementBar {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  height: 61px;
+  align-items: center;
+  justify-content: center;
+  background: #3d3183;
+}
+
+.announcement {
+  position: absolute;
+  top: 18px;
+  left: calc(50% - 125.5px);
+  display: flex;
+  width: 250px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.card {
+  position: absolute;
+  top: max(61px, calc((100vh - 577.899536px) / 2));
+  left: 50%;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  width: min(460px, calc(100% - 32px));
+  height: 577.899536px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  padding: 25px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px #e5e7eb,
+    0 6px 28px rgba(37, 32, 76, 0.0235294122248888);
+  font-family: YekanBakh, sans-serif;
+  transform: translateX(-50%);
+}
+
+.card[data-seller-type="individual"] {
+  height: 471.899536px;
+  top: max(61px, calc((100vh - 471.899536px) / 2));
+}
+
+.card[data-auth-stage="otp"] {
+  width: min(500px, calc(100% - 32px));
+  height: 484.61383px;
+  top: max(61px, calc((100vh - 484.61383px) / 2 + 0.449768px));
+  gap: 0;
+}
+
+.card[data-auth-stage="register"][data-seller-type="individual"] {
+  width: min(500px, calc(100% - 32px));
+  height: 515.899536px;
+  top: max(61px, calc((100vh - 515.899536px) / 2));
+  gap: 0;
+}
+
+.card[data-auth-stage="register"][data-seller-type="legal"] {
+  width: min(500px, calc(100% - 32px));
+  height: 739.899536px;
+  top: max(61px, calc((100vh - 739.899536px) / 2));
+  gap: 0;
+}
+
+.headingBlock {
+  display: flex;
+  width: 100%;
+  height: 257.899536px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.credentialsForm {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.logoSlot {
+  display: flex;
+  width: 100%;
+  height: 115.8995285px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  display: block;
+  width: 170.18px;
+  height: 65.8995285px;
+  flex: 0 0 auto;
+}
+
+.titleContainer {
+  width: 100%;
+  max-width: 378px;
+  height: 60px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.sellerTypeTabs {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 58px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 16px;
+  background: #eeeff6;
+}
+
+.sellerTypeTab {
+  box-sizing: border-box;
+  display: flex;
+  min-width: 0;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  color: #392e80;
+  background: transparent;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 450;
+  line-height: 26px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sellerTypeTab:focus-visible {
+  outline: 2px solid #392e80;
+  outline-offset: 2px;
+}
+
+.sellerTypeTabSelected {
+  height: 42px;
+  border-radius: 10px;
+  padding: 8px;
+  color: #eeeff6;
+  background: #3d3183;
+}
+
+.sellerTypeTabIdle {
+  height: 26px;
+}
+
+.legalTab.sellerTypeTabSelected,
+.individualTab.sellerTypeTabSelected {
+  flex: 0 1 199px;
+}
+
+.legalTab.sellerTypeTabIdle,
+.individualTab.sellerTypeTabIdle {
+  flex: 0 1 183px;
+}
+
+.legalTabLabel,
+.individualTabLabel {
+  display: block;
+  box-sizing: border-box;
+  height: 26px;
+  flex: 0 0 auto;
+  line-height: 26px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.legalTab.sellerTypeTabSelected .legalTabLabel {
+  width: 128px;
+  max-width: 100%;
+}
+
+.legalTab.sellerTypeTabIdle .legalTabLabel,
+.individualTab.sellerTypeTabIdle .individualTabLabel {
+  width: 100%;
+}
+
+.individualTab.sellerTypeTabSelected .individualTabLabel {
+  width: 125px;
+  max-width: 100%;
+}
+
+.fields {
+  display: flex;
+  width: 100%;
+  height: 196px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fields[data-seller-type="individual"] {
+  height: 90px;
+  gap: 0;
+}
+
+.field {
+  display: flex;
+  width: 100%;
+  height: 90px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fieldLabel {
+  display: block;
+  width: 100%;
+  height: 26px;
+  flex: 0 0 auto;
+  color: #1a1a2e;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 325;
+  line-height: 26px;
+  text-align: right;
+}
+
+.submitArea {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.mobileSubmitButton {
+  display: none;
+}
+
+.legalTermsDesktop {
+  position: absolute;
+  z-index: 1;
+  bottom: 45px;
+  left: calc(50% - 5px);
+  width: min(810px, calc(100% - 32px));
+  height: 26px;
+  transform: translateX(-50%);
+}
+
+.legalTermsDesktopImage {
+  display: block;
+  width: 810px;
+  max-width: 100%;
+  height: 26px;
+}
+
+.legalTermsMobile {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .page {
+    display: block;
+    height: 100dvh;
+    min-height: 720px;
+    background: #ffffff;
+  }
+
+  .credentialsForm {
+    gap: 24px;
+  }
+
+  .backgroundPattern {
+    display: none;
+  }
+
+  .announcement {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .card {
+    position: absolute;
+    top: calc(50% - 284px);
+    left: 50%;
+    width: min(358px, calc(100% - 32px));
+    height: 541.899536px;
+    gap: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: none;
+    transform: translateX(-50%);
+  }
+
+  .card[data-seller-type="individual"] {
+    top: calc(50% - 284px);
+    height: 541.899536px;
+    justify-content: center;
+  }
+
+  .card[data-auth-stage="otp"] {
+    top: calc(50% - 190.806915px);
+    width: min(358px, calc(100% - 32px));
+    height: 381.61383px;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .card[data-auth-stage="register"][data-seller-type="individual"] {
+    top: calc(50% + 30.949768px - 236.949768px);
+    width: min(358px, calc(100% - 32px));
+    height: 473.899536px;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .card[data-auth-stage="register"][data-seller-type="legal"] {
+    top: calc(50% - 354.949768px);
+    width: min(358px, calc(100% - 32px));
+    height: 709.899536px;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .legalTab.sellerTypeTabSelected,
+  .individualTab.sellerTypeTabSelected {
+    flex: 0 1 173px;
+  }
+
+  .legalTab.sellerTypeTabIdle,
+  .individualTab.sellerTypeTabIdle {
+    flex: 0 1 157px;
+  }
+
+  .legalTab.sellerTypeTabSelected .legalTabLabel {
+    width: 114px;
+    max-width: 100%;
+  }
+
+  .individualTab.sellerTypeTabSelected .individualTabLabel {
+    width: 112px;
+    max-width: 100%;
+  }
+
+  .legalTab.sellerTypeTabIdle .legalTabLabel,
+  .individualTab.sellerTypeTabIdle .individualTabLabel {
+    width: 100%;
+  }
+
+  .fields {
+    height: 184px;
+    gap: 12px;
+  }
+
+  .fields[data-seller-type="individual"] {
+    height: 86px;
+    gap: 0;
+  }
+
+  .field {
+    height: 86px;
+  }
+
+  .fieldLabel {
+    height: 22px;
+    line-height: 22px;
+  }
+
+  .field[data-hide-icon-on-mobile="true"] img {
+    display: none;
+  }
+
+  .submitArea > button:not(.mobileSubmitButton) {
+    display: none;
+  }
+
+  .mobileSubmitButton {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    height: 52px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 12px;
+    padding: 12px;
+    color: #ffffff;
+    background: #3d3183;
+    cursor: default;
+    direction: ltr;
+  }
+
+  .mobileSubmitIcon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+  }
+
+  .mobileSubmitLabel {
+    display: block;
+    width: 131px;
+    height: 22px;
+    flex: 0 0 auto;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 325;
+    line-height: 22px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .legalTermsDesktop {
+    display: none;
+  }
+
+  .legalTermsMobile {
+    position: absolute;
+    z-index: 1;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    display: block;
+    height: 44px;
+  }
+
+  .legalTermsMobile[data-auth-stage="register"] {
+    display: none;
+  }
+
+  .legalTermsMobileImage {
+    display: block;
+    width: 100%;
+    height: 44px;
+  }
+}
+
+@layer base {
+  @media (max-width: 480px) {
+    .fields input {
+      font-size: 16px !important;
+    }
+  }
+}

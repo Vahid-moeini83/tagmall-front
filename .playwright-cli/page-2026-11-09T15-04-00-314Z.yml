@@ -1,0 +1,27 @@
+- generic [active] [ref=f2e1]:
+  - main [ref=f2e2]:
+    - generic [ref=f2e4]:
+      - generic [ref=f2e6]: نسخه جدید
+      - generic [aria-hidden] [ref=f2e7]: "|"
+      - generic [ref=f2e8]: تگ مال ریبرند کرد
+    - region "ورود فروشنده" [ref=f2e9]:
+      - generic [ref=f2e10]:
+        - img "تگ مال" [ref=f2e12]
+        - generic [ref=f2e14]:
+          - heading "ورود به حساب کاربری" [level=1] [ref=f2e15]
+          - paragraph [ref=f2e16]: جهت ورود یا ثبت‌نام، شماره موبایل خود را وارد کنید.
+        - tablist "نوع فروشنده" [ref=f2e17]:
+          - tab "فروشنده حقوقی" [selected] [ref=f2e18] [cursor=pointer]
+          - tab "فروشنده حقیقی" [ref=f2e20] [cursor=pointer]
+      - generic [ref=f2e22]:
+        - generic [ref=f2e23]:
+          - generic [ref=f2e24]: شناسه ملی شرکت
+          - textbox "شناسه ملی شرکت" [ref=f2e26]:
+            - /placeholder: شناسه ملی شرکت را وارد کنید
+        - generic [ref=f2e27]:
+          - generic [ref=f2e28]: شماره موبایل
+          - textbox "شماره موبایل" [ref=f2e30]:
+            - /placeholder: شماره موبایل خود را وارد کنید
+      - button "ارسال پیامکی کد تایید" [ref=f2e32]
+    - img "با ورود و یا ثبت نام در تگ مال شما شرایط و قوانین استفاده از سرویس‌های سایت و قوانین حریم خصوصی آن را می‌پذیرید." [ref=f2e36]
+  - button "Open Next.js Dev Tools" [ref=f2e42] [cursor=pointer]

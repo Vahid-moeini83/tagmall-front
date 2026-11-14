@@ -1,0 +1,140 @@
+- generic [active] [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - button "موقعیت‌یابی" [ref=e7] [cursor=pointer]
+      - complementary [ref=e11]:
+        - generic [ref=e12]:
+          - link [ref=e13] [cursor=pointer]:
+            - /url: /
+            - img "تگ‌مال" [ref=e14]
+          - generic [ref=e15]:
+            - button "پروفایل کاربری" [ref=e16] [cursor=pointer]
+            - link "سبد خرید" [ref=e20] [cursor=pointer]:
+              - /url: /cart
+            - button "اعلان‌ها" [ref=e26] [cursor=pointer]
+        - textbox "گروه کالایی، برند، کالا، لوازم جانبی، قطعات" [ref=e35]
+        - generic [ref=e36]:
+          - generic [ref=e37] [cursor=pointer]:
+            - generic [ref=e38]:
+              - generic "مشاهده جزئیات فروشگاه" [ref=e39]:
+                - img "فروشگاه گرین کالا" [ref=e41]
+                - heading "فروشگاه گرین کالا" [level=3] [ref=e43]
+              - generic [ref=e47]:
+                - generic [ref=e48]: باز است
+                - generic [ref=e49]: 4.9/۵
+            - generic [ref=e53]:
+              - button "فروش ویژه این فروشگاه" [ref=e54]
+              - button "سفارشات جاری شما" [ref=e55]
+            - generic [ref=e56]:
+              - generic [ref=e57]: "مانده تا پایان فروش ویژه:"
+              - generic [ref=e58]:
+                - generic [ref=e59]: "00"
+                - generic [ref=e60]: ثانیه
+                - generic [ref=e61]: ":"
+                - generic [ref=e62]: "00"
+                - generic [ref=e63]: دقیقه
+                - generic [ref=e64]: ":"
+                - generic [ref=e65]: "00"
+                - generic [ref=e66]: ساعت
+            - generic [ref=e67]:
+              - generic [ref=e68]:
+                - generic [ref=e69]:
+                  - link [ref=e70]:
+                    - /url: /products/1
+                    - img "مک بوک نئو 13 اینچ A18 Pro (6C-5C) ظرفیت 512/8 گیگابایت" [ref=e72]
+                    - heading "مک بوک نئو 13 اینچ A18 Pro (6C-5C) ظرفیت 512/8 گیگابایت" [level=4] [ref=e73]
+                  - generic [ref=e74]:
+                    - generic [ref=e75]:
+                      - generic [ref=e76]: موجود
+                      - generic [ref=e77]: فقط ۲ عدد باقیمانده
+                    - generic [ref=e79]:
+                      - generic [ref=e80]:
+                        - generic [ref=e81]: ۳.۱۹۹.۰۰۰
+                        - generic [ref=e82]: ۳٬۹۶۶٬۷۶۰
+                      - button "افزودن به سبد خرید" [ref=e83]
+                - generic [ref=e89]:
+                  - link [ref=e90]:
+                    - /url: /products/2
+                    - img "استند شارژ بیسیم چند کاره Maxco مدل MW07" [ref=e92]
+                    - heading "استند شارژ بیسیم چند کاره Maxco مدل MW07" [level=4] [ref=e93]
+                  - generic [ref=e94]:
+                    - generic [ref=e95]:
+                      - generic [ref=e96]: موجود
+                      - generic [ref=e97]: موجود
+                    - generic [ref=e99]:
+                      - generic [ref=e100]: ۱.۸۵۰.۰۰۰
+                      - button "افزودن به سبد خرید" [ref=e102]
+                - generic [ref=e108]:
+                  - link [ref=e109]:
+                    - /url: /products/3
+                    - img "ساعت هوشمند اپل واچ سری 9 مدل 45 میلی‌متری" [ref=e111]
+                    - heading "ساعت هوشمند اپل واچ سری 9 مدل 45 میلی‌متری" [level=4] [ref=e112]
+                  - generic [ref=e113]:
+                    - generic [ref=e114]:
+                      - generic [ref=e115]: موجود
+                      - generic [ref=e116]: فقط ۲ عدد باقیمانده
+                    - generic [ref=e118]:
+                      - generic [ref=e119]:
+                        - generic [ref=e120]: ۲۴.۵۰۰.۰۰۰
+                        - generic [ref=e121]: ۲۷٬۴۴۰٬۰۰۰
+                      - button "افزودن به سبد خرید" [ref=e122]
+              - generic [ref=e128]:
+                - button "قبلی" [ref=e129]
+                - button "بعدی" [ref=e138]
+          - generic [ref=e142] [cursor=pointer]:
+            - generic [ref=e143]:
+              - generic "مشاهده جزئیات فروشگاه" [ref=e144]:
+                - img "فروشگاه اوکالا" [ref=e146]
+                - heading "فروشگاه اوکالا" [level=3] [ref=e148]
+              - generic [ref=e152]:
+                - generic [ref=e153]: باز است
+                - generic [ref=e154]: 4.8/۵
+            - generic [ref=e158]:
+              - button "فروش ویژه این فروشگاه" [ref=e159]
+              - button "سفارشات جاری شما" [ref=e160]
+            - generic [ref=e161]:
+              - generic [ref=e162]: "مانده تا پایان فروش ویژه:"
+              - generic [ref=e163]:
+                - generic [ref=e164]: "00"
+                - generic [ref=e165]: ثانیه
+                - generic [ref=e166]: ":"
+                - generic [ref=e167]: "00"
+                - generic [ref=e168]: دقیقه
+                - generic [ref=e169]: ":"
+                - generic [ref=e170]: "00"
+                - generic [ref=e171]: ساعت
+            - generic [ref=e172]:
+              - generic [ref=e173]:
+                - generic [ref=e174]:
+                  - link [ref=e175]:
+                    - /url: /products/1
+                    - img "گوشی موبایل شیائومی مدل Poco X6 Pro 5G ظرفیت 512" [ref=e177]
+                    - heading "گوشی موبایل شیائومی مدل Poco X6 Pro 5G ظرفیت 512" [level=4] [ref=e178]
+                  - generic [ref=e179]:
+                    - generic [ref=e180]:
+                      - generic [ref=e181]: موجود
+                      - generic [ref=e182]: فقط ۲ عدد باقیمانده
+                    - generic [ref=e184]:
+                      - generic [ref=e185]:
+                        - generic [ref=e186]: ۱۹.۸۰۰.۰۰۰
+                        - generic [ref=e187]: ۲۱٬۳۸۴٬۰۰۰
+                      - button "افزودن به سبد خرید" [ref=e188]
+                - generic [ref=e194]:
+                  - link [ref=e195]:
+                    - /url: /products/2
+                    - img "دوربین عکاسی بدون آینه سونی مدل Alpha 7 IV" [ref=e197]
+                    - heading "دوربین عکاسی بدون آینه سونی مدل Alpha 7 IV" [level=4] [ref=e198]
+                  - generic [ref=e199]:
+                    - generic [ref=e200]:
+                      - generic [ref=e201]: موجود
+                      - generic [ref=e202]: فقط ۲ عدد باقیمانده
+                    - generic [ref=e204]:
+                      - generic [ref=e205]:
+                        - generic [ref=e206]: ۱۱۲.۰۰۰.۰۰۰
+                        - generic [ref=e207]: ۱۲۸٬۸۰۰٬۰۰۰
+                      - button "افزودن به سبد خرید" [ref=e208]
+              - generic [ref=e214]:
+                - button "قبلی" [ref=e215]
+                - button "بعدی" [ref=e224]
+  - button "Open Next.js Dev Tools" [ref=e233] [cursor=pointer]
+  - alert [ref=e237]

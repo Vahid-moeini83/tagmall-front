@@ -3,11 +3,12 @@
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { isValidIranianNationalCode } from "@/lib/client/validations";
+import { toEnglishNumber } from "@/lib/client/utils";
+import { getAuthErrorMessage, persistAuthSession } from "@/lib/client/auth";
 import { registerUser } from "@/lib/server/actions/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { saveToken, saveUser } from "@/lib/server/cookies";
 import usePublicStore from "@/app/store/publicStore";
 import Image from "next/image";
 import ResponsiveModal from "@/components/ui/responsive-modal";
@@ -27,12 +28,13 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
     mobile: "",
     otp: "",
   });
+  const requestInFlight = useRef(false);
   const setUserInfo = usePublicStore((state) => state.setUserInfo);
   const setAccessToken = usePublicStore((state) => state.setAccessToken);
 
   const isFormValid =
-    firstName.trim() &&
-    lastName.trim() &&
+    Boolean(firstName.trim()) &&
+    Boolean(lastName.trim()) &&
     isValidIranianNationalCode(nationalCode) &&
     acceptedTerms;
 
@@ -46,7 +48,10 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
     setIsTermsOpen(false);
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (event) => {
+    event?.preventDefault();
+    if (requestInFlight.current) return;
+
     const newErrors = {
       firstName: "",
       lastName: "",
@@ -57,12 +62,15 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
 
     let hasError = false;
 
-    if (!firstName) {
+    const normalizedFirstName = firstName.trim();
+    const normalizedLastName = lastName.trim();
+
+    if (!normalizedFirstName) {
       newErrors.firstName = "لطفا نام را وارد نمایید";
       hasError = true;
     }
 
-    if (!lastName) {
+    if (!normalizedLastName) {
       newErrors.lastName = "لطفا نام خانوادگی را وارد نمایید";
       hasError = true;
     }
@@ -80,28 +88,31 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
     const payload = {
       mobile: phoneNumber,
       otp: enteredOtp,
-      name: firstName,
-      family: lastName,
-      national_code: nationalCode,
+      name: normalizedFirstName,
+      family: normalizedLastName,
+      national_code: toEnglishNumber(nationalCode).replace(/[^0-9]/g, ""),
     };
 
+    requestInFlight.current = true;
     setIsConfirming(true);
 
-    const { registerRes, registerErr } = await registerUser(payload);
+    try {
+      const { registerRes, registerErr } = await registerUser(payload);
 
-    if (registerRes) {
-      console.log(registerRes);
-      toast.success("ورود با موفقیت انجام شد");
-      setAccessToken(registerRes?.data?.token);
-      setUserInfo(registerRes?.data?.user);
-      await saveToken(registerRes?.data?.token);
-      await saveUser(JSON.stringify(registerRes?.data?.user));
-      if (onSuccess) onSuccess();
-      router.push("/");
-    } else if (registerErr) {
+      if (registerRes?.data) {
+        await persistAuthSession({
+          authData: registerRes.data,
+          setAccessToken,
+          setUserInfo,
+        });
+        toast.success("ورود با موفقیت انجام شد");
+        onSuccess?.();
+        router.push("/");
+        return;
+      }
+
       const apiErrors = registerErr?.response?.data?.errors;
-
-      if (apiErrors) {
+      if (apiErrors && Object.keys(apiErrors).length > 0) {
         const fieldMap = {
           name: "firstName",
           family: "lastName",
@@ -110,46 +121,42 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
           otp: "otp",
         };
         const mappedErrors = { ...newErrors };
+        let firstApiMessage;
 
-        Object.keys(apiErrors).forEach((key) => {
+        Object.entries(apiErrors).forEach(([key, value]) => {
           const stateKey = fieldMap[key];
-          if (stateKey) {
-            mappedErrors[stateKey] = apiErrors[key][0];
+          const message = Array.isArray(value) ? value[0] : value;
+          if (typeof message === "string" && !firstApiMessage) firstApiMessage = message;
+          if (stateKey && typeof message === "string") {
+            mappedErrors[stateKey] = message;
           }
         });
 
         setErrors(mappedErrors);
-
-        if (apiErrors.mobile) {
-          toast.error(apiErrors.mobile[0]);
-        }
-
-        if (apiErrors.otp) {
-          toast.error(apiErrors.otp[0]);
-        }
+        if (firstApiMessage) toast.error(firstApiMessage);
       } else {
-        toast.error("خطا در برقراری ارتباط");
+        toast.error(getAuthErrorMessage(registerErr, "ثبت‌نام انجام نشد. دوباره تلاش کنید."));
       }
+    } catch (requestError) {
+      toast.error(getAuthErrorMessage(requestError, "ثبت‌نام انجام نشد. دوباره تلاش کنید."));
+    } finally {
+      requestInFlight.current = false;
+      setIsConfirming(false);
     }
-
-    setIsConfirming(false);
   };
 
   return (
-    <div className="h-full flex flex-col justify-between overflow-y-auto scroll-hidden mt-6 lg:mt-0">
+    <form
+      className="h-full flex flex-col justify-between overflow-y-auto scroll-hidden mt-6 lg:mt-0"
+      onSubmit={handleConfirm}
+    >
       <div>
         {/* Slogan logo */}
         <div className="relative w-[150px] h-[50px] lg:w-[330px] lg:h-[100px] mx-auto flex items-center justify-center">
-          <Image
-            src="/assets/images/logo/slogan-logo.svg"
-            fill
-            alt="لوگوی شعار"
-          />
+          <Image src="/assets/images/logo/slogan-logo.svg" fill alt="لوگوی شعار" />
         </div>
         {/* Title */}
-        <h1 className="font-bold text-primary text-base mt-9 lg:mt-12">
-          ایجاد حساب کاربری:
-        </h1>
+        <h1 className="font-bold text-primary text-base mt-9 lg:mt-12">ایجاد حساب کاربری:</h1>
         {/* Main content */}
         <div className="bg-gray-200 rounded-lg overflow-hidden mt-4">
           <div>
@@ -164,9 +171,7 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
             />
             {errors.firstName && (
               <div className="px-4 py-2 border-b-2 border-white">
-                <p className="text-xs text-center text-error-medium">
-                  {errors.firstName}
-                </p>
+                <p className="text-xs text-center text-error-medium">{errors.firstName}</p>
               </div>
             )}
           </div>
@@ -182,9 +187,7 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
             />
             {errors.lastName && (
               <div className="px-4 py-2 border-b-2 border-white">
-                <p className="text-xs text-center text-error-medium">
-                  {errors.lastName}
-                </p>
+                <p className="text-xs text-center text-error-medium">{errors.lastName}</p>
               </div>
             )}
           </div>
@@ -201,9 +204,7 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
             />
             {errors.nationalCode && (
               <div className="px-4 py-2">
-                <p className="text-xs text-center text-error-medium">
-                  {errors.nationalCode}
-                </p>
+                <p className="text-xs text-center text-error-medium">{errors.nationalCode}</p>
               </div>
             )}
           </div>
@@ -234,8 +235,8 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
         </div>
       </div>
       <button
+        type="submit"
         disabled={isConfirming || !isFormValid}
-        onClick={handleConfirm}
         className={`font-bold font-iransans w-full mt-6 mb-2 border-2 py-2 rounded-full ${
           isConfirming || !isFormValid
             ? "text-gray-400 border-gray-400 cursor-not-allowed"
@@ -254,22 +255,19 @@ function LoginUserRegisteration({ phoneNumber, enteredOtp, onSuccess }) {
       >
         <div className="text-sm text-gray-600 leading-8 text-justify space-y-3">
           <p>
-            استفاده از خدمات تگ مال به معنای پذیرش شرایط و قوانین زیر است. این
-            متن فعلاً برای تست نمایش داده می‌شود و نسخه نهایی قوانین به‌زودی
-            جایگزین آن خواهد شد.
+            استفاده از خدمات تگ مال به معنای پذیرش شرایط و قوانین زیر است. این متن فعلاً برای تست
+            نمایش داده می‌شود و نسخه نهایی قوانین به‌زودی جایگزین آن خواهد شد.
           </p>
           <p>
-            کاربران موظف‌اند اطلاعات صحیح وارد کنند و از هرگونه سوءاستفاده از
-            سرویس خودداری نمایند. تگ مال حق به‌روزرسانی این شرایط را برای خود
-            محفوظ می‌دارد.
+            کاربران موظف‌اند اطلاعات صحیح وارد کنند و از هرگونه سوءاستفاده از سرویس خودداری نمایند.
+            تگ مال حق به‌روزرسانی این شرایط را برای خود محفوظ می‌دارد.
           </p>
           <p>
-            در صورت نیاز به پشتیبانی، می‌توانید از بخش پشتیبانی داخل اپلیکیشن با
-            ما در ارتباط باشید.
+            در صورت نیاز به پشتیبانی، می‌توانید از بخش پشتیبانی داخل اپلیکیشن با ما در ارتباط باشید.
           </p>
         </div>
       </ResponsiveModal>
-    </div>
+    </form>
   );
 }
 

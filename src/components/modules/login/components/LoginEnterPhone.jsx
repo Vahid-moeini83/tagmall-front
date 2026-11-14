@@ -3,9 +3,12 @@
 import { Input } from "@/components/ui/input";
 import { HintIcon } from "@/icons";
 import { isValidIranianMobile } from "@/lib/client/validations";
+import { toEnglishNumber } from "@/lib/client/utils";
+import { getAuthErrorMessage, getOtpExpirySeconds, parseAuthBoolean } from "@/lib/client/auth";
 import { sendOtp } from "@/lib/server/actions/auth";
 import Image from "next/image";
-import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRef, useState } from "react";
 
 function LoginEnterPhone({
   handleNextStep,
@@ -13,53 +16,61 @@ function LoginEnterPhone({
   setPhoneNumber,
   setOtpExpireTime,
   setIsNewUser,
-  setReceivedOtp,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ phone: "" });
+  const requestInFlight = useRef(false);
 
-  const handleConfirm = async () => {
-    if (!phoneNumber) {
-      setErrors({ ...errors, phone: "ابتدا شماره موبایل خود را وارد نمایید" });
+  const handleConfirm = async (event) => {
+    event?.preventDefault();
+    if (requestInFlight.current) return;
+
+    const normalizedPhone = toEnglishNumber(String(phoneNumber ?? "")).replace(/[^0-9]/g, "");
+    if (!normalizedPhone) {
+      setErrors({ phone: "ابتدا شماره موبایل خود را وارد نمایید" });
       return;
     }
 
-    if (!isValidIranianMobile(phoneNumber)) {
-      setErrors({ ...errors, phone: "شماره موبایل معتبر نمی‌باشد" });
+    if (!isValidIranianMobile(normalizedPhone)) {
+      setErrors({ phone: "شماره موبایل معتبر نمی‌باشد" });
       return;
     }
 
-    setErrors({ ...errors, phone: "" });
+    requestInFlight.current = true;
+    setErrors({ phone: "" });
+    setPhoneNumber(normalizedPhone);
     setIsLoading(true);
-    const { sendOtpRes, sendOtpErr } = await sendOtp({ mobile: phoneNumber });
-    if (sendOtpRes) {
-      console.log(sendOtpRes);
-      setReceivedOtp(sendOtpRes.data.otp);
-      setIsNewUser(sendOtpRes.data.is_new_user);
-      setOtpExpireTime(sendOtpRes.data.expires_in_seconds);
+    try {
+      const { sendOtpRes, sendOtpErr } = await sendOtp({ mobile: normalizedPhone });
+      const responseData = sendOtpRes?.data;
+      const isNewUser = parseAuthBoolean(responseData?.is_new_user);
+
+      if (!responseData || isNewUser === null) {
+        toast.error(getAuthErrorMessage(sendOtpErr, "پاسخ ارسال کد تأیید از سرور معتبر نیست."));
+        return;
+      }
+
+      setIsNewUser(isNewUser);
+      setOtpExpireTime(getOtpExpirySeconds(responseData.expires_in_seconds));
       handleNextStep();
-    } else if (sendOtpErr) {
-      console.log(sendOtpErr);
+    } catch (error) {
+      toast.error(getAuthErrorMessage(error, "ارسال کد تأیید انجام نشد."));
+    } finally {
+      requestInFlight.current = false;
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
-    <div className="flex flex-col h-full justify-between mt-6 lg:mt-0">
+    <form className="flex flex-col h-full justify-between mt-6 lg:mt-0" onSubmit={handleConfirm}>
       <div>
         {/* Slogan logo */}
         <div className="relative w-[150px] h-[50px] lg:w-[330px] lg:h-[100px] mx-auto flex items-center justify-center">
-          <Image
-            src="/assets/images/logo/slogan-logo.svg"
-            fill
-            alt="لوگوی شعار"
-          />
+          <Image src="/assets/images/logo/slogan-logo.svg" fill alt="لوگوی شعار" loading="eager" />
         </div>
         {/* Title */}
         <div className="mt-9 lg:mt-12">
-          <h1 className="font-bold text-primary text-base">
-            ورود به حساب کاربری
-          </h1>
+          <h1 className="font-bold text-primary text-base">ورود به حساب کاربری</h1>
         </div>
         {/* Main content */}
         <div className="mt-4">
@@ -69,12 +80,13 @@ function LoginEnterPhone({
             numeric
             maxLength={11}
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) => {
+              setPhoneNumber(e.target.value);
+              if (errors.phone) setErrors({ phone: "" });
+            }}
             disabled={isLoading}
             error={errors.phone}
-            className={`text-center text-gray-600 bg-gray-200 ${
-              errors.phone ? "" : "border-0!"
-            }`}
+            className={`text-center text-gray-600 bg-gray-200 ${errors.phone ? "" : "border-0!"}`}
           />
           <div className="flex items-center gap-5 mt-4 mr-4">
             <HintIcon size={20} />
@@ -86,8 +98,7 @@ function LoginEnterPhone({
       </div>
       {/* Submit button */}
       <button
-        type="button"
-        onClick={handleConfirm}
+        type="submit"
         disabled={!phoneNumber || isLoading}
         className={`mt-7 mb-2 w-full font-bold border-2 py-2 rounded-full ${
           !phoneNumber || isLoading
@@ -97,7 +108,7 @@ function LoginEnterPhone({
       >
         ارسال پیامکی کد تایید
       </button>
-    </div>
+    </form>
   );
 }
 

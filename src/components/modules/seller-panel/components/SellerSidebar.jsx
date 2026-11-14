@@ -14,6 +14,7 @@ import {
   TicketSimplePercentIcon,
   SellerLogoutIcon,
   CloseIcon,
+  MenuBarsIcon,
   EditIcon,
 } from "@/icons";
 import { useSellerNavigation } from "../context/SellerNavigationContext";
@@ -101,6 +102,7 @@ const PROFILE_SECTIONS = [
 function SellerSidebar() {
   const profileSection = useSellerProfileSection();
   const pathname = usePathname();
+  const isDashboard = pathname === "/seller";
   const isMessageCenter = pathname?.startsWith("/seller/messages");
   const isSellerProfile = pathname?.startsWith("/seller/profile");
   const isCampaignCenter = pathname?.startsWith("/seller/discounts");
@@ -109,7 +111,7 @@ function SellerSidebar() {
     pathname?.startsWith("/seller/branches") ||
     isCampaignCenter;
   const messageCategory = pathname?.split("/")[3] || "experts";
-  const { mobileSidebarOpen, closeMobileSidebar } = useSellerNavigation();
+  const { mobileSidebarOpen, closeMobileSidebar, toggleMobileSidebar } = useSellerNavigation();
 
   const navigateProfileSection = (event, section) => {
     event.preventDefault();
@@ -121,7 +123,7 @@ function SellerSidebar() {
     <>
       {/* Mobile app bar */}
       <div className="lg:hidden sticky top-0 z-30 bg-surface">
-        <header className="flex items-center justify-between px-6 py-4 bg-surface border-b border-border-subtle h-[76px]">
+        <header className={`flex items-center justify-between px-6 py-4 bg-surface ${pathname === "/seller" ? "h-[72.36px] border-b-0" : "h-[76px] border-b border-border-subtle"}`}>
           {/* Right side in RTL: Slogan Logo */}
           <Link href="/seller" className="inline-block shrink-0">
             <Image
@@ -133,8 +135,19 @@ function SellerSidebar() {
             />
           </Link>
 
-          {/* Left side in RTL: Messages button & Seller Avatar */}
+          {/* Left side in RTL: Dashboard menu or seller shortcuts */}
           <div className="flex items-center gap-2">
+            {pathname === "/seller" ? (
+              <button
+                type="button"
+                onClick={toggleMobileSidebar}
+                className="flex h-6 w-6 items-center justify-center text-text-primary"
+                aria-label="باز کردن منو"
+              >
+                <MenuBarsIcon size={24} />
+              </button>
+            ) : (
+              <>
             {/* Messages icon button with unread count badge "۳" */}
             <Link
               href="/seller/messages"
@@ -161,6 +174,8 @@ function SellerSidebar() {
                 className="object-cover"
               />
             </Link>
+              </>
+            )}
           </div>
         </header>
       </div>
@@ -176,7 +191,7 @@ function SellerSidebar() {
       {/* Sidebar container */}
       <aside
         className={`
-          fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-surface border-l border-border-subtle
+          fixed top-0 right-0 bottom-0 z-50 w-[300px] bg-surface ${isDashboard ? "" : "border-l border-border-subtle"}
           flex flex-col p-8 transition-transform duration-300 ease-in-out
           lg:static lg:translate-x-0 lg:z-10 lg:shrink-0 lg:min-h-screen lg:self-stretch
           ${isMessageCenter ? "font-extralight lg:h-dvh lg:min-h-0 lg:border-l-0 lg:ring-1 lg:ring-inset lg:ring-border-default" : ""}
@@ -212,10 +227,10 @@ function SellerSidebar() {
 
         {/* User Profile Block */}
         <div
-          className={`flex items-center gap-3 mt-10 ${isMessageCenter || hasProfileNavigationStyle ? "mb-10" : "mb-8"}`}
+          className={`flex items-center ${isDashboard ? "gap-2" : "gap-3"} mt-10 ${isMessageCenter || hasProfileNavigationStyle || isDashboard ? "mb-10" : "mb-8"}`}
         >
           <div
-            className={`relative w-12 h-12 overflow-hidden shrink-0 border border-border-subtle ${isMessageCenter || hasProfileNavigationStyle ? "rounded-md" : "rounded-full"}`}
+            className={`relative w-12 h-12 overflow-hidden shrink-0 ${isDashboard ? "rounded-[8px]" : `border border-border-subtle ${isMessageCenter || hasProfileNavigationStyle ? "rounded-md" : "rounded-full"}`}`}
           >
             <Image
               src="/assets/images/seller/avatar.png"
@@ -227,7 +242,7 @@ function SellerSidebar() {
           </div>
           <div className="truncate">
             <p
-              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : hasProfileNavigationStyle ? "font-normal" : "font-semibold"}`}
+              className={`text-body text-text-primary truncate ${isMessageCenter ? "font-extralight" : hasProfileNavigationStyle ? "font-normal" : isDashboard ? "[font-weight:325]" : "font-semibold"}`}
             >
               آرمان میمندی نژاد
             </p>
@@ -270,7 +285,7 @@ function SellerSidebar() {
                   relative h-[50px] px-4 rounded-md flex items-center justify-between transition-colors ${isMessageCenter ? "shrink-0" : ""}
                   ${
                     isActive
-                      ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : hasProfileNavigationStyle ? "font-normal" : "font-medium"}`
+                    ? `bg-primary-50 text-primary ${isMessageCenter ? "font-extralight" : hasProfileNavigationStyle || isDashboard ? "font-normal" : "font-medium"}`
                       : "text-text-primary hover:bg-surface-subtle"
                   }
                 `}
@@ -282,13 +297,15 @@ function SellerSidebar() {
                       ${isActive ? "text-primary" : "text-text-secondary"}
                     `}
                   >
-                    <Icon size={item.iconSize} />
+                    <Icon size={isDashboard ? 20 : item.iconSize} />
                   </span>
                   <span
                     className={
-                      isMessageCenter || hasProfileNavigationStyle
-                        ? "text-body"
-                        : "text-[15px]"
+                      isDashboard
+                        ? "text-body leading-[26px] [font-weight:325]"
+                        : isMessageCenter || hasProfileNavigationStyle
+                          ? "text-body"
+                          : "text-[15px]"
                     }
                   >
                     {item.id === "discounts" &&
@@ -301,7 +318,7 @@ function SellerSidebar() {
 
                 {item.badge && (
                   <span
-                    className={`w-[18px] h-[18px] rounded-full bg-error text-white text-[11px] flex items-center justify-center font-medium ${isMessageCenter || hasProfileNavigationStyle ? "absolute right-2 top-1.5" : ""}`}
+                    className={`w-[18px] h-[18px] ${isDashboard ? "rounded-[8px] bg-[#ef4444] text-[12px] leading-[18px] [font-weight:325]" : "rounded-full bg-error text-[11px] font-medium"} text-white flex items-center justify-center ${isDashboard || isMessageCenter || hasProfileNavigationStyle ? "absolute right-2 top-1.5" : ""}`}
                   >
                     {item.badge}
                   </span>

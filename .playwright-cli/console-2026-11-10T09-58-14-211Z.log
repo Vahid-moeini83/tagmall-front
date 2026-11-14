@@ -1,0 +1,33 @@
+[   16712ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   16895ms] [LOG] [HMR] connected @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   17040ms] [ERROR] `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:52
+[   17041ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   17047ms] [ERROR] `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:52
+[   17048ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   17528ms] [ERROR] React does not recognize the `%s` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `%s` instead. If you accidentally passed it from a parent component, remove it from the DOM element. showCloseButton showclosebutton @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:52
+[   17548ms] [ERROR] `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:52
+[   17550ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   17559ms] [ERROR] `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:52
+[   17560ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[   17657ms] [WARNING] Image with src "/assets/images/logo/slogan-logo.svg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[  185713ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[  186504ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[  186540ms] [LOG] [Fast Refresh] done in 37ms @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28
+[  187678ms] [LOG] [Fast Refresh] done in 1174ms @ webpack-internal:///(app-pages-browser)/../tagmall-front/node_modules/next/dist/next-devtools/shared/forward-logs-shared.js:28

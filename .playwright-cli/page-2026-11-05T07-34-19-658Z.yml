@@ -1,0 +1,89 @@
+- generic [active] [ref=f8e1]:
+  - main [ref=f8e2]:
+    - heading "پیش‌نمایش موقت stateهای کامپوننت‌های Figma" [level=1] [ref=f8e3]
+    - generic [ref=f8e4]:
+      - generic [ref=f8e5]:
+        - heading "Figma Input/Text" [level=2] [ref=f8e6]
+        - generic [ref=f8e7]:
+          - generic [ref=f8e8]:
+            - heading "پیش‌فرض" [level=3] [ref=f8e9]
+            - textbox "نام و نام خانوادگی" [ref=f8e12]
+          - generic [ref=f8e13]:
+            - heading "پرشده" [level=3] [ref=f8e14]
+            - textbox "نام و نام خانوادگی" [ref=f8e17]: آرش اسفندیاری
+          - generic [ref=f8e18]:
+            - heading "فوکوس" [level=3] [ref=f8e19]
+            - textbox "نام و نام خانوادگی" [ref=f8e23]
+          - generic [ref=f8e24]:
+            - heading "غیرفعال" [level=3] [ref=f8e25]
+            - textbox "نام و نام خانوادگی" [disabled] [ref=f8e28]
+          - generic [ref=f8e29]:
+            - heading "خطا" [level=3] [ref=f8e30]
+            - generic [ref=f8e31]:
+              - textbox "نام و نام خانوادگی" [ref=f8e33]: آرش
+              - paragraph [ref=f8e36]: لطفاً نام خود را وارد کنید
+      - generic [ref=f8e37]:
+        - heading "Figma Input/Phone" [level=2] [ref=f8e38]
+        - generic [ref=f8e39]:
+          - generic [ref=f8e40]:
+            - heading "پیش‌فرض" [level=3] [ref=f8e41]
+            - textbox "شماره موبایل" [ref=f8e44]
+          - generic [ref=f8e47]:
+            - heading "پرشده" [level=3] [ref=f8e48]
+            - textbox "شماره موبایل" [ref=f8e51]: ۰۹۱۲ ۳۴۵ ۶۷۸۹
+          - generic [ref=f8e54]:
+            - heading "فوکوس" [level=3] [ref=f8e55]
+            - textbox "شماره موبایل" [ref=f8e58]: ۰۹۱۲
+          - generic [ref=f8e61]:
+            - heading "غیرفعال" [level=3] [ref=f8e62]
+            - textbox "شماره موبایل" [disabled] [ref=f8e65]
+          - generic [ref=f8e68]:
+            - heading "خطا" [level=3] [ref=f8e69]
+            - generic [ref=f8e70]:
+              - textbox "شماره موبایل" [ref=f8e72]: ۰۹۱۲
+              - paragraph [ref=f8e74]: شماره وارد شده معتبر نیست
+      - generic [ref=f8e75]:
+        - heading "Figma Input/Password" [level=2] [ref=f8e76]
+        - generic [ref=f8e77]:
+          - generic [ref=f8e78]:
+            - heading "پیش‌فرض" [level=3] [ref=f8e79]
+            - generic [ref=f8e81]:
+              - button "نمایش رمز عبور" [ref=f8e82]
+              - textbox "رمز عبور خود را وارد کنید" [ref=f8e84]
+          - generic [ref=f8e88]:
+            - heading "پرشده / نمایان" [level=3] [ref=f8e89]
+            - generic [ref=f8e91]:
+              - button "مخفی کردن رمز عبور" [ref=f8e92]
+              - textbox "رمز عبور خود را وارد کنید" [ref=f8e94]: TagMall@2024
+          - generic [ref=f8e98]:
+            - heading "خطا" [level=3] [ref=f8e99]
+            - generic [ref=f8e100]:
+              - generic [ref=f8e101]:
+                - button "نمایش رمز عبور" [ref=f8e102]
+                - textbox "رمز عبور خود را وارد کنید" [ref=f8e104]: "123456"
+              - paragraph [ref=f8e107]: رمز عبور باید حداقل ۸ کاراکتر باشد
+      - generic [ref=f8e108]:
+        - heading "Figma Input/Search" [level=2] [ref=f8e109]
+        - generic [ref=f8e110]:
+          - generic [ref=f8e111]:
+            - heading "پیش‌فرض" [level=3] [ref=f8e112]
+            - searchbox "جستجو در تگ مال..." [ref=f8e114]
+          - generic [ref=f8e116]:
+            - heading "پرشده / پاک‌کردن" [level=3] [ref=f8e117]
+            - generic [ref=f8e118]:
+              - button "پاک کردن جستجو" [ref=f8e119]
+              - searchbox "جستجو در تگ مال..." [ref=f8e121]: کیف چرمی زنانه
+      - generic [ref=f8e123]:
+        - heading "Figma Input/Dropdown" [level=2] [ref=f8e124]
+        - generic [ref=f8e125]:
+          - generic [ref=f8e126]:
+            - heading "پیش‌فرض" [level=3] [ref=f8e127]
+            - button "استان خود را انتخاب کنید" [ref=f8e129]
+          - generic [ref=f8e132]:
+            - 'heading "انتخاب‌شده: تهران" [level=3] [ref=f8e133]'
+            - button "تهران" [ref=f8e135]
+          - generic [ref=f8e138]:
+            - 'heading "نمونهٔ منو: برای بازکردن کلیک کن" [level=3] [ref=f8e139]'
+            - button "همه فروشنده ها" [ref=f8e141]
+    - paragraph [ref=f8e144]: برای آزمودن Search تایپ کن و دکمهٔ × را بزن؛ منوی Dropdown در نمونهٔ آخر با کلیک باز می‌شود.
+  - button "Open Next.js Dev Tools" [ref=f8e150] [cursor=pointer]

@@ -1,0 +1,30 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e6]: نسخه جدید
+      - generic [aria-hidden] [ref=e7]: "|"
+      - generic [ref=e8]: تگ مال ریبرند کرد
+    - region "ورود فروشنده" [ref=e9]:
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - img "تگ مال" [ref=e77]
+          - generic [ref=e78]:
+            - heading "ثبت نام فروشنده حقوقی" [level=1] [ref=e79]
+            - paragraph [ref=e80]: اطلاعات شرکت و مدیر عامل را برای ساخت حساب وارد کنید.
+        - generic [ref=e81]:
+          - heading "اطلاعات هویتی شرکت" [level=2] [ref=e82]
+          - generic [ref=e83]:
+            - textbox "نام شرکت" [ref=e85]: شرکت-آزمایشی
+            - textbox "شناسه ملی شرکت" [ref=e88]: "12345678901"
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - heading "اطلاعات هویتی مدیر عامل" [level=2] [ref=e92]
+            - generic [ref=e93]:
+              - textbox "نام و نام خانوادگی مدیر عامل" [ref=e95]: مدیر-آزمایشی
+              - textbox "کد ملی مدیر عامل" [ref=e98]: "1111111111"
+              - textbox "شماره موبایل" [ref=e101]: "09123456791"
+          - button "ادامه ثبت‌نام" [active] [ref=e103] [cursor=pointer]
+    - img "با ورود و یا ثبت نام در تگ مال شما شرایط و قوانین استفاده از سرویس‌های سایت و قوانین حریم خصوصی آن را می‌پذیرید." [ref=e40]
+  - status [ref=e111]: نام و نام خانوادگی مدیر عامل را وارد کنید.
+  - button "Open Next.js Dev Tools" [ref=e46] [cursor=pointer]
+  - alert [ref=e50]

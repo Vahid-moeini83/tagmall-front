@@ -38,6 +38,7 @@ function DialogContent({
   className,
   children,
   onBack,
+  showCloseButton = true,
   overlayClassName,
   ...props
 }) {
@@ -51,11 +52,12 @@ function DialogContent({
           className,
         )}
         {...props}
+        aria-describedby={undefined}
       >
         {children}
 
         {/* دکمه‌های بیرونی */}
-        {onBack ? (
+        {showCloseButton && onBack ? (
           <div className="absolute left-0 -top-14 bg-white w-[100px] h-[50px] rounded-lg border border-gray-200 flex items-center justify-between overflow-hidden">
             {/* Back Button */}
             <button
@@ -78,7 +80,7 @@ function DialogContent({
               </button>
             </DialogPrimitive.Close>
           </div>
-        ) : (
+        ) : showCloseButton ? (
           <DialogPrimitive.Close data-slot="dialog-close" asChild>
             <button
               className="absolute left-0 -top-14 bg-white w-[50px] h-[50px] rounded-lg border border-gray-200 flex items-center justify-center transition-colors cursor-pointer outline-none focus:outline-none"
@@ -88,7 +90,7 @@ function DialogContent({
               <span className="sr-only">بستن</span>
             </button>
           </DialogPrimitive.Close>
-        )}
+        ) : null}
       </DialogPrimitive.Content>
     </DialogPortal>
   );
@@ -98,28 +100,17 @@ function DialogHeader({ className, ...props }) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn(
-        "flex flex-col space-y-1.5 text-center sm:text-left pb-4",
-        className,
-      )}
+      className={cn("flex flex-col space-y-1.5 text-center sm:text-left pb-4", className)}
       {...props}
     />
   );
 }
 
-function DialogFooter({
-  className,
-  showCloseButton = false,
-  children,
-  ...props
-}) {
+function DialogFooter({ className, showCloseButton = false, children, ...props }) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-        className,
-      )}
+      className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}
       {...props}
     >
       {children}
@@ -138,10 +129,7 @@ function DialogTitle({ className, ...props }) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn(
-        "text-lg font-bold leading-none tracking-tight text-center",
-        className,
-      )}
+      className={cn("text-lg font-bold leading-none tracking-tight text-center", className)}
       {...props}
     />
   );

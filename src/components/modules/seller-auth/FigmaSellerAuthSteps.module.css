@@ -1,0 +1,479 @@
+.otpStep,
+.registrationStep {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  font-family: YekanBakh, sans-serif;
+}
+
+.otpStep {
+  height: 434.61383px;
+  gap: 24px;
+}
+
+.backRow {
+  display: flex;
+  width: 100%;
+  height: 25px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.backButton {
+  display: flex;
+  width: 25px;
+  height: 25px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.backButton:focus-visible,
+.otpBox:focus-visible,
+.registrationField:focus-within,
+.timerButton:focus-visible,
+.resendButton:focus-visible,
+.registrationSubmit:focus-visible {
+  outline: 2px solid #3d3183;
+  outline-offset: 2px;
+}
+
+.backButton:disabled {
+  cursor: default;
+}
+
+.backIcon {
+  display: block;
+  width: 25px;
+  height: 25px;
+  transform: rotate(180deg);
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  height: 191.899536px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.logoSlot {
+  display: flex;
+  width: 100%;
+  height: 115.8995285px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  display: block;
+  width: 170.18px;
+  height: 65.8995285px;
+  flex: 0 0 auto;
+}
+
+.headerCopy {
+  display: flex;
+  width: 100%;
+  height: 64px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.title,
+.description {
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0;
+  font-family: inherit;
+  letter-spacing: 0;
+  text-align: right;
+}
+
+.title {
+  width: 100%;
+  height: 30px;
+  flex: 0 0 auto;
+  color: #392e80;
+  font-size: 22px;
+  font-weight: 450;
+  line-height: 30px;
+}
+
+.description {
+  width: 100%;
+  height: 22px;
+  flex: 0 0 auto;
+  color: #4a4a68;
+  font-size: 14px;
+  font-weight: 325;
+  line-height: 22px;
+}
+
+.header[data-variant="registration-legal"] .description {
+  color: #707070;
+}
+
+.otpForm {
+  display: flex;
+  width: 100%;
+  height: 95.714279px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.otpFields {
+  display: flex;
+  width: 100%;
+  height: 61.714279px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  direction: ltr;
+}
+
+.otpBox {
+  box-sizing: border-box;
+  display: block;
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  border: 0.833333px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 0;
+  color: #1a1a2e;
+  background: transparent;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: center;
+  outline: none;
+}
+
+.otpBoxActive {
+  border: 1px solid #3d3183;
+}
+
+.otpBoxFourth {
+  height: 61.714279px;
+  flex-basis: 60px;
+  border-width: 0.857143px;
+}
+
+.otpBoxError {
+  border-color: #ef4444;
+}
+
+.otpHelperRow {
+  display: flex;
+  width: 100%;
+  height: 22px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  direction: ltr;
+}
+
+.otpHelper,
+.otpHelperError {
+  box-sizing: border-box;
+  width: calc(100% - 28px);
+  max-width: 422px;
+  height: 22px;
+  margin: 0;
+  color: #707070;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 325;
+  line-height: 22px;
+  text-align: right;
+}
+
+.otpHelperError {
+  color: #ef4444;
+}
+
+.messageIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+.timerButton,
+.resendButton {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 50px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  padding: 11px 0;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 450;
+  line-height: 26px;
+  letter-spacing: 0;
+}
+
+.timerButton {
+  color: #1a1a2e;
+  background: #ffffff;
+  cursor: default;
+}
+
+.timerDigits {
+  color: #ef4444;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.resendButton {
+  border-color: #392e80;
+  color: #ffffff;
+  background: #3d3183;
+  cursor: pointer;
+}
+
+.resendButton:disabled,
+.registrationSubmit:disabled {
+  cursor: wait;
+}
+
+.registrationStep {
+  gap: 12px;
+}
+
+.registrationLegal {
+  height: 689.899536px;
+}
+
+.registrationIndividual {
+  height: 465.899536px;
+}
+
+.fieldGroup {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldGroupTitle {
+  box-sizing: border-box;
+  width: 100%;
+  height: 26px;
+  flex: 0 0 auto;
+  margin: 0;
+  color: #1a1a2e;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 325;
+  line-height: 26px;
+  text-align: right;
+}
+
+.fieldGroupInputs,
+.individualFields {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.registrationField {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 56px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  direction: ltr;
+  border: 1px solid #e5e7eb;
+  border-radius: 15px;
+  padding: 12px;
+  background: transparent;
+}
+
+.registrationField input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 26px;
+  flex: 1 1 auto;
+  border: 0;
+  padding: 0;
+  color: #1a1a2e;
+  background: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 325;
+  line-height: 26px;
+  text-align: right;
+  outline: none;
+}
+
+.registrationField input::placeholder {
+  color: #bdbdbd;
+  opacity: 1;
+}
+
+.fieldIcon,
+.mobileFieldIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.mobileFieldIcon {
+  height: 24.38095px;
+}
+
+.individualFieldsAndSubmit,
+.legalManagerAndSubmit {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.individualFieldsAndSubmit {
+  height: 262px;
+}
+
+.individualFields {
+  height: 200px;
+  flex: 0 0 auto;
+}
+
+.legalManagerAndSubmit {
+  height: 304px;
+}
+
+.legalManagerAndSubmit > .fieldGroup {
+  height: 242px;
+}
+
+.registrationSubmit {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 50px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #392e80;
+  border-radius: 16px;
+  padding: 11px 0;
+  color: #ffffff;
+  background: #3d3183;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 450;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.submitIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.registrationPayload {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .otpStep {
+    height: 381.61383px;
+    gap: 24px;
+  }
+
+  .backRow {
+    display: none;
+  }
+
+  .header {
+    height: 187.899536px;
+    gap: 12px;
+  }
+
+  .headerCopy {
+    height: 60px;
+  }
+
+  .header[data-variant="otp"] .title {
+    height: 26px;
+    font-size: 16px;
+    font-weight: 325;
+    line-height: 26px;
+  }
+
+  .header[data-variant="otp"] .headerCopy {
+    gap: 12px;
+  }
+
+  .header[data-variant^="registration"] .title {
+    font-size: 22px;
+    font-weight: 450;
+    line-height: 30px;
+  }
+
+  .header[data-variant^="registration"] .headerCopy {
+    gap: 8px;
+  }
+
+  .header[data-variant="registration-legal"] .description {
+    color: #707070;
+  }
+
+  .header[data-variant="registration-individual"] .description,
+  .header[data-variant="otp"] .description {
+    color: #4a4a68;
+  }
+
+  .otpFields {
+    width: 100%;
+  }
+
+  .otpHelper,
+  .otpHelperError {
+    max-width: calc(100% - 28px);
+  }
+
+  .registrationStep {
+    gap: 24px;
+  }
+
+  .registrationIndividual {
+    height: 473.899536px;
+  }
+
+  .registrationLegal {
+    height: 709.899536px;
+  }
+}

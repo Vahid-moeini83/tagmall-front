@@ -5,19 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { SupportChatContent } from "@/components/modules/support";
 import { Input } from "@/components/ui/input";
+import { FigmaDropdown } from "@/components/ui/figma-inputs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ChevronDownIcon,
-  MoreSquareIcon,
-  MessageTextIcon,
-  SellerUserIcon,
-} from "@/icons";
+import { MoreSquareIcon, MessageTextIcon, SellerUserIcon } from "@/icons";
 import { MESSAGE_SECTIONS } from "../data/messageSections";
+
+const CITY_OPTIONS = ["تهران", "اصفهان", "مشهد", "شیراز"].map((city) => ({
+  label: city,
+  value: city,
+}));
 
 // These preview conversations mirror the selected Figma screens.
 function getConversations(category) {
@@ -92,6 +93,7 @@ export default function SellerMessages({ category = "experts" }) {
           <h2>پیام‌ها</h2>
           <DropdownMenu dir="rtl">
             <DropdownMenuTrigger
+              id={`seller-messages-options-${category}`}
               className="flex h-6 w-6 items-center justify-center rounded-sm text-text-secondary focus-visible:outline-2 focus-visible:outline-primary"
               aria-label="گزینه‌های پیام‌ها"
             >
@@ -145,22 +147,14 @@ export default function SellerMessages({ category = "experts" }) {
         </nav>
 
         {category === "experts" && (
-          <div className="relative shrink-0">
-            <select
-              aria-label="شهر گفتگوها"
-              value={city}
-              onChange={(event) => setCity(event.target.value)}
-              className="h-11 w-full appearance-none rounded-lg border border-border-default bg-surface pl-10 pr-3 text-small text-text-muted outline-none focus-visible:border-primary"
-            >
-              {["تهران", "اصفهان", "مشهد", "شیراز"].map((name) => (
-                <option key={name}>{name}</option>
-              ))}
-            </select>
-            <ChevronDownIcon
-              size={20}
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
-            />
-          </div>
+          <FigmaDropdown
+            aria-label="شهر گفتگوها"
+            size="small"
+            className="w-full shrink-0"
+            value={city}
+            onChange={setCity}
+            options={CITY_OPTIONS}
+          />
         )}
 
         <div

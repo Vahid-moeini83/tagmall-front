@@ -46,6 +46,8 @@ function SellerBottomNav() {
   const pathname = usePathname();
   const { toggleMobileSidebar, mobileSidebarOpen } = useSellerNavigation();
 
+  if (pathname === "/seller") return null;
+
   return (
     <nav
       aria-label="ناوبری اصلی ثابت"

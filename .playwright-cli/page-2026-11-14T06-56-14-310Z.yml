@@ -1,0 +1,183 @@
+- generic [active] [ref=f14e1]:
+  - generic [ref=f14e2]:
+    - complementary [ref=f14e3]:
+      - link [ref=f14e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=f14e6]
+      - generic [ref=f14e7]:
+        - img "آرمان میمندی نژاد" [ref=f14e9]
+        - paragraph [ref=f14e11]: آرمان میمندی نژاد
+      - navigation [ref=f14e12]:
+        - link "داشبورد" [ref=f14e13] [cursor=pointer]:
+          - /url: /seller
+        - link "پیام‌ها ۳" [ref=f14e23] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f14e24]: پیام‌ها
+          - generic [ref=f14e31]: ۳
+        - link "سفارشات" [ref=f14e32] [cursor=pointer]:
+          - /url: /seller/orders
+        - generic [ref=f14e40]:
+          - link "پروفایل فروشنده" [ref=f14e41] [cursor=pointer]:
+            - /url: /seller/profile
+          - navigation "بخش‌های پروفایل فروشنده" [ref=f14e48]:
+            - link "مشخصات" [ref=f14e49] [cursor=pointer]:
+              - /url: /seller/profile
+            - link "گزارش مالی" [ref=f14e50] [cursor=pointer]:
+              - /url: /seller/profile#financial
+            - link "کیف پول اعتباری" [ref=f14e51] [cursor=pointer]:
+              - /url: /seller/profile#wallet
+            - link "نشست های فعال" [ref=f14e52] [cursor=pointer]:
+              - /url: /seller/profile#sessions
+            - link "تنظیمات" [ref=f14e53] [cursor=pointer]:
+              - /url: /seller/profile#settings
+        - link "شعبه ها" [ref=f14e54] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=f14e61] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=f14e74] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "تخفیف‌های فعال" [ref=f14e80] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=f14e89] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=f14e96]:
+      - main [ref=f14e97]:
+        - generic [ref=f14e99]:
+          - heading "پنل فروشگاه تگ مال" [level=1] [ref=f14e100]
+          - paragraph [ref=f14e101]: امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
+        - generic [ref=f14e102]:
+          - generic [ref=f14e104]:
+            - generic [ref=f14e105]:
+              - img "لوگوی فروشگاه" [ref=f14e106]
+              - button "ویرایش تصویر فروشگاه" [ref=f14e107]
+            - generic [ref=f14e111]:
+              - heading "آرمان میمندی نژاد" [level=2] [ref=f14e112]
+              - paragraph [ref=f14e113]: با تأیید هویت، نشست‌های فعال را مدیریت و از خدمات کیف پول اعتباری بهره‌مند شوید.
+          - generic [ref=f14e114]:
+            - heading "اطلاعات هویتی" [level=2] [ref=f14e120]
+            - generic [ref=f14e121]:
+              - generic [ref=f14e122]:
+                - generic [ref=f14e123]:
+                  - generic [ref=f14e124]:
+                    - generic [ref=f14e125]: نام شرکت
+                    - generic [ref=f14e126]: "*"
+                  - textbox "نام شرکت" [ref=f14e130]:
+                    - /placeholder: نام و نام خانوادگی
+                    - text: نوآوران گسترش فناوری راه ابریشم
+                - generic [ref=f14e131]:
+                  - generic [ref=f14e132]:
+                    - generic [ref=f14e133]: شناسه ملی شرکت
+                    - generic [ref=f14e134]: "*"
+                  - textbox "شناسه ملی شرکت" [ref=f14e138]:
+                    - /placeholder: نام و نام خانوادگی
+                    - text: "14012051005"
+                - generic [ref=f14e140]:
+                  - generic [ref=f14e141]:
+                    - generic [ref=f14e142]: کد اقتصادی
+                    - generic [ref=f14e143]: "*"
+                  - textbox "کد اقتصادی" [ref=f14e147]:
+                    - /placeholder: نام و نام خانوادگی
+                    - text: "14012051005"
+              - generic [ref=f14e148]:
+                - generic [ref=f14e154]:
+                  - heading "در اطلاعات هویتی شرکت تغییری داشتید؟" [level=3] [ref=f14e155]
+                  - paragraph [ref=f14e156]: اطلاعات پس از بررسی آخرین روزنامه رسمی ویرایش می شود
+                - button "درخواست ویرایش اطلاعات" [ref=f14e157]
+          - generic [ref=f14e163]:
+            - heading "اطلاعات ارتباطی:" [level=2] [ref=f14e169]
+            - generic [ref=f14e171]:
+              - generic [ref=f14e173]:
+                - generic [ref=f14e174]:
+                  - generic [ref=f14e175]: شماره تماس
+                  - generic [ref=f14e176]: "*"
+                - button "شماره تماس" [ref=f14e179]:
+                  - generic [ref=f14e181]: ۰۹۰۲۱۲۳۲۳۲۳
+              - generic [ref=f14e183]:
+                - generic [ref=f14e184]:
+                  - generic [ref=f14e185]: شماره تلفن ثابت
+                  - generic [ref=f14e186]: "*"
+                - button "شماره تلفن ثابت" [ref=f14e189]:
+                  - generic [ref=f14e191]: ۰۲۱۲۲۴۴۵۴
+              - generic [ref=f14e193]:
+                - generic [ref=f14e194]:
+                  - generic [ref=f14e195]: پست الکترونیک شرکتی
+                  - generic [ref=f14e196]: "*"
+                - button "پست الکترونیک شرکتی" [ref=f14e199]:
+                  - generic [ref=f14e201]: meymandiarman@gmail.com
+              - generic [ref=f14e203]:
+                - generic [ref=f14e204]:
+                  - generic [ref=f14e205]: نشانی های اینترنتی ( ip )
+                  - generic [ref=f14e206]: "*"
+                - button "نشانی های اینترنتی ( ip )" [ref=f14e209]:
+                  - generic [ref=f14e211]: 192.168.1.1
+          - generic [ref=f14e212]:
+            - heading "اطلاعات مالی" [level=2] [ref=f14e222]
+            - generic [ref=f14e224]:
+              - generic [ref=f14e226]:
+                - generic [ref=f14e227]:
+                  - generic [ref=f14e228]: نام بانک
+                  - generic [ref=f14e229]: "*"
+                - button "نام بانک" [ref=f14e232]:
+                  - generic [ref=f14e234]: بانک ملی ایران
+              - generic [ref=f14e236]:
+                - generic [ref=f14e237]:
+                  - generic [ref=f14e238]: شماره حساب بانکی
+                  - generic [ref=f14e239]: "*"
+                - textbox "شماره حساب بانکی" [ref=f14e243]:
+                  - /placeholder: نام و نام خانوادگی
+                  - text: ۱۲۳۴۵۶۷۸۹۰
+              - generic [ref=f14e245]:
+                - generic [ref=f14e246]:
+                  - generic [ref=f14e247]: شماره کارت
+                  - generic [ref=f14e248]: "*"
+                - textbox "شماره کارت" [ref=f14e252]:
+                  - /placeholder: نام و نام خانوادگی
+                  - text: ۶۰۳۷۱۰۲۴۹۵۰۴۸۲۴
+              - generic [ref=f14e254]:
+                - generic [ref=f14e255]:
+                  - generic [ref=f14e256]: شماره شبا (IBAN)
+                  - generic [ref=f14e257]: "*"
+                - textbox "شماره شبا (IBAN)" [ref=f14e261]:
+                  - /placeholder: نام و نام خانوادگی
+                  - text: IR۹۵۰۱۷۰۰۰۰۰۰۰۳۴۰۵۶۲۰۹MDA
+          - generic [ref=f14e262]:
+            - generic [ref=f14e263]:
+              - heading "مجوزها" [level=2] [ref=f14e272]
+              - button "افزودن مجوز فروش" [ref=f14e273]
+            - generic [ref=f14e278]:
+              - generic [ref=f14e279]:
+                - generic [ref=f14e280]: شناسه صنفی
+                - generic [ref=f14e281]: تاریخ انقضا
+                - generic [ref=f14e282]: رسته فعالیت
+                - generic [ref=f14e283]: وضعیت
+                - generic [ref=f14e284]: عملیات
+              - generic [ref=f14e285]:
+                - generic [ref=f14e286]: ۰۲۱۸۸۸۸۴۴۲۲
+                - generic [ref=f14e287]: ۱۴۰۵/۰۵/۱۲
+                - generic [ref=f14e288]: عرضه انواع کالا و خدمات در فروشگاه های مجازی
+                - generic [ref=f14e289]: تایید شده
+                - generic [ref=f14e290]:
+                  - button "ویرایش مجوز" [ref=f14e291]
+                  - button "پیام درباره مجوز" [ref=f14e295]
+          - generic [ref=f14e300]:
+            - heading "شبکه‌های اجتماعی و وب‌سایت" [level=2] [ref=f14e306]
+            - generic [ref=f14e307]:
+              - generic [ref=f14e308]:
+                - generic [ref=f14e309]: اینستاگرام
+                - textbox "اینستاگرام" [ref=f14e314]:
+                  - /placeholder: نام و نام خانوادگی
+                  - text: digikit_official
+              - generic [ref=f14e315]:
+                - generic [ref=f14e316]: تلگرام
+                - textbox "تلگرام" [ref=f14e321]:
+                  - /placeholder: نام و نام خانوادگی
+                  - text: t.me/digikit
+              - generic [ref=f14e322]:
+                - generic [ref=f14e323]: وب‌سایت
+                - textbox "وب‌سایت" [ref=f14e328]:
+                  - /placeholder: نام و نام خانوادگی
+                  - text: https://digikit.ir
+          - generic [ref=f14e329]:
+            - button "ذخیره تغییرات" [ref=f14e330]
+            - button "انصراف" [ref=f14e331]
+  - button "Open Next.js Dev Tools" [ref=f14e337] [cursor=pointer]

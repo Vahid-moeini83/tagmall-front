@@ -14,13 +14,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from "@/components/ui/dropdown-menu";
+import { FigmaDropdown } from "@/components/ui/figma-inputs";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -173,46 +167,20 @@ export default function SellerWallet() {
             </div>
             <div className="flex flex-wrap gap-2" dir="ltr">
               {filters.map((filter) => (
-                <DropdownMenu key={filter.label} dir="rtl">
-                  <DropdownMenuTrigger asChild>
-                    <button
-                      type="button"
-                      aria-label={filter.label}
-                      className={`flex h-10 w-[146px] items-center justify-between gap-3 rounded-md border border-border-default px-3 text-[13px] text-text-secondary ${CONTROL}`}
-                    >
-                      <ChevronDownIcon
-                        size={12}
-                        className="shrink-0 text-text-muted"
-                      />
-                      <span dir="rtl">
-                        {
-                          filter.options.find(
-                            (option) => option.value === filter.value,
-                          )?.label
-                        }
-                      </span>
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="theme-new border border-border-default bg-surface text-text-secondary shadow-dropdown"
-                    dir="rtl"
-                  >
-                    <DropdownMenuRadioGroup
-                      value={filter.value}
-                      onValueChange={filter.onChange}
-                    >
-                      {filter.options.map((option) => (
-                        <DropdownMenuRadioItem
-                          key={option.value}
-                          value={option.value}
-                          className="text-small focus:bg-primary-50"
-                        >
-                          {option.label}
-                        </DropdownMenuRadioItem>
-                      ))}
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <FigmaDropdown
+                  key={filter.label}
+                  aria-label={filter.label}
+                  size="small"
+                  className="w-[146px] shrink-0"
+                  triggerClassName={`h-10 w-full rounded-md px-3 text-[13px] leading-5 text-text-secondary ${CONTROL}`}
+                  selectedLabelClassName="text-[13px] leading-5 tracking-normal [font-weight:400] text-text-secondary!"
+                  menuClassName="h-auto min-h-0 py-2"
+                  optionClassName="h-8"
+                  optionLabelClassName="text-[14px] leading-[22px] tracking-normal font-[YekanBakh] [font-weight:400] text-text-secondary!"
+                  value={filter.value}
+                  onChange={filter.onChange}
+                  options={filter.options}
+                />
               ))}
               <button
                 type="button"
@@ -413,6 +381,7 @@ export default function SellerWallet() {
                   <ProfileWalletAmountContent
                     type="increase"
                     walletBalance={2500000}
+                    useFigmaInput
                     onBack={() => setDialog(null)}
                     onNext={() =>
                       setPaymentMessage(

@@ -1,0 +1,48 @@
+- generic:
+  - main [aria-hidden]:
+    - generic:
+      - generic:
+        - generic: نسخه جدید
+        - generic [aria-hidden]: "|"
+        - generic: تگ مال ریبرند کرد
+    - region:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: ورود به حساب کاربری
+              - paragraph: جهت ورود یا ثبت‌نام، شماره موبایل خود را وارد کنید.
+          - tablist:
+            - tab [selected]:
+              - generic: فروشنده حقوقی
+            - tab:
+              - generic: فروشنده حقیقی
+        - generic:
+          - generic:
+            - generic: شناسه ملی شرکت
+            - generic:
+              - textbox:
+                - /placeholder: شناسه ملی شرکت را وارد کنید
+          - generic:
+            - generic: شماره موبایل
+            - generic:
+              - textbox:
+                - /placeholder: شماره موبایل خود را وارد کنید
+        - generic:
+          - button:
+            - generic: ارسال پیامکی کد تایید
+  - button "Open Next.js Dev Tools" [ref=f3e46] [cursor=pointer]
+  - alert: ورود به حساب کاربری
+  - dialog "ورود به حساب کاربری" [ref=f3e51]:
+    - heading "ورود به حساب کاربری" [level=2] [ref=f3e52]
+    - generic [ref=f3e54]:
+      - generic [ref=f3e55]:
+        - img "لوگوی شعار" [ref=f3e57]
+        - heading "ورود به حساب کاربری" [level=1] [ref=f3e59]
+        - generic [ref=f3e60]:
+          - generic [ref=f3e61]:
+            - textbox "شماره تماس" [ref=f3e62]: "123"
+            - paragraph [ref=f3e74]: شماره موبایل معتبر نمی‌باشد
+          - generic [ref=f3e63]: کد تایید به شماره تماس شما پیامک می‌شود
+      - button "ارسال پیامکی کد تایید" [active] [ref=f3e69] [cursor=pointer]
+    - button "بستن" [ref=f3e70] [cursor=pointer]

@@ -1,0 +1,70 @@
+- generic:
+  - main [aria-hidden]:
+    - generic:
+      - generic:
+        - generic: نسخه جدید
+        - generic [aria-hidden]: "|"
+        - generic: تگ مال ریبرند کرد
+    - region:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: ورود به حساب کاربری
+              - paragraph: جهت ورود یا ثبت‌نام، شماره موبایل خود را وارد کنید.
+          - tablist:
+            - tab [selected]:
+              - generic: فروشنده حقوقی
+            - tab:
+              - generic: فروشنده حقیقی
+        - generic:
+          - generic:
+            - generic: شناسه ملی شرکت
+            - generic:
+              - textbox:
+                - /placeholder: شناسه ملی شرکت را وارد کنید
+          - generic:
+            - generic: شماره موبایل
+            - generic:
+              - textbox:
+                - /placeholder: شماره موبایل خود را وارد کنید
+        - generic:
+          - button:
+            - generic: ارسال پیامکی کد تایید
+  - button "Open Next.js Dev Tools" [ref=f3e46] [cursor=pointer]
+  - alert: ورود فروشنده حقوقی | تگ مال
+  - dialog [aria-hidden]:
+    - heading [level=2]: ورود به حساب کاربری
+    - generic:
+      - generic:
+        - generic:
+          - heading [level=1]: "ایجاد حساب کاربری:"
+          - generic:
+            - generic:
+              - generic:
+                - textbox:
+                  - /placeholder: نام
+            - generic:
+              - generic:
+                - textbox:
+                  - /placeholder: نام خانوادگی
+            - generic:
+              - generic:
+                - textbox:
+                  - /placeholder: کد ملی
+          - generic:
+            - generic:
+              - checkbox
+              - generic:
+                - button: شرایط
+                - text: بهره مندی از خدمات تگ مال را می پذیرم
+        - button [disabled]: بهره مندی از خدمات ما :)
+    - button:
+      - generic: بستن
+  - dialog "شرایط و قوانین تگ مال" [ref=f3e144]:
+    - heading "شرایط و قوانین تگ مال" [level=2] [ref=f3e146]
+    - generic [ref=f3e148]:
+      - paragraph [ref=f3e149]: استفاده از خدمات تگ مال به معنای پذیرش شرایط و قوانین زیر است. این متن فعلاً برای تست نمایش داده می‌شود و نسخه نهایی قوانین به‌زودی جایگزین آن خواهد شد.
+      - paragraph [ref=f3e150]: کاربران موظف‌اند اطلاعات صحیح وارد کنند و از هرگونه سوءاستفاده از سرویس خودداری نمایند. تگ مال حق به‌روزرسانی این شرایط را برای خود محفوظ می‌دارد.
+      - paragraph [ref=f3e151]: در صورت نیاز به پشتیبانی، می‌توانید از بخش پشتیبانی داخل اپلیکیشن با ما در ارتباط باشید.
+    - button "بستن" [active] [ref=f3e152] [cursor=pointer]

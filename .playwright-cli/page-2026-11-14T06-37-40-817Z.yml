@@ -1,0 +1,187 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e2]:
+    - complementary [ref=f9e3]:
+      - link [ref=f9e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=f9e6]
+      - generic [ref=f9e7]:
+        - img "آرمان میمندی نژاد" [ref=f9e9]
+        - paragraph [ref=f9e11]: آرمان میمندی نژاد
+      - navigation [ref=f9e12]:
+        - link "داشبورد" [ref=f9e13] [cursor=pointer]:
+          - /url: /seller
+        - link "پیام‌ها ۳" [ref=f9e23] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f9e24]: پیام‌ها
+          - generic [ref=f9e31]: ۳
+        - link "سفارشات" [ref=f9e32] [cursor=pointer]:
+          - /url: /seller/orders
+        - link "پروفایل فروشنده" [ref=f9e40] [cursor=pointer]:
+          - /url: /seller/profile
+        - link "شعبه ها" [ref=f9e47] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=f9e54] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=f9e67] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "کمپین‌های فروش" [ref=f9e73] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=f9e82] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=f9e89]:
+      - generic [ref=f9e91]:
+        - generic [ref=f9e92]:
+          - heading "پنل فروشگاه تگ مال" [level=1] [ref=f9e93]
+          - paragraph [ref=f9e94]: امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
+        - region "وضعیت کمپین‌ها" [ref=f9e95]:
+          - button "همه کمپین‌ها ۱۴۸" [pressed] [ref=f9e96]:
+            - text: همه کمپین‌ها
+            - generic [ref=f9e97]: ۱۴۸
+          - button "کمپین‌های فعال ۱۲" [ref=f9e98]:
+            - text: کمپین‌های فعال
+            - generic [ref=f9e99]: ۱۲
+          - button "پیش‌نویس‌ها ۲۴" [ref=f9e100]:
+            - text: پیش‌نویس‌ها
+            - generic [ref=f9e101]: ۲۴
+          - button "منقضی شده ۸۵" [ref=f9e102]:
+            - text: منقضی شده
+            - generic [ref=f9e103]: ۸۵
+          - button "لغو شده ۵" [ref=f9e104]:
+            - text: لغو شده
+            - generic [ref=f9e105]: ۵
+        - region "جست‌وجو و فیلتر کمپین‌ها" [ref=f9e106]:
+          - textbox "جست‌وجوی محصول یا شناسه محصول" [ref=f9e109]:
+            - /placeholder: جست‌وجو محصول یا شناسه محصول
+          - button "شهر" [ref=f9e110]:
+            - generic [ref=f9e111]: تهران
+          - button "شهر شعبه" [ref=f9e115]:
+            - generic [ref=f9e116]: تهران
+        - generic [ref=f9e120]:
+          - generic [ref=f9e121]:
+            - heading "کمپین‌های فروش" [level=2] [ref=f9e122]
+            - link "ایجاد کمپین فروش" [ref=f9e123] [cursor=pointer]:
+              - /url: /seller/discounts/new
+          - table [ref=f9e128]:
+            - rowgroup [ref=f9e137]:
+              - row [ref=f9e138]:
+                - columnheader "محصول و شناسه محصول" [ref=f9e139]
+                - columnheader "قیمت فروش ویژه" [ref=f9e140]
+                - columnheader "بازدید" [ref=f9e141]
+                - columnheader "فروش موفق" [ref=f9e142]
+                - columnheader "بازه زمانی" [ref=f9e143]
+                - columnheader "وضعیت" [ref=f9e144]
+                - columnheader "عملیات" [ref=f9e145]
+            - rowgroup [ref=f9e146]:
+              - row [ref=f9e147]:
+                - cell [ref=f9e148]:
+                  - generic [ref=f9e149]:
+                    - img "گوشی هوشمند ایکس ۱۴ پرو" [ref=f9e150]
+                    - generic [ref=f9e151]:
+                      - paragraph [ref=f9e152]: گوشی هوشمند ایکس ۱۴ پرو
+                      - paragraph [ref=f9e153]: PRD–1024
+                - cell "۱٬۸۵۰٬۰۰۰ تومان" [ref=f9e154]
+                - cell "۲۰" [ref=f9e155]
+                - cell "۱۲" [ref=f9e156]
+                - cell "۱۴۰۱/۰۷/۳۱" [ref=f9e157]
+                - cell "فعال" [ref=f9e158]
+                - cell [ref=f9e160]:
+                  - generic [ref=f9e161]:
+                    - link "مشاهده و درخواست ویرایش گوشی هوشمند ایکس ۱۴ پرو" [ref=f9e162] [cursor=pointer]:
+                      - /url: /seller/discounts/1024
+                    - button "پیام‌های کمپین گوشی هوشمند ایکس ۱۴ پرو" [ref=f9e166]
+              - row [ref=f9e172]:
+                - cell [ref=f9e173]:
+                  - generic [ref=f9e174]:
+                    - img "هدفون بی‌سیم مدل M5" [ref=f9e175]
+                    - generic [ref=f9e176]:
+                      - paragraph [ref=f9e177]: هدفون بی‌سیم مدل M5
+                      - paragraph [ref=f9e178]: PRD–1024
+                - cell "۲٬۴۰۰٬۰۰۰ تومان" [ref=f9e179]
+                - cell "۲۰" [ref=f9e180]
+                - cell "۲" [ref=f9e181]
+                - cell "۱۴۰۱/۰۷/۳۱" [ref=f9e182]
+                - cell "منقضی" [ref=f9e183]
+                - cell [ref=f9e185]:
+                  - generic [ref=f9e186]:
+                    - link "مشاهده و درخواست ویرایش هدفون بی‌سیم مدل M5" [ref=f9e187] [cursor=pointer]:
+                      - /url: /seller/discounts/1025
+                    - button "پیام‌های کمپین هدفون بی‌سیم مدل M5" [ref=f9e191]
+              - row [ref=f9e197]:
+                - cell [ref=f9e198]:
+                  - generic [ref=f9e199]:
+                    - img "لپ‌تاپ گیمینگ X1" [ref=f9e200]
+                    - generic [ref=f9e201]:
+                      - paragraph [ref=f9e202]: لپ‌تاپ گیمینگ X1
+                      - paragraph [ref=f9e203]: PRD–1024
+                - cell "۳٬۲۰۰٬۰۰۰ تومان" [ref=f9e204]
+                - cell "۲۰" [ref=f9e205]
+                - cell "۵" [ref=f9e206]
+                - cell "۱۴۰۱/۰۷/۳۱" [ref=f9e207]
+                - cell "فعال" [ref=f9e208]
+                - cell [ref=f9e210]:
+                  - generic [ref=f9e211]:
+                    - link "مشاهده و درخواست ویرایش لپ‌تاپ گیمینگ X1" [ref=f9e212] [cursor=pointer]:
+                      - /url: /seller/discounts/1026
+                    - button "پیام‌های کمپین لپ‌تاپ گیمینگ X1" [ref=f9e216]
+              - row [ref=f9e222]:
+                - cell [ref=f9e223]:
+                  - generic [ref=f9e224]:
+                    - img "دوربین عکاسی بدون آینه" [ref=f9e225]
+                    - generic [ref=f9e226]:
+                      - paragraph [ref=f9e227]: دوربین عکاسی بدون آینه
+                      - paragraph [ref=f9e228]: PRD–1024
+                - cell "۵۹۰٬۰۰۰ تومان" [ref=f9e229]
+                - cell "۲۰" [ref=f9e230]
+                - cell "۱۴" [ref=f9e231]
+                - cell "۱۴۰۱/۰۷/۳۱" [ref=f9e232]
+                - cell "پیش‌نویس" [ref=f9e233]
+                - cell [ref=f9e235]:
+                  - generic [ref=f9e236]:
+                    - link "مشاهده و درخواست ویرایش دوربین عکاسی بدون آینه" [ref=f9e237] [cursor=pointer]:
+                      - /url: /seller/discounts/1027
+                    - button "پیام‌های کمپین دوربین عکاسی بدون آینه" [ref=f9e241]
+              - row [ref=f9e247]:
+                - cell [ref=f9e248]:
+                  - generic [ref=f9e249]:
+                    - img "تبلت ۱۱ اینچی M1" [ref=f9e250]
+                    - generic [ref=f9e251]:
+                      - paragraph [ref=f9e252]: تبلت ۱۱ اینچی M1
+                      - paragraph [ref=f9e253]: PRD–1024
+                - cell "۸۵۰٬۰۰۰ تومان" [ref=f9e254]
+                - cell "۲۰" [ref=f9e255]
+                - cell "۱۳" [ref=f9e256]
+                - cell "۱۴۰۱/۰۷/۳۱" [ref=f9e257]
+                - cell "منقضی" [ref=f9e258]
+                - cell [ref=f9e260]:
+                  - generic [ref=f9e261]:
+                    - link "مشاهده و درخواست ویرایش تبلت ۱۱ اینچی M1" [ref=f9e262] [cursor=pointer]:
+                      - /url: /seller/discounts/1028
+                    - button "پیام‌های کمپین تبلت ۱۱ اینچی M1" [ref=f9e266]
+              - row [ref=f9e272]:
+                - cell [ref=f9e273]:
+                  - generic [ref=f9e274]:
+                    - img "ساعت هوشمند سری ۹" [ref=f9e275]
+                    - generic [ref=f9e276]:
+                      - paragraph [ref=f9e277]: ساعت هوشمند سری ۹
+                      - paragraph [ref=f9e278]: PRD–1024
+                - cell "۱٬۱۰۰٬۰۰۰ تومان" [ref=f9e279]
+                - cell "۲۰" [ref=f9e280]
+                - cell "۱۶" [ref=f9e281]
+                - cell "۱۴۰۱/۰۷/۳۱" [ref=f9e282]
+                - cell "فعال" [ref=f9e283]
+                - cell [ref=f9e285]:
+                  - generic [ref=f9e286]:
+                    - link "مشاهده و درخواست ویرایش ساعت هوشمند سری ۹" [ref=f9e287] [cursor=pointer]:
+                      - /url: /seller/discounts/1029
+                    - button "پیام‌های کمپین ساعت هوشمند سری ۹" [ref=f9e291]
+          - generic [ref=f9e297]:
+            - paragraph [ref=f9e298]: نمایش ۱ تا ۱۰ از ۱۴۸ مورد
+            - navigation "صفحه‌بندی کمپین‌ها" [ref=f9e299]:
+              - button "قبلی" [disabled] [ref=f9e300]
+              - button "۱" [ref=f9e301]
+              - button "۲" [ref=f9e302]
+              - button "۳" [ref=f9e303]
+              - generic [ref=f9e304]: …
+              - button "۱۵" [ref=f9e305]
+              - button "بعدی" [ref=f9e306]
+  - button "Open Next.js Dev Tools" [ref=f9e312] [cursor=pointer]

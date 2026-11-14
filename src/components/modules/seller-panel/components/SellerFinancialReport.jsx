@@ -2,6 +2,7 @@
 
 import { Fragment, useState } from "react";
 import DateRangeFilterContent from "@/components/ui/date-range/DateRangeFilterContent";
+import { FigmaDropdown } from "@/components/ui/figma-inputs";
 import {
   Dialog,
   DialogContent,
@@ -51,6 +52,11 @@ const TRANSACTIONS = [
 ];
 const CONTROL_STYLE =
   "rounded-md text-[13px] leading-5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const TRANSACTION_TYPE_OPTIONS = [
+  { value: "all", label: "همه تراکنش‌ها" },
+  { value: "income", label: "واریز" },
+  { value: "expense", label: "برداشت" },
+];
 
 export default function SellerFinancialReport() {
   const [period, setPeriod] = useState("امروز");
@@ -298,16 +304,21 @@ export default function SellerFinancialReport() {
               )}
               <div className="flex flex-col gap-2 text-small">
                 <label htmlFor="financial-transaction-type">نوع تراکنش</label>
-                <select
+                <FigmaDropdown
                   id="financial-transaction-type"
+                  aria-label="نوع تراکنش"
+                  size="medium"
+                  className="w-full"
+                  menuPlacement="above"
+                  triggerClassName="h-12 rounded-md bg-surface-subtle px-3 text-[14px] leading-[22px] focus-visible:border-primary focus-visible:outline-none"
+                  selectedLabelClassName="text-[14px] leading-[22px] tracking-normal [font-weight:400] text-text-primary!"
+                  menuClassName="h-auto min-h-0 py-2"
+                  optionClassName="h-8"
+                  optionLabelClassName="text-[14px] leading-[22px] tracking-normal font-[YekanBakh] [font-weight:400] text-text-secondary!"
                   value={type}
-                  onChange={(event) => setType(event.target.value)}
-                  className="h-12 rounded-md border border-border-default bg-surface-subtle px-3"
-                >
-                  <option value="all">همه تراکنش‌ها</option>
-                  <option value="income">واریز</option>
-                  <option value="expense">برداشت</option>
-                </select>
+                  onChange={setType}
+                  options={TRANSACTION_TYPE_OPTIONS}
+                />
               </div>
               <div className="flex gap-3">
                 <button

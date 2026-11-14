@@ -4,19 +4,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import SellerHeader from "./SellerHeader";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  ChevronDownIcon,
-  EditIcon,
-  MessagesTextIcon,
-  SearchIcon,
-} from "@/icons";
+import { FigmaDropdown } from "@/components/ui/figma-inputs";
+import { EditIcon, MessagesTextIcon, SearchIcon } from "@/icons";
 
 const ORDERS = [
   {
@@ -120,6 +109,11 @@ const ORDER_STATUSES = [
   { label: "لغو شده", count: "۵" },
 ];
 
+const CITY_OPTIONS = ["تهران", "اصفهان", "مشهد", "شیراز"].map((city) => ({
+  label: city,
+  value: city,
+}));
+
 const STATUS_STYLES = {
   "در انتظار تأیید": "bg-secondary-100 text-secondary",
   "در حال پردازش": "bg-secondary-100 text-secondary",
@@ -180,16 +174,17 @@ function SellerOrders() {
             <button
               key={status.label}
               type="button"
+              dir="rtl"
               aria-pressed={isActive}
               onClick={() => setActiveStatus(status.label)}
               className={`inline-flex h-[43px] shrink-0 items-center gap-2 rounded-lg border px-4 text-small font-semibold transition-colors ${isActive ? "border-primary bg-primary text-white" : "border-border-default bg-surface text-text-primary hover:bg-surface-subtle"}`}
             >
+              {status.label}
               <span
                 className={`rounded-md px-1.5 py-0.5 text-caption ${isActive ? "bg-white/20 text-white" : "bg-surface-muted text-text-primary"}`}
               >
                 {status.count}
               </span>
-              {status.label}
             </button>
           );
         })}
@@ -209,40 +204,19 @@ function SellerOrders() {
               onChange: setDestinationCity,
             },
           ].map((filter) => (
-            <DropdownMenu key={filter.label} dir="rtl">
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  aria-label={filter.label}
-                  dir="ltr"
-                  className="flex h-10 shrink-0 items-center justify-between rounded-field border border-border-default bg-surface px-4 text-small text-text-primary focus-visible:outline-2 focus-visible:outline-primary lg:w-[280px]"
-                >
-                  <ChevronDownIcon size={20} className="text-text-secondary" />
-                  <span dir="rtl" className="flex-1 text-right">
-                    {filter.value}
-                  </span>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="theme-new min-w-40 border border-border-default bg-surface shadow-dropdown"
-              >
-                <DropdownMenuRadioGroup
-                  value={filter.value}
-                  onValueChange={filter.onChange}
-                >
-                  {["تهران", "اصفهان", "مشهد", "شیراز"].map((city) => (
-                    <DropdownMenuRadioItem key={city} value={city}>
-                      {city}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FigmaDropdown
+              key={filter.label}
+              aria-label={filter.label}
+              size="small"
+              className="w-full min-w-0 lg:w-[280px] lg:flex-[1_1_280px]"
+              value={filter.value}
+              onChange={filter.onChange}
+              options={CITY_OPTIONS}
+            />
           ))}
           <label
             dir="rtl"
-            className="flex h-10 min-w-0 flex-1 items-center gap-3 rounded-xl bg-surface-muted px-4 text-text-muted lg:w-[444px] lg:flex-none"
+            className="flex h-10 min-w-0 flex-1 items-center gap-3 rounded-xl bg-surface-muted px-4 text-text-muted lg:flex-[1_1_444px]"
           >
             <SearchIcon size={20} className="shrink-0" />
             <Input

@@ -1,0 +1,16 @@
+[     141ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[     721ms] [LOG] [Fast Refresh] done in 689ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    1037ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    1088ms] [LOG] [HMR] connected @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    1541ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    1652ms] [LOG] [Fast Refresh] done in 212ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    6076ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    6159ms] [LOG] [Fast Refresh] done in 185ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   25761ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   25825ms] [LOG] [Fast Refresh] done in 168ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   25995ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   26058ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   89598ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   89716ms] [LOG] [Fast Refresh] done in 204ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  104668ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  104746ms] [LOG] [Fast Refresh] done in 153ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297

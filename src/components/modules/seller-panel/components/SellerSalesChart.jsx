@@ -48,6 +48,8 @@ const CHART_DATA = [
 ];
 
 const Y_AXIS_STEPS = [200, 150, 100, 50, 0];
+const MOBILE_Y_AXIS_LABELS = ["۲۰۰", "۱۵۰", "۱۰۰", "۵۰", "۰"];
+const DESKTOP_MONTH_LABEL_WIDTHS = [19, 20, 15, 17, 28, 32];
 
 function SellerSalesChart({ variant = "default" }) {
   const [hoveredMonth, setHoveredMonth] = useState(null);
@@ -95,36 +97,93 @@ function SellerSalesChart({ variant = "default" }) {
   }
 
   return (
-    <div className="bg-surface rounded-xl border border-border-subtle shadow-card p-4 sm:p-6 lg:pt-7 lg:px-8 lg:pb-6 flex flex-col justify-between h-auto min-h-[332px] lg:h-[399px]">
+    <div className="bg-surface rounded-xl border-0 shadow-none p-4 sm:p-6 lg:rounded-xl lg:ring-1 lg:ring-inset lg:ring-border-subtle lg:shadow-card lg:pt-7 lg:px-8 lg:pb-6 flex flex-col justify-start gap-4 sm:gap-0 h-auto min-h-[332px] lg:h-[399px]">
       {/* Header with Title and Legend */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
         <div>
-          <h2 className="text-body font-bold text-text-primary">
+          <h2 className="text-[18px] leading-[26px] [font-weight:450] text-text-primary sm:text-body sm:leading-[25px] sm:[font-weight:600]">
             نمودار فروش ماهانه <span className="hidden sm:inline">(۶ ماه اخیر)</span>
           </h2>
-          <p className="text-[12px] text-text-muted sm:hidden mt-0.5">۶ ماه اخیر</p>
+          <p className="mt-[2px] text-[12px] leading-[18px] [font-weight:325] text-text-muted sm:hidden">۶ ماه اخیر</p>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 sm:gap-5 text-caption text-text-primary">
+        <div className="flex h-[18px] items-center gap-4 sm:gap-5 text-caption leading-[18px] [font-weight:325] text-text-secondary sm:text-text-primary">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-primary" />
             <span>امسال</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-primary-200" />
+            <span className="w-2 h-2 rounded-full bg-primary-100 sm:bg-primary-50" />
             <span>سال گذشته</span>
           </div>
         </div>
       </div>
 
-      {/* Main Chart Area */}
-      <div className="relative flex-1 mt-4 sm:mt-6 flex flex-col justify-between">
+      {/* Mobile chart: month order and value axis follow the PWA frame. */}
+      <div className="relative flex h-[204px] w-full gap-2 sm:hidden" dir="rtl">
+        <div className="flex h-[184px] w-6 shrink-0 flex-col justify-between text-[12px] leading-[18px] [font-weight:325] text-text-muted">
+          {MOBILE_Y_AXIS_LABELS.map((step) => (
+            <span key={step} className="w-6 text-right">{step}</span>
+          ))}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="relative h-[176px] w-full">
+            <div className="pointer-events-none absolute inset-x-0 top-0 flex h-[176px] flex-col justify-between">
+              {Y_AXIS_STEPS.map((step) => (
+                <span key={step} className="w-full border-t border-primary-50" />
+              ))}
+            </div>
+            <div className="absolute inset-0 flex h-[176px] items-end justify-between" dir="ltr">
+              {[...CHART_DATA].reverse().map((item) => {
+                const isHovered = hoveredMonth === item.month;
+
+                return (
+                  <div
+                    key={item.month}
+                    className="group relative flex h-[176px] w-11 shrink-0 cursor-pointer items-end justify-center"
+                    onMouseEnter={() => setHoveredMonth(item.month)}
+                    onMouseLeave={() => setHoveredMonth(null)}
+                  >
+                    {isHovered && (
+                      <div className="absolute -top-10 z-20 whitespace-nowrap rounded-md bg-text-primary px-2.5 py-1 text-[11px] text-surface shadow-card">
+                        امسال: {item.thisYear} | پارسال: {item.lastYear}
+                      </div>
+                    )}
+                    <div className="flex h-[168px] items-end gap-1" dir="rtl">
+                      <div
+                        style={{ height: `${item.thisYearHeight}%` }}
+                        className="w-[13px] rounded-t-[4px] bg-primary transition-all duration-200 group-hover:brightness-110"
+                      />
+                      <div
+                        style={{ height: `${item.lastYearHeight}%` }}
+                        className="w-[13px] rounded-t-[4px] bg-primary-50 transition-all duration-200 group-hover:bg-primary-100"
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-[10px] flex h-[18px] w-full items-center justify-between gap-[6px] text-[12px] leading-[18px] [font-weight:325] text-text-secondary" dir="ltr">
+            {[...CHART_DATA].reverse().map((item) => (
+              <span key={item.month} className="w-11 shrink-0 text-center">
+                {item.month}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop chart */}
+      <div className="relative mt-6 hidden flex-1 flex-col justify-between sm:flex sm:min-h-0">
         {/* Horizontal Grid lines with Y-Axis Labels */}
-        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-6">
+        <div className="pointer-events-none absolute left-0 top-0 flex h-[256px] w-full flex-col justify-between">
           {Y_AXIS_STEPS.map((step) => (
-            <div key={step} className="flex items-center gap-2 sm:gap-3 w-full" dir="ltr">
-              <span className="w-5 sm:w-6 text-[10px] sm:text-[11px] text-text-muted text-left font-normal select-none">
+            <div key={step} className="flex h-[13px] w-full shrink-0 items-center" dir="ltr">
+              <span className="w-[21px] select-none text-left text-[11px] leading-[13px] font-normal text-text-primary [font-family:Inter,Arial,sans-serif]">
                 {step}
               </span>
               <div className="flex-1 border-t border-primary-50" />
@@ -132,36 +191,30 @@ function SellerSalesChart({ variant = "default" }) {
           ))}
         </div>
 
-        {/* Bars Container */}
-        <div className="relative z-10 flex-1 flex items-end justify-between pr-6 sm:pr-4 pl-10 sm:pl-8 pb-6 lg:pb-5 h-[170px] sm:h-[220px]">
+        <div className="relative z-10 flex h-[220px] flex-1 items-end justify-between pb-6 pl-8 pr-4 lg:h-[246px] lg:pb-5" dir="ltr">
           {CHART_DATA.map((item) => {
             const isHovered = hoveredMonth === item.month;
 
             return (
               <div
                 key={item.month}
-                className="flex flex-col items-center group cursor-pointer relative"
+                className="group relative flex cursor-pointer flex-col items-center"
                 onMouseEnter={() => setHoveredMonth(item.month)}
                 onMouseLeave={() => setHoveredMonth(null)}
               >
-                {/* Tooltip on hover */}
                 {isHovered && (
-                  <div className="absolute -top-10 bg-text-primary text-surface text-[11px] px-2.5 py-1 rounded-md shadow-card whitespace-nowrap z-20 pointer-events-none">
+                  <div className="pointer-events-none absolute -top-10 z-20 whitespace-nowrap rounded-md bg-text-primary px-2.5 py-1 text-[11px] text-surface shadow-card">
                     امسال: {item.thisYear} | پارسال: {item.lastYear}
                   </div>
                 )}
-
-                {/* Bars Pair */}
-                <div className="flex items-end gap-1 h-[160px] sm:h-[210px] lg:h-[246px]" dir="ltr">
-                  {/* This Year bar (13px in Figma mobile, 28px on desktop) */}
+                <div className="flex h-[210px] items-end gap-1 lg:h-[246px]" dir="ltr">
                   <div
                     style={{ height: `${item.thisYearHeight}%` }}
-                    className="w-[13px] sm:w-6 lg:w-7 rounded-t-sm sm:rounded-t-lg bg-primary transition-all duration-200 group-hover:brightness-110"
+                    className="w-6 rounded-t-lg bg-primary transition-all duration-200 group-hover:brightness-110 lg:w-7"
                   />
-                  {/* Last Year bar */}
                   <div
                     style={{ height: `${item.lastYearHeight}%` }}
-                    className="w-[13px] sm:w-6 lg:w-7 rounded-t-sm sm:rounded-t-lg bg-primary-50 transition-all duration-200 group-hover:bg-primary-100"
+                    className="w-6 rounded-t-lg bg-primary-50 transition-all duration-200 group-hover:bg-primary-100 lg:w-7"
                   />
                 </div>
               </div>
@@ -169,13 +222,13 @@ function SellerSalesChart({ variant = "default" }) {
           })}
         </div>
 
-        {/* X-Axis Month Labels */}
-        <div
-          className="flex justify-between items-center pr-6 sm:pr-10 pl-6 pt-1 text-[11px] sm:text-caption text-text-primary font-normal"
-          dir="ltr"
-        >
-          {CHART_DATA.map((item) => (
-            <span key={item.month} className="w-8 sm:w-16 text-center">
+        <div className="relative flex items-center justify-between pl-[36px] pr-0 pt-1 text-[11px] [font-weight:325] text-text-primary sm:text-caption" dir="ltr">
+          {CHART_DATA.map((item, index) => (
+            <span
+              key={item.month}
+              className="shrink-0 text-right"
+              style={{ width: `${DESKTOP_MONTH_LABEL_WIDTHS[index]}px` }}
+            >
               {item.month}
             </span>
           ))}

@@ -1,0 +1,414 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - heading "پیش‌نمایش موقت stateهای کامپوننت‌های Figma" [level=1] [ref=e3]
+    - 'button "پاسخ آزمایشی: موفق" [ref=e4]'
+    - 'button "تأیید آزمایشی: موفق" [ref=e5]'
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - heading "Figma Input/Text · اندازه‌ها" [level=2] [ref=e8]
+        - generic [ref=e9]:
+          - generic [ref=e10]:
+            - heading "Large" [level=3] [ref=e11]
+            - textbox "نام و نام خانوادگی" [ref=e14]
+          - generic [ref=e15]:
+            - heading "Medium" [level=3] [ref=e16]
+            - textbox "نام و نام خانوادگی" [ref=e19]
+          - generic [ref=e20]:
+            - heading "Small" [level=3] [ref=e21]
+            - textbox "نام و نام خانوادگی" [ref=e24]
+          - generic [ref=e25]:
+            - heading "وضعیت‌های Figma · Large" [level=3] [ref=e26]
+            - generic [ref=e27]:
+              - textbox "نام و نام خانوادگی" [ref=e30]: آرش اسفندیاری
+              - textbox "نام و نام خانوادگی" [ref=e34]
+              - textbox "نام و نام خانوادگی" [disabled] [ref=e37]
+              - generic [ref=e38]:
+                - textbox "نام و نام خانوادگی" [ref=e40]: آرش
+                - paragraph [ref=e43]: لطفاً نام خود را وارد کنید
+      - generic [ref=e44]:
+        - heading "Figma Input/Phone · اندازه‌ها" [level=2] [ref=e45]
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - heading "Large" [level=3] [ref=e48]
+            - textbox "شماره موبایل" [ref=e51]
+          - generic [ref=e54]:
+            - heading "Medium" [level=3] [ref=e55]
+            - textbox "شماره موبایل" [ref=e58]
+          - generic [ref=e61]:
+            - heading "Small" [level=3] [ref=e62]
+            - textbox "شماره موبایل" [ref=e65]
+          - generic [ref=e68]:
+            - heading "وضعیت‌های Figma · Large" [level=3] [ref=e69]
+            - generic [ref=e70]:
+              - textbox "شماره موبایل" [ref=e73]: ۰۹۱۲ ۳۴۵ ۶۷۸۹
+              - textbox "شماره موبایل" [ref=e78]: ۰۹۱۲ ۳۴۵ ۶۷۸۹
+              - textbox "شماره موبایل" [disabled] [ref=e83]
+              - generic [ref=e86]:
+                - textbox "شماره موبایل" [ref=e88]: ۰۹۱۲ ۳۴۵ ۶۷۸۹
+                - paragraph [ref=e90]: شماره وارد شده معتبر نیست
+      - generic [ref=e91]:
+        - heading "Figma Input/Password · اندازه‌ها" [level=2] [ref=e92]
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - heading "Large" [level=3] [ref=e95]
+            - generic [ref=e96]:
+              - generic [ref=e97]:
+                - paragraph [ref=e98]: پیش‌فرض
+                - generic [ref=e100]:
+                  - button "نمایش رمز عبور" [ref=e101]
+                  - textbox "رمز عبور خود را وارد کنید" [ref=e103]
+              - generic [ref=e107]:
+                - paragraph [ref=e108]: پرشده · نمایان
+                - generic [ref=e110]:
+                  - button "مخفی کردن رمز عبور" [ref=e111]
+                  - textbox "رمز عبور خود را وارد کنید" [ref=e113]: TagMall@2024
+              - generic [ref=e117]:
+                - paragraph [ref=e118]: خطا
+                - generic [ref=e119]:
+                  - generic [ref=e120]:
+                    - button "نمایش رمز عبور" [ref=e121]
+                    - textbox "رمز عبور خود را وارد کنید" [ref=e123]: "123456"
+                  - paragraph [ref=e126]: رمز عبور باید حداقل ۸ کاراکتر باشد
+          - generic [ref=e127]:
+            - heading "Medium" [level=3] [ref=e128]
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - paragraph [ref=e131]: پیش‌فرض
+                - generic [ref=e133]:
+                  - button "نمایش رمز عبور" [ref=e134]
+                  - textbox "رمز عبور خود را وارد کنید" [ref=e136]
+              - generic [ref=e140]:
+                - paragraph [ref=e141]: پرشده · نمایان
+                - generic [ref=e143]:
+                  - button "مخفی کردن رمز عبور" [ref=e144]
+                  - textbox "رمز عبور خود را وارد کنید" [ref=e146]: TagMall@2024
+              - generic [ref=e150]:
+                - paragraph [ref=e151]: خطا
+                - generic [ref=e152]:
+                  - generic [ref=e153]:
+                    - button "نمایش رمز عبور" [ref=e154]
+                    - textbox "رمز عبور خود را وارد کنید" [ref=e156]: "123456"
+                  - paragraph [ref=e159]: رمز عبور باید حداقل ۸ کاراکتر باشد
+          - generic [ref=e160]:
+            - heading "Small" [level=3] [ref=e161]
+            - generic [ref=e162]:
+              - generic [ref=e163]:
+                - paragraph [ref=e164]: پیش‌فرض
+                - generic [ref=e166]:
+                  - button "نمایش رمز عبور" [ref=e167]
+                  - textbox "رمز عبور خود را وارد کنید" [ref=e169]
+              - generic [ref=e173]:
+                - paragraph [ref=e174]: پرشده · نمایان
+                - generic [ref=e176]:
+                  - button "مخفی کردن رمز عبور" [ref=e177]
+                  - textbox "رمز عبور خود را وارد کنید" [ref=e179]: TagMall@2024
+              - generic [ref=e183]:
+                - paragraph [ref=e184]: خطا
+                - generic [ref=e185]:
+                  - generic [ref=e186]:
+                    - button "نمایش رمز عبور" [ref=e187]
+                    - textbox "رمز عبور خود را وارد کنید" [ref=e189]: "123456"
+                  - paragraph [ref=e192]: رمز عبور باید حداقل ۸ کاراکتر باشد
+      - generic [ref=e193]:
+        - heading "Figma Input/Search · اندازه‌ها" [level=2] [ref=e194]
+        - generic [ref=e195]:
+          - generic [ref=e196]:
+            - heading "Large · پیش‌فرض" [level=3] [ref=e197]
+            - searchbox "جستجو در تگ مال..." [ref=e199]
+          - generic [ref=e201]:
+            - heading "Large · پرشده / پاک‌کردن" [level=3] [ref=e202]
+            - generic [ref=e203]:
+              - button "پاک کردن جستجو" [ref=e204]
+              - searchbox "جستجو در تگ مال..." [ref=e206]: کیف چرمی زنانه
+          - generic [ref=e208]:
+            - heading "Medium" [level=3] [ref=e209]
+            - searchbox "جستجو در تگ مال..." [ref=e211]
+          - generic [ref=e213]:
+            - heading "Small" [level=3] [ref=e214]
+            - searchbox "جستجو در تگ مال..." [ref=e216]
+      - generic [ref=e218]:
+        - heading "Figma Input/Dropdown · اندازه‌ها" [level=2] [ref=e219]
+        - generic [ref=e220]:
+          - generic [ref=e221]:
+            - heading "Large · پیش‌فرض" [level=3] [ref=e222]
+            - generic [ref=e223]:
+              - button "استان خود را انتخاب کنید" [expanded] [ref=e224]
+              - listbox [ref=e554]:
+                - option "همه فروشنده ها همه فروشنده ها" [ref=e555]:
+                  - generic [ref=e556]: همه فروشنده ها
+                  - radio "همه فروشنده ها" [ref=e557]
+                - option "فروشگاه رسمی فروشگاه رسمی" [ref=e558]:
+                  - generic [ref=e559]: فروشگاه رسمی
+                  - radio "فروشگاه رسمی" [ref=e560]
+                - option "فروشگاه برگزیده فروشگاه برگزیده" [ref=e561]:
+                  - generic [ref=e562]: فروشگاه برگزیده
+                  - radio "فروشگاه برگزیده" [ref=e563]
+                - option "فروشندگان بومی فروشندگان بومی" [ref=e564]:
+                  - generic [ref=e565]: فروشندگان بومی
+                  - radio "فروشندگان بومی" [ref=e566]
+          - generic [ref=e227]:
+            - 'heading "انتخاب‌شده: تهران" [level=3] [ref=e228]'
+            - button "تهران" [ref=e230]
+          - generic [ref=e233]:
+            - 'heading "نمونهٔ منو: برای بازکردن کلیک کن" [level=3] [ref=e234]'
+            - button "همه فروشنده ها" [active] [ref=e236]
+          - generic [ref=e239]:
+            - heading "Medium" [level=3] [ref=e240]
+            - button "استان خود را انتخاب کنید" [ref=e242]
+          - generic [ref=e245]:
+            - heading "Small" [level=3] [ref=e246]
+            - button "استان خود را انتخاب کنید" [ref=e248]
+      - generic [ref=e251]:
+        - heading "Figma PhoneFieldContainer · اندازه‌ها" [level=2] [ref=e252]
+        - generic [ref=e253]:
+          - generic [ref=e254]:
+            - heading "Large · پیش‌فرض" [level=3] [ref=e255]
+            - generic [ref=e256]:
+              - generic [ref=e257]:
+                - generic [aria-hidden] [ref=e258]: "*"
+                - generic [ref=e259]:
+                  - text: شماره موبایل
+                  - generic [ref=e260]: (اجباری)
+              - button "شماره موبایل (اجباری) ۰۹۰۲۹۳۲۰۹۱۸" [ref=e261]:
+                - generic [ref=e263]: ۰۹۰۲۹۳۲۰۹۱۸
+          - generic [ref=e264]:
+            - heading "اندازهٔ Medium" [level=3] [ref=e265]
+            - generic [ref=e266]:
+              - generic [ref=e267]:
+                - generic [aria-hidden] [ref=e268]: "*"
+                - generic [ref=e269]:
+                  - text: شماره موبایل
+                  - generic [ref=e270]: (اجباری)
+              - button "شماره موبایل (اجباری) ۰۹۰۲۹۳۲۰۹۱۸" [ref=e271]:
+                - generic [ref=e273]: ۰۹۰۲۹۳۲۰۹۱۸
+          - generic [ref=e274]:
+            - heading "اندازهٔ Small" [level=3] [ref=e275]
+            - generic [ref=e276]:
+              - generic [ref=e277]:
+                - generic [aria-hidden] [ref=e278]: "*"
+                - generic [ref=e279]:
+                  - text: شماره موبایل
+                  - generic [ref=e280]: (اجباری)
+              - button "شماره موبایل (اجباری) ۰۹۰۲۹۳۲۰۹۱۸" [ref=e281]:
+                - generic [ref=e283]: ۰۹۰۲۹۳۲۰۹۱۸
+          - generic [ref=e284]:
+            - heading "باز / شمارهٔ انتخاب‌شده" [level=3] [ref=e285]
+            - generic [ref=e286]:
+              - generic [ref=e287]:
+                - generic [aria-hidden] [ref=e288]: "*"
+                - generic [ref=e289]:
+                  - text: شماره موبایل
+                  - generic [ref=e290]: (اجباری)
+              - button "شماره موبایل (اجباری) ۰۹۰۲۹۳۲۰۹۱۸" [expanded] [ref=e291]:
+                - generic [ref=e293]: ۰۹۰۲۹۳۲۰۹۱۸
+              - group "شماره‌های ذخیره‌شده" [ref=e294]:
+                - generic [ref=e295]:
+                  - generic [ref=e296]:
+                    - button "حذف شماره ۰۹۰۲۹۳۲۰۹۱۸" [ref=e297]
+                    - generic [ref=e299] [cursor=pointer]:
+                      - generic [ref=e300]: ۰۹۰۲۹۳۲۰۹۱۸
+                      - radio "۰۹۰۲۹۳۲۰۹۱۸" [checked] [ref=e301]
+                  - generic [ref=e302]:
+                    - button "حذف شماره ۰۹۱۲۵۵۵۱۲۳۴" [ref=e303]
+                    - generic [ref=e305] [cursor=pointer]:
+                      - generic [ref=e306]: ۰۹۱۲۵۵۵۱۲۳۴
+                      - radio "۰۹۱۲۵۵۵۱۲۳۴" [ref=e307]
+                  - button "افزودن شماره تماس جدید" [ref=e309]
+          - generic [ref=e312]:
+            - heading "ایمیل / فهرست باز" [level=3] [ref=e313]
+            - generic [ref=e314]:
+              - generic [ref=e315]:
+                - generic [aria-hidden] [ref=e316]: "*"
+                - generic [ref=e317]:
+                  - text: پست الکترونیک
+                  - generic [ref=e318]: (اجباری)
+              - button "پست الکترونیک (اجباری) tagmall@info.ir" [expanded] [ref=e319]:
+                - generic [ref=e321]: tagmall@info.ir
+              - group "ایمیل‌های ذخیره‌شده" [ref=e322]:
+                - generic [ref=e323]:
+                  - generic [ref=e324]:
+                    - button "حذف ایمیل tagmall@info.ir" [ref=e325]
+                    - generic [ref=e327] [cursor=pointer]:
+                      - generic [ref=e328]: tagmall@info.ir
+                      - radio "tagmall@info.ir" [checked] [ref=e329]
+                  - button "افزودن پست الکترونیک" [ref=e331]
+          - generic [ref=e334]:
+            - heading "آدرس / فهرست باز" [level=3] [ref=e335]
+            - generic [ref=e336]:
+              - generic [ref=e337]:
+                - generic [aria-hidden] [ref=e338]: "*"
+                - generic [ref=e339]:
+                  - text: آدرس
+                  - generic [ref=e340]: (اجباری)
+              - button "آدرس (اجباری) آدرس خود را انتخاب کنید" [expanded] [ref=e341]:
+                - generic [ref=e343]: آدرس خود را انتخاب کنید
+              - group "آدرس‌های ذخیره‌شده" [ref=e344]:
+                - generic [ref=e345]:
+                  - generic [ref=e346]:
+                    - button "حذف آدرس آدرس خود را انتخاب کنید" [ref=e347]
+                    - generic [ref=e349] [cursor=pointer]:
+                      - generic [ref=e350]: آدرس خود را انتخاب کنید
+                      - radio "آدرس خود را انتخاب کنید" [checked] [ref=e351]
+                  - button "افزودن آدرس جدید" [ref=e353]
+          - generic [ref=e356]:
+            - heading "حساب بانکی / فهرست باز · Large" [level=3] [ref=e357]
+            - generic [ref=e358]:
+              - button "بانک ملی (۱۲۵۲۳۵۳۴۷)" [expanded] [ref=e359]
+              - generic [ref=e361]:
+                - generic [ref=e362]:
+                  - button "حذف بانک ملی (۱۲۵۲۳۵۳۴۷)" [ref=e363]
+                  - generic [ref=e364] [cursor=pointer]:
+                    - generic [ref=e365]: بانک ملی (۱۲۵۲۳۵۳۴۷)
+                    - radio "بانک ملی (۱۲۵۲۳۵۳۴۷)" [checked] [ref=e366]
+                - generic [ref=e367]:
+                  - button "حذف بانک ملت (۴۳۷۶۴۵۷۸)" [ref=e368]
+                  - generic [ref=e369] [cursor=pointer]:
+                    - generic [ref=e370]: بانک ملت (۴۳۷۶۴۵۷۸)
+                    - radio "بانک ملت (۴۳۷۶۴۵۷۸)" [ref=e371]
+                - button "افزودن حساب بانکی" [ref=e373]
+          - generic [ref=e375]:
+            - heading "حساب بانکی · Medium" [level=3] [ref=e376]
+            - button "بانک ملی (۱۲۵۲۳۵۳۴۷)" [ref=e378]
+          - generic [ref=e380]:
+            - heading "حساب بانکی · Small" [level=3] [ref=e381]
+            - button "بانک ملی (۱۲۵۲۳۵۳۴۷)" [ref=e383]
+          - generic [ref=e385]:
+            - heading "حساب بانکی / افزودن شبا" [level=3] [ref=e386]
+            - generic [ref=e387]:
+              - button "بانک ملی (۱۲۵۲۳۵۳۴۷)" [expanded] [ref=e388]
+              - generic [ref=e391]:
+                - generic [ref=e392]: افزودن شماره شبا
+                - textbox "شماره شبا" [ref=e394]:
+                  - /placeholder: IR95 0170 0000 0034 0562 0900 04
+                - generic [ref=e395]: شماره شبا باید به نام شما باشد
+                - button "افزودن حساب بانکی" [ref=e397]
+      - generic [ref=e398]:
+        - heading "Figma Input/Toggle" [level=2] [ref=e399]
+        - generic [ref=e400]:
+          - generic [ref=e401]:
+            - heading "پیش‌فرض" [level=3] [ref=e402]
+            - generic [ref=e403] [cursor=pointer]:
+              - generic [ref=e404]: غیرفعال
+              - switch "غیرفعال" [ref=e405]
+          - generic [ref=e408]:
+            - heading "فعال" [level=3] [ref=e409]
+            - generic [ref=e410] [cursor=pointer]:
+              - generic [ref=e411]: فعال
+              - switch "فعال" [checked] [ref=e412]
+          - generic [ref=e415]:
+            - heading "غیرفعال · متن کم‌رنگ" [level=3] [ref=e416]
+            - generic [ref=e417] [cursor=pointer]:
+              - generic [ref=e418]: غیرفعال
+              - switch "غیرفعال" [disabled] [ref=e419]
+      - generic [ref=e422]:
+        - heading "Figma Input/Radio" [level=2] [ref=e423]
+        - generic [ref=e424]:
+          - generic [ref=e425]:
+            - heading "انتخاب نشده" [level=3] [ref=e426]
+            - radio [ref=e427]
+          - generic [ref=e428]:
+            - heading "انتخاب شده" [level=3] [ref=e429]
+            - radio [checked] [ref=e430]
+          - generic [ref=e431]:
+            - heading "غیرفعال" [level=3] [ref=e432]
+            - radio [disabled] [ref=e433]
+      - generic [ref=e434]:
+        - heading "Figma Input/Checkbox" [level=2] [ref=e435]
+        - generic [ref=e436]:
+          - generic [ref=e437]:
+            - heading "انتخاب نشده" [level=3] [ref=e438]
+            - checkbox [ref=e439]
+          - generic [ref=e440]:
+            - heading "انتخاب شده" [level=3] [ref=e441]
+            - checkbox [checked] [ref=e442]
+          - generic [ref=e443]:
+            - heading "غیرفعال" [level=3] [ref=e444]
+            - checkbox [disabled] [ref=e445]
+      - generic [ref=e446]:
+        - heading "Figma Input/Textarea" [level=2] [ref=e447]
+        - generic [ref=e449]:
+          - heading "پیش‌فرض و شمارندهٔ کاراکتر" [level=3] [ref=e450]
+          - generic [ref=e451]:
+            - textbox "توضیحات" [ref=e452]:
+              - /placeholder: توضیحات یا پیام خود را وارد کنید...
+            - generic [ref=e453]: ۰ / ۵۰۰
+      - generic [ref=e454]:
+        - heading "پیش‌نمایش مراحل کد تأیید" [level=2] [ref=e455]
+        - generic [ref=e456]:
+          - button "کد شماره" [ref=e457]
+          - button "ارسال مجدد شماره" [ref=e458]
+          - button "کد ایمیل" [ref=e459]
+          - button "ارسال مجدد ایمیل" [ref=e460]
+      - generic [ref=e461]:
+        - heading "پیش‌نمایش کیف پول" [level=2] [ref=e462]
+        - generic [ref=e463]:
+          - button "افزایش اعتبار" [ref=e464]
+          - button "موفقیت افزایش اعتبار" [ref=e465]
+          - button "درخواست وجه" [ref=e466]
+          - button "کد درخواست وجه" [ref=e467]
+          - button "ارسال مجدد درخواست" [ref=e468]
+          - button "موفقیت درخواست وجه" [ref=e469]
+      - generic [ref=e470]:
+        - heading "Figma ورود و ثبت‌نام · component set 177:3144" [level=2] [ref=e471]
+        - generic [ref=e472]:
+          - generic [ref=e473]:
+            - heading "ورود با شماره موبایل" [level=3] [ref=e474]
+            - region "ورود به حساب کاربری" [ref=e475]:
+              - img "تگ مال" [ref=e477]
+              - generic [ref=e478]:
+                - heading "ورود به حساب کاربری" [level=1] [ref=e479]
+                - paragraph [ref=e480]: جهت ورود یا ثبت‌نام، شماره موبایل خود را وارد کنید.
+              - textbox "شماره موبایل" [ref=e482]
+              - button "ارسال پیامکی کد تایید" [ref=e484]
+          - generic [ref=e486]:
+            - heading "ورود با کد · زمان باقی‌مانده" [level=3] [ref=e487]
+            - region "ورود به حساب کاربری" [ref=e488]:
+              - generic [ref=e489]:
+                - button "بازگشت" [ref=e490]
+                - img "تگ مال" [ref=e492]
+              - generic [ref=e493]:
+                - heading "ورود به حساب کاربری" [level=1] [ref=e494]
+                - paragraph [ref=e495]: کد ارسال شده به شماره خود را وارد نمایید.
+              - generic [ref=e496]:
+                - group "کد تأیید پیامکی" [ref=e497]:
+                  - textbox "رقم 1 کد تأیید" [ref=e498]
+                  - textbox "رقم 2 کد تأیید" [ref=e499]
+                  - textbox "رقم 3 کد تأیید" [ref=e500]
+                  - textbox "رقم 4 کد تأیید" [ref=e501]
+                  - textbox "رقم 5 کد تأیید" [ref=e502]
+                - paragraph [ref=e504]: کد تایید به شماره شما پیامک شده است.
+              - button "ارسال مجدد کد تایید تا ۰۲:۰۰ دیگر" [disabled] [ref=e506]
+          - generic [ref=e508]:
+            - heading "ورود با کد · ارسال دوباره" [level=3] [ref=e509]
+            - region "ورود به حساب کاربری" [ref=e510]:
+              - generic [ref=e511]:
+                - button "بازگشت" [ref=e512]
+                - img "تگ مال" [ref=e514]
+              - generic [ref=e515]:
+                - heading "ورود به حساب کاربری" [level=1] [ref=e516]
+                - paragraph [ref=e517]: کد تایید منقضی شده است. می‌توانید مجدداً درخواست کنید.
+              - generic [ref=e518]:
+                - group "کد تأیید پیامکی" [ref=e519]:
+                  - textbox "رقم 1 کد تأیید" [ref=e520]
+                  - textbox "رقم 2 کد تأیید" [ref=e521]
+                  - textbox "رقم 3 کد تأیید" [ref=e522]
+                  - textbox "رقم 4 کد تأیید" [ref=e523]
+                  - textbox "رقم 5 کد تأیید" [ref=e524]
+                - paragraph [ref=e526]: کد تایید به شماره شما پیامک شده است.
+              - button "ارسال مجدد کد تایید" [ref=e528]
+          - generic [ref=e530]:
+            - heading "ایجاد حساب" [level=3] [ref=e531]
+            - region "ایجاد حساب کاربری" [ref=e532]:
+              - generic [ref=e533]:
+                - button "بازگشت" [ref=e534]
+                - img "تگ مال" [ref=e536]
+              - generic [ref=e537]:
+                - heading "ایجاد حساب کاربری" [level=1] [ref=e538]
+                - paragraph [ref=e539]: اطلاعات خود را جهت ثبت‌نام وارد کنید.
+              - generic [ref=e540]:
+                - textbox "نام و نام خانوادگی" [ref=e542]
+                - textbox "شناسه ملی" [ref=e545]
+                - textbox "شماره موبایل" [ref=e548]
+              - button "ثبت نام" [ref=e550]
+    - paragraph [ref=e552]: این پیش‌نمایش از پاسخ آزمایشی استفاده می‌کند؛ کد واقعی ارسال نمی‌شود و آدرس ثبت نمی‌شود.
+  - alert [ref=e553]

@@ -1,0 +1,14 @@
+.root,
+.root * {
+  font-family: YekanBakh, sans-serif;
+}
+
+@layer base {
+  .input16 {
+    font-size: 16px !important;
+  }
+
+  .input18 {
+    font-size: 18px !important;
+  }
+}

@@ -1,0 +1,98 @@
+[     178ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[     211ms] [LOG] [HMR] connected @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[     511ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[     574ms] [LOG] [Fast Refresh] done in 170ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    3109ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[    3109ms] [LOG] [Fast Refresh] done in 108ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  267424ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  267486ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  293430ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  293450ms] [LOG] [Fast Refresh] done in 127ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  457963ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  458026ms] [LOG] [Fast Refresh] done in 166ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  584450ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  584465ms] [LOG] [Fast Refresh] done in 121ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  639373ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  639436ms] [LOG] [Fast Refresh] done in 172ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  714479ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  714496ms] [LOG] [Fast Refresh] done in 124ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  724196ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  724260ms] [LOG] [Fast Refresh] done in 170ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  890607ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  890685ms] [LOG] [Fast Refresh] done in 185ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  980760ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  981061ms] [LOG] [Fast Refresh] done in 377ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  991600ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  991617ms] [LOG] [Fast Refresh] done in 126ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1167961ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1168240ms] [LOG] [Fast Refresh] done in 395ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1247574ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1247799ms] [LOG] [Fast Refresh] done in 267ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1253999ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1254279ms] [LOG] [Fast Refresh] done in 393ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1300031ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1300220ms] [LOG] [Fast Refresh] done in 258ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1310740ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1311005ms] [LOG] [Fast Refresh] done in 369ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1448403ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1448466ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2625157ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2625250ms] [LOG] [Fast Refresh] done in 198ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2898510ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2898663ms] [LOG] [Fast Refresh] done in 234ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2903282ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2903935ms] [LOG] [Fast Refresh] done in 591ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2904038ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2904196ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:3100/figma-input-qa?_rsc=n6641:0
+[ 2904202ms] [LOG] [Fast Refresh] done in 264ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2904354ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:3100/figma-input-qa?_rsc=n6641:0
+[ 2904489ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2904766ms] [LOG] [Fast Refresh] done in 384ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2904892ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2904992ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:3100/figma-input-qa?_rsc=n6641:0
+[ 2904995ms] [LOG] [Fast Refresh] done in 208ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2905048ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:3100/figma-input-qa:0
+[ 2905421ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2905497ms] [LOG] [HMR] connected @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2934117ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2935202ms] [LOG] [Fast Refresh] done in 307ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2935588ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2935624ms] [LOG] [Fast Refresh] done in 139ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2935755ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2935927ms] [LOG] [Fast Refresh] done in 279ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2936182ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:3100/figma-input-qa:0
+[ 2936182ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) @ http://127.0.0.1:3100/figma-input-qa:0
+[ 2936281ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2936316ms] [LOG] [HMR] connected @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2971665ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://127.0.0.1:3100/figma-input-qa:0
+[ 2971665ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) @ http://127.0.0.1:3100/figma-input-qa:0
+[ 2971745ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2971771ms] [LOG] [HMR] connected @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2972079ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 2972097ms] [LOG] [Fast Refresh] done in 123ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 3096055ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 3096072ms] [LOG] [Fast Refresh] done in 124ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 3502522ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 3502707ms] [LOG] [Fast Refresh] done in 264ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 3529872ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 3530471ms] [LOG] [Fast Refresh] done in 707ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4056405ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4056500ms] [LOG] [Fast Refresh] done in 199ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4340998ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4341732ms] [LOG] [Fast Refresh] done in 786ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4435794ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4435983ms] [LOG] [Fast Refresh] done in 264ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4638772ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4638961ms] [LOG] [Fast Refresh] done in 268ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4872032ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4872172ms] [LOG] [Fast Refresh] done in 246ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4954002ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4954065ms] [LOG] [Fast Refresh] done in 169ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4984023ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 4984427ms] [LOG] [Fast Refresh] done in 516ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 5096735ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 5096917ms] [LOG] [Fast Refresh] done in 244ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 5110696ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 5110759ms] [LOG] [Fast Refresh] done in 171ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 5127424ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 5127621ms] [LOG] [Fast Refresh] done in 309ms @ http://127.0.0.1:3100/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297

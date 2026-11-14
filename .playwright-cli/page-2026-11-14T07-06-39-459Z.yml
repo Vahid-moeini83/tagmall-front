@@ -1,0 +1,84 @@
+- generic [ref=f15e1]:
+  - generic [ref=f15e2]:
+    - complementary [ref=f15e3]:
+      - link [ref=f15e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=f15e6]
+      - generic [ref=f15e7]:
+        - img "آرمان میمندی نژاد" [ref=f15e9]
+        - paragraph [ref=f15e11]: آرمان میمندی نژاد
+      - navigation [ref=f15e12]:
+        - link "داشبورد" [ref=f15e13] [cursor=pointer]:
+          - /url: /seller
+        - link "پیام‌ها ۳" [ref=f15e23] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f15e24]: پیام‌ها
+          - generic [ref=f15e31]: ۳
+        - link "سفارشات" [ref=f15e32] [cursor=pointer]:
+          - /url: /seller/orders
+        - generic [ref=f15e40]:
+          - link "پروفایل فروشنده" [ref=f15e41] [cursor=pointer]:
+            - /url: /seller/profile
+          - navigation "بخش‌های پروفایل فروشنده" [ref=f15e48]:
+            - link "مشخصات" [ref=f15e49] [cursor=pointer]:
+              - /url: /seller/profile
+            - link "گزارش مالی" [ref=f15e50] [cursor=pointer]:
+              - /url: /seller/profile#financial
+            - link "کیف پول اعتباری" [ref=f15e51] [cursor=pointer]:
+              - /url: /seller/profile#wallet
+            - link "نشست های فعال" [ref=f15e52] [cursor=pointer]:
+              - /url: /seller/profile#sessions
+            - link "تنظیمات" [active] [ref=f15e53] [cursor=pointer]:
+              - /url: /seller/profile#settings
+        - link "شعبه ها" [ref=f15e54] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=f15e61] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=f15e74] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "تخفیف‌های فعال" [ref=f15e80] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=f15e89] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=f15e96]:
+      - generic [ref=f15e499]:
+        - generic [ref=f15e500]:
+          - heading "پنل فروشگاه تگ مال" [level=1] [ref=f15e501]
+          - paragraph [ref=f15e502]: امروز ۳۰ مرداد ماه ۱۴۰۵ ساعت ۱۲:۲۴
+        - form "تنظیمات فروشگاه" [ref=f15e503]:
+          - region "فعالیت و نمایش فروشگاه" [ref=f15e504]:
+            - generic [ref=f15e505]:
+              - heading "فعالیت و نمایش فروشگاه" [level=2] [ref=f15e510]
+              - status [ref=f15e511]:
+                - generic [ref=f15e512]: فروشگاه فعال است
+            - generic [ref=f15e517]:
+              - generic [ref=f15e518]:
+                - heading "وضعیت فعال بودن فروشگاه" [level=3] [ref=f15e519]
+                - paragraph [ref=f15e520]: فعال یا غیرفعال بودن فروشگاه را برای کاربران مشخص کنید.
+              - group "وضعیت فعال بودن فروشگاه" [ref=f15e521]:
+                - generic [ref=f15e523] [cursor=pointer]:
+                  - radio "فعال" [checked] [ref=f15e524]
+                  - generic [ref=f15e525]: فعال
+                - generic [ref=f15e526] [cursor=pointer]:
+                  - radio "غیرفعال" [ref=f15e527]
+                  - generic [ref=f15e528]: غیرفعال
+          - region "ارتباط با کاربران" [ref=f15e529]:
+            - generic [ref=f15e530]:
+              - heading "ارتباط با کاربران" [level=2] [ref=f15e537]
+              - generic [ref=f15e538]: ۲ تنظیم مستقل
+            - generic [ref=f15e540]:
+              - generic [ref=f15e541]:
+                - heading "امکان دریافت پیام از کاربر" [level=3] [ref=f15e542]
+                - paragraph [ref=f15e543]: اجازه دهید کاربران برای فروشگاه پیام بفرستند؛ این گزینه مربوط به دریافت پیام است.
+              - group "امکان دریافت پیام از کاربر" [ref=f15e544]:
+                - generic [ref=f15e546] [cursor=pointer]:
+                  - radio "فعال" [checked] [ref=f15e547]
+                  - generic [ref=f15e548]: فعال
+                - generic [ref=f15e549] [cursor=pointer]:
+                  - radio "غیرفعال" [ref=f15e550]
+                  - generic [ref=f15e551]: غیرفعال
+          - generic [ref=f15e552]:
+            - button "ذخیره تغییرات" [ref=f15e553]
+            - button "انصراف" [ref=f15e557]
+  - button "Open Next.js Dev Tools" [ref=f15e247] [cursor=pointer]
+  - alert [ref=f15e251]

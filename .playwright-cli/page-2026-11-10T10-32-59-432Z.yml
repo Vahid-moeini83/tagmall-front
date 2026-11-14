@@ -1,0 +1,52 @@
+- generic:
+  - main [aria-hidden]:
+    - generic:
+      - generic:
+        - generic: نسخه جدید
+        - generic [aria-hidden]: "|"
+        - generic: تگ مال ریبرند کرد
+    - region:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: ورود به حساب کاربری
+              - paragraph: جهت ورود یا ثبت‌نام، شماره موبایل خود را وارد کنید.
+          - tablist:
+            - tab [selected]:
+              - generic: فروشنده حقوقی
+            - tab:
+              - generic: فروشنده حقیقی
+        - generic:
+          - generic:
+            - generic: شناسه ملی شرکت
+            - generic:
+              - textbox:
+                - /placeholder: شناسه ملی شرکت را وارد کنید
+          - generic:
+            - generic: شماره موبایل
+            - generic:
+              - textbox:
+                - /placeholder: شماره موبایل خود را وارد کنید
+        - generic:
+          - button:
+            - generic: ارسال پیامکی کد تایید
+  - button "Open Next.js Dev Tools" [ref=f7e46] [cursor=pointer]
+  - alert
+  - dialog "ورود به حساب کاربری" [ref=f7e51]:
+    - heading "ورود به حساب کاربری" [level=2] [ref=f7e52]
+    - generic [ref=f7e113]:
+      - generic [ref=f7e114]:
+        - img "لوگوی شعار" [ref=f7e116]
+        - heading "ایجاد حساب کاربری:" [level=1] [ref=f7e117]
+        - generic [ref=f7e118]:
+          - textbox "نام" [ref=f7e121]: آزمایش
+          - textbox "نام خانوادگی" [ref=f7e124]: کاربر
+          - textbox "کد ملی" [ref=f7e127]: "0084575946"
+        - generic [ref=f7e129] [cursor=pointer]:
+          - checkbox "شرایط بهره مندی از خدمات تگ مال را می پذیرم" [checked] [active] [ref=f7e130]
+          - generic [ref=f7e134]:
+            - button "شرایط" [ref=f7e135]
+            - text: بهره مندی از خدمات تگ مال را می پذیرم
+      - button "بهره مندی از خدمات ما :)" [disabled] [ref=f7e136]
+    - button "بستن" [ref=f7e137] [cursor=pointer]

@@ -132,6 +132,7 @@ export default function SellerCampaigns() {
             <button
               key={item.id}
               type="button"
+              dir="rtl"
               aria-pressed={status === item.id}
               onClick={() => {
                 setStatus(item.id);

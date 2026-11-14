@@ -7,12 +7,12 @@ import SellerRecentOrders from "./SellerRecentOrders";
 
 function SellerDashboard() {
   return (
-    <div className="flex-1 w-full max-w-[1140px] mx-auto p-4 sm:p-6 lg:p-10 pb-28 lg:pb-10 flex flex-col gap-5 lg:gap-6">
-      {/* 1. Header (Panel Title and Current Date/Time) */}
-      <SellerHeader />
-
-      {/* 2. Top Stats Grid (4 Metric Cards) */}
-      <SellerStats />
+    <div className="flex-1 w-full max-w-[1140px] mx-auto px-4 pt-5 pb-6 sm:p-6 lg:p-10 flex flex-col gap-5 lg:gap-6">
+      {/* 1. Dashboard heading and summary cards */}
+      <section className="flex flex-col gap-4 lg:gap-6">
+        <SellerHeader />
+        <SellerStats />
+      </section>
 
       {/* 3. Middle Visual Section (Sales Chart & Top Products) */}
       <section className="flex flex-col lg:flex-row items-stretch gap-5">

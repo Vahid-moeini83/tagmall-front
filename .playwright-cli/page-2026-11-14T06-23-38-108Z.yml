@@ -1,0 +1,148 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - banner [ref=f1e4]:
+      - link [ref=f1e5] [cursor=pointer]:
+        - /url: /seller
+        - img "تگ مال؛ با هم، برای همه" [ref=f1e6]
+      - generic [ref=f1e7]:
+        - link "پیام‌ها" [ref=f1e8] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f1e13]: ۳
+        - link "پروفایل فروشنده" [ref=f1e14] [cursor=pointer]:
+          - /url: /seller/profile
+          - img "آرمان میمندی نژاد" [ref=f1e15]
+    - complementary [ref=f1e16]:
+      - generic [ref=f1e17]:
+        - link [ref=f1e18] [cursor=pointer]:
+          - /url: /seller
+          - img "تگ مال؛ با هم، برای همه" [ref=f1e19]
+        - button "بستن منو" [ref=f1e20]
+      - generic [ref=f1e23]:
+        - img "آرمان میمندی نژاد" [ref=f1e25]
+        - paragraph [ref=f1e27]: آرمان میمندی نژاد
+      - navigation [ref=f1e28]:
+        - link "داشبورد" [ref=f1e29] [cursor=pointer]:
+          - /url: /seller
+        - generic [ref=f1e39]:
+          - link "پیام‌ها ۳" [ref=f1e40] [cursor=pointer]:
+            - /url: /seller/messages
+            - generic [ref=f1e41]: پیام‌ها
+            - generic [ref=f1e48]: ۳
+          - navigation "بخش‌های مرکز پیام‌ها" [ref=f1e49]:
+            - link "گفتگو با کارشناسان" [ref=f1e50] [cursor=pointer]:
+              - /url: /seller/messages/experts
+            - link "گفتگو با مشتریان" [ref=f1e51] [cursor=pointer]:
+              - /url: /seller/messages/customers
+            - link "محصولات من" [ref=f1e52] [cursor=pointer]:
+              - /url: /seller/messages/products
+            - link "رضایت کاربران" [ref=f1e53] [cursor=pointer]:
+              - /url: /seller/messages/reviews
+        - link "سفارشات" [ref=f1e54] [cursor=pointer]:
+          - /url: /seller/orders
+        - link "پروفایل فروشنده" [ref=f1e62] [cursor=pointer]:
+          - /url: /seller/profile
+        - link "شعبه ها" [ref=f1e69] [cursor=pointer]:
+          - /url: /seller/branches
+        - link "محصولات من" [ref=f1e76] [cursor=pointer]:
+          - /url: /seller/products
+        - link "ثبت کالا" [ref=f1e89] [cursor=pointer]:
+          - /url: /seller/products/new
+        - link "تخفیف‌های فعال" [ref=f1e95] [cursor=pointer]:
+          - /url: /seller/discounts
+        - link "خروج" [ref=f1e104] [cursor=pointer]:
+          - /url: /seller/logout
+    - main [ref=f1e111]:
+      - complementary "گفتگو با کارشناسان" [ref=f1e113]:
+        - generic [ref=f1e114]:
+          - heading "پیام‌ها" [level=2] [ref=f1e115]
+          - button "گزینه‌های پیام‌ها" [ref=f1e116]
+        - textbox "جستجو در پیام‌ها" [ref=f1e122]:
+          - /placeholder: جستجو در پیام ها
+        - navigation "دسته‌های پیام‌ها" [ref=f1e123]:
+          - link "گفتگو با کارشناسان" [ref=f1e124] [cursor=pointer]:
+            - /url: /seller/messages/experts
+          - link "گفتگو با مشتریان" [ref=f1e125] [cursor=pointer]:
+            - /url: /seller/messages/customers
+          - link "محصولات من" [ref=f1e126] [cursor=pointer]:
+            - /url: /seller/messages/products
+          - link "رضایت کاربران" [ref=f1e127] [cursor=pointer]:
+            - /url: /seller/messages/reviews
+        - button "شهر گفتگوها" [ref=f1e129]:
+          - generic [ref=f1e131]: تهران
+        - generic "فهرست گفتگوها" [ref=f1e133]:
+          - generic [ref=f1e134]: گفتگو با کارشناسان
+          - generic [ref=f1e135]:
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e136]:
+              - generic [ref=f1e137]:
+                - generic [ref=f1e138]: فروشنده ابزار صنعتی
+                - time [ref=f1e144]: ۲۸ اسفند
+              - paragraph [ref=f1e146]: بسته به واحد ارسال تحویل داده شد
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e147]:
+              - generic [ref=f1e148]:
+                - generic [ref=f1e149]: فروشنده ابزار صنعتی
+                - time [ref=f1e155]: ۲۸ اسفند
+              - paragraph [ref=f1e157]: بسته به واحد ارسال تحویل داده شد
+            - button "واحد پشتیبانی ۱۰:۴۲ سلام، ممنون. وقت شما به خیر... پیام خوانده‌نشده" [pressed] [ref=f1e158]:
+              - generic [ref=f1e159]:
+                - generic [ref=f1e160]: واحد پشتیبانی
+                - time [ref=f1e167]: ۱۰:۴۲
+              - generic [ref=f1e168]:
+                - paragraph [ref=f1e169]: سلام، ممنون. وقت شما به خیر...
+                - generic "پیام خوانده‌نشده" [ref=f1e170]
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e171]:
+              - generic [ref=f1e172]:
+                - generic [ref=f1e173]: فروشنده ابزار صنعتی
+                - time [ref=f1e179]: ۲۸ اسفند
+              - paragraph [ref=f1e181]: بسته به واحد ارسال تحویل داده شد
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e182]:
+              - generic [ref=f1e183]:
+                - generic [ref=f1e184]: فروشنده ابزار صنعتی
+                - time [ref=f1e190]: ۲۸ اسفند
+              - paragraph [ref=f1e192]: بسته به واحد ارسال تحویل داده شد
+            - button "واحد پشتیبانی ۱۰:۴۲ سلام، ممنون. وقت شما به خیر... پیام خوانده‌نشده" [ref=f1e193]:
+              - generic [ref=f1e194]:
+                - generic [ref=f1e195]: واحد پشتیبانی
+                - time [ref=f1e202]: ۱۰:۴۲
+              - generic [ref=f1e203]:
+                - paragraph [ref=f1e204]: سلام، ممنون. وقت شما به خیر...
+                - generic "پیام خوانده‌نشده" [ref=f1e205]
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e206]:
+              - generic [ref=f1e207]:
+                - generic [ref=f1e208]: فروشنده ابزار صنعتی
+                - time [ref=f1e214]: ۲۸ اسفند
+              - paragraph [ref=f1e216]: بسته به واحد ارسال تحویل داده شد
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e217]:
+              - generic [ref=f1e218]:
+                - generic [ref=f1e219]: فروشنده ابزار صنعتی
+                - time [ref=f1e225]: ۲۸ اسفند
+              - paragraph [ref=f1e227]: بسته به واحد ارسال تحویل داده شد
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e228]:
+              - generic [ref=f1e229]:
+                - generic [ref=f1e230]: فروشنده ابزار صنعتی
+                - time [ref=f1e236]: ۲۸ اسفند
+              - paragraph [ref=f1e238]: بسته به واحد ارسال تحویل داده شد
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e239]:
+              - generic [ref=f1e240]:
+                - generic [ref=f1e241]: فروشنده ابزار صنعتی
+                - time [ref=f1e247]: ۲۸ اسفند
+              - paragraph [ref=f1e249]: بسته به واحد ارسال تحویل داده شد
+            - button "فروشنده ابزار صنعتی ۲۸ اسفند بسته به واحد ارسال تحویل داده شد" [ref=f1e250]:
+              - generic [ref=f1e251]:
+                - generic [ref=f1e252]: فروشنده ابزار صنعتی
+                - time [ref=f1e258]: ۲۸ اسفند
+              - paragraph [ref=f1e260]: بسته به واحد ارسال تحویل داده شد
+    - navigation "ناوبری اصلی ثابت" [ref=f1e261]:
+      - generic [ref=f1e262]:
+        - link "داشبورد" [ref=f1e263] [cursor=pointer]:
+          - /url: /seller
+        - link "سفارشات" [ref=f1e272] [cursor=pointer]:
+          - /url: /seller/orders
+        - link "محصولات من" [ref=f1e279] [cursor=pointer]:
+          - /url: /seller/products
+        - link "۳ پیام‌ها" [ref=f1e291] [cursor=pointer]:
+          - /url: /seller/messages
+          - generic [ref=f1e292]: ۳
+          - generic [ref=f1e297]: پیام‌ها
+        - button "نمایش منوی کامل" [ref=f1e298]:
+          - generic [ref=f1e302]: بیشتر
+  - button "Open Next.js Dev Tools" [ref=f1e308] [cursor=pointer]
